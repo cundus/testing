@@ -20,7 +20,7 @@ const Header = (props) => {
         type="flex"
         className="headerWrapper"
       >
-        <Col sm={12} xs={24}>
+        <Col lg={10} sm={10} xs={24}>
           <Menu
             theme="light"
             mode="horizontal"
@@ -59,10 +59,10 @@ const Header = (props) => {
             <Menu.Item key="6">My Team</Menu.Item>
           </Menu>
         </Col>
-        <Col sm={5} lg={5} xs={0} md={0}>
+        <Col lg={8} sm={5} xs={0} md={0}>
           <img src={Logo} alt="logo" />
         </Col>
-        <Col sm={7} lg={5} xs={0} md={0}>
+        <Col lg={6} sm={5} xs={0} md={0}>
           <Menu
             theme="light"
             mode="horizontal"
