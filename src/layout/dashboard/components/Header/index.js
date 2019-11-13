@@ -29,11 +29,11 @@ const Header = (props) => {
             defaultSelectedKeys={['1']}
             className="menuWrapper"
           >
-            <Icon
+            {/* <Icon
               className="drawerIcon"
               type={collapsed ? 'align-right' : 'alignt-left'}
               onClick={toggle}
-            />
+            /> */}
             <Menu.Item key="1">Home</Menu.Item>
             <Menu.SubMenu
               key="1"
