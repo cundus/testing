@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import  Layout from '../layout/dashboard/index';
+import  Layout from '../../layout/dashboard/index';
 
 
-class Planing extends Component {
+class CreatePlaning extends Component {
   render(){
       return(
         <div>
@@ -13,4 +13,4 @@ class Planing extends Component {
       )
   }
 }
-export default Planing;
+export default CreatePlaning;
