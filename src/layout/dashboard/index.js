@@ -33,7 +33,7 @@ class Dashboard extends React.Component {
               <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
                 ...
                 <br />
-                Really
+                {this.props.children}
                 <br />
                 content
               </div>

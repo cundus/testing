@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from 'antd';
-
+import  {Link}  from 'react-router-dom';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/indonesia-flag.png';
 import "./header-styles.scss";
@@ -31,7 +31,11 @@ const Header = (props) => {
               type={collapsed ? 'align-right' : 'alignt-left'}
               onClick={toggle}
             />
-            <Menu.Item key="2">Home</Menu.Item>
+            <Menu.Item key="2">
+              <Link to='/'>
+                Home
+              </Link>
+            </Menu.Item>
             <Menu.SubMenu
               key="1"
               title={
@@ -40,9 +44,11 @@ const Header = (props) => {
                 </span>
               }
             >
-              <Menu.Item key="default">
+            <Menu.Item key="default">
+              <Link to='/planing'>
               <Icon type="plus-circle" theme="filled" className="dropdownItem" />
                 Create KPI
+                </Link>
               </Menu.Item>
               <Menu.Item key="fluid">
                 <Icon type="plus-circle" className="dropdownItem" />
