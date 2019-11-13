@@ -3,8 +3,7 @@ import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from 'antd';
 
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/indonesia-flag.png';
-import "antd/dist/antd.css";
-import "./header-styles.css";
+import "./header-styles.scss";
 
 const { Text } = Typography;
 
