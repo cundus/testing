@@ -16,7 +16,7 @@ class Dashboard extends React.Component {
       collapsed: !this.state.collapsed
     });
   };
-
+  
   render() {
     const { collapsed } = this.state;
 

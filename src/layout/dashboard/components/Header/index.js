@@ -16,7 +16,12 @@ const Header = props => {
     setActiveMenu(['0'])
   }, [])
   const mainRouter = Router.filter(x => x.menuLevel === 1);
-
+  const [activeMenu, setActiveMenu] = React.useState(['']);
+  React.useEffect(() => {
+    setActiveMenu([''])
+  }, []);
+  console.log(activeMenu);
+  
   // const { collapsed, toggle } = props;
   return (
     <Layout.Header className="headerContainer">
@@ -40,7 +45,9 @@ const Header = props => {
               if (childsRoutes.length === 0) {
                 return (
                   <Menu.Item key={i}>
-                    <Link to={r.path}>{r.viewName}</Link>
+                    <Link to={r.path} onClick={() => setActiveMenu([`${i}`])}>
+                      {r.viewName}
+                    </Link>
                   </Menu.Item>
                 );
               } else {
@@ -56,7 +63,10 @@ const Header = props => {
                     {childsRoutes.map((rc, i) => {
                       return (
                         <Menu.Item key={`${r.name}-${i}`}>
-                          <Link to={rc.path}>
+                          <Link
+                            to={rc.path}
+                            onClick={() => setActiveMenu([`${r.name}-${i}`])}
+                          >
                             <Icon
                               type={`${rc.icon}`}
                               theme={`${rc.theme}`}
