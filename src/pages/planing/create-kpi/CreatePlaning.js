@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import  Layout from '../../layout/dashboard/index';
+import  Layout from '../../../layout/dashboard/index';
 
 
 class CreatePlaning extends Component {

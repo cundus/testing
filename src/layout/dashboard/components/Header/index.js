@@ -8,7 +8,13 @@ import "./header-styles.scss";
 import Router from "../../../../Router";
 const { Text } = Typography;
 
+
+
 const Header = props => {
+  const [activeMenu, setActiveMenu] = React.useState([]);
+  React.useEffect(()=>{
+    setActiveMenu(['0'])
+  }, [])
   const mainRouter = Router.filter(x => x.menuLevel === 1);
 
   // const { collapsed, toggle } = props;
@@ -19,7 +25,7 @@ const Header = props => {
           <Menu
             theme="light"
             mode="horizontal"
-            defaultSelectedKeys={["1"]}
+            selectedKeys={activeMenu}
             className="menuWrapper"
           >
             {/* <Icon
@@ -40,6 +46,7 @@ const Header = props => {
               } else {
                 return (
                   <Menu.SubMenu
+                    key={i}
                     title={
                       <span className="submenu-title-wrapper">
                         {r.viewName}

@@ -8,7 +8,7 @@ class Footer extends React.Component {
         <Row>
           <Col sm={18} md={20} xs={24}>
             <div>
-            2019 © Human Capital - People Services | PT XL Axiata
+            2019 &copy; Human Capital - People Services | PT XL Axiata
           </div>
           </Col>
         </Row>
