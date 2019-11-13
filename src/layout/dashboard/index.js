@@ -3,7 +3,6 @@ import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 
 import { Footer, Header, Sidebar } from './components';
-import Register from '../../pages/test';
 
 const { Content } = Layout;
 
