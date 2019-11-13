@@ -74,7 +74,9 @@ const Header = props => {
           </Menu>
         </Col>
         <Col xs={0} sm={0} md={0} lg={8}>
+          <Link to='/'>
           <img src={Logo} alt="logo" />
+          </Link>
         </Col>
         <Col xs={0} sm={0} md={0} lg={4}>
           <Menu theme="light" mode="horizontal" className="menuWrapper">
