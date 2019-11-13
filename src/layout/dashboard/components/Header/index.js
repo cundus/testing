@@ -5,13 +5,13 @@ import Logo from "../../../../assets/xl.png";
 import Indonesia from "../../../../assets/flags/004-indonesia.svg";
 import myAvatar from "../../../../assets/users/300_23.jpg";
 import "./header-styles.scss";
-import "antd/dist/antd.css";
-
+import Router from "../../../../Router";
 const { Text } = Typography;
 
 const Header = props => {
-  // const { collapsed, toggle } = props;
+  const mainRouter = Router.filter(x => x.menuLevel === 1);
 
+  // const { collapsed, toggle } = props;
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
@@ -27,35 +27,43 @@ const Header = props => {
               type={collapsed ? 'align-right' : 'alignt-left'}
               onClick={toggle}
             /> */}
-            <Menu.Item key="1">
-              <Link to="/">Home</Link>
-            </Menu.Item>
-            <Menu.SubMenu
-              key="1"
-              title={<span className="submenu-title-wrapper">Planning</span>}
-            >
-              <Menu.Item key="default">
-                <Link to="/planing">
-                  <Icon
-                    type="plus-circle"
-                    theme="filled"
-                    className="dropdownItem"
-                  />
-                  Create KPI
-                </Link>
-              </Menu.Item>
-              <Menu.Item key="fluid">
-                <Icon type="plus-circle" className="dropdownItem" />
-                Create Non KPI
-              </Menu.Item>
-              <Menu.Item key="asaid">
-                <Icon type="search" className="dropdownItem" />
-                View My KPI
-              </Menu.Item>
-            </Menu.SubMenu>
-            <Menu.Item key="2">Monitoring</Menu.Item>
-            <Menu.Item key="3">Appraisal</Menu.Item>
-            <Menu.Item key="4">My Team</Menu.Item>
+
+            {mainRouter.map((r, i) => {
+              // check is has child
+              const childsRoutes = Router.filter(rc => rc.parent === r.name);
+              if (childsRoutes.length === 0) {
+                return (
+                  <Menu.Item key={i}>
+                    <Link to={r.path}>{r.viewName}</Link>
+                  </Menu.Item>
+                );
+              } else {
+                return (
+                  <Menu.SubMenu
+                    title={
+                      <span className="submenu-title-wrapper">
+                        {r.viewName}
+                      </span>
+                    }
+                  >
+                    {childsRoutes.map((rc, i) => {
+                      return (
+                        <Menu.Item key={`${r.name}-${i}`}>
+                          <Link to={rc.path}>
+                            <Icon
+                              type={`${rc.icon}`}
+                              theme={`${rc.theme}`}
+                              className="dropdownItem"
+                            />
+                            {rc.viewName}
+                          </Link>
+                        </Menu.Item>
+                      );
+                    })}
+                  </Menu.SubMenu>
+                );
+              }
+            })}
           </Menu>
         </Col>
         <Col xs={0} sm={0} md={0} lg={8}>

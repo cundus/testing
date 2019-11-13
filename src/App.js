@@ -16,11 +16,8 @@ import store from './redux/store';
 // Browser history
 // const browserHistory = createBrowserHistory();
 
-//layout
-
-// pages
-import Home from './pages/home';
-import Planing from './pages/planing';
+// import router
+import router from './Router'
 
 const App = () => {
   return (
@@ -28,13 +25,10 @@ const App = () => {
       {/* <Dashbord /> */}
       <BrowserRouter>
         <Switch>
-          {/* <Route
-            history={browserHistory}
-            routes={routes}
-          /> */}
-          <Redirect exact from='/' to='/home'/>
-          <Route path='/home' exect component={Home}/>
-          <Route path='/planing' exect component={Planing}/>
+          {
+            router.map((r)=> <Route path='r.path' {...r}/>)
+          }
+          <Redirect from='/'  to='/home'/>
         </Switch>
       </BrowserRouter>
      </div>
