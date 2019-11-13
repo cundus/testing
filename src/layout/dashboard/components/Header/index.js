@@ -34,7 +34,7 @@ const Header = (props) => {
               type={collapsed ? 'align-right' : 'alignt-left'}
               onClick={toggle}
             />
-            <Menu.Item key="2">Home</Menu.Item>
+            <Menu.Item key="1">Home</Menu.Item>
             <Menu.SubMenu
               key="1"
               title={
@@ -56,9 +56,9 @@ const Header = (props) => {
                 View My KPI
               </Menu.Item>
             </Menu.SubMenu>
-            <Menu.Item key="4">Monitoring</Menu.Item>
-            <Menu.Item key="5">Appraisal</Menu.Item>
-            <Menu.Item key="6">My Team</Menu.Item>
+            <Menu.Item key="2">Monitoring</Menu.Item>
+            <Menu.Item key="3">Appraisal</Menu.Item>
+            <Menu.Item key="4">My Team</Menu.Item>
           </Menu>
         </Col>
         <Col xs={0} sm={0} md={0} lg={8}>
@@ -71,13 +71,13 @@ const Header = (props) => {
             className="menuWrapper"
           >
           <Row type="flex" justify="space-between" align="middle">
-            <Menu.Item key="6">
+            <Menu.Item key="5">
               <Icon style={{ fontSize: 18 }} type="bell" />
             </Menu.Item>
-            <Menu.Item key="7">
+            <Menu.Item key="6">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Menu.Item>
-            <Menu.Item key="8" className="accountWrapper">
+            <Menu.Item key="7" className="accountWrapper">
               <Text>Hi, John Doe</Text>
               <Avatar shape="square" size="large" src={myAvatar} className="avatar" />
             </Menu.Item>
