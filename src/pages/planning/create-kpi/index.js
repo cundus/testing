@@ -92,11 +92,6 @@ class CreatePlanning extends React.Component {
         editable: true
       },
       {
-        title: "address",
-        dataIndex: "address",
-        editable: true
-      },
-      {
         title: "operation",
         dataIndex: "operation",
         render: (text, record) =>
