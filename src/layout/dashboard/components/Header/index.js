@@ -10,7 +10,7 @@ import "antd/dist/antd.css";
 const { Text } = Typography;
 
 const Header = props => {
-  const { collapsed, toggle } = props;
+  // const { collapsed, toggle } = props;
 
   return (
     <Layout.Header className="headerContainer">
