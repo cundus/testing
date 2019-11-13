@@ -2,8 +2,11 @@ import React from 'react';
 import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from 'antd';
 
 import Logo from '../../../../assets/xl.png';
-import Indonesia from '../../../../assets/indonesia-flag.png';
+import Indonesia from '../../../../assets/flags/004-indonesia.svg';
+import myAvatar from '../../../../assets/users/300_23.jpg'
 import "./header-styles.scss";
+import "antd/dist/antd.css";
+
 
 const { Text } = Typography;
 
@@ -19,7 +22,7 @@ const Header = (props) => {
         type="flex"
         className="headerWrapper"
       >
-        <Col lg={10} sm={10} xs={24}>
+        <Col xs={0} sm={0} md={0} lg={10}>
           <Menu
             theme="light"
             mode="horizontal"
@@ -58,27 +61,25 @@ const Header = (props) => {
             <Menu.Item key="6">My Team</Menu.Item>
           </Menu>
         </Col>
-        <Col lg={8} sm={5} xs={0} md={0}>
+        <Col xs={0} sm={0} md={0} lg={8}>
           <img src={Logo} alt="logo" />
         </Col>
-        <Col lg={6} sm={5} xs={0} md={0}>
+        <Col xs={0} sm={0} md={0} lg={4}>
           <Menu
             theme="light"
             mode="horizontal"
             className="menuWrapper"
           >
-          <Row type="flex" justify="space-around" align="middle">
+          <Row type="flex" justify="space-between" align="middle">
             <Menu.Item key="6">
               <Icon style={{ fontSize: 18 }} type="bell" />
             </Menu.Item>
             <Menu.Item key="7">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Menu.Item>
-            <Menu.Item key="8">
+            <Menu.Item key="8" className="accountWrapper">
               <Text>Hi, John Doe</Text>
-            </Menu.Item>
-            <Menu.Item key="9">
-              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              <Avatar shape="square" size="large" src={myAvatar} className="avatar" />
             </Menu.Item>
           </Row>
           </Menu>
