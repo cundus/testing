@@ -28,23 +28,18 @@ class Dashboard extends React.Component {
           collapsed={collapsed}
           toggle={this.toggle}
         />
-        <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
-          <Header
-            collapsed={collapsed}
-            toggle={this.toggle}
-          />
-          <Content
-            style={{
-              marginTop: '100px',
-              padding: 24,
-              background: '#fff',
-              width: '100%'
-            }}
-          >
-            {/* <Text>Content</Text> */}
-            <Register />
-          </Content>
-          <Footer />
+        <Layout>
+          <Header style={{ background: '#fff', padding: 0 }} />
+            <Content style={{ margin: '100px 16px 0', overflow: 'initial' }}>
+              <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
+                ...
+                <br />
+                Really
+                <br />
+                content
+              </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }} />
         </Layout>
       </Layout>
     );
