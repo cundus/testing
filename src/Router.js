@@ -5,7 +5,7 @@ import {
 
 const Routes = [
     {
-      path: '/home',
+      path: '/',
       component: HomePage,
       name:  'home',
       viewName: 'Home',

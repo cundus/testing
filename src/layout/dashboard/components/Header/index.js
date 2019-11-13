@@ -9,19 +9,9 @@ import Router from "../../../../Router";
 const { Text } = Typography;
 
 
-
 const Header = props => {
-  const [activeMenu, setActiveMenu] = React.useState([]);
-  React.useEffect(()=>{
-    setActiveMenu(['0'])
-  }, [])
   const mainRouter = Router.filter(x => x.menuLevel === 1);
-  const [activeMenu, setActiveMenu] = React.useState(['']);
-  React.useEffect(() => {
-    setActiveMenu([''])
-  }, []);
-  console.log(activeMenu);
-  
+  const pathlocation = window.location.pathname;
   // const { collapsed, toggle } = props;
   return (
     <Layout.Header className="headerContainer">
@@ -30,7 +20,7 @@ const Header = props => {
           <Menu
             theme="light"
             mode="horizontal"
-            selectedKeys={activeMenu}
+            selectedKeys={[pathlocation]}
             className="menuWrapper"
           >
             {/* <Icon
@@ -44,8 +34,8 @@ const Header = props => {
               const childsRoutes = Router.filter(rc => rc.parent === r.name);
               if (childsRoutes.length === 0) {
                 return (
-                  <Menu.Item key={i}>
-                    <Link to={r.path} onClick={() => setActiveMenu([`${i}`])}>
+                  <Menu.Item key={`${r.path}`}>
+                    <Link to={r.path}>
                       {r.viewName}
                     </Link>
                   </Menu.Item>
@@ -53,7 +43,7 @@ const Header = props => {
               } else {
                 return (
                   <Menu.SubMenu
-                    key={i}
+                    key={`${r.name}-${i}`}
                     title={
                       <span className="submenu-title-wrapper">
                         {r.viewName}
@@ -62,10 +52,9 @@ const Header = props => {
                   >
                     {childsRoutes.map((rc, i) => {
                       return (
-                        <Menu.Item key={`${r.name}-${i}`}>
+                        <Menu.Item key={`${rc.path}`}>
                           <Link
                             to={rc.path}
-                            onClick={() => setActiveMenu([`${r.name}-${i}`])}
                           >
                             <Icon
                               type={`${rc.icon}`}
@@ -81,6 +70,7 @@ const Header = props => {
                 );
               }
             })}
+            
           </Menu>
         </Col>
         <Col xs={0} sm={0} md={0} lg={8}>
