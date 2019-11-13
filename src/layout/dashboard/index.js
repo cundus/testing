@@ -24,19 +24,17 @@ class Dashboard extends React.Component {
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />
         <Layout>
-          <Header style={{ background: "#fff", padding: 0 }} />
-          <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
-            <div
-              style={{ padding: 24, background: "#fff", textAlign: "center" }}
-            >
-              ...
-              <br />
-              Really
-              <br />
-              content
-            </div>
-          </Content>
-          <Footer style={{ textAlign: "center" }} />
+          <Header style={{ background: '#fff', padding: 0 }} />
+            <Content style={{ margin: '100px 16px 0', overflow: 'initial' }}>
+              <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
+                ...
+                <br />
+                {this.props.children}
+                <br />
+                content
+              </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }} />
         </Layout>
       </Layout>
     );
