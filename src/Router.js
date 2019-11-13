@@ -1,6 +1,6 @@
 import {
     Home  as HomePage,
-    CreatePlaning as CreatePlaningPage
+    CreatePlanning as CreatePlanningPage
 } from  './pages';
 
 const Routes = [
@@ -14,44 +14,44 @@ const Routes = [
       parent: 'none',
     },
     {
-      path: '/planing/',
-      component: CreatePlaningPage,
+      path: '/planning/',
+      component: CreatePlanningPage,
       exact: true,
       menuLevel: 1,
-      name: 'planing',
+      name: 'planning',
       viewName: 'Planning',
       parent: 'none',
     },
     {
-      path: '/planing/create-planing',
-      component: CreatePlaningPage,
+      path: '/planning/create-planing',
+      component: CreatePlanningPage,
       exact: true,
       menuLevel: 2,
-      name: 'create-planing',
+      name: 'create-planning',
       viewName: 'Create KPI',
-      parent: 'planing',
+      parent: 'planning',
       icon: 'plus-circle',
       theme: 'filled'
     },
     {
-      path: '/planing/create-non-kpi-planing',
-      component: CreatePlaningPage,
+      path: '/planning/create-non-kpi-planning',
+      component: CreatePlanningPage,
       exact: true,
       menuLevel: 2,
-      name: 'create-non-kpi-planing',
+      name: 'create-non-kpi-planning',
       viewName: 'Create Non KPI',
-      parent: 'planing',
+      parent: 'planning',
       icon: 'plus-circle',
       theme: 'outlined'
     },
     {
-      path: '/planing/kpi-planing',
-      component: CreatePlaningPage,
+      path: '/planning/kpi-planning',
+      component: CreatePlanningPage,
       exact: true,
       menuLevel: 2,
-      name: 'kpi-planing',
+      name: 'kpi-planning',
       viewName: 'View My KPI',
-      parent: 'planing',
+      parent: 'planning',
       icon: 'search',
       theme: 'outlined'
     }
