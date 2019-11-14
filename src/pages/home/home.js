@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import  Layout from '../../layout/dashboard/index';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import { Row, Col, Button, Icon } from 'antd';
 import  './home-styles.scss';
 
