@@ -21,18 +21,23 @@ class Dashboard extends React.Component {
     const { collapsed } = this.state;
 
     return (
-      <Layout style={{ minHeight: "100vh" }}>
-        <Sidebar collapsed={collapsed} toggle={this.toggle} />
-        <Layout>
-          <Header style={{ background: '#fff', padding: 0 }} />
-            <Content style={{ margin: '100px 16px 0', overflow: 'initial' }}>
+
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sidebar
+          collapsed={collapsed}
+          toggle={this.toggle}
+        />
+        <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
+          <Header
+            collapsed={collapsed}
+            toggle={this.toggle}
+          />
+          <Content style={{ margin: '100px 16px 0', overflow: 'initial' }}>
               <div style={{ padding: 24, background: '#fff', textAlign: 'center' }}>
-                <br />
                 {this.props.children}
-                <br />
               </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }} />
+          <Footer />
         </Layout>
       </Layout>
     );

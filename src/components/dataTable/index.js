@@ -47,7 +47,6 @@ class EditableCell extends React.Component {
               ref={node => (this.input = node)}
               placeholder={placeholder}
               type={type}
-              autoSize={{ minRows: 3, maxRows: 5 }}
               onChange={this.change}
             />
           ) : (
