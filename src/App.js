@@ -1,13 +1,13 @@
 import React from 'react';
 // import { Provider } from 'react-redux';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import { createBrowserHistory } from 'history';
+// import { createBrowserHistory } from 'history';
 
 // Routes
 // import routes from './routes/Route';
 
 // Store
-import store from './redux/store';
+// import store from './redux/store';
 
 // Routes
 //import { Route } from './routes';
