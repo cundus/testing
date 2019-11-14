@@ -23,7 +23,7 @@ const Routes = [
       parent: 'none',
     },
     {
-      path: '/planning/create-planing',
+      path: '/planning/create-planning',
       component: CreatePlanningPage,
       exact: true,
       menuLevel: 2,
