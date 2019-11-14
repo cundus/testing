@@ -77,15 +77,15 @@ const Header = props => {
           </Link>
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
-          <Menu theme="light" mode="horizontal" className="menuWrapper">
+          {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
             <Row type="flex" justify="space-between" align="middle">
-              <Menu.Item key="5">
+              <div>
                 <Icon style={{ fontSize: 18 }} type="bell" />
-              </Menu.Item>
-              <Menu.Item key="6">
+              </div>
+              <div>
                 <img src={Indonesia} alt="flag" className="flagIcon" />
-              </Menu.Item>
-              <Menu.Item key="7" className="accountWrapper">
+              </div>
+              <div className="accountWrapper">
                 {isDesktopOrLaptop && <Text>Hi, John Doe</Text>}
                 <Avatar
                   shape="square"
@@ -93,9 +93,9 @@ const Header = props => {
                   src={myAvatar}
                   className="avatar"
                 />
-              </Menu.Item>
+              </div>
             </Row>
-          </Menu>
+          {/* </Menu> */}
         </Col>
       </Row>
     </Layout.Header>

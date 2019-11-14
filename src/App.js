@@ -41,7 +41,7 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           {
-            router.map((r)=> <PrivateRouter path='r.path' {...r}/>)
+            router.map((r, i)=> <PrivateRouter key={i} path='r.path' {...r}/>)
           }
           <Redirect from='/'  to='/home'/>
         </Switch>
