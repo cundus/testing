@@ -17,7 +17,22 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 // const browserHistory = createBrowserHistory();
 
 // import router
-import router from './Router'
+import router from './Router';
+
+const PrivateRouter = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    checkAuth() === true
+      ? <Component {...props} />
+      : window.location.href = 'https://www.google.com'
+  )} />
+)
+
+
+// check authentication router here
+const checkAuth = ()=>{
+  const auth = true;
+  return auth;
+}
 
 const App = () => {
   return (
@@ -26,7 +41,7 @@ const App = () => {
       <BrowserRouter>
         <Switch>
           {
-            router.map((r)=> <Route path='r.path' {...r}/>)
+            router.map((r)=> <PrivateRouter path='r.path' {...r}/>)
           }
           <Redirect from='/'  to='/home'/>
         </Switch>
