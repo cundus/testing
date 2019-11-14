@@ -76,19 +76,33 @@ class CreatePlanning extends React.Component {
     super(props);
     this.columns = [
       {
-        title: "name",
-        dataIndex: "name",
-        width: "30%",
+        title: "KPI",
+        dataIndex: "kpi",
         editable: true
       },
       {
-        title: "age",
-        dataIndex: "age",
+        title: "2019 Baseline",
+        dataIndex: "baseline",
         editable: true
       },
       {
-        title: "address",
-        dataIndex: "address",
+        title: "Weight (100%)",
+        dataIndex: "weight",
+        editable: true
+      },
+      {
+        title: "L1",
+        dataIndex: "l1",
+        editable: true
+      },
+      {
+        title: "L2",
+        dataIndex: "l2",
+        editable: true
+      },
+      {
+        title: "L3",
+        dataIndex: "l3",
         editable: true
       },
       {
@@ -110,18 +124,15 @@ class CreatePlanning extends React.Component {
       dataSource: [
         {
           key: 0,
-          name: "",
-          age: "",
-          address: ""
-        },
-        {
-          key: 1,
-          name: "",
-          age: "",
-          address: ""
+          kpi: "",
+          baseline: "",
+          weight: "",
+          l1: "",
+          l2: "",
+          l3: ""
         }
       ],
-      count: 2
+      count: 1
     };
   }
 
@@ -134,9 +145,12 @@ class CreatePlanning extends React.Component {
     const { count, dataSource } = this.state;
     const newData = {
       key: count,
-      name: `Edward King ${count}`,
-      age: 32,
-      address: `London, Park Lane no. ${count}`
+      kpi: "",
+      baseline: "",
+      weight: "",
+      l1: "",
+      l2: "",
+      l3: ""
     };
     this.setState({
       dataSource: [...dataSource, newData],
@@ -158,7 +172,7 @@ class CreatePlanning extends React.Component {
   render() {
     const { dataSource } = this.state;
     console.log(dataSource);
-    
+
     const components = {
       body: {
         row: EditableFormRow,
