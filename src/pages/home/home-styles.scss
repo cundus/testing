@@ -1,7 +1,24 @@
-.grid {
-    border-right: 0.07rem solid #ebedf2;
-    text-align: center;
+@media(min: 1281px){
+    .grid {
+        border-right: 0.07rem solid #ebedf2;
+        text-align: center;
+    }
 }
+@media(min: 1025px){
+    .grid {
+        border-right: 0.07rem solid #ebedf2;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 961px), screen and (max-width: 641px), screen and (max-width: 481px), screen and (max-width: 320px) {
+    .grid {
+        border-bottom: 0.07rem solid #ebedf2;
+        text-align: center;
+        padding-bottom: 20%;
+    }
+}
+
 
 .homeBtn {
     padding-left: 2.25rem;
@@ -12,15 +29,20 @@
 
 .purple {
     color: #591df1;
+    filter: invert(8%) sepia(75%) saturate(7311%) hue-rotate(260deg) brightness(140%) contrast(97%);
 }
 .pink{
     color: #fd27eb;
+    filter: invert(32%) sepia(40%) saturate(7022%) hue-rotate(289deg) brightness(105%) contrast(108%);
 }
 .yellow{
     color: #ffb822;
+    filter: invert(78%) sepia(47%) saturate(897%) hue-rotate(338deg) brightness(101%) contrast(101%);
 }
 .green{
     color: #1dc9b7;
+    filter: invert(70%) sepia(20%) saturate(1609%) hue-rotate(123deg) brightness(92%) contrast(86%);
+
 }
 
 .purpleBtn{
