@@ -20,20 +20,17 @@ class EditableCell extends React.Component {
     editing: true
   };
 
-  save = e => {
-    const { record, handleSave } = this.props;
+  change = e => {
+    const { record, handleChange } = this.props;
     this.form.validateFields((error, values) => {
-      if (error && error[e.currentTarget.id]) {
-        return;
-      }
-      handleSave({ ...record, ...values });
+      handleChange({ ...record, ...values });
     });
   };
 
   renderCell = form => {
     this.form = form;
-    const { children, dataIndex, record, title } = this.props;
-    const { editing } = this.state;
+    const { /*children,*/ dataIndex, record/*, title*/ } = this.props;
+    // const { editing } = this.state;
     return (
       <Form.Item style={{ margin: 0 }}>
         {form.getFieldDecorator(dataIndex, {
@@ -42,7 +39,7 @@ class EditableCell extends React.Component {
           <TextArea
             ref={node => (this.input = node)}
             autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.save}
+            onChange={this.change}
           />
         )}
       </Form.Item>
@@ -56,7 +53,7 @@ class EditableCell extends React.Component {
       title,
       record,
       index,
-      handleSave,
+      handleChange,
       children,
       ...restProps
     } = this.props;
@@ -115,7 +112,7 @@ class DataTable extends React.Component {
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
             >
-              <a>Delete</a>
+              <Button>Delete</Button>
             </Popconfirm>
           ) : null
       }
@@ -159,7 +156,7 @@ class DataTable extends React.Component {
     });
   };
 
-  handleSave = row => {
+  handleChange = row => {
     const newData = [...this.state.dataSource];
     const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
@@ -191,7 +188,7 @@ class DataTable extends React.Component {
           editable: col.editable,
           dataIndex: col.dataIndex,
           title: col.title,
-          handleSave: this.handleSave
+          handleChange: this.handleChange
         })
       };
     });
