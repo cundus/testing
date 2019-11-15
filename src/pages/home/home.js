@@ -14,7 +14,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Layout>
+        {/* <Layout> */}
           <Row style={{ paddingTop: 50 }}>
             <Col xl={6} lg={6} md={6} xs={24} className="grid">
               <br />
@@ -73,7 +73,7 @@ class Home extends Component {
               </Button>
             </Col>
           </Row>
-        </Layout>
+        {/* </Layout> */}
       </div>
     );
   }

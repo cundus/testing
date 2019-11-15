@@ -2,8 +2,8 @@ import React from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
 
-import { MappedRouter } from '../../routes/RouteGenerator';
 import { Footer, Header, Sidebar } from "./components";
+import { MappedRouter } from '../../routes/RouteGenerator';
 
 const { Content } = Layout;
 
@@ -21,7 +21,6 @@ class Dashboard extends React.Component {
   render() {
     const { collapsed } = this.state;    
     const { child } = this.props;
-
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />

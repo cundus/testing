@@ -27,13 +27,13 @@ export const routes = [
         component: DashboardLayout,
         child: [
           {
-            path: "/home",
-            component: HomePage,
+            path: "/dashboard/home",
+            component: Lazyload(HomePage),
             title: "Home",
             exact: true,
           },
           {
-            path: "/planning/",
+            path: "/dashboard/planning/create-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
             title: "Planning",

@@ -111,11 +111,10 @@ class CreatePlanning extends Component {
   render() {
     const { dataSource } = this.state;
     const { columns, handleAdd, handleChange, handleDelete } = this;
-    console.log("SAaas");
     
     return (
       <div>
-        <Layout>
+        {/* <Layout> */}
           <DataTable
             columns={columns}
             dataSource={dataSource}
@@ -123,7 +122,7 @@ class CreatePlanning extends Component {
             handleChange={handleChange}
             handleDelete={handleDelete}
           />
-        </Layout>
+        {/* </Layout> */}
       </div>
     );
   }

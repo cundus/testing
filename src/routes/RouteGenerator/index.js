@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
-// import { Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 // Stores Redux
 // import store from '../../redux/store';
@@ -45,7 +45,6 @@ export const MainRouter = ({
 
 export const MappedRouter = (props) => {
   const { routes } = props;
-  
   return (
     <React.Fragment>
       {routes.map((route, i) => (<MainRouter key={i} {...route} />))}
