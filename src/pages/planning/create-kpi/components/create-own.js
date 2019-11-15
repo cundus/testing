@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../../components";
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Tooltip } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash as deleteIcon } from "@fortawesome/free-solid-svg-icons";
 
 class CreateOwn extends Component {
   constructor(props) {
@@ -19,7 +21,7 @@ class CreateOwn extends Component {
         editable: true
       },
       {
-        title: "Weight (100%)",
+        title: "Weight (%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
         type: "number",
@@ -46,13 +48,17 @@ class CreateOwn extends Component {
       {
         title: "",
         dataIndex: "operation",
+        action: true,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
-            >
-              <Button>Delete</Button>
+            > <Tooltip placement="bottomRight" title={"delete"}>
+              <Button>
+                <FontAwesomeIcon icon={deleteIcon} color="red"/>
+              </Button>
+              </Tooltip>
             </Popconfirm>
           ) : null
       }
@@ -113,13 +119,13 @@ class CreateOwn extends Component {
     return (
       <div>
         {/* <Layout> */}
-          <DataTable
-            columns={columns}
-            dataSource={dataSource}
-            handleAdd={handleAdd}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+        <DataTable
+          columns={columns}
+          dataSource={dataSource}
+          handleAdd={handleAdd}
+          handleChange={handleChange}
+          handleDelete={handleDelete}
+        />
         {/* </Layout> */}
       </div>
     );

@@ -9,37 +9,44 @@ class CascadePartner extends Component {
       {
         title: "KPI",
         dataIndex: "kpi",
-        placeholder: "Enter KPI subject"
+        placeholder: "Enter KPI subject",
+        editable: false,
       },
       {
         title: "2020 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline"
+        placeholder: "Enter 2020 baseline",
+        editable: false,
       },
       {
-        title: "Weight (100%)",
+        title: "Weight (%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number"
+        type: "number",
+        editable: false,
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1"
+        placeholder: "Enter Level 1",
+        editable: false,
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2"
+        placeholder: "Enter Level 2",
+        editable: false,
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3"
+        placeholder: "Enter Level 3",
+        editable: false,
       },
       {
         title: "operation",
         dataIndex: "operation",
+        action: true,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <Popconfirm
@@ -56,7 +63,7 @@ class CascadePartner extends Component {
       dataSource: [
         {
           key: 0,
-          kpi: "",
+          kpi: "dasdada",
           baseline: "",
           weight: "",
           l1: "",
