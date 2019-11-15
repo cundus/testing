@@ -9,9 +9,7 @@ import Clear from "../../layout/clear";
 
 // Shared Pages
 const HomePage = React.lazy(() => import("../../pages/home/home"));
-const CreatePlanningPage = React.lazy(() =>
-  import("../../pages/planning/create-kpi/")
-);
+const CreatePlanningPage = React.lazy(() => import("../../pages/planning/"));
 
 export const routes = [
   {
@@ -30,31 +28,31 @@ export const routes = [
             path: "/dashboard/home",
             component: Lazyload(HomePage),
             title: "Home",
-            exact: true,
+            exact: true
           },
           {
             path: "/dashboard/planning/create-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
-            title: "Planning",
+            title: "Planning"
           },
           {
             path: "/planning/create-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
-            title: "Create Planning",
+            title: "Create Planning"
           },
           {
             path: "/planning/create-non-kpi-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
-            title: "Create Non KPI Planning",
+            title: "Create Non KPI Planning"
           },
           {
             path: "/planning/kpi-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
-            title: "KPI Planning",
+            title: "KPI Planning"
           }
         ]
       } /*, {

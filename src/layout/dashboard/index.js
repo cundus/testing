@@ -29,7 +29,7 @@ class Dashboard extends React.Component {
           <Header collapsed={collapsed} toggle={this.toggle} />
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div
-              style={{ padding: 24, background: "#fff", textAlign: "center", borderRadius: 5 }}
+              style={{ padding: 24, background: "#fff", borderRadius: 5 }}
             >
               <MappedRouter routes={child} />
             </div>

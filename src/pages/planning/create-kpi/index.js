@@ -16,7 +16,7 @@ class CreateKPI extends Component {
     return (
       <div>
         {/* <Layout> */}
-          <Tabs defaultActiveKey="1">
+          <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="Creat Own KPI" key="1">
               <CreateOwn
                 addRow
