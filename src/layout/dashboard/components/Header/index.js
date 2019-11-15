@@ -1,92 +1,105 @@
-import React from 'react';
-import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from 'antd';
-
-import Logo from '../../../../assets/xl.png';
-import Indonesia from '../../../../assets/indonesia-flag.png';
-import "antd/dist/antd.css";
-import "./header-styles.css";
-
+import React from "react";
+import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from "antd";
+import { Link } from "react-router-dom";
+import Logo from "../../../../assets/xl.png";
+import Indonesia from "../../../../assets/flags/004-indonesia.svg";
+import myAvatar from "../../../../assets/users/300_23.jpg";
+import "./header-styles.scss";
+import { useMediaQuery } from "react-responsive";
+import Router from "../../../../Router";
 const { Text } = Typography;
 
-const Header = (props) => {
+const Header = props => {
+  const mainRouter = Router.filter(x => x.menuLevel === 1);
+  const pathlocation = window.location.pathname;
   const { collapsed, toggle } = props;
+  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
 
   return (
-    <Layout.Header
-      className="headerContainer"
-    >
-      <Row
-        justify="space-between"
-        type="flex"
-        className="headerWrapper"
-      >
-        <Col lg={10} sm={10} xs={24}>
+    <Layout.Header className="headerContainer">
+      <Row justify="space-between" type="flex" className="headerWrapper">
+        <Col xs={1} sm={1} md={1} lg={0}>
+          <Icon
+            className="drawerIcon"
+            type={collapsed ? "align-right" : "alignt-left"}
+            onClick={toggle}
+          />
+        </Col>
+        <Col xs={0} sm={0} md={0} lg={10}>
           <Menu
             theme="light"
             mode="horizontal"
-            defaultSelectedKeys={['1']}
+            selectedKeys={[pathlocation]}
             className="menuWrapper"
           >
-            <Icon
-              className="drawerIcon"
-              type={collapsed ? 'align-right' : 'alignt-left'}
-              onClick={toggle}
-            />
-            <Menu.Item key="2">Home</Menu.Item>
-            <Menu.SubMenu
-              key="1"
-              title={
-                <span className="submenu-title-wrapper">
-                  Planning
-                </span>
+            {mainRouter.map((r, i) => {
+              // check is has child
+              const childsRoutes = Router.filter(rc => rc.parent === r.name);
+              if (childsRoutes.length === 0) {
+                return (
+                  <Menu.Item key={`${r.path}`}>
+                    <Link to={r.path}>{r.viewName}</Link>
+                  </Menu.Item>
+                );
+              } else {
+                return (
+                  <Menu.SubMenu
+                    key={`${r.name}-${i}`}
+                    title={
+                      <span className="submenu-title-wrapper">
+                        {r.viewName}
+                      </span>
+                    }
+                  >
+                    {childsRoutes.map((rc, i) => {
+                      return (
+                        <Menu.Item key={`${rc.path}`}>
+                          <Link to={rc.path}>
+                            <Icon
+                              type={`${rc.icon}`}
+                              theme={`${rc.theme}`}
+                              className="dropdownItem"
+                            />
+                            {rc.viewName}
+                          </Link>
+                        </Menu.Item>
+                      );
+                    })}
+                  </Menu.SubMenu>
+                );
               }
-            >
-              <Menu.Item key="default">
-              <Icon type="plus-circle" theme="filled" className="dropdownItem" />
-                Create KPI
-              </Menu.Item>
-              <Menu.Item key="fluid">
-                <Icon type="plus-circle" className="dropdownItem" />
-                Create Non KPI
-              </Menu.Item>
-              <Menu.Item key="asaid">
-                <Icon type="search" className="dropdownItem" />
-                View My KPI
-              </Menu.Item>
-            </Menu.SubMenu>
-            <Menu.Item key="4">Monitoring</Menu.Item>
-            <Menu.Item key="5">Appraisal</Menu.Item>
-            <Menu.Item key="6">My Team</Menu.Item>
+            })}
           </Menu>
         </Col>
-        <Col lg={8} sm={5} xs={0} md={0}>
-          <img src={Logo} alt="logo" />
+        <Col xs={10} sm={10} md={10} lg={8}>
+          <Link to="/">
+            <img src={Logo} alt="logo" style={isDesktopOrLaptop ? {} :{width:"auto", height:40}} />
+          </Link>
         </Col>
-        <Col lg={6} sm={5} xs={0} md={0}>
-          <Menu
-            theme="light"
-            mode="horizontal"
-            className="menuWrapper"
-          >
-          <Row type="flex" justify="space-around" align="middle">
-            <Menu.Item key="6">
-              <Icon style={{ fontSize: 18 }} type="bell" />
-            </Menu.Item>
-            <Menu.Item key="7">
-              <img src={Indonesia} alt="flag" className="flagIcon" />
-            </Menu.Item>
-            <Menu.Item key="8">
-              <Text>Hi, John Doe</Text>
-            </Menu.Item>
-            <Menu.Item key="9">
-              <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-            </Menu.Item>
-          </Row>
-          </Menu>
+        <Col xs={8} sm={8} md={8} lg={4}>
+          {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
+            <Row type="flex" justify="space-between" align="middle">
+              <div>
+                <Icon style={{ fontSize: 18 }} type="bell" />
+              </div>
+              <div>
+                <img src={Indonesia} alt="flag" className="flagIcon" />
+              </div>
+              <div className="accountWrapper">
+                {isDesktopOrLaptop && <Text>Hi, John Doe</Text>}
+                <Avatar
+                  shape="square"
+                  size={isDesktopOrLaptop ? "large" : "default"}
+                  src={myAvatar}
+                  className="avatar"
+                />
+              </div>
+            </Row>
+          {/* </Menu> */}
         </Col>
       </Row>
     </Layout.Header>
-  )
-}
+  );
+};
 
 export default Header;
