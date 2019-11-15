@@ -1,129 +1,34 @@
 import React, { Component } from "react";
 import Layout from "../../../layout/dashboard";
-import { DataTable } from "../../../components";
-import { Button, Popconfirm } from "antd";
+import CreateOwn from "./create-own";
+import CascadePartner from "./cascade-partner";
+import CascadePrevious from "./cascade-previous";
+import { Tabs } from "antd";
 
-class CreatePlanning extends Component {
-  constructor(props) {
-    super(props);
-    this.columns = [
-      {
-        title: "KPI",
-        dataIndex: "kpi",
-        placeholder: "Enter KPI subject",
-        editable: true
-      },
-      {
-        title: "2020 Baseline",
-        dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline",
-        editable: true
-      },
-      {
-        title: "Weight (100%)",
-        dataIndex: "weight",
-        placeholder: "Enter KPI Weight",
-        type: "number",
-        editable: true
-      },
-      {
-        title: "L1",
-        dataIndex: "l1",
-        placeholder: "Enter Level 1",
-        editable: true
-      },
-      {
-        title: "L2",
-        dataIndex: "l2",
-        placeholder: "Enter Level 2",
-        editable: true
-      },
-      {
-        title: "L3",
-        dataIndex: "l3",
-        placeholder: "Enter Level 3",
-        editable: true
-      },
-      {
-        title: "operation",
-        dataIndex: "operation",
-        render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
-            >
-              <Button>Delete</Button>
-            </Popconfirm>
-          ) : null
-      }
-    ];
+const { TabPane } = Tabs;
 
-    this.state = {
-      dataSource: [
-        {
-          key: 0,
-          kpi: "",
-          baseline: "",
-          weight: "",
-          l1: "",
-          l2: "",
-          l3: ""
-        }
-      ],
-      count: 1
-    };
-  }
-
-  handleDelete = key => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  };
-
-  handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      kpi: "",
-      baseline: "",
-      weight: "",
-      l1: "",
-      l2: "",
-      l3: ""
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1
-    });
-  };
-
-  handleChange = row => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
-    this.setState({ dataSource: newData });
-  };
-
+class CreateKPI extends Component {
   render() {
-    const { dataSource } = this.state;
-    const { columns, handleAdd, handleChange, handleDelete } = this;
+    // function callback(key) {
+    //   console.log(key);
+    // }
     return (
       <div>
         <Layout>
-          <DataTable
-            columns={columns}
-            dataSource={dataSource}
-            handleAdd={handleAdd}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Creat Own KPI" key="1">
+              <CreateOwn />
+            </TabPane>
+            <TabPane tab="Cascade From Supervisor" key="2">
+              <CascadePartner />
+            </TabPane>
+            <TabPane tab="Cascade From Previous Year" key="3">
+              <CascadePrevious />
+            </TabPane>
+          </Tabs>
         </Layout>
       </div>
     );
   }
 }
-export default CreatePlanning;
+export default CreateKPI;

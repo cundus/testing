@@ -1,6 +1,6 @@
 import {
     Home  as HomePage,
-    CreatePlanning as CreatePlanningPage
+    CreateKPI as CreateKpiPage
 } from  './pages';
 
 const Routes = [
@@ -15,7 +15,7 @@ const Routes = [
     },
     {
       path: '/planning/',
-      component: CreatePlanningPage,
+      component: CreateKpiPage,
       exact: true,
       menuLevel: 1,
       name: 'planning',
@@ -24,7 +24,7 @@ const Routes = [
     },
     {
       path: '/planning/create-planning',
-      component: CreatePlanningPage,
+      component: CreateKpiPage,
       exact: true,
       menuLevel: 2,
       name: 'create-planning',
@@ -35,7 +35,7 @@ const Routes = [
     },
     {
       path: '/planning/create-non-kpi-planning',
-      component: CreatePlanningPage,
+      component: CreateKpiPage,
       exact: true,
       menuLevel: 2,
       name: 'create-non-kpi-planning',
@@ -46,7 +46,7 @@ const Routes = [
     },
     {
       path: '/planning/kpi-planning',
-      component: CreatePlanningPage,
+      component: CreateKpiPage,
       exact: true,
       menuLevel: 2,
       name: 'kpi-planning',

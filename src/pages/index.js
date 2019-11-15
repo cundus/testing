@@ -1,2 +1,2 @@
 export { default as Home } from './home/home';
-export { default as CreatePlanning } from './planning/create-kpi';
+export { default as CreateKPI } from './planning/create-kpi';
