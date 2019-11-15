@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../../components";
-import { Button, Popconfirm, Tooltip } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash as deleteIcon } from "@fortawesome/free-solid-svg-icons";
+import { Button, Popconfirm, Tooltip, Icon } from "antd";
 
 class CreateOwn extends Component {
   constructor(props) {
@@ -54,10 +52,11 @@ class CreateOwn extends Component {
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
-            > <Tooltip placement="bottomRight" title={"delete"}>
-              <Button>
-                <FontAwesomeIcon icon={deleteIcon} color="red"/>
-              </Button>
+            >
+              <Tooltip placement="bottomRight" title={"delete"}>
+                <Button>
+                  <Icon type="delete" />
+                </Button>
               </Tooltip>
             </Popconfirm>
           ) : null
