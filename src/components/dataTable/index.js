@@ -17,10 +17,6 @@ const EditableRow = ({ form, index, ...props }) => (
 const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
-  state = {
-    editing: true
-  };
-
   change = e => {
     const { record, handleChange } = this.props;
     this.form.validateFields((error, values) => {
@@ -31,12 +27,14 @@ class EditableCell extends React.Component {
   renderCell = form => {
     this.form = form;
     const {
-      /*children,*/ dataIndex,
+      editable,
+      dataIndex,
       record,
       placeholder,
-      type /*, title*/
+      type,
+      title
     } = this.props;
-    // const { editing } = this.state;
+
     return (
       <Form.Item style={{ margin: 0 }}>
         {form.getFieldDecorator(dataIndex, {
@@ -44,17 +42,23 @@ class EditableCell extends React.Component {
         })(
           type === "number" ? (
             <InputNumber
+              id={title}
+              className="input"
               ref={node => (this.input = node)}
               placeholder={placeholder}
               type={type}
               onChange={this.change}
+              disabled={!editable}
             />
           ) : (
             <TextArea
+              id={title}
+              className="input"
               ref={node => (this.input = node)}
               placeholder={placeholder}
               autoSize={{ minRows: 3, maxRows: 5 }}
               onChange={this.change}
+              disabled={!editable}
             />
           )
         )}
@@ -71,64 +75,65 @@ class EditableCell extends React.Component {
       index,
       handleChange,
       children,
+      action,
       ...restProps
     } = this.props;
+
     return (
       <td {...restProps}>
-        {editable ? (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-        ) : (
+        {action ? (
           children
+        ) : (
+          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
         )}
       </td>
     );
   }
 }
 
-const DataTable = (props) => {
-    const { dataSource, handleChange, handleAdd, columns } = props;
+const DataTable = props => {
+  const { dataSource, handleChange, handleAdd, columns } = props;
 
-    const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
 
-    const components = {
-      body: {
-        row: EditableFormRow,
-        cell: EditableCell
-      }
+  const components = {
+    body: {
+      row: EditableFormRow,
+      cell: EditableCell
+    }
+  };
+  const columnList = columns.map(col => {
+    return {
+      ...col,
+      onCell: record => ({
+        record,
+        editable: col.editable,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        type: col.type,
+        action: col.action,
+        placeholder: col.placeholder,
+        handleChange: handleChange
+      })
     };
-    const columnList = columns.map(col => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: record => ({
-          record,
-          editable: col.editable,
-          dataIndex: col.dataIndex,
-          title: col.title,
-          type: col.type,
-          placeholder: col.placeholder,
-          numberType: col.numberType,
-          handleChange: handleChange
-        })
-      };
-    });
-    return (
-      <div>
-        <Table
-          components={components}
-          rowClassName={() => "editable-row"}
-          bordered
-          dataSource={dataSource}
-          columns={columnList}
-          scroll={isDesktopOrLaptop ? { x: false } : { x: true }}
-        />
-        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-          Add a row
-        </Button>
-      </div>
-    );
-  }
+  });
+  return (
+    <div>
+      <Table
+        components={components}
+        rowClassName={() => "editable-row"}
+        bordered
+        dataSource={dataSource}
+        columns={columnList}
+        scroll={isDesktopOrLaptop ? { x: false } : { x: true }}
+        pagination={false}
+        style={{ marginBottom: 10 }}
+      />
+      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+        Add a row
+      </Button>
+    </div>
+  );
+};
 
 export default DataTable;
