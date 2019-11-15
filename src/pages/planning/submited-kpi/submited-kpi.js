@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Layout from "../../../layout/dashboard";
-import TableDrafKPI from "./table-draf-kpi";
+import TableSubmitedKPI from "./table-submited-kpi";
 
-class DrafKPI extends Component {
+class SubmitedKPI extends Component {
   render() {
     // function callback(key) {
     //   console.log(key);
@@ -10,10 +10,10 @@ class DrafKPI extends Component {
     return (
       <div>
         <Layout>
-            <TableDrafKPI/>
+            <TableSubmitedKPI/>
         </Layout>
       </div>
     );
   }
 }
-export default DrafKPI;
+export default SubmitedKPI;

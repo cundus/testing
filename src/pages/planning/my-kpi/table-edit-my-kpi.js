@@ -2,15 +2,14 @@ import React, { Component } from "react";
 import { DataTable } from "../../../components";
 import { Button, Popconfirm } from "antd";
 
-class TableDrafKPI extends Component {
+class TableEditMyKPI extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "Cascading/Self KPI",
+        title: "Cascading/ Self KPI",
         dataIndex: "typeKpi",
         placeholder: "Cascading/Self KPI",
-        editable: true
       },
       {
         title: "KPI Subject",
@@ -50,18 +49,10 @@ class TableDrafKPI extends Component {
         editable: true
       },
       {
-        title: "operation",
-        dataIndex: "operation",
-        render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
-            >
-              <Button>Delete</Button>
-            </Popconfirm>
-          ) : null
-      }
+          title: "Feedback",
+          dataIndex: "feedback",
+          placeholder: "Feedback"
+      },
     ];
 
     this.state = {
@@ -96,7 +87,8 @@ class TableDrafKPI extends Component {
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
       },
       {
         key: 2,
@@ -106,17 +98,24 @@ class TableDrafKPI extends Component {
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
       },
       {
-        key: 1,
+        key: 3,
         typeKpi: "Cascading from Superior",
         kpi: "Create datawarehouse for HC Analytics purposes",
         baseline: "Ready in Q3 2019",
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
+      },
+      {
+        key: 4,
+        baseline: "Total Ratting",
+        weight: "100%",
       }
     ]});
   }
@@ -173,4 +172,4 @@ class TableDrafKPI extends Component {
     );
   }
 }
-export default TableDrafKPI;
+export default TableEditMyKPI;

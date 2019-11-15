@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { DataTable } from "../../../components";
 import { Button, Popconfirm } from "antd";
 
-class TableDrafKPI extends Component {
+class TableSubmitedKPI extends Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -10,58 +10,38 @@ class TableDrafKPI extends Component {
         title: "Cascading/Self KPI",
         dataIndex: "typeKpi",
         placeholder: "Cascading/Self KPI",
-        editable: true
       },
       {
         title: "KPI Subject",
         dataIndex: "kpi",
-        placeholder: "Enter 2020 baseline",
-        editable: true
+        placeholder: "Enter 2020 baseline"
       },
       {
         title: "2019 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2019 baseline",
-        editable: true
+        placeholder: "Enter 2019 baseline"
       },
       {
         title: "Weight (100%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number",
-        editable: true
+        type: "number"
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1",
-        editable: true
+        placeholder: "Enter Level 1"
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2",
-        editable: true
+        placeholder: "Enter Level 2"
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3",
-        editable: true
+        placeholder: "Enter Level 3"
       },
-      {
-        title: "operation",
-        dataIndex: "operation",
-        render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
-            >
-              <Button>Delete</Button>
-            </Popconfirm>
-          ) : null
-      }
     ];
 
     this.state = {
@@ -173,4 +153,4 @@ class TableDrafKPI extends Component {
     );
   }
 }
-export default TableDrafKPI;
+export default TableSubmitedKPI;

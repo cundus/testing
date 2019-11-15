@@ -2,66 +2,51 @@ import React, { Component } from "react";
 import { DataTable } from "../../../components";
 import { Button, Popconfirm } from "antd";
 
-class TableDrafKPI extends Component {
+class TableMyKPI extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "Cascading/Self KPI",
+        title: "Cascading/ Self KPI",
         dataIndex: "typeKpi",
         placeholder: "Cascading/Self KPI",
-        editable: true
       },
       {
         title: "KPI Subject",
         dataIndex: "kpi",
-        placeholder: "Enter 2020 baseline",
-        editable: true
+        placeholder: "Enter 2020 baseline"
       },
       {
         title: "2019 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2019 baseline",
-        editable: true
+        placeholder: "Enter 2019 baseline"
       },
       {
         title: "Weight (100%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number",
-        editable: true
+        type: "number"
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1",
-        editable: true
+        placeholder: "Enter Level 1"
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2",
-        editable: true
+        placeholder: "Enter Level 2"
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3",
-        editable: true
+        placeholder: "Enter Level 3"
       },
       {
-        title: "operation",
-        dataIndex: "operation",
-        render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
-            >
-              <Button>Delete</Button>
-            </Popconfirm>
-          ) : null
-      }
+          title: "Feedback",
+          dataIndex: "feedback",
+          placeholder: "Feedback"
+      },
     ];
 
     this.state = {
@@ -96,7 +81,8 @@ class TableDrafKPI extends Component {
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
       },
       {
         key: 2,
@@ -106,17 +92,24 @@ class TableDrafKPI extends Component {
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
       },
       {
-        key: 1,
+        key: 3,
         typeKpi: "Cascading from Superior",
         kpi: "Create datawarehouse for HC Analytics purposes",
         baseline: "Ready in Q3 2019",
         weight: 20,
         l1: "Ready in Q2 2019",
         l2: "Ready in Q3 2019",
-        l3: "Ready in Q4 2019"
+        l3: "Ready in Q4 2019",
+        feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
+      },
+      {
+        key: 4,
+        baseline: "Total Ratting",
+        weight: "100%",
       }
     ]});
   }
@@ -173,4 +166,4 @@ class TableDrafKPI extends Component {
     );
   }
 }
-export default TableDrafKPI;
+export default TableMyKPI;
