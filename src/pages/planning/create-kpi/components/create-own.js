@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { DataTable } from "../../../components";
+import { DataTable } from "../../../../components";
 import { Button, Popconfirm } from "antd";
 
 class CreateOwn extends Component {
@@ -44,7 +44,7 @@ class CreateOwn extends Component {
         editable: true
       },
       {
-        title: "operation",
+        title: "",
         dataIndex: "operation",
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (

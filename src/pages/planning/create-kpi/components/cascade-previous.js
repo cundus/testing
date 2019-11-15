@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { DataTable } from "../../../components";
+import { DataTable } from "../../../../components";
 import { Button, Popconfirm } from "antd";
 
-class CascadePartner extends Component {
+class CascadePrevious extends Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -107,16 +107,16 @@ class CascadePartner extends Component {
     return (
       <div>
         {/* <Layout> */}
-          <DataTable
-            columns={columns}
-            dataSource={dataSource}
-            handleAdd={handleAdd}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+        <DataTable
+          columns={columns}
+          dataSource={dataSource}
+          handleAdd={handleAdd}
+          handleChange={handleChange}
+          handleDelete={handleDelete}
+        />
         {/* </Layout> */}
       </div>
     );
   }
 }
-export default CascadePartner;
+export default CascadePrevious;
