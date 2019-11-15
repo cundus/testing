@@ -1,12 +1,12 @@
 import React from "react";
 import { Layout, Menu, Icon, /*Typography*/ } from "antd";
 import { Link } from "react-router-dom";
-import Router from "../../../../Router";
+import MenuList from "../../../../routes/MenuList";
 
 const { Sider } = Layout;
 
 const Sidebar = props => {
-  const mainRouter = Router.filter(x => x.menuLevel === 1);
+  const mainRouter = MenuList.filter(x => x.menuLevel === 1);
   const pathlocation = window.location.pathname;
   const { collapsed, toggle } = props;
   return (
@@ -35,35 +35,35 @@ const Sidebar = props => {
             onClick={toggle}
           />
         </div>
-        {mainRouter.map((r, i) => {
+            {mainRouter.map((menu) => {
               // check is has child
-              const childsRoutes = Router.filter(rc => rc.parent === r.name);
+              const childsRoutes = MenuList.filter(menuChild => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
                 return (
-                  <Menu.Item key={`${r.path}`}>
-                    <Link to={r.path}>{r.viewName}</Link>
+                  <Menu.Item key={`${menu.path}`}>
+                    <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
                 );
               } else {
                 return (
                   <Menu.SubMenu
-                    key={`${r.name}-${i}`}
+                    key={`${menu.name}-${menu.id}`}
                     title={
                       <span className="submenu-title-wrapper">
-                        {r.viewName}
+                        {menu.title}
                       </span>
                     }
                   >
-                    {childsRoutes.map((rc, i) => {
+                    {childsRoutes.map((menuChild) => {
                       return (
-                        <Menu.Item key={`${rc.path}`}>
-                          <Link to={rc.path}>
+                        <Menu.Item key={`${menuChild.path}`}>
+                          <Link to={menuChild.path}>
                             <Icon
-                              type={`${rc.icon}`}
-                              theme={`${rc.theme}`}
+                              type={`${menuChild.icon}`}
+                              theme={`${menuChild.theme}`}
                               className="dropdownItem"
                             />
-                            {rc.viewName}
+                            {menuChild.title}
                           </Link>
                         </Menu.Item>
                       );

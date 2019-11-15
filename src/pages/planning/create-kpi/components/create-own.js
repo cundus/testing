@@ -1,52 +1,63 @@
 import React, { Component } from "react";
-import { DataTable } from "../../../components";
-import { Button, Popconfirm } from "antd";
+import { DataTable } from "../../../../components";
+import { Button, Popconfirm, Tooltip, Icon } from "antd";
 
-class CascadePrevious extends Component {
+class CreateOwn extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
         title: "KPI",
         dataIndex: "kpi",
-        placeholder: "Enter KPI subject"
+        placeholder: "Enter KPI subject",
+        editable: true
       },
       {
         title: "2020 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline"
+        placeholder: "Enter 2020 baseline",
+        editable: true
       },
       {
-        title: "Weight (100%)",
+        title: "Weight (%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number"
+        type: "number",
+        editable: true
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1"
+        placeholder: "Enter Level 1",
+        editable: true
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2"
+        placeholder: "Enter Level 2",
+        editable: true
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3"
+        placeholder: "Enter Level 3",
+        editable: true
       },
       {
-        title: "operation",
+        title: "",
         dataIndex: "operation",
+        action: true,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
               onConfirm={() => this.handleDelete(record.key)}
             >
-              <Button>Delete</Button>
+              <Tooltip placement="bottomRight" title={"delete"}>
+                <Button>
+                  <Icon type="delete" />
+                </Button>
+              </Tooltip>
             </Popconfirm>
           ) : null
       }
@@ -119,4 +130,4 @@ class CascadePrevious extends Component {
     );
   }
 }
-export default CascadePrevious;
+export default CreateOwn;

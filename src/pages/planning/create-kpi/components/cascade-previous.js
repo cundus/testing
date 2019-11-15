@@ -1,45 +1,52 @@
 import React, { Component } from "react";
-import { DataTable } from "../../../components";
+import { DataTable } from "../../../../components";
 import { Button, Popconfirm } from "antd";
 
-class CascadePartner extends Component {
+class CascadePrevious extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
         title: "KPI",
         dataIndex: "kpi",
-        placeholder: "Enter KPI subject"
+        placeholder: "Enter KPI subject",
+        editable: false,
       },
       {
         title: "2020 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline"
+        placeholder: "Enter 2020 baseline",
+        editable: false,
       },
       {
-        title: "Weight (100%)",
+        title: "Weight (%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number"
+        type: "number",
+        editable: false,
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1"
+        placeholder: "Enter Level 1",
+        editable: false,
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2"
+        placeholder: "Enter Level 2",
+        editable: false,
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3"
+        placeholder: "Enter Level 3",
+        editable: false,
       },
       {
         title: "operation",
         dataIndex: "operation",
+        action: true,
         render: (text, record) =>
           this.state.dataSource.length >= 1 ? (
             <Popconfirm
@@ -107,16 +114,16 @@ class CascadePartner extends Component {
     return (
       <div>
         {/* <Layout> */}
-          <DataTable
-            columns={columns}
-            dataSource={dataSource}
-            handleAdd={handleAdd}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+        <DataTable
+          columns={columns}
+          dataSource={dataSource}
+          handleAdd={handleAdd}
+          handleChange={handleChange}
+          handleDelete={handleDelete}
+        />
         {/* </Layout> */}
       </div>
     );
   }
 }
-export default CascadePartner;
+export default CascadePrevious;
