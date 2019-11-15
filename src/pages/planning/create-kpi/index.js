@@ -15,7 +15,7 @@ class CreateKPI extends Component {
   render() {
     return (
       <div>
-        <Layout>
+        {/* <Layout> */}
           <Tabs defaultActiveKey="1">
             <TabPane tab="Creat Own KPI" key="1">
               <CreateOwn
@@ -37,7 +37,7 @@ class CreateKPI extends Component {
               />
             </TabPane>
           </Tabs>
-        </Layout>
+        {/* </Layout> */}
       </div>
     );
   }

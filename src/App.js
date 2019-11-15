@@ -1,52 +1,32 @@
 import React from 'react';
-// import { Provider } from 'react-redux';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-// import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
 // Routes
-// import routes from './routes/Route';
+import routes from './routes/Route';
 
-// Store
-// import store from './redux/store';
+// Stores
+import store from './redux/store';
 
 // Routes
-//import { Route } from './routes';
-//import Dashbord from '../src/layout/dashboard';
+import { MappedRouter } from './routes/RouteGenerator';
 
 // Browser history
-// const browserHistory = createBrowserHistory();
+const browserHistory = createBrowserHistory();
 
-// import router
-import router from './Router';
-
-const PrivateRouter = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    checkAuth() === true
-      ? <Component {...props} />
-      : window.location.href = 'https://www.google.com'
-  )} />
-)
-
-
-// check authentication router here
-const checkAuth = ()=>{
-  const auth = true;
-  return auth;
-}
-
-const App = () => {
+const App = (props) => {
   return (
-    <div>
-      {/* <Dashbord /> */}
-      <BrowserRouter>
-        <Switch>
-          {
-            router.map((r, i)=> <PrivateRouter key={i} path='r.path' {...r}/>)
-          }
-          <Redirect from='/'  to='/home'/>
-        </Switch>
-      </BrowserRouter>
-     </div>
+    <Provider store={store}>
+        <BrowserRouter>
+          <Switch>
+            <MappedRouter
+              history={browserHistory}
+              routes={routes}
+            />
+          </Switch>
+        </BrowserRouter>
+    </Provider>
   );
 };
 
