@@ -54,7 +54,7 @@ const Routes = [
       parent: 'planning',
       icon: 'search',
       theme: 'outlined'
-    }
+    },
 ];
 
 export default Routes;
