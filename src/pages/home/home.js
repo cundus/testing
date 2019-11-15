@@ -11,6 +11,9 @@ import UsersIcon from '../../assets/icons/users.svg';
 // import { file } from "@babel/types";
 
 class Home extends Component {
+  componentDidMount(){
+    console.log(this.props.auth.getAccessToken())
+  }
   render(){
       return(
         <div>
