@@ -1,6 +1,10 @@
 import {
     Home  as HomePage,
-    CreateKPI as CreateKpiPage
+    CreateKPI as CreateKpiPage,
+    DrafKPI as DrafKPIPage,
+    SubmitedKPI  as SubmitedKPIPage,
+    MyKPI  as MyKPIPage,
+    EditMyKPI  as EditMyKPIPage
 } from  './pages';
 
 const Routes = [
@@ -46,7 +50,7 @@ const Routes = [
     },
     {
       path: '/planning/kpi-planning',
-      component: CreateKpiPage,
+      component: MyKPIPage,
       exact: true,
       menuLevel: 2,
       name: 'kpi-planning',
@@ -54,6 +58,25 @@ const Routes = [
       parent: 'planning',
       icon: 'search',
       theme: 'outlined'
+    },
+    {
+      path: '/planning/kpi-planning/edit',
+      component: EditMyKPIPage,
+      exact: true,
+      menuLevel: -1,
+      name: 'kpi-planning',
+    },
+    {
+      path: '/planning/draf/kpi',
+      component: DrafKPIPage,
+      exact: true,
+      menuLevel: -1,
+    },
+    {
+      path: '/planning/submited/kpi',
+      component: SubmitedKPIPage,
+      exact: true,
+      menuLevel: -1,
     }
 ];
 
