@@ -1,12 +1,14 @@
 // authProvider.js
 import { MsalAuthProvider, LoginType } from 'react-aad-msal';
 import Axios from 'axios';
-
+const { REACT_APP_AUTHORITY_AADMS, REACT_APP_CLIENTID_AADMS } = process.env;
 const config = {
     auth: {
-        clientId: "b0306e8c-c76e-4e1e-a8c3-41ae52c5097e",
-        authority: "https://login.microsoftonline.com/58f5a80f-a60e-4de7-9114-470285231e08",
+        clientId: REACT_APP_CLIENTID_AADMS,
+        authority: REACT_APP_AUTHORITY_AADMS,
         redirectURI: "http://localhost:8080/home"
+
+
     },
     cache: {
         cacheLocation: "localStorage",
