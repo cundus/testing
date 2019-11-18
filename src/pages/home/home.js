@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import  Layout from '../../layout/dashboard/index';
 import { Row, Col, Button/*, Icon */} from 'antd';
 import  './home-styles.scss';
 
@@ -13,8 +12,7 @@ import UsersIcon from '../../assets/icons/users.svg';
 class Home extends Component {
   render(){
       return(
-        <div>
-            {/* <Layout> */}
+        <div style={{textAlign: "center"}}>
               <Row style={{paddingTop:50}}>
                 <Col xl={6} lg={6} md={6} xs={24} className='grid'>
                   <br/><br/>
@@ -45,7 +43,6 @@ class Home extends Component {
                   <Button className='homeBtn  greenBtn' shape='round'>View My Team Performance</Button>
                 </Col>
               </Row>
-            {/* </Layout> */}
         </div>
       )
   }
