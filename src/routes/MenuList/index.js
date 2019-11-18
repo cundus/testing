@@ -39,6 +39,23 @@ const MenuList = [
     parent: 'Planning',
     icon: 'search',
     theme: 'outlined'
-  }];
+  },
+  {
+    id: 6,
+    path: '/my-team/',
+    menuLevel: 1,
+    title: 'My Team',
+    parent: 'none',
+  },
+  {
+    id: 6,
+    path: '/my-team/planning/',
+    menuLevel: 2,
+    title: 'Planning',
+    parent: 'My Team',
+    icon: 'calendar',
+    theme: 'outlined'
+  },
+];
 
 export default MenuList;

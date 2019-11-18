@@ -16,13 +16,11 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   // const token = localStorage.getItem('token');
   // const { isLogin } = state.auth;
   // // eslint-disable-next-line react/prop-types
-  // const { location } = props;
-  // const { pathname } = location;
-  // if (pathname === '/') {
-  //   if (isLogin && token !== null) {
-  //     return (<Redirect to="/dashboard/home" />);
-  //   } return (<Redirect to="/login" />);
-  // }
+  const { location } = props;
+  const { pathname } = location;
+  if (pathname === '/') {
+      return (<Redirect to="/home" />);
+  }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
   // } else if (token !== null && isLogin && pathname !== '/dashboard/home' && child.length <= 0) {
@@ -55,7 +53,7 @@ export const MappedRouter = (props) => {
   return (
     <React.Fragment>
       {routes.map((route, i) => (<MainRouter key={i} {...route} auth={props.auth}/>))}
-      <Redirect from="/" to="/home" />
+      {/* <Redirect from="/" to="/home" /> */}
     </React.Fragment>
   );
 };

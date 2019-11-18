@@ -12,6 +12,9 @@ const HomePage = React.lazy(() => import("../../pages/home/home"));
 const CreatePlanningPage = React.lazy(() => import("../../pages/planning/"));
 const MyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/my-kpi'));
 const EditMyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/edit-my-kpi'));
+const DrafKPIPage =  React.lazy(()=> import ('../../pages/planning/draf/draf-kpi'));
+const SubmitedKPIPage = React.lazy(()=> import('../../pages/planning/submited-kpi/submited-kpi'));
+const MyTeamPlaningPAge = React.lazy(()=> import('../../pages/my-team/planning/planning'));
 export const routes = [
   {
     path: "/",
@@ -60,6 +63,24 @@ export const routes = [
             component: Lazyload(EditMyKpiPage),
             exact: true,
             title: "Edit Kpi Planning"
+          },
+          {
+            path: '/planning/draf/kpi',
+            component: Lazyload(DrafKPIPage),
+            exact: true,
+            title: "Draf KPI"
+          },
+          {
+            path: '/planning/submited/kpi',
+            component: Lazyload(SubmitedKPIPage),
+            exact: true,
+            title: "Submited KPI"
+          },
+          {
+            path: '/my-team/planning/',
+            component: Lazyload(MyTeamPlaningPAge),
+            exact: true,
+            title: "Planning"
           },
         ]
       } /*, {
