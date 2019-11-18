@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Layout from "../../../layout/dashboard";
 import TableDrafKPI from "./table-draf-kpi";
 
 class DrafKPI extends Component {
@@ -9,9 +8,7 @@ class DrafKPI extends Component {
     // }
     return (
       <div>
-        <Layout>
-            <TableDrafKPI/>
-        </Layout>
+        <TableDrafKPI />
       </div>
     );
   }

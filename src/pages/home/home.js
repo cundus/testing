@@ -4,7 +4,7 @@ import { Row, Col, Button/*, Icon */} from 'antd';
 import  './home-styles.scss';
 
 // icons list
-import collaborationIcon from '../../assets/icons/collaboration.svg'; 
+import collaborationIcon from '../../assets/icons/collaboration.svg';
 import CustomerIcon from  '../../assets/icons/customer.svg';
 import FileIcon from  '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
@@ -12,12 +12,11 @@ import UsersIcon from '../../assets/icons/users.svg';
 
 class Home extends Component {
   componentDidMount(){
-    console.log(this.props.auth.getAccessToken())
   }
   render(){
       return(
         <div>
-            <Layout>
+            {/* <Layout> */}
               <Row style={{paddingTop:50}}>
                 <Col xl={6} lg={6} md={6} xs={24} className='grid'>
                   <br/><br/>
@@ -48,7 +47,7 @@ class Home extends Component {
                   <Button className='homeBtn  greenBtn' shape='round'>View My Team Performance</Button>
                 </Col>
               </Row>
-            </Layout>
+            {/* </Layout> */}
         </div>
       )
   }
