@@ -3,13 +3,15 @@ import { Row, Col, Button/*, Icon */} from 'antd';
 import  './home-styles.scss';
 
 // icons list
-import collaborationIcon from '../../assets/icons/collaboration.svg'; 
+import collaborationIcon from '../../assets/icons/collaboration.svg';
 import CustomerIcon from  '../../assets/icons/customer.svg';
 import FileIcon from  '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
 // import { file } from "@babel/types";
 
 class Home extends Component {
+  componentDidMount(){
+  }
   render(){
       return(
         <div style={{textAlign: "center"}}>

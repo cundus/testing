@@ -9,9 +9,7 @@ class SubmitedKPI extends Component {
     // }
     return (
       <div>
-        <Layout>
-            <TableSubmitedKPI/>
-        </Layout>
+        <TableSubmitedKPI/>
       </div>
     );
   }
