@@ -41,12 +41,6 @@ export const routes = [
             title: "Planning"
           },
           {
-            path: "/planning/create-planning",
-            component: Lazyload(CreatePlanningPage),
-            exact: true,
-            title: "Create Planning"
-          },
-          {
             path: "/planning/create-non-kpi-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,

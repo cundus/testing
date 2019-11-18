@@ -45,13 +45,13 @@ class CreateOwn extends Component {
       },
       {
         title: "",
-        dataIndex: "operation",
+        dataIndex: "action",
         action: true,
         render: (text, record) =>
-          this.state.dataSource.length >= 1 ? (
+          this.props.dataOwn.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => this.handleDelete(record.key)}
+              onConfirm={() => this.props.handleDeleteRow(record.key)}
             >
               <Tooltip placement="bottomRight" title={"delete"}>
                 <Button>
@@ -62,70 +62,28 @@ class CreateOwn extends Component {
           ) : null
       }
     ];
-
-    this.state = {
-      dataSource: [
-        {
-          key: 0,
-          kpi: "",
-          baseline: "",
-          weight: "",
-          l1: "",
-          l2: "",
-          l3: ""
-        }
-      ],
-      count: 1
-    };
   }
-
-  handleDelete = key => {
-    const dataSource = [...this.state.dataSource];
-    this.setState({ dataSource: dataSource.filter(item => item.key !== key) });
-  };
-
-  handleAdd = () => {
-    const { count, dataSource } = this.state;
-    const newData = {
-      key: count,
-      kpi: "",
-      baseline: "",
-      weight: "",
-      l1: "",
-      l2: "",
-      l3: ""
-    };
-    this.setState({
-      dataSource: [...dataSource, newData],
-      count: count + 1
-    });
-  };
-
-  handleChange = row => {
-    const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
-    this.setState({ dataSource: newData });
-  };
-
   render() {
-    const { dataSource } = this.state;
-    const { columns, handleAdd, handleChange, handleDelete } = this;
+    const {columns}= this;
+    const { dataOwn, handleAddRow, handleChangeField, handleSaveDraft } = this.props;
     return (
       <div>
-        {/* <Layout> */}
         <DataTable
           columns={columns}
-          dataSource={dataSource}
-          handleAdd={handleAdd}
-          handleChange={handleChange}
-          handleDelete={handleDelete}
+          dataSource={dataOwn}
+          handleChange={handleChangeField}
         />
-        {/* </Layout> */}
+        <div style={{ textAlign: "center" }}>
+          <Button onClick={handleAddRow} type="primary" style={{ margin: 10 }}>
+            Add a row
+          </Button>
+          <Button
+            onClick={handleSaveDraft}
+            style={{ margin: 10 }}
+          >
+            Save Draft
+          </Button>
+        </div>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Input, InputNumber, Button, Form } from "antd";
+import { Table, Input, InputNumber, Form } from "antd";
 import "antd/dist/antd.css";
 import "./dataTable-style.scss";
 import { useMediaQuery } from "react-responsive";
@@ -92,7 +92,7 @@ class EditableCell extends React.Component {
 }
 
 const DataTable = props => {
-  const { dataSource, handleChange, handleAdd, columns } = props;
+  const { dataSource, handleChange, columns } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
 
@@ -129,9 +129,6 @@ const DataTable = props => {
         pagination={false}
         style={{ marginBottom: 10 }}
       />
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add a row
-      </Button>
     </div>
   );
 };
