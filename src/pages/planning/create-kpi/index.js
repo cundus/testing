@@ -21,8 +21,8 @@ class CreateKPI extends Component {
       }
     ],
     dataOwnId: 2,
-    dataCascadePartner: [{key: 13}, {key: 12}],
-    dataCascadePrevious: [{key: 11}, {key: 1212}],
+    dataCascadePartner: [],
+    dataCascadePrevious: [],
     dataSelectedCascade: []
   };
 
