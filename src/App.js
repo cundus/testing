@@ -27,6 +27,7 @@ const App = (props) => {
   return (
     <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
       {({ login, logout, authenticationState }) => {
+        console.log('login', authProvider)
         if (authenticationState === AuthenticationState.Authenticated) {
             return (
               <Provider store={store}>
@@ -45,6 +46,7 @@ const App = (props) => {
               </Provider>
             )
         } else if (authenticationState === AuthenticationState.Unauthenticated) {
+          localStorage.clear();
           return (
             <div>
             </div>
