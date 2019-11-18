@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Layout from "../../../layout/dashboard";
 import TableSubmitedKPI from "./table-submited-kpi";
 
 class SubmitedKPI extends Component {

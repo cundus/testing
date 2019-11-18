@@ -1,4 +1,3 @@
-import { createStore } from 'redux';
 import { AuthenticationActions, AuthenticationState } from 'react-aad-msal';
 
 const initialState = {

@@ -1,6 +1,6 @@
 // authProvider.js
 import { MsalAuthProvider, LoginType } from 'react-aad-msal';
-import Axios from 'axios';
+// import Axios from 'axios';
 
 const config = {
     auth: {

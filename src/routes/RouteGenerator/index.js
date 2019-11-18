@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import store from '../../redux/store/index';
 
 // Stores Redux
 import Stores from '../../redux/store/index';

@@ -1,7 +1,6 @@
 import React from 'react';
 // import { Provider } from 'react-redux';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import  Layout from './layout/dashboard/index';
+import { BrowserRouter, Switch } from 'react-router-dom';
 
 import { AzureAD, AuthenticationState } from 'react-aad-msal';
 import {authProvider} from './service/auth/auth';
