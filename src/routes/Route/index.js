@@ -10,7 +10,11 @@ import Clear from "../../layout/clear";
 // Shared Pages
 const HomePage = React.lazy(() => import("../../pages/home/home"));
 const CreatePlanningPage = React.lazy(() => import("../../pages/planning/"));
-
+const MyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/my-kpi'));
+const EditMyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/edit-my-kpi'));
+const DrafKPIPage =  React.lazy(()=> import ('../../pages/planning/draf/draf-kpi'));
+const SubmitedKPIPage = React.lazy(()=> import('../../pages/planning/submited-kpi/submited-kpi'));
+const MyTeamPlaningPAge = React.lazy(()=> import('../../pages/my-team/planning/planning'));
 export const routes = [
   {
     path: "/",
@@ -19,19 +23,19 @@ export const routes = [
     component: Clear,
     child: [
       {
-        path: "/dashboard",
+        path: "/",
         title: "Dashboard",
         exact: false,
         component: DashboardLayout,
         child: [
           {
-            path: "/dashboard/home",
+            path: "/home",
             component: Lazyload(HomePage),
             title: "Home",
             exact: true
           },
           {
-            path: "/dashboard/planning/create-planning",
+            path: "/planning/create-planning",
             component: Lazyload(CreatePlanningPage),
             exact: true,
             title: "Planning"
@@ -50,10 +54,34 @@ export const routes = [
           },
           {
             path: "/planning/kpi-planning",
-            component: Lazyload(CreatePlanningPage),
+            component: Lazyload(MyKpiPage),
             exact: true,
             title: "KPI Planning"
-          }
+          },
+          {
+            path: "/planning/kpi-planning/edit",
+            component: Lazyload(EditMyKpiPage),
+            exact: true,
+            title: "Edit Kpi Planning"
+          },
+          {
+            path: '/planning/draf/kpi',
+            component: Lazyload(DrafKPIPage),
+            exact: true,
+            title: "Draf KPI"
+          },
+          {
+            path: '/planning/submited/kpi',
+            component: Lazyload(SubmitedKPIPage),
+            exact: true,
+            title: "Submited KPI"
+          },
+          {
+            path: '/my-team/planning/',
+            component: Lazyload(MyTeamPlaningPAge),
+            exact: true,
+            title: "Planning"
+          },
         ]
       } /*, {
     path: '/',
