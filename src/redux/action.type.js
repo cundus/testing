@@ -1,0 +1,1 @@
+export const getUserInfo = 'GET_USER_INFO';

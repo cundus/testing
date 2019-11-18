@@ -27,7 +27,6 @@ const App = (props) => {
   return (
     <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
       {({ login, logout, authenticationState }) => {
-        console.log('login', authProvider)
         if (authenticationState === AuthenticationState.Authenticated) {
             return (
               <Provider store={store}>

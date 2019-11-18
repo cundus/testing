@@ -2,16 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
-import store from '../../redux/store/index';
-
+// import {GetInfoUser } from  '../../redux/actions/user';
 // Stores Redux
 import Stores from '../../redux/store/index';
 
 const RenderedRoute = (Component, child, title, auth) => (props) => {
   const store = Stores.getState();
-  // console.log(accesstoken)
   if(auth !== undefined &&  store.authReducer.accessToken === null){
-    auth.getAccessToken();
+    (async()=> {
+       const token = await auth.getAccessToken();
+       localStorage.setItem('tokken', token.accessToken);
+    })()
+    const updatedStore = Stores.getState();
+    console.log('hahah ',updatedStore.authReducer)
+    const token = store.authReducer.accessToken
+    // GetInfoUser()
+    //store.dispatch()
   }
   // const token = localStorage.getItem('token');
   // const { isLogin } = state.auth;
