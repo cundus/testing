@@ -62,7 +62,7 @@ class TableSubmitedKPI extends Component {
   }
 
   componentDidMount(){
-    this.getAllData() 
+    this.getAllData()
   }
 
   getAllData =() =>{
