@@ -5,16 +5,12 @@ import CreateKPI from "./create-kpi";
 
 class Planning extends Component {
   state = {
-    draftData: [],
     currentWizzard: 0
   };
 
   onChangeCurrentWizzard = currentWizzard => {
     this.setState({ currentWizzard });
   };
-
-  handleSaveDraft = () => {};
-
   render() {
     const { currentWizzard } = this.state;
     return (
