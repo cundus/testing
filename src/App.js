@@ -26,7 +26,7 @@ import { Provider } from 'react-redux';
 // import router
 import router from './Router';
 
-const PrivateRouter = ({ component: Component, provider,...rest }) => {
+const PrivateRouter = ({ component: Component, provider, ...rest }) => {
   return(
     <Route {...rest} render={(props) => (
       checkAuth() === true
@@ -62,9 +62,11 @@ const App = (props) => {
             );
           } else if (authenticationState === AuthenticationState.Unauthenticated) {
             return (
-              <button className="Button" onClick={login}>
-                Login
-              </button>
+              // <button className="Button" onClick={login}>
+              //   Login
+              // </button>
+              <div>
+              </div>
             );
           }
         }}
