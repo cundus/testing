@@ -23,6 +23,7 @@ import { MappedRouter } from './routes/RouteGenerator';
 // Browser history
 const browserHistory = createBrowserHistory();
 
+require('dotenv').config();
 
 const App = (props) => {
   return (
