@@ -20,9 +20,9 @@ class CreateKPI extends Component {
         l3: ""
       }
     ],
-    dataOwnId: 1,
-    dataCascadePartner: [],
-    dataCascadePrevious: [],
+    dataOwnId: 2,
+    dataCascadePartner: [{key: 13}, {key: 12}],
+    dataCascadePrevious: [{key: 11}, {key: 1212}],
     dataSelectedCascade: []
   };
 
@@ -97,7 +97,8 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-
+    console.log(this.state.dataDraft);
+    
     return (
       <div>
         <Tabs defaultActiveKey="1" type="card">
