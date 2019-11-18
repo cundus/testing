@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Layout from "../../../layout/dashboard";
 import TableEditMyKPI from "./table-edit-my-kpi";
 import { Button } from 'antd';
 import {Link}  from 'react-router-dom';
@@ -11,12 +10,10 @@ class EditMyKPI extends Component {
     // }
     return (
       <div>
-        <Layout>
-            <TableEditMyKPI/>
-            <Link to={'/planning/kpi-planning/'}>
-                <Button type='default'>Submit To Superior</Button>
-            </Link>
-        </Layout>
+          <TableEditMyKPI/>
+          <Link to={'/planning/kpi-planning/'}>
+              <Button type='default'>Submit To Superior</Button>
+          </Link>
       </div>
     );
   }

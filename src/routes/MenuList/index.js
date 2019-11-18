@@ -1,21 +1,21 @@
 const MenuList = [
   {
     id: 1,
-    path: '/dashboard/home',
+    path: '/home',
     title: 'Home',
     menuLevel: 1,
     parent: 'none',
   },
   {
     id: 2,
-    path: '/dashboard/planning/',
+    path: '/planning/',
     menuLevel: 1,
     title: 'Planning',
     parent: 'none',
   },
   {
     id: 3,
-    path: '/dashboard/planning/create-planning',
+    path: '/planning/create-planning',
     menuLevel: 2,
     title: 'Create KPI',
     parent: 'Planning',
@@ -24,7 +24,7 @@ const MenuList = [
   },
   {
     id: 4,
-    path: '/dashboard/planning/create-non-kpi-planning',
+    path: '/planning/create-non-kpi-planning',
     menuLevel: 2,
     title: 'Create Non KPI',
     parent: 'Planning',
@@ -33,7 +33,7 @@ const MenuList = [
   },
   {
     id: 5,
-    path: '/dashboard/planning/kpi-planning',
+    path: '/planning/kpi-planning',
     menuLevel: 2,
     title: 'View My KPI',
     parent: 'Planning',
