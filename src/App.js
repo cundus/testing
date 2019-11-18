@@ -22,7 +22,6 @@ import { MappedRouter } from './routes/RouteGenerator';
 // Browser history
 const browserHistory = createBrowserHistory();
 
-
 const App = (props) => {
   return (
     <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
