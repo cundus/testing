@@ -1,30 +1,34 @@
-import React, { Component } from "react";
-import CreateOwn from "./components/create-own";
-import CascadePartner from "./components/cascade-partner";
-import CascadePrevious from "./components/cascade-previous";
-import { Tabs } from "antd";
+import React, { Component } from 'react';
+import { Tabs } from 'antd';
+import { withRouter } from 'react-router';
+import CreateOwn from './components/create-own';
+import CascadePartner from './components/cascade-partner';
+import CascadePrevious from './components/cascade-previous';
 
 const { TabPane } = Tabs;
 
 class CreateKPI extends Component {
-  state = {
-    dataDraft: [],
-    dataOwn: [
-      {
-        key: 1,
-        kpi: "",
-        baseline: "",
-        weight: "",
-        l1: "",
-        l2: "",
-        l3: ""
-      }
-    ],
-    dataOwnId: 2,
-    dataCascadePartner: [],
-    dataCascadePrevious: [],
-    dataSelectedCascade: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataDraft: [],
+      dataOwn: [
+        {
+          key: 1,
+          kpi: '',
+          baseline: '',
+          weight: '',
+          l1: '',
+          l2: '',
+          l3: ''
+        }
+      ],
+      dataOwnId: 2,
+      dataCascadePartner: [],
+      dataCascadePrevious: [],
+      dataSelectedCascade: []
+    };
+  }
 
   handleSaveDraft = () => {
     const { dataOwn, dataSelectedCascade } = this.state;
@@ -32,15 +36,15 @@ class CreateKPI extends Component {
     this.setState({ dataDraft: dataSaving });
   };
 
-  handleSelectData = record => {
+  handleSelectData = (record) => {
     const { dataSelectedCascade } = this.state;
     const dataChecking = dataSelectedCascade.filter(
-      item => item.key === record.key
+      (item) => item.key === record.key
     );
     if (dataChecking.length !== 0) {
       this.setState({
         dataSelectedCascade: dataSelectedCascade.filter(
-          item => item.key !== record.key
+          (item) => item.key !== record.key
         )
       });
     } else {
@@ -54,12 +58,12 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
-      kpi: "",
-      baseline: "",
-      weight: "",
-      l1: "",
-      l2: "",
-      l3: ""
+      kpi: '',
+      baseline: '',
+      weight: '',
+      l1: '',
+      l2: '',
+      l3: ''
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
@@ -67,14 +71,14 @@ class CreateKPI extends Component {
     });
   };
 
-  handleDeleteRow = key => {
+  handleDeleteRow = (key) => {
     const dataOwn = [...this.state.dataOwn];
-    this.setState({ dataOwn: dataOwn.filter(item => item.key !== key) });
+    this.setState({ dataOwn: dataOwn.filter((item) => item.key !== key) });
   };
 
-  handleChangeField = row => {
+  handleChangeField = (row) => {
     const newData = [...this.state.dataOwn];
-    const index = newData.findIndex(item => row.key === item.key);
+    const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -97,7 +101,7 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-    console.log(this.state.dataDraft);
+    console.log(this.props);
     
     return (
       <div>
@@ -132,4 +136,4 @@ class CreateKPI extends Component {
     );
   }
 }
-export default CreateKPI;
+export default withRouter(CreateKPI);

@@ -48,7 +48,7 @@ const MenuList = [
     parent: 'none'
   },
   {
-    id: 6,
+    id: 7,
     path: '/my-team/planning/',
     menuLevel: 2,
     title: 'Planning',

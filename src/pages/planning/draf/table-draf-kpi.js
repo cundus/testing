@@ -109,7 +109,7 @@ class TableDrafKPI extends Component {
         l3: "Ready in Q4 2019"
       },
       {
-        key: 1,
+        key: 3,
         typeKpi: "Cascading from Superior",
         kpi: "Create datawarehouse for HC Analytics purposes",
         baseline: "Ready in Q3 2019",

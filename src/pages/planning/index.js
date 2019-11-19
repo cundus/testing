@@ -16,6 +16,7 @@ class Planning extends Component {
   };
 
   render() {
+    const { child } = this.props;
     const { currentWizzard } = this.state;
     return (
       <div>
@@ -23,7 +24,7 @@ class Planning extends Component {
         <Divider />
         <Typography>Create New KPI</Typography>
         <Divider />
-        <MappedRouter routes={this.props.child} />
+        <MappedRouter routes={child} />
       </div>
     );
   }
