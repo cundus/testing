@@ -11,9 +11,21 @@ class Planning extends Component {
     };
   }
 
-  onChangeCurrentWizzard = (currentWizzard) => {
-    this.setState({ currentWizzard });
-  };
+  componentDidMount() {
+    this.wizzardStatus();
+  }
+
+  wizzardStatus() {
+    const { history } = this.props;
+    const { pathname } = history.location;
+    if (pathname === '/planning/kpi/create-planning') {
+      this.setState({ currentWizzard: 0 });
+    } else if (pathname === '/planning/kpi/draft-planning') {
+      this.setState({ currentWizzard: 1 });
+    } else {
+      this.setState({ currentWizzard: 1 });
+    }
+  }
 
   render() {
     const { child } = this.props;

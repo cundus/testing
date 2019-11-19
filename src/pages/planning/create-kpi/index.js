@@ -40,7 +40,7 @@ class CreateKPI extends Component {
     confirm({
       title: 'Are u sure?',
       async onOk() {
-        await doSavingDraft([dataSaving]);
+        await doSavingDraft(dataSaving);
         history.push('/planning/kpi/draft-planning');
       },
       onCancel() {}
