@@ -26,6 +26,7 @@ class CreateKPI extends Component {
         }
       ],
       dataOwnId: 2,
+      cascadePrevious: false,
       dataCascadePartner: [],
       dataCascadePrevious: [],
       dataSelectedCascade: []
@@ -99,6 +100,7 @@ class CreateKPI extends Component {
 
   render() {
     const {
+      cascadePrevious,
       dataOwn,
       dataCascadePrevious,
       dataCascadePartner,
@@ -132,14 +134,16 @@ class CreateKPI extends Component {
               handleSelectData={handleSelectData}
             />
           </TabPane>
-          <TabPane tab="Cascade From Previous Year" key="3">
-            <CascadePrevious
-              dataCascadePrevious={dataCascadePrevious}
-              dataSelectedCascade={dataSelectedCascade}
-              handleSaveDraft={handleSaveDraft}
-              handleSelectData={handleSelectData}
-            />
-          </TabPane>
+          {cascadePrevious && (
+            <TabPane tab="Cascade From Previous Year" key="3">
+              <CascadePrevious
+                dataCascadePrevious={dataCascadePrevious}
+                dataSelectedCascade={dataSelectedCascade}
+                handleSaveDraft={handleSaveDraft}
+                handleSelectData={handleSelectData}
+              />
+            </TabPane>
+          )}
         </Tabs>
       </div>
     );
