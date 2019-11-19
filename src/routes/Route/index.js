@@ -1,88 +1,94 @@
-import React from "react";
+import React from 'react';
 
 // React Lazy
-import Lazyload from "../../components/lazyLoad";
+import Lazyload from '../../components/lazyLoad';
 
 // Shared layouts
-import { Dashboard as DashboardLayout } from "../../layout";
-import Clear from "../../layout/clear";
+import { Dashboard as DashboardLayout } from '../../layout';
+import PlanningPage from '../../pages/planning';
+import Clear from '../../layout/clear';
 
 // Shared Pages
-const HomePage = React.lazy(() => import("../../pages/home/home"));
-const CreatePlanningPage = React.lazy(() => import("../../pages/planning/"));
-const MyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/my-kpi'));
-const EditMyKpiPage = React.lazy(()=> import ('../../pages/planning/my-kpi/edit-my-kpi'));
-const DrafKPIPage =  React.lazy(()=> import ('../../pages/planning/draf/draf-kpi'));
-const SubmitedKPIPage = React.lazy(()=> import('../../pages/planning/submited-kpi/submited-kpi'));
-const MyTeamPlaningPAge = React.lazy(()=> import('../../pages/my-team/planning/planning'));
+const HomePage = React.lazy(() => import('../../pages/home/home'));
+// const PlanningPage = React.lazy(() => import('../../pages/planning'));
+const CreatePlanningPage = React.lazy(() => import('../../pages/planning/create-kpi'));
+const DrafKPIPage = React.lazy(() => import('../../pages/planning/draf/draf-kpi'));
+// const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
+// const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
+// const SubmitedKPIPage = React.lazy(() => import('../../pages/planning/submited-kpi/submited-kpi'));
+// const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
+
 export const routes = [
   {
-    path: "/",
+    path: '/',
     exact: false,
-    title: "Root",
+    title: 'Root',
     component: Clear,
     child: [
       {
-        path: "/",
-        title: "Dashboard",
+        path: '/',
+        title: 'Dashboard',
         exact: false,
         component: DashboardLayout,
         child: [
           {
-            path: "/home",
+            path: '/home',
             component: Lazyload(HomePage),
-            title: "Home",
+            title: 'Home',
             exact: true
           },
           {
-            path: "/planning/create-planning",
-            component: Lazyload(CreatePlanningPage),
-            exact: true,
-            title: "Planning"
-          },
-          {
-            path: "/planning/create-non-kpi-planning",
-            component: Lazyload(CreatePlanningPage),
-            exact: true,
-            title: "Create Non KPI Planning"
-          },
-          {
-            path: "/planning/kpi-planning",
-            component: Lazyload(MyKpiPage),
-            exact: true,
-            title: "KPI Planning"
-          },
-          {
-            path: "/planning/kpi-planning/edit",
-            component: Lazyload(EditMyKpiPage),
-            exact: true,
-            title: "Edit Kpi Planning"
-          },
-          {
-            path: '/planning/draf/kpi',
-            component: Lazyload(DrafKPIPage),
-            exact: true,
-            title: "Draf KPI"
-          },
-          {
-            path: '/planning/submited/kpi',
-            component: Lazyload(SubmitedKPIPage),
-            exact: true,
-            title: "Submited KPI"
-          },
-          {
-            path: '/my-team/planning/',
-            component: Lazyload(MyTeamPlaningPAge),
-            exact: true,
-            title: "Planning"
-          },
+            path: '/planning/kpi',
+            component: PlanningPage,
+            exact: false,
+            title: 'Planning',
+            child: [
+              {
+                path: '/planning/kpi/create-planning',
+                component: Lazyload(CreatePlanningPage),
+                exact: true,
+                title: 'Create KPI'
+              },
+              {
+                path: '/planning/kpi/draft-planning',
+                component: Lazyload(DrafKPIPage),
+                exact: true,
+                title: 'Draf KPI'
+              }
+            ]
+          }
+          // {
+          //   path: '/planning/create-non-kpi-planning',
+          //   component: Lazyload(CreatePlanningPage),
+          //   exact: true,
+          //   title: 'Create Non KPI Planning'
+          // },
+          // {
+          //   path: '/planning/kpi-planning',
+          //   component: Lazyload(MyKpiPage),
+          //   exact: true,
+          //   title: 'KPI Planning'
+          // },
+          // {
+          //   path: '/planning/kpi-planning/edit',
+          //   component: Lazyload(EditMyKpiPage),
+          //   exact: true,
+          //   title: 'Edit Kpi Planning'
+          // },
+          // {
+          //   path: '/planning/submited/kpi',
+          //   component: Lazyload(SubmitedKPIPage),
+          //   exact: true,
+          //   title: 'Submited KPI'
+          // },
+          // {
+          //   path: '/my-team/planning/',
+          //   component: Lazyload(MyTeamPlaningPAge),
+          //   exact: true,
+          //   title: 'Planning'
+          // }
         ]
-      } /*, {
-    path: '/',
-    title: 'Login',
-    exact: true,
-    component: Lazyload(Login)
-  }*/
+      }
     ]
   }
 ];

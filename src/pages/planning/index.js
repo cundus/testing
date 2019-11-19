@@ -1,16 +1,20 @@
-import React, { Component } from "react";
-import { Divider, Typography } from "antd";
-import StepWizzard from "./components/steps";
-import CreateKPI from "./create-kpi";
+import React, { Component } from 'react';
+import { Divider, Typography } from 'antd';
+import StepWizzard from './components/steps';
+import { MappedRouter } from '../../routes/RouteGenerator';
 
 class Planning extends Component {
-  state = {
-    currentWizzard: 0
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentWizzard: 0
+    };
+  }
 
-  onChangeCurrentWizzard = currentWizzard => {
+  onChangeCurrentWizzard = (currentWizzard) => {
     this.setState({ currentWizzard });
   };
+
   render() {
     const { currentWizzard } = this.state;
     return (
@@ -19,7 +23,7 @@ class Planning extends Component {
         <Divider />
         <Typography>Create New KPI</Typography>
         <Divider />
-        <CreateKPI />
+        <MappedRouter routes={this.props.child} />
       </div>
     );
   }

@@ -4,18 +4,18 @@ const MenuList = [
     path: '/home',
     title: 'Home',
     menuLevel: 1,
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 2,
     path: '/planning/',
     menuLevel: 1,
     title: 'Planning',
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 3,
-    path: '/planning/create-planning',
+    path: '/planning/kpi/create-planning',
     menuLevel: 2,
     title: 'Create KPI',
     parent: 'Planning',
@@ -24,7 +24,7 @@ const MenuList = [
   },
   {
     id: 4,
-    path: '/planning/create-non-kpi-planning',
+    path: '/planning/kpi/create-non-kpi-planning',
     menuLevel: 2,
     title: 'Create Non KPI',
     parent: 'Planning',
@@ -45,7 +45,7 @@ const MenuList = [
     path: '/my-team/',
     menuLevel: 1,
     title: 'My Team',
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 6,
@@ -55,7 +55,7 @@ const MenuList = [
     parent: 'My Team',
     icon: 'calendar',
     theme: 'outlined'
-  },
+  }
 ];
 
 export default MenuList;
