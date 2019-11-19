@@ -2,7 +2,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
-  
+
 import combineReducers from '../reducers';
 
 const middlewares = [thunk];
@@ -17,4 +17,3 @@ const middleware = applyMiddleware(...middlewares);
 export default createStore(
   combineReducers, composeEnhanchers(middleware)
 );
-  
