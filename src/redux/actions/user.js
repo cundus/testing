@@ -1,5 +1,5 @@
-import { getUserInfo as getUserInfoAction } from '../../service/auth/index';
-import { getUserInfo } from '../action.type';
+import { getUserInfo as getUserInfoAction } from  '../../service/auth/index';
+import {getUserInfo, errGetUserInfo } from '../action.type';
 
 export const GetInfoUser = (token) => {
   return async (dispatch) => {
@@ -8,11 +8,13 @@ export const GetInfoUser = (token) => {
       console.log(resp);
       dispatch({
         type: getUserInfo,
-        data: resp
+        data: resp.data
       });
     } catch (error) {
-      console.log(error);
-      console.log('err');
+      dispatch({
+        type: errGetUserInfo,
+        data: error
+      });
     }
   };
 };

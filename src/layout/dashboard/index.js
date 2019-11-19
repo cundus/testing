@@ -15,7 +15,7 @@ class Dashboard extends React.Component {
     collapsed: true
   };
   componentWillMount(){
-    this.props.GetInfoUser(this.props.auth.accessToken);
+    // this.props.GetInfoUser(this.props.auth.accessToken);
   }
 
   toggle = () => {

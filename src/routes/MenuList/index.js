@@ -4,14 +4,14 @@ const MenuList = [
     path: '/home',
     title: 'Home',
     menuLevel: 1,
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 2,
     path: '/planning/',
     menuLevel: 1,
     title: 'Planning',
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 3,
@@ -45,7 +45,7 @@ const MenuList = [
     path: '/my-team/',
     menuLevel: 1,
     title: 'My Team',
-    parent: 'none',
+    parent: 'none'
   },
   {
     id: 6,
@@ -55,7 +55,7 @@ const MenuList = [
     parent: 'My Team',
     icon: 'calendar',
     theme: 'outlined'
-  },
+  }
 ];
 
 export default MenuList;

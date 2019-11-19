@@ -1,5 +1,6 @@
 import React from "react";
 import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from "antd";
+import  { connect } from  'react-redux';
 import { Link } from "react-router-dom";
 import Logo from "../../../../assets/xl.png";
 import Indonesia from "../../../../assets/flags/004-indonesia.svg";
@@ -7,14 +8,23 @@ import myAvatar from "../../../../assets/users/300_23.jpg";
 import "./header-styles.scss";
 import { useMediaQuery } from "react-responsive";
 import MenuList from "../../../../routes/MenuList";
+import _ from  'lodash';
 const { Text } = Typography;
+const { REACT_APP_API_URL } = process.env;
 
-const Header = props => {
-  const mainRouter = MenuList.filter(x => x.menuLevel === 1);
+const Header = (props) => {
+  let mainRouter = MenuList.filter(x => x.menuLevel === 1);
   const pathlocation = window.location.pathname;
+  // eslint-disable-next-line react/prop-types
   const { collapsed, toggle } = props;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-
+  const uId = _.get(props, 'user.result.user.userId', '');
+  const url = (uId !== '')?`${REACT_APP_API_URL}/user/photo/${uId}`:myAvatar;
+  const name = _.get(props, 'user.result.user.firstName', '');
+  const isManager = _.get(props, 'user.result.user.manager', false);
+  if (isManager === false) {
+    mainRouter = mainRouter.filter(d=> d.title !== 'My Team');
+  }
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
@@ -86,11 +96,11 @@ const Header = props => {
                 <img src={Indonesia} alt="flag" className="flagIcon" />
               </div>
               <div className="accountWrapper">
-                {isDesktopOrLaptop && <Text>Hi, John Doe</Text>}
+                {isDesktopOrLaptop && <Text>Hi, {name}</Text>}
                 <Avatar
                   shape="square"
                   size={isDesktopOrLaptop ? "large" : "default"}
-                  src={myAvatar}
+                  src={url}
                   className="avatar"
                 />
               </div>
@@ -102,4 +112,12 @@ const Header = props => {
   );
 };
 
-export default Header;
+
+const mapStateToProps = state => ({
+  auth: state.authReducer,
+  user: state.userReducers
+});
+const connectToComponent = connect(mapStateToProps)(Header);
+
+
+export default connectToComponent;
