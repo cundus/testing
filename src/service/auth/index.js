@@ -9,6 +9,6 @@ export const getUserInfo = token => customAxios({
     'Accept': 'application/json'
   },
   data: {
-    token: token
+    token
   }
 });

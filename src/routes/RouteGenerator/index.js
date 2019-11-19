@@ -16,7 +16,6 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   }
   // const token = localStorage.getItem('token');
   // const { isLogin } = state.auth;
-  // // eslint-disable-next-line react/prop-types
   const { location } = props;
   const { pathname } = location;
   const token = localStorage.getItem('token');

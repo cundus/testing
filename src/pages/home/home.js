@@ -13,6 +13,7 @@ import UsersIcon from '../../assets/icons/users.svg';
 import { authProvider } from '../../service/auth/auth';
 import _ from  'lodash';
 
+
 class Home extends Component {
   async componentDidMount() {
     const myToken = await this.getToken();
