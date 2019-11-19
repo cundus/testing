@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Modal } from 'antd';
 import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
 
 const { TabPane } = Tabs;
+const { confirm } = Modal;
 
 class CreateKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataDraft: [],
       dataOwn: [
         {
           key: 1,
@@ -31,9 +33,17 @@ class CreateKPI extends Component {
   }
 
   handleSaveDraft = () => {
+    const { history, doSavingDraft } = this.props;
     const { dataOwn, dataSelectedCascade } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
-    this.setState({ dataDraft: dataSaving });
+    confirm({
+      title: 'Are u sure?',
+      async onOk() {
+        await doSavingDraft([dataSaving]);
+        history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
   };
 
   handleSelectData = (record) => {
@@ -101,8 +111,7 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-    console.log(this.props);
-    
+
     return (
       <div>
         <Tabs defaultActiveKey="1" type="card">
@@ -136,4 +145,18 @@ class CreateKPI extends Component {
     );
   }
 }
-export default withRouter(CreateKPI);
+
+const mapStateToProps = (state) => ({
+  draft: state.draft
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateKPI);
+
+export default withRouter(connectToComponent);
