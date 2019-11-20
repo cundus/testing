@@ -1,25 +1,19 @@
-import React, { Component } from "react";
-import { Divider, Typography } from "antd";
-import StepWizzard from "./components/steps";
-import CreateKPI from "./create-kpi";
+import React, { Component } from 'react';
+import { Divider, Typography } from 'antd';
+import StepWizzard from './components/steps';
+import { MappedRouter } from '../../routes/RouteGenerator';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Planning extends Component {
-  state = {
-    currentWizzard: 0
-  };
-
-  onChangeCurrentWizzard = currentWizzard => {
-    this.setState({ currentWizzard });
-  };
   render() {
-    const { currentWizzard } = this.state;
+    const { child, history } = this.props;
     return (
       <div>
-        <StepWizzard currentWizzard={currentWizzard} />
+        <StepWizzard history={history} />
         <Divider />
         <Typography>Create New KPI</Typography>
         <Divider />
-        <CreateKPI />
+        <MappedRouter routes={child} />
       </div>
     );
   }

@@ -1,51 +1,56 @@
-import React, { Component } from "react";
-import { DataTable } from "../../../../components";
-import { Button, Popconfirm, Tooltip, Icon } from "antd";
+import React, { Component } from 'react';
+import {
+  Button,
+  Popconfirm,
+  Tooltip,
+  Icon
+} from 'antd';
+import { DataTable } from '../../../../components';
 
 class CreateOwn extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "KPI",
-        dataIndex: "kpi",
-        placeholder: "Enter KPI subject",
+        title: 'KPI',
+        dataIndex: 'kpi',
+        placeholder: 'Enter KPI subject',
         editable: true
       },
       {
-        title: "2020 Baseline",
-        dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline",
+        title: '2020 Baseline',
+        dataIndex: 'baseline',
+        placeholder: 'Enter 2020 baseline',
         editable: true
       },
       {
-        title: "Weight (%)",
-        dataIndex: "weight",
-        placeholder: "Enter KPI Weight",
-        type: "number",
+        title: 'Weight (%)',
+        dataIndex: 'weight',
+        placeholder: 'Enter KPI Weight',
+        type: 'number',
         editable: true
       },
       {
-        title: "L1",
-        dataIndex: "l1",
-        placeholder: "Enter Level 1",
+        title: 'L1',
+        dataIndex: 'l1',
+        placeholder: 'Enter Level 1',
         editable: true
       },
       {
-        title: "L2",
-        dataIndex: "l2",
-        placeholder: "Enter Level 2",
+        title: 'L2',
+        dataIndex: 'l2',
+        placeholder: 'Enter Level 2',
         editable: true
       },
       {
-        title: "L3",
-        dataIndex: "l3",
-        placeholder: "Enter Level 3",
+        title: 'L3',
+        dataIndex: 'l3',
+        placeholder: 'Enter Level 3',
         editable: true
       },
       {
-        title: "",
-        dataIndex: "action",
+        title: '',
+        dataIndex: 'action',
         action: true,
         render: (text, record) =>
           this.props.dataOwn.length >= 1 ? (
@@ -53,7 +58,7 @@ class CreateOwn extends Component {
               title="Sure to delete?"
               onConfirm={() => this.props.handleDeleteRow(record.key)}
             >
-              <Tooltip placement="bottomRight" title={"delete"}>
+              <Tooltip placement="bottomRight" title={'delete'}>
                 <Button>
                   <Icon type="delete" />
                 </Button>
@@ -63,9 +68,15 @@ class CreateOwn extends Component {
       }
     ];
   }
+
   render() {
-    const {columns}= this;
-    const { dataOwn, handleAddRow, handleChangeField, handleSaveDraft } = this.props;
+    const { columns } = this;
+    const {
+      dataOwn,
+      handleAddRow,
+      handleChangeField,
+      handleSaveDraft
+    } = this.props;
     return (
       <div>
         <DataTable
@@ -73,14 +84,11 @@ class CreateOwn extends Component {
           dataSource={dataOwn}
           handleChange={handleChangeField}
         />
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: 'center' }}>
           <Button onClick={handleAddRow} type="primary" style={{ margin: 10 }}>
             Add a row
           </Button>
-          <Button
-            onClick={handleSaveDraft}
-            style={{ margin: 10 }}
-          >
+          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
             Save Draft
           </Button>
         </div>

@@ -1,11 +1,9 @@
 import React from 'react';
 // import { Provider } from 'react-redux';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import  Layout from './layout/dashboard/index';
+import { BrowserRouter, Switch } from 'react-router-dom';
 
 import { AzureAD, AuthenticationState } from 'react-aad-msal';
-import {authProvider} from './service/auth/auth';
-
+import { authProvider } from './service/auth/auth';
 
 // import { createBrowserHistory } from 'history';
 import { createBrowserHistory } from 'history';
@@ -28,31 +26,29 @@ const App = (props) => {
     <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
       {({ login, logout, authenticationState }) => {
         if (authenticationState === AuthenticationState.Authenticated) {
-            return (
-              <Provider store={store}>
-                <BrowserRouter>
-                  <Switch>
-                    <MappedRouter
-                      history={browserHistory}
-                      routes={routes}
-                      auth={authProvider}
-                      authenticationState={authenticationState}
-                      login={login}
-                      logout={logout}
-                    />
-                  </Switch>
-                </BrowserRouter>
-              </Provider>
-            )
-        } else if (authenticationState === AuthenticationState.Unauthenticated) {
-          localStorage.clear();
           return (
-            <div>
-            </div>
+            <Provider store={store}>
+              <BrowserRouter>
+                <Switch>
+                  <MappedRouter
+                    history={browserHistory}
+                    routes={routes}
+                    auth={authProvider}
+                    authenticationState={authenticationState}
+                    login={login}
+                    logout={logout}
+                  />
+                </Switch>
+              </BrowserRouter>
+            </Provider>
           );
+        } else if (
+          authenticationState === AuthenticationState.Unauthenticated
+        ) {
+          localStorage.clear();
+          return <div></div>;
         }
-      }
-    }
+      }}
     </AzureAD>
   );
 };

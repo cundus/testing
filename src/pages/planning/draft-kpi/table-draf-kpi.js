@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Popconfirm } from 'antd';
 import { DataTable } from '../../../components';
 
 class TableDrafKPI extends Component {
@@ -47,18 +48,33 @@ class TableDrafKPI extends Component {
         dataIndex: 'l3',
         placeholder: 'Enter Level 3',
         editable: true
+      },
+      {
+        title: 'operation',
+        dataIndex: 'operation',
+        action: true,
+        render: (text, record) =>
+          this.props.dataSource.length >= 1 ? (
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => this.props.handleDelete(record.key)}
+            >
+              <Button>Delete</Button>
+            </Popconfirm>
+          ) : null
       }
     ];
   }
 
   render() {
     const { columns } = this;
-    const { dataSource } = this.props;
+    const { handleChange, dataSource } = this.props;
     return (
       <div>
         <DataTable
           columns={columns}
           dataSource={dataSource}
+          handleChange={handleChange}
         />
       </div>
     );

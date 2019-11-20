@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../components";
-import { Button, Popconfirm } from "antd";
 
 class TableEditMyKPI extends Component {
   constructor(props) {

@@ -1,46 +1,62 @@
-import React, { Component } from "react";
-import CreateOwn from "./components/create-own";
-import CascadePartner from "./components/cascade-partner";
-import CascadePrevious from "./components/cascade-previous";
-import { Tabs } from "antd";
+import React, { Component } from 'react';
+import { Tabs, Modal } from 'antd';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
+import CreateOwn from './components/create-own';
+import CascadePartner from './components/cascade-partner';
+import CascadePrevious from './components/cascade-previous';
 
 const { TabPane } = Tabs;
+const { confirm } = Modal;
 
 class CreateKPI extends Component {
-  state = {
-    dataDraft: [],
-    dataOwn: [
-      {
-        key: 1,
-        kpi: "",
-        baseline: "",
-        weight: "",
-        l1: "",
-        l2: "",
-        l3: ""
-      }
-    ],
-    dataOwnId: 2,
-    dataCascadePartner: [],
-    dataCascadePrevious: [],
-    dataSelectedCascade: []
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataOwn: [
+        {
+          key: 1,
+          typeKpi: 'Self KPI',
+          kpi: '',
+          baseline: '',
+          weight: '',
+          l1: '',
+          l2: '',
+          l3: ''
+        }
+      ],
+      dataOwnId: 2,
+      cascadePrevious: false,
+      dataCascadePartner: [],
+      dataCascadePrevious: [],
+      dataSelectedCascade: []
+    };
+  }
 
   handleSaveDraft = () => {
+    const { history, doSavingDraft } = this.props;
     const { dataOwn, dataSelectedCascade } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
-    this.setState({ dataDraft: dataSaving });
+    confirm({
+      title: 'Are u sure?',
+      async onOk() {
+        await doSavingDraft(dataSaving);
+        history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
   };
 
-  handleSelectData = record => {
+  handleSelectData = (record) => {
     const { dataSelectedCascade } = this.state;
     const dataChecking = dataSelectedCascade.filter(
-      item => item.key === record.key
+      (item) => item.key === record.key
     );
     if (dataChecking.length !== 0) {
       this.setState({
         dataSelectedCascade: dataSelectedCascade.filter(
-          item => item.key !== record.key
+          (item) => item.key !== record.key
         )
       });
     } else {
@@ -54,12 +70,12 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
-      kpi: "",
-      baseline: "",
-      weight: "",
-      l1: "",
-      l2: "",
-      l3: ""
+      kpi: '',
+      baseline: '',
+      weight: '',
+      l1: '',
+      l2: '',
+      l3: ''
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
@@ -67,14 +83,14 @@ class CreateKPI extends Component {
     });
   };
 
-  handleDeleteRow = key => {
+  handleDeleteRow = (key) => {
     const dataOwn = [...this.state.dataOwn];
-    this.setState({ dataOwn: dataOwn.filter(item => item.key !== key) });
+    this.setState({ dataOwn: dataOwn.filter((item) => item.key !== key) });
   };
 
-  handleChangeField = row => {
+  handleChangeField = (row) => {
     const newData = [...this.state.dataOwn];
-    const index = newData.findIndex(item => row.key === item.key);
+    const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -85,6 +101,7 @@ class CreateKPI extends Component {
 
   render() {
     const {
+      cascadePrevious,
       dataOwn,
       dataCascadePrevious,
       dataCascadePartner,
@@ -97,7 +114,6 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-    console.log(this.state.dataDraft);
 
     return (
       <div>
@@ -119,17 +135,33 @@ class CreateKPI extends Component {
               handleSelectData={handleSelectData}
             />
           </TabPane>
-          <TabPane tab="Cascade From Previous Year" key="3">
-            <CascadePrevious
-              dataCascadePrevious={dataCascadePrevious}
-              dataSelectedCascade={dataSelectedCascade}
-              handleSaveDraft={handleSaveDraft}
-              handleSelectData={handleSelectData}
-            />
-          </TabPane>
+          {cascadePrevious && (
+            <TabPane tab="Cascade From Previous Year" key="3">
+              <CascadePrevious
+                dataCascadePrevious={dataCascadePrevious}
+                dataSelectedCascade={dataSelectedCascade}
+                handleSaveDraft={handleSaveDraft}
+                handleSelectData={handleSelectData}
+              />
+            </TabPane>
+          )}
         </Tabs>
       </div>
     );
   }
 }
-export default CreateKPI;
+
+const mapStateToProps = (state) => ({
+  draft: state.draft
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateKPI);
+
+export default withRouter(connectToComponent);

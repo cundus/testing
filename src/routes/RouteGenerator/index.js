@@ -1,5 +1,6 @@
 import React from 'react';
-import PropTypes, { object } from 'prop-types';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import PropTypes from 'prop-types';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 // import {GetInfoUser } from  '../../redux/actions/user';
@@ -9,7 +10,7 @@ import Stores from '../../redux/store/index';
 const RenderedRoute = (Component, child, title, auth) => (props) => {
   const store = Stores.getState();
   if (auth !== undefined && store.authReducer.accessToken === null) {
-    (async() => {
+    (async () => {
       const token = await auth.getAccessToken();
       localStorage.setItem('token', token.accessToken);
     })();
@@ -20,7 +21,7 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   const { pathname } = location;
   const token = localStorage.getItem('token');
   if (pathname === '/' || token === null) {
-      return (<Redirect to="/home" />);
+    return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
@@ -40,7 +41,7 @@ export const MainRouter = ({
   child = [],
   auth
 }) => (
- // console.log(auth)
+  // console.log(auth)
   <Route
     exact={exact}
     path={path}
@@ -52,17 +53,16 @@ export const MappedRouter = (props) => {
   const { routes } = props;
   return (
     <React.Fragment>
-      {routes.map((route, i) => (<MainRouter key={i} {...route} auth={props.auth}/>))}
+      {routes.map((route, i) => (
+        <MainRouter key={i} {...route} auth={props.auth} />
+      ))}
       {/* <Redirect from="/" to="/home" /> */}
     </React.Fragment>
   );
 };
 
 MainRouter.propTypes = {
-  child: PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.arrayOf(Object)
-  ]),
+  child: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(Object)]),
   component: PropTypes.instanceOf(Object).isRequired,
   exact: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
