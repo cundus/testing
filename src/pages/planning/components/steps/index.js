@@ -1,7 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { Steps, Icon } from 'antd';
+import { withRouter } from 'react-router-dom';
+import {
+  Steps,
+  Icon,
+  message,
+  Modal
+} from 'antd';
 
 const { Step } = Steps;
+const {confirm} = Modal;
 
 const StepWizzard = (props) => {
   const [wizzard, setWizzard] = useState(0);
@@ -18,9 +25,30 @@ const StepWizzard = (props) => {
     }
   }, [pathname]);
 
+  const onWizzardChange = (current) => {
+    // setWizzard(current);
+    if (wizzard === 0) {
+      message.warning('Please fill form first');
+    } else if (wizzard === 1) {
+      confirm({
+        title: 'Are u sure?',
+        async onOk() {
+          if (current === 0) {
+            history.push('/planning/kpi/create-planning');
+          } else {
+            history.push('/planning/kpi/submit-planning');
+          }
+        },
+        onCancel() {}
+      });
+    } else {
+      message.warning('U cannot be able to back');
+    }
+  };
+
   return (
     <div>
-      <Steps type="navigation" current={wizzard}>
+      <Steps type="navigation" current={wizzard} onChange={onWizzardChange}>
         <Step
           title="Fill KPI Form"
           description="This is a description."
@@ -40,4 +68,5 @@ const StepWizzard = (props) => {
     </div>
   );
 };
-export default StepWizzard;
+
+export default withRouter(StepWizzard);
