@@ -11,7 +11,7 @@ const initialState = {
   draftData: []
 };
 
-export const draft = (state = initialState, action) => {
+const draft = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_DRAFT:
       return {
@@ -41,3 +41,5 @@ export const draft = (state = initialState, action) => {
       return { ...state };
   }
 };
+
+export default draft;
