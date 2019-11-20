@@ -6,7 +6,7 @@ export const getUserInfo = token => customAxios({
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
+    Accept: 'application/json'
   },
   data: {
     token

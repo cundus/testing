@@ -17,6 +17,7 @@ const DraftKPIPage = React.lazy(() => import('../../pages/planning/draft-kpi'));
 // const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
 const SubmitedKPIPage = React.lazy(() => import('../../pages/planning/submited-kpi'));
 // const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
+// const MyTeamPlaningDetailPage =  React.lazy(()=> import('../../pages/my-team/planning/planning-detail'));
 
 export const routes = [
   {
@@ -63,40 +64,9 @@ export const routes = [
               }
             ]
           }
-          // {
-          //   path: '/planning/create-non-kpi-planning',
-          //   component: Lazyload(CreatePlanningPage),
-          //   exact: true,
-          //   title: 'Create Non KPI Planning'
-          // },
-          // {
-          //   path: '/planning/kpi-planning',
-          //   component: Lazyload(MyKpiPage),
-          //   exact: true,
-          //   title: 'KPI Planning'
-          // },
-          // {
-          //   path: '/planning/kpi-planning/edit',
-          //   component: Lazyload(EditMyKpiPage),
-          //   exact: true,
-          //   title: 'Edit Kpi Planning'
-          // },
-          // {
-          //   path: '/planning/submited/kpi',
-          //   component: Lazyload(SubmitedKPIPage),
-          //   exact: true,
-          //   title: 'Submited KPI'
-          // },
-          // {
-          //   path: '/my-team/planning/',
-          //   component: Lazyload(MyTeamPlaningPAge),
-          //   exact: true,
-          //   title: 'Planning'
-          // }
         ]
       }
     ]
   }
-];
-
+]
 export default routes;

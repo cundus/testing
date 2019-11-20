@@ -1,57 +1,48 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../components";
+import { Button, Popconfirm } from "antd";
 
 class TableEditMyKPI extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: "Cascading/ Self KPI",
-        dataIndex: "typeKpi",
-        placeholder: "Cascading/Self KPI",
-      },
-      {
         title: "KPI Subject",
         dataIndex: "kpi",
-        placeholder: "Enter 2020 baseline",
-        editable: true
+        placeholder: "Enter 2020 baseline"
       },
       {
         title: "2019 Baseline",
         dataIndex: "baseline",
-        placeholder: "Enter 2019 baseline",
-        editable: true
+        placeholder: "Enter 2019 baseline"
       },
       {
         title: "Weight (100%)",
         dataIndex: "weight",
         placeholder: "Enter KPI Weight",
-        type: "number",
-        editable: true
+        type: "number"
       },
       {
         title: "L1",
         dataIndex: "l1",
-        placeholder: "Enter Level 1",
-        editable: true
+        placeholder: "Enter Level 1"
       },
       {
         title: "L2",
         dataIndex: "l2",
-        placeholder: "Enter Level 2",
-        editable: true
+        placeholder: "Enter Level 2"
       },
       {
         title: "L3",
         dataIndex: "l3",
-        placeholder: "Enter Level 3",
-        editable: true
+        placeholder: "Enter Level 3"
       },
       {
-          title: "Feedback",
-          dataIndex: "feedback",
-          placeholder: "Feedback"
-      },
+        title: "Feedback",
+        dataIndex: "feedback",
+        placeholder: "Feedback",
+        editable: true
+      }
     ];
 
     this.state = {
@@ -110,11 +101,6 @@ class TableEditMyKPI extends Component {
         l2: "Ready in Q3 2019",
         l3: "Ready in Q4 2019",
         feedback: "Make L2 ready in Q2 2019 and adjust other level. Rating stays."
-      },
-      {
-        key: 4,
-        baseline: "Total Ratting",
-        weight: "100%",
       }
     ]});
   }

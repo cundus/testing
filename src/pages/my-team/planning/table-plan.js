@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import DataTable from '../../../components/dataTable/index';
 import {Avatar, Tag, Button} from 'antd';
+import { Link } from 'react-router-dom';
 
-class TablePlan extends Component{
-  constructor(props){
+class TablePlan extends Component {
+  constructor(props) {
     super(props);
     this.columns = [
       {
@@ -17,33 +18,27 @@ class TablePlan extends Component{
       {
         title: "Name",
         dataIndex: "name",
-        placeholder: "name",
-        action: true
+        placeholder: "name"
       },
       {
         title: "KPI Title",
         dataIndex: "kpi",
-        placeholder: "KPI Title",
-        action: true
+        placeholder: "KPI Title"
       },
       {
         title: "KPI Score",
         dataIndex: "kpiScore",
         placeholder: "Score",
-
-        action: true
       },
       {
         title: "KPI Rating",
         dataIndex: "kpiRating",
         placeholder: "Rating",
-        action: true
       },
       {
         title: "Non-KPI Result",
         dataIndex: "nonkpiResult",
         placeholder: "Non-KPI Result",
-        action: true
       },
       {
         title: "Status",
@@ -57,8 +52,8 @@ class TablePlan extends Component{
         dataIndex: "action",
         placeholder: "action",
         action: true,
-      render: (text) => (<Button type={'primary'}>{text}</Button>)
-      },
+        render: (text) => (<Button type={'primary'}><Link to={`/my-team/planning/${text}`}>View</Link></Button>)
+      }
     ];
 
     this.state = {
@@ -71,48 +66,51 @@ class TablePlan extends Component{
           kpiRating: 20,
           nonkpiResult: "Ready in Q2 2019",
           status: "Pending",
-          action: "View"
+          action: "1231"
         },
       ],
       count: 1
     };
   }
-  componentDidMount(){
+
+  componentDidMount() {
     this.getAllData();
   }
-  getAllData = () =>{
+
+  getAllData = () => {
     // dummy data
     this.setState(
       {
         dataSource:[
-        {
-          key: 1,
-          profile: "test-img",
-          name: "Cascading from Superior",
-          kpi: "Create datawarehouse for HC Analytics purposes",
-          kpiScore: "Ready in Q3 2019",
-          kpiRating: "0",
-          nonkpiResult: "Ready in Q2 2019",
-          status: "Pending",
-          action: "View"
-        },
-      ]
-    }
-  );
+          {
+            key: 1,
+            profile: "test-img",
+            name: "Cascading from Superior",
+            kpi: "Create datawarehouse for HC Analytics purposes",
+            kpiScore: "Ready in Q3 2019",
+            kpiRating: "0",
+            nonkpiResult: "Ready in Q2 2019",
+            status: "Pending",
+            action: "1231"
+          }
+        ]
+      }
+    );
   }
-  render(){
+
+  render() {
     const { dataSource } = this.state;
     const { columns } = this;
     return (
       <div>
         {/* <Layout> */}
-          <DataTable
-            columns={columns}
-            dataSource={dataSource}
-          />
+        <DataTable
+          columns={columns}
+          dataSource={dataSource}
+        />
         {/* </Layout> */}
       </div>
-    )
+    );
   }
 }
 
