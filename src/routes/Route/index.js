@@ -10,25 +10,13 @@ import Clear from '../../layout/clear';
 
 // Shared Pages
 const HomePage = React.lazy(() => import('../../pages/home/home'));
-const CreatePlanningPage = React.lazy(() =>
-  import('../../pages/planning/create-kpi')
-);
+const CreatePlanningPage = React.lazy(() => import('../../pages/planning/create-kpi'));
 const DraftKPIPage = React.lazy(() => import('../../pages/planning/draft-kpi'));
-const MyKpiPage = React.lazy(() =>
-  import('../../pages/planning/my-kpi/my-kpi')
-);
-const EditMyKpiPage = React.lazy(() =>
-  import('../../pages/planning/my-kpi/edit-my-kpi')
-);
-const SubmitedKPIPage = React.lazy(() =>
-  import('../../pages/planning/submited-kpi')
-);
-const MyTeamPlaningPAge = React.lazy(() =>
-  import('../../pages/my-team/planning/planning')
-);
-const MyTeamPlaningDetailPage = React.lazy(() =>
-  import('../../pages/my-team/planning/planning-detail')
-);
+const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
+const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
+const SubmitedKPIPage = React.lazy(() => import('../../pages/planning/submited-kpi'));
+const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
+const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
 
 export const routes = [
   {
