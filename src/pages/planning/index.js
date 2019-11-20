@@ -3,36 +3,13 @@ import { Divider, Typography } from 'antd';
 import StepWizzard from './components/steps';
 import { MappedRouter } from '../../routes/RouteGenerator';
 
+// eslint-disable-next-line react/prefer-stateless-function
 class Planning extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentWizzard: 0
-    };
-  }
-
-  componentDidMount() {
-    this.wizzardStatus();
-  }
-
-  wizzardStatus() {
-    const { history } = this.props;
-    const { pathname } = history.location;
-    if (pathname === '/planning/kpi/create-planning') {
-      this.setState({ currentWizzard: 0 });
-    } else if (pathname === '/planning/kpi/draft-planning') {
-      this.setState({ currentWizzard: 1 });
-    } else {
-      this.setState({ currentWizzard: 1 });
-    }
-  }
-
   render() {
-    const { child } = this.props;
-    const { currentWizzard } = this.state;
+    const { child, history } = this.props;
     return (
       <div>
-        <StepWizzard currentWizzard={currentWizzard} />
+        <StepWizzard history={history} />
         <Divider />
         <Typography>Create New KPI</Typography>
         <Divider />
