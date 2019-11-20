@@ -17,6 +17,7 @@ class CreateKPI extends Component {
       dataOwn: [
         {
           key: 1,
+          typeKpi: 'Self KPI',
           kpi: '',
           baseline: '',
           weight: '',
