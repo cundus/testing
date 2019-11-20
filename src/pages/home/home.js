@@ -10,35 +10,12 @@ import collaborationIcon from '../../assets/icons/collaboration.svg';
 import CustomerIcon from  '../../assets/icons/customer.svg';
 import FileIcon from '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
-import { authProvider } from '../../service/auth/auth';
+
 import _ from  'lodash';
 
 
 class Home extends Component {
   async componentDidMount() {
-    const myToken = await this.getToken();
-    await this.getDetailUser(myToken);
-
-    if (this.props.user === null) {
-      await authProvider.logout();
-    }
-  }
-
-  async getToken() {
-    let token = localStorage.getItem('token');
-    if (token === null) {
-      if (this.props.auth === null) {
-        token = null;
-      } else if(this.props.auth.accessToken !== null) {
-        token = this.props.auth.accessToken.accessToken;
-        localStorage.setItem('token', token);
-      }
-    }
-    return token;
-  }
-
-  async getDetailUser(token) {
-    await this.props.GetInfoUser(token);
   }
 
   render() {

@@ -98,7 +98,7 @@ class CreateKPI extends Component {
       handleSelectData
     } = this;
     console.log(this.state.dataDraft);
-    
+
     return (
       <div>
         <Tabs defaultActiveKey="1" type="card">
