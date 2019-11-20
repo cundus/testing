@@ -1,14 +1,19 @@
 import React, { Component } from "react";
 import TablePlanning from './table-plan';
+import { withRouter } from 'react-router-dom';
 
 class Planning extends Component {
-  render(){
+  componentDidMount() {
+    console.log('plan', this.props);
+  }
+
+  render() {
     return(
       <div>
-         <TablePlanning />
+        <TablePlanning />
       </div>
-    )
+    );
   }
 }
 
-export default Planning;
+export default withRouter(Planning);
