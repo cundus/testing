@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 // import {GetInfoUser } from  '../../redux/actions/user';
@@ -10,8 +10,8 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   const store = Stores.getState();
   if (auth !== undefined && store.authReducer.accessToken === null) {
     (async() => {
-       const token = await auth.getAccessToken();
-       localStorage.setItem('token', token.accessToken);
+      const token = await auth.getAccessToken();
+      localStorage.setItem('token', token.accessToken);
     })();
   }
   // const token = localStorage.getItem('token');
@@ -19,7 +19,7 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   const { location } = props;
   const { pathname } = location;
   const token = localStorage.getItem('token');
-  if (pathname === '/' || token === null ) {
+  if (pathname === '/' || token === null) {
       return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
