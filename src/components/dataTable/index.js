@@ -1,8 +1,8 @@
-import React from "react";
-import { Table, Input, InputNumber, Form } from "antd";
-import "antd/dist/antd.css";
-import "./dataTable-style.scss";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import { Table, Input, InputNumber, Form } from 'antd';
+import 'antd/dist/antd.css';
+import './dataTable-style.scss';
+import { useMediaQuery } from 'react-responsive';
 
 const { TextArea } = Input;
 
@@ -17,14 +17,14 @@ const EditableRow = ({ form, index, ...props }) => (
 const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
-  change = e => {
+  change = (e) => {
     const { record, handleChange } = this.props;
     this.form.validateFields((error, values) => {
       handleChange({ ...record, ...values });
     });
   };
 
-  renderCell = form => {
+  renderCell = (form) => {
     this.form = form;
     const {
       editable,
@@ -38,13 +38,19 @@ class EditableCell extends React.Component {
     return (
       <Form.Item style={{ margin: 0 }}>
         {form.getFieldDecorator(dataIndex, {
+          rules: [
+            {
+              required: true,
+              message: `${title} is required`
+            }
+          ],
           initialValue: record[dataIndex]
         })(
-          type === "number" ? (
+          type === 'number' ? (
             <InputNumber
               id={title}
               className="input"
-              ref={node => (this.input = node)}
+              ref={(node) => (this.input = node)}
               placeholder={placeholder}
               type={type}
               onChange={this.change}
@@ -54,7 +60,7 @@ class EditableCell extends React.Component {
             <TextArea
               id={title}
               className="input"
-              ref={node => (this.input = node)}
+              ref={(node) => (this.input = node)}
               placeholder={placeholder}
               autoSize={{ minRows: 3, maxRows: 5 }}
               onChange={this.change}
@@ -91,7 +97,7 @@ class EditableCell extends React.Component {
   }
 }
 
-const DataTable = props => {
+const DataTable = (props) => {
   const { dataSource, handleChange, columns } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -102,10 +108,10 @@ const DataTable = props => {
       cell: EditableCell
     }
   };
-  const columnList = columns.map(col => {
+  const columnList = columns.map((col) => {
     return {
       ...col,
-      onCell: record => ({
+      onCell: (record) => ({
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,
@@ -113,7 +119,7 @@ const DataTable = props => {
         type: col.type,
         action: col.action,
         placeholder: col.placeholder,
-        handleChange: handleChange
+        handleChange
       })
     };
   });
@@ -121,7 +127,7 @@ const DataTable = props => {
     <div>
       <Table
         components={components}
-        rowClassName={() => "editable-row"}
+        rowClassName={() => 'editable-row'}
         bordered
         dataSource={dataSource}
         columns={columnList}
