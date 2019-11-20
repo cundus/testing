@@ -1,16 +1,22 @@
 import React from "react";
+import  { connect } from  'react-redux';
 import "antd/dist/antd.css";
 import { Layout } from "antd";
+import  { GetInfoUser } from '../../redux/actions/user';
 
 import { Footer, Header, Sidebar } from "./components";
 import { MappedRouter } from '../../routes/RouteGenerator';
 
+import Stores from '../../redux/store/index';
 const { Content } = Layout;
 
 class Dashboard extends React.Component {
   state = {
     collapsed: true
   };
+  componentWillMount(){
+    // this.props.GetInfoUser(this.props.auth.accessToken);
+  }
 
   toggle = () => {
     this.setState({
@@ -19,9 +25,9 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { collapsed } = this.state;    
+    const { collapsed } = this.state;
     const { child } = this.props;
-    
+
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />
@@ -41,4 +47,12 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard;
+
+const mapDispatchtoProps = dispatch => ({
+    GetInfoUser: (token) => dispatch(GetInfoUser(token))
+  })
+const mapStateToProps = state => ({
+  auth: state.authReducer,
+  user: state.userReducers
+});
+export default connect(mapStateToProps, mapDispatchtoProps)(Dashboard);

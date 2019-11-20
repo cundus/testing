@@ -1,13 +1,14 @@
 // Custom Axios
 import { customAxios } from '../axios';
 
-export const Login = data => customAxios({
-  url: '/auth/login',
-  method: 'post',
+export const getUserInfo = token => customAxios({
+  url: '/user/loginByToken',
+  method: 'POST',
   headers: {
-    ttl: 1440
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
   },
-  data
-})
-  .then(res => Promise.resolve(res))
-  .catch(err => Promise.reject(err));
+  data: {
+    token
+  }
+});
