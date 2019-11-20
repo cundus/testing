@@ -1,33 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 // import {GetInfoUser } from  '../../redux/actions/user';
 // Stores Redux
-// import Stores from '../../redux/store/index';
+import Stores from '../../redux/store/index';
 
 const RenderedRoute = (Component, child, title, auth) => (props) => {
-  // const store = Stores.getState();
-  // if(auth !== undefined &&  store.authReducer.accessToken === null){
-  //   (async()=> {
-  //      const token = await auth.getAccessToken();
-  //      localStorage.setItem('tokken', token.accessToken);
-  //   })()
-  //   const updatedStore = Stores.getState();
-  //   console.log('hahah ',updatedStore.authReducer)
-  //   const token = store.authReducer.accessToken
-  //   // GetInfoUser()
-  //   //store.dispatch()
-  // }
-  const token = localStorage.getItem('token');
+  const store = Stores.getState();
+  if (auth !== undefined && store.authReducer.accessToken === null) {
+    (async() => {
+      const token = await auth.getAccessToken();
+      localStorage.setItem('token', token.accessToken);
+    })();
+  }
+  // const token = localStorage.getItem('token');
   // const { isLogin } = state.auth;
   const { location } = props;
   const { pathname } = location;
-  if (pathname === '/') {
-    return (<Redirect to="/home" />);
-  }
-  if (token === null) {
-    return (<Redirect to="/home" />);
+  const token = localStorage.getItem('token');
+  if (pathname === '/' || token === null) {
+      return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
@@ -36,8 +29,7 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   // } else if (token !== null && pathname === '/login') {
   //   return (<Redirect to="/dashboard/home" />);
   // }
-
-  return (<Component {...props} child={child} auth={auth} />);
+  return (<Component {...props} child={child} />);
 };
 
 export const MainRouter = ({

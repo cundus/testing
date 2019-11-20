@@ -75,14 +75,15 @@ export const routes = [
             component: Lazyload(MyTeamPlaningPAge),
             exact: true,
             title: "Planning"
-          },
+          }
         ]
-      } /*, {
-    path: '/',
-    title: 'Login',
-    exact: true,
-    component: Lazyload(Login)
-  }*/
+      },
+      /*{
+        path: '/init-loading',
+        title: 'Login',
+        exact: true,
+        component: Lazyload(InitLoadingPage)
+      }*/
     ]
   }
 ];

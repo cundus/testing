@@ -1,11 +1,12 @@
 // Custom Axios
 import { customAxios } from '../axios';
 
-export const getUserInfo = (token) => customAxios({
-  url: 'user/loginByToken',
+export const getUserInfo = token => customAxios({
+  url: '/user/loginByToken',
   method: 'POST',
   headers: {
-    ttl: 1440
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
   },
   data: {
     token
