@@ -1,15 +1,26 @@
-import React from "react";
-import { Steps, Icon } from "antd";
-// import { faFile } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useMemo } from 'react';
+import { Steps, Icon } from 'antd';
 
 const { Step } = Steps;
 
-const StepWizzard = props => {
-  const { currentWizzard } = props;
+const StepWizzard = (props) => {
+  const [wizzard, setWizzard] = useState(0);
+  const { history } = props;
+  const { pathname } = history.location;
+
+  useMemo(() => {
+    if (pathname === '/planning/kpi/create-planning') {
+      setWizzard(0);
+    } else if (pathname === '/planning/kpi/draft-planning') {
+      setWizzard(1);
+    } else {
+      setWizzard(2);
+    }
+  }, [pathname]);
 
   return (
     <div>
-      <Steps type="navigation" current={currentWizzard}>
+      <Steps type="navigation" current={wizzard}>
         <Step
           title="Fill KPI Form"
           description="This is a description."
