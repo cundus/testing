@@ -29,7 +29,7 @@ export const doSaveDraft = (data) => async (dispatch) => {
       type: SAVE_DRAFT_FAILED,
       isDraftSaved: false,
       loading: false,
-      draftData: {},
+      draftData: [],
       errorMessage: {}
     });
   }
