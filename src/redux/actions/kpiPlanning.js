@@ -20,7 +20,7 @@ export const doSaveDraft = (data) => async (dispatch) => {
         type: SAVE_DRAFT_SUCCESS,
         isDraftSaved: true,
         loading: false,
-        draftData: { data },
+        draftData: data,
         errorMessage: {}
       });
     }
