@@ -1,26 +1,17 @@
 import React, { Component } from 'react';
-import { Button } from 'antd';
+import { Button, Modal } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
+import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
+
+const { confirm } = Modal;
 
 class DraftKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: [
-        {
-          key: 1,
-          typeKpi: 'Cascading from Superior',
-          kpi: 'Create datawarehouse for HC Analytics purposes',
-          baseline: 'Ready in Q3 2019',
-          weight: 20,
-          l1: 'Ready in Q2 2019',
-          l2: 'Ready in Q3 2019',
-          l3: 'Ready in Q4 2019'
-        }
-      ],
-      isEditable: false
+      dataSource: []
     };
   }
 
@@ -37,8 +28,16 @@ class DraftKPI extends Component {
   };
 
   handleSubmit = () => {
-    // const { isEditable } = this.state;
-    // this.setState({ isEditable: true });
+    const { history, doSavingDraft } = this.props;
+    const { dataSource } = this.state;
+    confirm({
+      title: 'Are u sure?',
+      async onOk() {
+        await doSavingDraft(dataSource);
+        history.push('/planning/kpi/submit-planning');
+      },
+      onCancel() {}
+    });
   };
 
   handleChange = (row) => {
@@ -60,7 +59,7 @@ class DraftKPI extends Component {
   };
 
   render() {
-    const { dataSource, isEditable } = this.state;
+    const { dataSource } = this.state;
     const { handleChange, handleDelete, handleSubmit } = this;
     return (
       <div>
@@ -68,7 +67,6 @@ class DraftKPI extends Component {
           dataSource={dataSource}
           handleChange={handleChange}
           handleDelete={handleDelete}
-          isEditable={isEditable}
         />
         <div style={{ textAlign: 'center' }}>
           <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
@@ -84,7 +82,9 @@ const mapStateToProps = (state) => ({
   draft: state.draft
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+});
 
 const connectToComponent = connect(
   mapStateToProps,

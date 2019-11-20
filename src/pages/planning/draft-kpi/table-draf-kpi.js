@@ -52,6 +52,7 @@ class TableDrafKPI extends Component {
       {
         title: 'operation',
         dataIndex: 'operation',
+        action: true,
         render: (text, record) =>
           this.props.dataSource.length >= 1 ? (
             <Popconfirm
