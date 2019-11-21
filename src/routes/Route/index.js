@@ -32,6 +32,12 @@ export const routes = [
         component: DashboardLayout,
         child: [
           {
+            path: '/',
+            component: Lazyload(HomePage),
+            title: 'Home',
+            exact: true
+          },
+          {
             path: '/home',
             component: Lazyload(HomePage),
             title: 'Home',

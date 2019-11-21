@@ -17,6 +17,7 @@ class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
+    await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
 
@@ -24,7 +25,10 @@ class Dashboard extends React.Component {
     window.addEventListener('onbeforeunload', ()=>{
       localStorage.clear();
     });
-
+  }
+  async callToken() {
+   const token = await authProvider.getAccessToken();
+   localStorage.setItem('token', token.accessToken);
   }
 
   async getToken() {
@@ -78,8 +82,8 @@ class Dashboard extends React.Component {
 
 
 const mapDispatchtoProps = dispatch => ({
-    GetInfoUser: (token) => dispatch(GetInfoUser(token))
-  })
+  GetInfoUser: (token) => dispatch(GetInfoUser(token))
+})
 const mapStateToProps = state => ({
   auth: state.authReducer,
   user: state.userReducers
