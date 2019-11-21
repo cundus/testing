@@ -11,7 +11,7 @@ const config = {
     clientId: REACT_APP_CLIENTID_AADMS,
     authority: REACT_APP_AUTHORITY_AADMS,
     redirectURI: REACT_APP_REDIRECT_URI_AADMS,
-    postLogoutRedirectUri: 'http://localhost:8080/home'
+    postLogoutRedirectUri: REACT_APP_REDIRECT_URI_AADMS
   },
   cache: {
     cacheLocation: "localStorage",

@@ -34,7 +34,7 @@ export const routes = [
           {
             path: '/',
             component: Lazyload(HomePage),
-            title: 'Home',
+            title: 'Dashboard',
             exact: true
           },
           {
