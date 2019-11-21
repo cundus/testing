@@ -1,6 +1,7 @@
 import React from "react";
 import { Layout, Menu, Row, Col, Icon, Typography, Avatar } from "antd";
 import  { connect } from  'react-redux';
+import  { withRouter } from  'react-router-dom';
 import { Link } from "react-router-dom";
 import Logo from "../../../../assets/xl.png";
 import Indonesia from "../../../../assets/flags/004-indonesia.svg";
@@ -14,7 +15,8 @@ const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
   let mainRouter = MenuList.filter(x => x.menuLevel === 1);
-  const pathlocation = window.location.pathname;
+  console.log(props)
+  const pathlocation = props.history.location.pathname;
   // eslint-disable-next-line react/prop-types
   const { collapsed, toggle } = props;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -120,4 +122,4 @@ const mapStateToProps = state => ({
 const connectToComponent = connect(mapStateToProps)(Header);
 
 
-export default connectToComponent;
+export default withRouter(connectToComponent);
