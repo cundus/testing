@@ -21,9 +21,8 @@ class DraftKPI extends Component {
 
   getAllData = () => {
     const { draft } = this.props;
-    const { data } = draft.draftData;
     this.setState({
-      dataSource: data
+      dataSource: draft.draftData
     });
   };
 

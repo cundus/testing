@@ -61,8 +61,8 @@ class Home extends Component {
   }
 }
 const mapDispatchtoProps = dispatch => ({
-    GetInfoUser: (token) => dispatch(GetInfoUser(token))
-  })
+  GetInfoUser: (token) => dispatch(GetInfoUser(token))
+})
 const mapStateToProps = state => ({
   auth: state.authReducer,
   user: state.userReducers
