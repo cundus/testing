@@ -20,7 +20,6 @@ class Dashboard extends React.Component {
     await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
-
     // listen when browser close
     window.addEventListener('onbeforeunload', ()=>{
       localStorage.clear();
@@ -46,9 +45,7 @@ class Dashboard extends React.Component {
 
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
-  }
-  componentWillMount(){
-    // this.props.GetInfoUser(this.props.auth.accessToken);
+    localStorage.setItem('sfToken', this.props.user.result.accessToken);
   }
 
   toggle = () => {
