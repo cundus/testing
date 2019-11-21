@@ -23,6 +23,30 @@
   cursor: pointer;
   transition: color 0.3s;
 }
-.dropdownItem { font-size: 18px }
-.flagIcon { height: 22px; width: 22px; border-radius: 4px; }
-.avatar {margin-left: 10px;}
+.dropdownItem {
+  font-size: 18px;
+}
+.flagIcon {
+  height: 22px;
+  width: 22px;
+  border-radius: 4px;
+}
+.avatar {
+  margin-left: 10px;
+}
+.ant-table {
+  td {
+    white-space: nowrap;
+  }
+  th {
+    white-space: nowrap;
+  }
+}
+.ant-input:disabled {
+  background-color: #f7f8fa;
+  color: black;
+}
+.ant-input-number-input:disabled {
+  background-color: #f7f8fa;
+  color: black;
+}

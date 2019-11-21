@@ -18,6 +18,9 @@ import store from './redux/store';
 // Routes
 import { MappedRouter } from './routes/RouteGenerator';
 
+import './styles/global-styles.scss';
+// import 'antd/dist/antd.less';
+
 // Browser history
 const browserHistory = createBrowserHistory();
 
