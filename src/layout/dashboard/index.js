@@ -17,14 +17,17 @@ class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
+    await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
-
     // listen when browser close
     window.addEventListener('onbeforeunload', ()=>{
       localStorage.clear();
     });
-
+  }
+  async callToken() {
+   const token = await authProvider.getAccessToken();
+   localStorage.setItem('token', token.accessToken);
   }
 
   async getToken() {
@@ -42,9 +45,7 @@ class Dashboard extends React.Component {
 
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
-  }
-  componentWillMount(){
-    // this.props.GetInfoUser(this.props.auth.accessToken);
+    localStorage.setItem('sfToken', this.props.user.result.accessToken);
   }
 
   toggle = () => {
@@ -78,8 +79,8 @@ class Dashboard extends React.Component {
 
 
 const mapDispatchtoProps = dispatch => ({
-    GetInfoUser: (token) => dispatch(GetInfoUser(token))
-  })
+  GetInfoUser: (token) => dispatch(GetInfoUser(token))
+})
 const mapStateToProps = state => ({
   auth: state.authReducer,
   user: state.userReducers

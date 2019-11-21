@@ -8,19 +8,19 @@ import { Redirect } from 'react-router-dom';
 import Stores from '../../redux/store/index';
 
 const RenderedRoute = (Component, child, title, auth) => (props) => {
-  const store = Stores.getState();
-  if (auth !== undefined && store.authReducer.accessToken === null) {
-    (async () => {
-      const token = await auth.getAccessToken();
-      localStorage.setItem('token', token.accessToken);
-    })();
-  }
+  // const store = Stores.getState();
+  // if (store.authReducer.accessToken === null) {
+  //   (async () => {
+  //     const token = await auth.getAccessToken();
+  //     localStorage.setItem('token', token.accessToken);
+  //   })();
+  // }
   // const token = localStorage.getItem('token');
   // const { isLogin } = state.auth;
   const { location } = props;
   const { pathname } = location;
   const token = localStorage.getItem('token');
-  if (pathname === '/' || token === null) {
+  if (pathname === '/' && token !== null) {
     return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
@@ -56,7 +56,6 @@ export const MappedRouter = (props) => {
       {routes.map((route, i) => (
         <MainRouter key={i} {...route} auth={props.auth} />
       ))}
-      {/* <Redirect from="/" to="/home" /> */}
     </React.Fragment>
   );
 };
