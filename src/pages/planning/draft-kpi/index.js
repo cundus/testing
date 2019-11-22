@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import TableDrafKPI from './table-draf-kpi';
+import React, { Component } from "react";
+import { Button, Modal, Typography, Divider } from "antd";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import TableDrafKPI from "./table-draf-kpi";
 // import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
 
 const { confirm } = Modal;
+const { Text } = Typography;
 
 class DraftKPI extends Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class DraftKPI extends Component {
     // const { history, doSavingDraft } = this.props;
     const { dataSource } = this.state;
     confirm({
-      title: 'Are u sure?',
+      title: "Are u sure?",
       async onOk() {
         // await doSavingDraft(dataSource);
         // history.push('/planning/kpi/submit-planning');
@@ -39,9 +40,9 @@ class DraftKPI extends Component {
     });
   };
 
-  handleChange = (row) => {
+  handleChange = row => {
     const newData = [...this.state.dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -50,10 +51,10 @@ class DraftKPI extends Component {
     this.setState({ dataSource: newData });
   };
 
-  handleDelete = (key) => {
+  handleDelete = key => {
     const dataSource = [...this.state.dataSource];
     this.setState({
-      dataSource: dataSource.filter((item) => item.key !== key)
+      dataSource: dataSource.filter(item => item.key !== key)
     });
   };
 
@@ -62,12 +63,21 @@ class DraftKPI extends Component {
     const { handleChange, handleDelete, handleSubmit } = this;
     return (
       <div>
+        <div>
+          <Divider />
+          <Text strong>KPI Save Draft </Text>
+          <Text>
+            This is a draft of your KPI. You can still edit these KPI(s) then
+            submit to your superior.
+          </Text>
+          <Divider />
+        </div>
         <TableDrafKPI
           dataSource={dataSource}
           handleChange={handleChange}
           handleDelete={handleDelete}
         />
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: "center" }}>
           <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
             Submit To Superior
           </Button>
@@ -77,11 +87,11 @@ class DraftKPI extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   draft: state.draft
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   // doSavingDraft: (data) => dispatch(doSaveDraft(data))
 });
 

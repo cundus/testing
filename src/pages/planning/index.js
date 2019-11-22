@@ -31,10 +31,6 @@ class Planning extends Component {
       return (
         <div>
           <StepWizzard history={history} />
-          <Divider />
-          <Text strong>Create New KPI </Text>
-          <Text>Please complete the following form. You can create your own KPI or cascade from your Superior's KPI.</Text>
-          <Divider />
           <MappedRouter routes={child} />
         </div>
       );

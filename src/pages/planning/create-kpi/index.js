@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Tabs, Modal, Typography, Progress } from "antd";
+import { Tabs, Modal, Typography, Divider } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import { doSaveDraft } from "../../../redux/actions/kpi";
@@ -7,7 +7,7 @@ import CreateOwn from "./components/create-own";
 import CascadePartner from "./components/cascade-partner";
 import CascadePrevious from "./components/cascade-previous";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -120,7 +120,16 @@ class CreateKPI extends Component {
     const { name } = data;
     return (
       <div>
-        <div style={{textAlign: 'center'}}>
+        <div>
+          <Divider />
+          <Text strong>Create New KPI </Text>
+          <Text>
+            Please complete the following form. You can create your own KPI or
+            cascade from your Superior's KPI.
+          </Text>
+          <Divider />
+        </div>
+        <div style={{ textAlign: "center" }}>
           <Title level={4}>{`Performance Management - ${name}`}</Title>
         </div>
         <Tabs defaultActiveKey="1" type="card">
