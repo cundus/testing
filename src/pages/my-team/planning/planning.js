@@ -1,19 +1,40 @@
 import React, { Component } from "react";
+import  { connect } from  'react-redux';
+import  { GetMyTeamKPI } from  '../../../redux/actions/user';
 import TablePlanning from './table-plan';
+import  { Spin} from  'antd';
 import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
 
 class Planning extends Component {
   componentDidMount() {
-    console.log('plan', this.props);
+    this.props.getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
   }
 
   render() {
     return(
       <div>
-        <TablePlanning />
+        {
+          (Object.keys(this.props.myteam).length)?
+          <TablePlanning team={this.props.myteam} />:
+          <center>
+            <Spin/>
+          </center>
+        }
       </div>
     );
   }
 }
 
-export default withRouter(Planning);
+const mapDispatchtoProps = dispatch => ({
+  getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
+});
+
+const mapStateToProps = state => ({
+  auth: state.authReducer,
+  user: state.userReducers,
+  myteam: state.myteamReducers
+});
+const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Planning);
+
+export default withRouter(connectToComponent);

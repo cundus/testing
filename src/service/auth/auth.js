@@ -14,7 +14,7 @@ const config = {
     postLogoutRedirectUri: REACT_APP_REDIRECT_URI_AADMS
   },
   cache: {
-    cacheLocation: "localStorage",
+    cacheLocation: 'localStorage',
     storeAuthStateInCookie: true
   }
 };
