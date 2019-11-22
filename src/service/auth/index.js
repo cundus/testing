@@ -1,5 +1,5 @@
-// Custom Axios
 import { customAxios } from '../axios';
+const token = localStorage.getItem('sfToken');
 
 export const getUserInfo = token => customAxios({
   url: '/user/loginByToken',
@@ -10,5 +10,25 @@ export const getUserInfo = token => customAxios({
   },
   data: {
     token
+  }
+});
+
+export const getMyTeam = idUser => customAxios({
+  url: `/user/team/${idUser}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`
+  }
+});
+
+export const getMyKPI = idUser => customAxios({
+  url: `/user/team/kpi/${idUser}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`
   }
 });
