@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Tabs, Modal } from 'antd';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
-import CreateOwn from './components/create-own';
-import CascadePartner from './components/cascade-partner';
-import CascadePrevious from './components/cascade-previous';
+import React, { Component } from "react";
+import { Tabs, Modal, Typography, Progress } from "antd";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import { doSaveDraft } from "../../../redux/actions/kpi";
+import CreateOwn from "./components/create-own";
+import CascadePartner from "./components/cascade-partner";
+import CascadePrevious from "./components/cascade-previous";
 
+const { Title } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -17,13 +18,13 @@ class CreateKPI extends Component {
       dataOwn: [
         {
           key: 1,
-          typeKpi: 'Self KPI',
-          kpi: '',
-          baseline: '',
-          weight: '',
-          l1: '',
-          l2: '',
-          l3: ''
+          typeKpi: "Self KPI",
+          kpi: "",
+          baseline: "",
+          weight: "",
+          l1: "",
+          l2: "",
+          l3: ""
         }
       ],
       dataOwnId: 2,
@@ -39,24 +40,24 @@ class CreateKPI extends Component {
     const { dataOwn, dataSelectedCascade } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     confirm({
-      title: 'Are u sure?',
+      title: "Are u sure?",
       async onOk() {
         await doSavingDraft(dataSaving);
-        history.push('/planning/kpi/draft-planning');
+        history.push("/planning/kpi/draft-planning");
       },
       onCancel() {}
     });
   };
 
-  handleSelectData = (record) => {
+  handleSelectData = record => {
     const { dataSelectedCascade } = this.state;
     const dataChecking = dataSelectedCascade.filter(
-      (item) => item.key === record.key
+      item => item.key === record.key
     );
     if (dataChecking.length !== 0) {
       this.setState({
         dataSelectedCascade: dataSelectedCascade.filter(
-          (item) => item.key !== record.key
+          item => item.key !== record.key
         )
       });
     } else {
@@ -70,12 +71,12 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
-      kpi: '',
-      baseline: '',
-      weight: '',
-      l1: '',
-      l2: '',
-      l3: ''
+      kpi: "",
+      baseline: "",
+      weight: "",
+      l1: "",
+      l2: "",
+      l3: ""
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
@@ -83,14 +84,14 @@ class CreateKPI extends Component {
     });
   };
 
-  handleDeleteRow = (key) => {
+  handleDeleteRow = key => {
     const dataOwn = [...this.state.dataOwn];
-    this.setState({ dataOwn: dataOwn.filter((item) => item.key !== key) });
+    this.setState({ dataOwn: dataOwn.filter(item => item.key !== key) });
   };
 
-  handleChangeField = (row) => {
+  handleChangeField = row => {
     const newData = [...this.state.dataOwn];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const index = newData.findIndex(item => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -114,9 +115,14 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-
+    const { kpiReducers } = this.props;
+    const { data } = kpiReducers;
+    const { name } = data;
     return (
       <div>
+        <div style={{textAlign: 'center'}}>
+          <Title level={4}>{`Performance Management - ${name}`}</Title>
+        </div>
         <Tabs defaultActiveKey="1" type="card">
           <TabPane tab="Creat Own KPI" key="1">
             <CreateOwn
@@ -151,12 +157,12 @@ class CreateKPI extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  draft: state.draft
+const mapStateToProps = state => ({
+  kpiReducers: state.kpiReducers
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+const mapDispatchToProps = dispatch => ({
+  doSavingDraft: data => dispatch(doSaveDraft(data))
 });
 
 const connectToComponent = connect(

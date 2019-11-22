@@ -3,7 +3,7 @@ import { Button, Modal } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
+// import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
 
 const { confirm } = Modal;
 
@@ -16,7 +16,7 @@ class DraftKPI extends Component {
   }
 
   componentDidMount() {
-    this.getAllData();
+    // this.getAllData();
   }
 
   getAllData = () => {
@@ -27,13 +27,13 @@ class DraftKPI extends Component {
   };
 
   handleSubmit = () => {
-    const { history, doSavingDraft } = this.props;
+    // const { history, doSavingDraft } = this.props;
     const { dataSource } = this.state;
     confirm({
       title: 'Are u sure?',
       async onOk() {
-        await doSavingDraft(dataSource);
-        history.push('/planning/kpi/submit-planning');
+        // await doSavingDraft(dataSource);
+        // history.push('/planning/kpi/submit-planning');
       },
       onCancel() {}
     });
@@ -82,7 +82,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  // doSavingDraft: (data) => dispatch(doSaveDraft(data))
 });
 
 const connectToComponent = connect(
