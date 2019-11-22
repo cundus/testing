@@ -1,7 +1,5 @@
 import React from 'react';
 import { Table, Input, InputNumber, Form } from 'antd';
-import 'antd/dist/antd.css';
-import './dataTable-style.scss';
 import { useMediaQuery } from 'react-responsive';
 
 const { TextArea } = Input;
