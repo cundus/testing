@@ -17,17 +17,33 @@ class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
-    await this.callToken();
-    const myToken = await this.getToken();
-    await this.getDetailUser(myToken);
+  await this.callAndStore();
     // listen when browser close
     window.addEventListener('onbeforeunload', ()=>{
       localStorage.clear();
     });
+    // // refresh token
+    if (this.props.auth.accessToken !== null) {
+      const now = new Date().getTime();
+      const last = this.props.auth.accessToken.expiresOn.getTime();
+      const refresh = last - now;
+      setTimeout( async () => {
+        await this.callAndStore();
+      }, refresh);
+    }
+   }
+
+  // eslint-disable-next-line react/sort-comp
+  async callAndStore() {
+    await this.callToken();
+    const myToken = await this.getToken();
+    await this.getDetailUser(myToken);
   }
+
+  // eslint-disable-next-line class-methods-use-this
   async callToken() {
-   const token = await authProvider.getAccessToken();
-   localStorage.setItem('token', token.accessToken);
+    const token = await authProvider.getAccessToken();
+    localStorage.setItem('token', token.accessToken);
   }
 
   async getToken() {
