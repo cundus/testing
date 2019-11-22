@@ -1,10 +1,12 @@
 // Custom Axios
-import { customAxios } from "../axios";
+import { customAxios } from '../axios';
 
-export const getUserInfo = () => customAxios({
-  url: '/user/loginByToken',
+const token = localStorage.getItem('sfToken');
+
+export const getLatestKpi = () => customAxios({
+  url: '/kpi/goal-plan/latest',
   method: 'GET',
   headers: {
-    Authorization: 'Bearer '
+    Authorization: `Bearer ${token}`
   }
 });
