@@ -1,29 +1,33 @@
-import React, { Component } from "react";
-import { Divider, Typography, Spin } from "antd";
-import { connect } from "react-redux";
-import StepWizzard from "./components/steps";
-import { MappedRouter } from "../../routes/RouteGenerator";
-import { doGetLatestGoalKpi } from "../../redux/actions/kpi";
+import React, { Component } from 'react';
+import { Spin } from 'antd';
+import { connect } from 'react-redux';
+import StepWizzard from './components/steps';
+import { MappedRouter } from '../../routes/RouteGenerator';
+import { doGetLatestGoalKpi, doGetKpiList } from '../../redux/actions/kpi';
 
-const {Text} = Typography;
 // eslint-disable-next-line react/prefer-stateless-function
 class Planning extends Component {
   componentDidMount() {
-    this.getLatestGoal();
+    this.getAllData();
   }
 
-  getLatestGoal = async () => {
-    const { doGetLatestGoal } = this.props;
-    await doGetLatestGoal();
+  getAllData = async () => {
+    const {
+      getLatestGoalKpi,
+      getKpiList,
+      userReducers
+    } = this.props;
+    await getKpiList(userReducers.result.user.userId);
+    await getLatestGoalKpi();
   };
 
   render() {
     const { child, history } = this.props;
     const { kpiReducers } = this.props;
-    const { getGoal } = kpiReducers;
-    if (getGoal) {
+    const { loading } = kpiReducers;
+    if (loading) {
       return (
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: 'center' }}>
           <Spin />
         </div>
       );
@@ -38,12 +42,14 @@ class Planning extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  kpiReducers: state.kpiReducers
+const mapStateToProps = (state) => ({
+  kpiReducers: state.kpiReducers,
+  userReducers: state.userReducers
 });
 
-const mapDispatchToProps = dispatch => ({
-  doGetLatestGoal: data => dispatch(doGetLatestGoalKpi(data))
+const mapDispatchToProps = (dispatch) => ({
+  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
+  getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(

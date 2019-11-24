@@ -4,17 +4,25 @@ import {
   SAVE_DRAFT_FAILED,
   GET_LATEST_GOAL_KPI,
   GET_LATEST_GOAL_KPI_SUCCESS,
-  GET_LATEST_GOAL_KPI_FAILED
+  GET_LATEST_GOAL_KPI_FAILED,
+  GET_KPI_LIST,
+  GET_KPI_LIST_SUCCESS,
+  GET_KPI_LIST_FAILED
 } from '../action.type';
 
 const initialState = {
-  isDoSaveDraft: false,
-  isGetLatestGoal: false,
-  getGoal: false,
-  payload: null,
+  loading: false,
   status: null,
-  message: null,
-  data: ''
+  message: '',
+  dataGoal: {
+    id: null,
+    name: '',
+    description: '',
+    startDate: '',
+    dueDate: '',
+    parentPlanId: null
+  },
+  dataKpi: []
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -22,29 +30,42 @@ const kpiReducers = (state = initialState, action) => {
     case GET_LATEST_GOAL_KPI:
       return {
         ...state,
-        isGetLatestGoal: action.isGetLatestGoal,
-        getGoal: action.loading,
-        status: null,
-        message: null,
-        data: ''
+        loading: action.loading
       };
     case GET_LATEST_GOAL_KPI_SUCCESS:
       return {
         ...state,
-        isGetLatestGoal: action.isGetLatestGoal,
-        getGoal: action.loading,
+        loading: action.loading,
         status: action.status,
         message: action.message,
-        data: action.data
+        dataGoal: action.data
       };
     case GET_LATEST_GOAL_KPI_FAILED:
       return {
         ...state,
-        isGetLatestGoal: action.isGetLatestGoal,
-        getGoal: action.loading,
+        loading: action.loading,
+        status: action.status,
+        message: action.message
+      };
+    case GET_KPI_LIST:
+      return {
+        ...state,
+        loading: action.loading
+      };
+    case GET_KPI_LIST_SUCCESS:
+      return {
+        ...state,
+        loading: action.loading,
         status: action.status,
         message: action.message,
-        data: ''
+        dataKpi: action.data
+      };
+    case GET_KPI_LIST_FAILED:
+      return {
+        ...state,
+        loading: action.loading,
+        status: action.status,
+        message: action.message
       };
     case SAVE_DRAFT:
       return {

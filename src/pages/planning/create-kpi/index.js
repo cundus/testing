@@ -116,8 +116,8 @@ class CreateKPI extends Component {
       handleSelectData
     } = this;
     const { kpiReducers } = this.props;
-    const { data } = kpiReducers;
-    const { name } = data;
+    const { dataGoal } = kpiReducers;
+    const { name } = dataGoal;
     return (
       <div>
         <div>
