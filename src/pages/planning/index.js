@@ -7,19 +7,27 @@ import { MappedRouter } from '../../routes/RouteGenerator';
 import { doGetLatestGoalKpi, doGetKpiList } from '../../redux/actions/kpi';
 
 class Planning extends Component {
-  async componentDidMount() {
-    await this.getKPIData();
+  componentDidMount() {
+    this.getKPIData();
   }
 
-  getKPIData = async () => {
+  getKPIData = async (e) => {
     const {
       getLatestGoalKpi,
       getKpiList,
-      userReducers
+      userReducers,
+      history
     } = this.props;
-    getKpiList(userReducers.result.user.userId);
-    getLatestGoalKpi();
-  };
+    const { user } = userReducers.result;
+    await getKpiList(user.userId);
+    const { kpiReducers } = this.props;
+    const { page } = kpiReducers;
+    if (page === 'create-kpi') {
+      getLatestGoalKpi();
+    } else if (page === 'draft-kpi') {
+      history.push('/planning/kpi/draft-planning');
+    }
+  }
 
   render() {
     const { child, history, kpiReducers } = this.props;

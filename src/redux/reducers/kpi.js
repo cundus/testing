@@ -14,7 +14,7 @@ const initialState = {
   loading: false,
   status: null,
   message: '',
-  pages: '',
+  page: '',
   dataGoal: {
     id: null,
     name: '',
@@ -60,7 +60,7 @@ const kpiReducers = (state = initialState, action) => {
         status: action.status,
         message: action.message,
         dataKpi: action.data,
-        pages: action.pages,
+        page: action.page,
         action: action.pages
       };
     case GET_KPI_LIST_FAILED:
