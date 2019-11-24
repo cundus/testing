@@ -1,29 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Spin } from 'antd';
 import { connect } from 'react-redux';
 import StepWizzard from './components/steps';
 import { MappedRouter } from '../../routes/RouteGenerator';
 import { doGetLatestGoalKpi, doGetKpiList } from '../../redux/actions/kpi';
 
-// eslint-disable-next-line react/prefer-stateless-function
 class Planning extends Component {
-  componentDidMount() {
-    this.getAllData();
+  async componentDidMount() {
+    await this.getKPIData();
   }
 
-  getAllData = async () => {
+  getKPIData = async () => {
     const {
       getLatestGoalKpi,
       getKpiList,
       userReducers
     } = this.props;
-    await getKpiList(userReducers.result.user.userId);
-    await getLatestGoalKpi();
+    getKpiList(userReducers.result.user.userId);
+    getLatestGoalKpi();
   };
 
   render() {
-    const { child, history } = this.props;
-    const { kpiReducers } = this.props;
+    const { child, history, kpiReducers } = this.props;
     const { loading } = kpiReducers;
     if (loading) {
       return (
@@ -58,3 +57,12 @@ const connectToComponent = connect(
 )(Planning);
 
 export default connectToComponent;
+
+Planning.propTypes = {
+  getLatestGoalKpi: PropTypes.func,
+  getKpiList: PropTypes.func,
+  userReducers: PropTypes.instanceOf(Object),
+  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
+  child: PropTypes.instanceOf(Object).isRequired
+};

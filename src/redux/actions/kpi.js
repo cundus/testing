@@ -43,7 +43,7 @@ export const doGetLatestGoalKpi = () => async (dispatch) => {
   }
 };
 
-export const doSaveDraft = (data) => async (dispatch) => {
+export const doSaveDraft = (data, pages) => async (dispatch) => {
   dispatch({
     type: SAVE_DRAFT,
     isDoSaveDraft: true,
@@ -56,16 +56,15 @@ export const doSaveDraft = (data) => async (dispatch) => {
       dispatch({
         type: SAVE_DRAFT_SUCCESS,
         isDoSaveDraft: true,
-        payload: data,
-        error: null
+        data,
+        error: null,
+        pages
       });
     }
   } catch (error) {
     dispatch({
       type: SAVE_DRAFT_FAILED,
-      isDoSaveDraft: true,
-      payload: null,
-      error
+      isDoSaveDraft: true
     });
   }
 };
@@ -76,18 +75,31 @@ export const doGetKpiList = (id) => async (dispatch) => {
     loading: true,
     status: null,
     message: null,
-    data: []
+    data: [],
+    pages: ''
   });
   try {
     const payload = await getKpiList(id);
     if (payload.data.status_code === 0) {
-      dispatch({
-        type: GET_KPI_LIST_SUCCESS,
-        loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
-        data: payload.data.result
-      });
+      if (payload.data.result.length === 0) {
+        dispatch({
+          type: GET_KPI_LIST_SUCCESS,
+          loading: false,
+          status: payload.data.status_code,
+          message: payload.data.status_description,
+          data: payload.data.result,
+          pages: 'create-kpi'
+        });
+      } else {
+        dispatch({
+          type: GET_KPI_LIST_SUCCESS,
+          loading: false,
+          status: payload.data.status_code,
+          message: payload.data.status_description,
+          data: payload.data.result,
+          pages: 'draft-kpi'
+        });
+      }
     } else {
       throw payload;
     }
