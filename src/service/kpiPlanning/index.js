@@ -10,3 +10,11 @@ export const getLatestGoalKpi = () => customAxios({
     Authorization: `Bearer ${token}`
   }
 });
+
+export const getKpiList = (id) => customAxios({
+  url: `/kpi/byid/${id}`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
