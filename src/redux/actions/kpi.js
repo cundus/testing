@@ -16,6 +16,8 @@ export const doGetLatestGoalKpi = (data) => async (dispatch) => {
     loading: true,
     data: null,
     goalName: '',
+    payload: null,
+    error: null,
     status: null,
     message: null
   });
@@ -26,16 +28,20 @@ export const doGetLatestGoalKpi = (data) => async (dispatch) => {
         type: GET_LATEST_GOAL_KPI_SUCCESS,
         isGetLatestGoal: true,
         loading: false,
+        payload,
         status: payload.data.status_code,
         message: payload.data.status_description,
         data: payload.data.result
       });
+    } else {
+      throw payload; //senfing error
     }
   } catch (error) {
     dispatch({
       type: GET_LATEST_GOAL_KPI_FAILED,
       isGetLatestGoal: false,
       loading: false,
+      error,
       status: error.data.status_code,
       message: error.data.status_description
     });
