@@ -6,13 +6,15 @@ import {
   message,
   Modal
 } from 'antd';
+import { useMediaQuery } from 'react-responsive';
 
 const { Step } = Steps;
-const {confirm} = Modal;
+const { confirm } = Modal;
 
 const StepWizzard = (props) => {
   const [wizzard, setWizzard] = useState(0);
   const { history } = props;
+  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const { pathname } = history.location;
 
   useMemo(() => {
@@ -30,17 +32,17 @@ const StepWizzard = (props) => {
     if (wizzard === 0) {
       message.warning('Please fill form first');
     } else if (wizzard === 1) {
-      confirm({
-        title: 'Are u sure?',
-        async onOk() {
-          if (current === 0) {
+      if (current === 0) {
+        confirm({
+          title: 'Are u sure?',
+          async onOk() {
             history.push('/planning/kpi/create-planning');
-          } else {
-            history.push('/planning/kpi/submit-planning');
-          }
-        },
-        onCancel() {}
-      });
+          },
+          onCancel() {}
+        });
+      } else {
+        message.warning('U cannot be able to go');
+      }
     } else {
       message.warning('U cannot be able to back');
     }
@@ -48,20 +50,23 @@ const StepWizzard = (props) => {
 
   return (
     <div>
-      <Steps type="navigation" current={wizzard} onChange={onWizzardChange}>
+      <Steps
+        type="navigation"
+        current={wizzard}
+        style={{ display: 'flex' }}
+        // eslint-disable-next-line react/jsx-no-bind
+        onChange={onWizzardChange}
+      >
         <Step
-          title="Fill KPI Form"
-          description="This is a description."
+          title={isDesktopOrLaptop && 'Fill KPI Form'}
           icon={<Icon type="file-text" style={{ fontSize: 32 }} />}
         />
         <Step
-          title="Save Draft"
-          description="This is a description."
+          title={isDesktopOrLaptop && 'Save Draft'}
           icon={<Icon type="file-done" style={{ fontSize: 32 }} />}
         />
         <Step
-          title="Submit & Complete"
-          description="This is a description."
+          title={isDesktopOrLaptop && 'Submit & Complete'}
           icon={<Icon type="check" style={{ fontSize: 32 }} />}
         />
       </Steps>

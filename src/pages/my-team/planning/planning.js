@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import  { connect } from  'react-redux';
 import  { GetMyTeamKPI } from  '../../../redux/actions/user';
 import TablePlanning from './table-plan';
-import  { Spin} from  'antd';
+import  { Spin, Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
+const {Text} = Typography;
 
 class Planning extends Component {
   componentDidMount() {
@@ -16,10 +17,20 @@ class Planning extends Component {
       <div>
         {
           (Object.keys(this.props.myteam).length)?
-          <TablePlanning team={this.props.myteam} />:
-          <center>
-            <Spin/>
-          </center>
+            <div>
+               <div>
+                <Divider />
+                <Text strong>View My Team KPI & Non-KPI Status </Text>
+                <Text>
+                  {`View your team KPI and Non-KPI status`}
+                </Text>
+                <Divider />
+              </div>
+             <TablePlanning team={this.props.myteam} />
+            </div>:
+            <center>
+              <Spin/>
+            </center>
         }
       </div>
     );

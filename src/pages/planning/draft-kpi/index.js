@@ -29,16 +29,24 @@ class DraftKPI extends Component {
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
+
+    // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
+      let dataMetrics = itemKpi.metrics.map((metric) => {
+        return `{"${metric.label}":"${metric.description}"}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
       const data = {
         key: itemKpi.id,
+        typeKpi: 'Self KPI',
         description: itemKpi.description,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
-        l1: itemKpi.metrics[0].description,
-        l2: itemKpi.metrics[1].description,
-        l3: itemKpi.metrics[2].description
+        ...dataMetrics
       };
       newData.push(data);
     });
@@ -80,9 +88,23 @@ class DraftKPI extends Component {
     });
   };
 
+  handleSaveDraft = () => {
+    const { history /* , doSavingDraft */ } = this.props;
+    // const { dataOwn, dataSelectedCascade } = this.state;
+    // const dataSaving = dataOwn.concat(dataSelectedCascade);
+    confirm({
+      title: 'Are u sure?',
+      async onOk() {
+        // await doSavingDraft(dataSaving);
+        history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
+  };
+
   render() {
     const { dataSource } = this.state;
-    const { handleChange, handleDelete, handleSubmit } = this;
+    const { handleChange, handleDelete, handleSubmit, handleSaveDraft } = this;
     return (
       <div>
         <div>
@@ -100,6 +122,9 @@ class DraftKPI extends Component {
           handleDelete={handleDelete}
         />
         <div style={{ textAlign: 'center' }}>
+          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+            Save as Draft
+          </Button>
           <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
             Submit To Superior
           </Button>

@@ -7,41 +7,47 @@ class CascadePrevious extends Component {
     super(props);
     this.columns = [
       {
-        title: "KPI",
-        dataIndex: "kpi",
-        placeholder: "Enter KPI subject",
+        title: 'Cascading/Self KPI',
+        dataIndex: 'typeKpi',
+        placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
-        title: "2020 Baseline",
-        dataIndex: "baseline",
-        placeholder: "Enter 2020 baseline",
-        editable: false
+        title: 'KPI Subject',
+        dataIndex: 'description',
+        placeholder: 'Enter 2019 baseline',
+        editable: true
       },
       {
-        title: "Weight (%)",
-        dataIndex: "weight",
-        placeholder: "Enter KPI Weight",
-        type: "number",
-        editable: false
+        title: '2019 Baseline',
+        dataIndex: 'baseline',
+        placeholder: 'Enter 2019 baseline',
+        editable: true
       },
       {
-        title: "L1",
-        dataIndex: "l1",
-        placeholder: "Enter Level 1",
-        editable: false
+        title: 'Weight (%)',
+        dataIndex: 'weight',
+        placeholder: 'Enter KPI Weight',
+        type: 'number',
+        editable: true
       },
       {
-        title: "L2",
-        dataIndex: "l2",
-        placeholder: "Enter Level 2",
-        editable: false
+        title: 'L1',
+        dataIndex: 'L1',
+        placeholder: 'Enter Level 1',
+        editable: true
       },
       {
-        title: "L3",
-        dataIndex: "l3",
-        placeholder: "Enter Level 3",
-        editable: false
+        title: 'L2',
+        dataIndex: 'L2',
+        placeholder: 'Enter Level 2',
+        editable: true
+      },
+      {
+        title: 'L3',
+        dataIndex: 'L3',
+        placeholder: 'Enter Level 3',
+        editable: true
       },
       {
         title: "",
@@ -80,6 +86,7 @@ class CascadePrevious extends Component {
         />
         <div style={{ textAlign: "center" }}>
           <Button
+            type="primary"
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >

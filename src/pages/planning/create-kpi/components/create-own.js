@@ -12,15 +12,15 @@ class CreateOwn extends Component {
     super(props);
     this.columns = [
       {
-        title: 'KPI',
-        dataIndex: 'kpi',
-        placeholder: 'Enter KPI subject',
+        title: 'KPI Subject',
+        dataIndex: 'description',
+        placeholder: 'Enter 2019 baseline',
         editable: true
       },
       {
-        title: '2020 Baseline',
+        title: '2019 Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2020 baseline',
+        placeholder: 'Enter 2019 baseline',
         editable: true
       },
       {
@@ -32,19 +32,19 @@ class CreateOwn extends Component {
       },
       {
         title: 'L1',
-        dataIndex: 'l1',
+        dataIndex: 'L1',
         placeholder: 'Enter Level 1',
         editable: true
       },
       {
         title: 'L2',
-        dataIndex: 'l2',
+        dataIndex: 'L2',
         placeholder: 'Enter Level 2',
         editable: true
       },
       {
         title: 'L3',
-        dataIndex: 'l3',
+        dataIndex: 'L3',
         placeholder: 'Enter Level 3',
         editable: true
       },
@@ -85,10 +85,10 @@ class CreateOwn extends Component {
           handleChange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>
-          <Button onClick={handleAddRow} type="primary" style={{ margin: 10 }}>
+          <Button onClick={handleAddRow} style={{ margin: 10 }}>
             Add a row
           </Button>
-          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+          <Button onClick={handleSaveDraft} type="primary" style={{ margin: 10 }}>
             Save Draft
           </Button>
         </div>

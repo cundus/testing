@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import  { connect } from  'react-redux';
-import {withRouter} from  'react-router-dom'
+import { withRouter, Link } from  'react-router-dom'
 import { Row, Col, Button/*, Icon */} from 'antd';
 import  './home-styles.scss';
 import  { GetInfoUser } from '../../redux/actions/user';
@@ -32,28 +32,28 @@ class Home extends Component {
                 <img alt={"plannning"} src={FileIcon} className='purple' style={{width:120, height: 120}}/>
                 <h1>Planning</h1>
                 <p className='qoute-text'>Create New KPI or Cascade</p>
-                <Button shape='round' className='homeBtn  purpleBtn'>Create KPI</Button>
+                <Link to={'/planning/kpi/create-planning'}><Button shape='round' className='homeBtn  purpleBtn'>Create KPI</Button></Link>
               </Col>
               <Col xl={size} lg={size} md={size} xs={24} className='grid'>
                 <br/><br/>
                 <img alt={"monitoring"} src={UsersIcon} className='pink' style={{width:120, height: 120}}/>
                 <h1>Monitoring</h1>
                 <p className='qoute-text'>Feedbask session with Superior</p>
-                <Button shape='round' className='homeBtn  pinkBtn'>View Feedback Session</Button>
+                <Button shape='round' className='homeBtn  pinkBtn' disabled={true}>View Feedback Session</Button>
               </Col>
               <Col xl={6} lg={6} md={6} xs={24} className='grid'>
                 <br/><br/>
                 <img alt={"appraisal"} src={CustomerIcon} className='yellow' style={{width:120, height: 120}}/>
                 <h1>Appraisal</h1>
                 <p className='qoute-text'>View your final performance rating</p>
-                <Button  shape='round' className='homeBtn  yellowBtn'>View My Final Performance</Button>
+                <Button  shape='round' className='homeBtn  yellowBtn' disabled={true}>View My Final Performance</Button>
               </Col>
               <Col xl={size} lg={size} md={size} xs={24} className='grid' style={{display: (isManager) ? '': 'none'}}>
                 <br/><br/>
                 <img alt={"team"} src={collaborationIcon}  className='green' style={{width:120, height: 120}}/>
                 <h1>My Team</h1>
                 <p className='qoute-text'>View your team's performance</p>
-                <Button className='homeBtn  greenBtn' shape='round'>View My Team Performance</Button>
+                <Link to={'/my-team/planning'}><Button className='homeBtn  greenBtn' shape='round'>View My Team Performance</Button></Link>
               </Col>
             </Row>
       </div>

@@ -11,7 +11,6 @@ export default (state = initMyteam, action) => {
     case startGetMyTeam:
       return action.data;
     default:
-      // return initUsers;
       return { ...state };
   }
 };

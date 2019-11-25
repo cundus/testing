@@ -82,7 +82,6 @@ class TablePlan extends Component {
   }
 
   getAllData = () => {
-    console.log('mau apa ya', this.props)
     this.setState(
       {
         dataSource: this.props.team.result,

@@ -42,13 +42,13 @@ class CreateKPI extends Component {
   }
 
   handleSaveDraft = () => {
-    const { history, doSavingDraft } = this.props;
-    const { dataOwn, dataSelectedCascade } = this.state;
-    const dataSaving = dataOwn.concat(dataSelectedCascade);
+    const { history /* , doSavingDraft */ } = this.props;
+    // const { dataOwn, dataSelectedCascade } = this.state;
+    // const dataSaving = dataOwn.concat(dataSelectedCascade);
     confirm({
       title: 'Are u sure?',
       async onOk() {
-        await doSavingDraft(dataSaving);
+        // await doSavingDraft(dataSaving);
         history.push('/planning/kpi/draft-planning');
       },
       onCancel() {}
@@ -190,7 +190,7 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 CreateKPI.propTypes = {
-  doSavingDraft: PropTypes.func,
+  // doSavingDraft: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 };

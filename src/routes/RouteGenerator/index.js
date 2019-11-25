@@ -5,7 +5,7 @@ import { Route } from 'react-router';
 import { Redirect } from 'react-router-dom';
 // import {GetInfoUser } from  '../../redux/actions/user';
 // Stores Redux
-import Stores from '../../redux/store/index';
+// import Stores from '../../redux/store/index';
 
 const RenderedRoute = (Component, child, title, auth) => (props) => {
   // const store = Stores.getState();

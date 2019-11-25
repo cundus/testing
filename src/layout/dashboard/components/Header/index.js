@@ -14,7 +14,6 @@ const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
   let mainRouter = MenuList.filter(x => x.menuLevel === 1);
-  console.log(props)
   const pathlocation = props.history.location.pathname;
   // eslint-disable-next-line react/prop-types
   const { collapsed, toggle } = props;

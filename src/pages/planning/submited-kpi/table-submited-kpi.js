@@ -13,8 +13,8 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'KPI Subject',
-        dataIndex: 'kpi',
-        placeholder: 'Enter 2020 baseline',
+        dataIndex: 'description',
+        placeholder: 'Enter 2019 baseline',
         editable: false
       },
       {
@@ -24,7 +24,7 @@ class TableDrafKPI extends Component {
         editable: false
       },
       {
-        title: 'Weight (100%)',
+        title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         type: 'number',
@@ -32,19 +32,19 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'L1',
-        dataIndex: 'l1',
+        dataIndex: 'L1',
         placeholder: 'Enter Level 1',
         editable: false
       },
       {
         title: 'L2',
-        dataIndex: 'l2',
+        dataIndex: 'L2',
         placeholder: 'Enter Level 2',
         editable: false
       },
       {
         title: 'L3',
-        dataIndex: 'l3',
+        dataIndex: 'L3',
         placeholder: 'Enter Level 3',
         editable: false
       }
