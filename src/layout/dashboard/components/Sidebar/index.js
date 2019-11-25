@@ -4,7 +4,6 @@ import  { connect } from  'react-redux';
 import { Link } from "react-router-dom";
 import MenuList from "../../../../routes/MenuList";
 import _ from  'lodash';
-const { REACT_APP_API_URL } = process.env;
 
 const { Sider } = Layout;
 

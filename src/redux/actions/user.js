@@ -2,11 +2,21 @@ import {
   getUserInfo as getUserInfoAction,
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
+  getMyTeamDetailKPI as getMyTeamDetailKPIAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
 
-import { getUserInfo, errGetUserInfo, errGetMyTeam, getMyTeam, startGetMyTeam } from '../action.type';
+import {
+  getUserInfo,
+  errGetUserInfo,
+  errGetMyTeam,
+  getMyTeam,
+  startGetMyTeam,
+  errGetMyTeamDetail,
+  getMyTeamDetail,
+  startGetMyTeamDetail
+} from '../action.type';
 import _ from  'lodash';
 
 export const GetInfoUser = (token) => {
@@ -63,6 +73,38 @@ export const GetMyTeamKPI = (idUser) => {
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
+        data: []
+      });
+    }
+  };
+};
+
+
+export const GetMyTeamKPIDetail = (idUser) => {
+  return async (dispatch) => {
+    dispatch({
+      type: startGetMyTeamDetail,
+      data: []
+    });
+    try {
+      const resp = await getMyTeamDetailKPIAction(idUser);
+      if (resp.status_code !== Success || resp.data.result.length <= 0) {
+        dispatch({
+          type: errGetMyTeamDetail,
+          data: [{
+            error: true
+          }]
+        });
+      }
+      if (resp.data.result.length > 0) {
+        dispatch({
+          type: getMyTeamDetail,
+          data: resp.data.result
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: errGetMyTeamDetail,
         data: []
       });
     }
