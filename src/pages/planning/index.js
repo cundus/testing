@@ -22,11 +22,10 @@ class Planning extends Component {
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { page } = kpiReducers;
-    if (page === 'create-kpi') {
-      getLatestGoalKpi();
-    } else if (page === 'draft-kpi') {
+    if (page === 'draft-kpi') {
       history.push('/planning/kpi/draft-planning');
     }
+    getLatestGoalKpi();
   }
 
   render() {
