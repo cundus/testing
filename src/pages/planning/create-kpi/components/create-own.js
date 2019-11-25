@@ -12,12 +12,6 @@ class CreateOwn extends Component {
     super(props);
     this.columns = [
       {
-        title: 'Cascading/Self KPI',
-        dataIndex: 'typeKpi',
-        placeholder: 'Cascading/Self KPI',
-        editable: false
-      },
-      {
         title: 'KPI Subject',
         dataIndex: 'description',
         placeholder: 'Enter 2019 baseline',
