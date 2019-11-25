@@ -22,8 +22,22 @@ class SubmitedKPI extends Component {
   getAllData = () => {
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataKpi.map((itemKpi) => {
+      const data = {
+        key: itemKpi.id,
+        description: itemKpi.description,
+        baseline: itemKpi.baseline,
+        weight: itemKpi.weight,
+        l1: itemKpi.metrics[0].description,
+        l2: itemKpi.metrics[1].description,
+        l3: itemKpi.metrics[2].description
+      };
+      newData.push(data);
+    });
     this.setState({
-      dataSource: dataKpi
+      dataSource: newData
     });
   };
 
