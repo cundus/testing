@@ -86,6 +86,7 @@ class CascadePartner extends Component {
         />
         <div style={{ textAlign: "center" }}>
           <Button
+            type="primary"
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >

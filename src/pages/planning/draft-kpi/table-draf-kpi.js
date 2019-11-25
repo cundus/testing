@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, Tooltip, Icon } from 'antd';
 import { DataTable } from '../../../components';
 
 class TableDrafKPI extends Component {
@@ -59,7 +59,11 @@ class TableDrafKPI extends Component {
               title="Sure to delete?"
               onConfirm={() => this.props.handleDelete(record.key)}
             >
-              <Button>Delete</Button>
+              <Tooltip placement="bottomRight" title={'delete'}>
+                <Button>
+                  <Icon type="delete" />
+                </Button>
+              </Tooltip>
             </Popconfirm>
           ) : null
       }
