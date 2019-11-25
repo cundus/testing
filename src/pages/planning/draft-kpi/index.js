@@ -29,16 +29,23 @@ class DraftKPI extends Component {
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
+
+    // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
+      let dataMetrics = itemKpi.metrics.map((metric) => {
+        return `{"${metric.label}":"${metric.description}"}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
       const data = {
         key: itemKpi.id,
         description: itemKpi.description,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
-        l1: itemKpi.metrics[0].description,
-        l2: itemKpi.metrics[1].description,
-        l3: itemKpi.metrics[2].description
+        ...dataMetrics
       };
       newData.push(data);
     });

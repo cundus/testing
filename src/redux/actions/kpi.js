@@ -37,8 +37,8 @@ export const doGetLatestGoalKpi = () => async (dispatch) => {
     dispatch({
       type: GET_LATEST_GOAL_KPI_FAILED,
       loading: false,
-      status: error.data.status_code,
-      message: error.data.status_description
+      status: error,
+      message: error
     });
   }
 };
@@ -107,8 +107,8 @@ export const doGetKpiList = (id) => async (dispatch) => {
     dispatch({
       type: GET_KPI_LIST_FAILED,
       loading: false,
-      status: error.data.status_code,
-      message: error.data.status_description
+      status: error,
+      message: error
     });
   }
 };
