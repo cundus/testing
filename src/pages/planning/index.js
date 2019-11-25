@@ -19,8 +19,8 @@ class Planning extends Component {
       // history
     } = this.props;
     const { user } = userReducers.result;
-    await getKpiList(user.userId);
     await getLatestGoalKpi();
+    await getKpiList(user.userId);
     // const { kpiReducers } = this.props;
     // const { page } = kpiReducers;
     // if (page === 'create-kpi') {
