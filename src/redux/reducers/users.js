@@ -9,6 +9,7 @@ export default (state = initUsers, action) => {
     case errGetUserInfo:
       return action.data;
     default:
-      return initUsers;
+      // return initUsers;
+      return { ...state };
   }
 };

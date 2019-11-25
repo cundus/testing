@@ -1,14 +1,14 @@
 import React from "react";
-import  { connect } from  'react-redux';
+import { connect } from "react-redux";
 import "antd/dist/antd.css";
-import { Layout } from "antd";
-import  { GetInfoUser } from '../../redux/actions/user';
+import { Layout, Spin } from "antd";
+import { GetInfoUser } from "../../redux/actions/user";
 
 import { Footer, Header, Sidebar } from "./components";
-import { MappedRouter } from '../../routes/RouteGenerator';
-import { authProvider } from '../../service/auth/auth';
+import { MappedRouter } from "../../routes/RouteGenerator";
+import { authProvider } from "../../service/auth/auth";
 
-import Stores from '../../redux/store/index';
+// import Stores from "../../redux/store/index";
 const { Content } = Layout;
 
 class Dashboard extends React.Component {
@@ -17,27 +17,43 @@ class Dashboard extends React.Component {
   };
 
   async componentDidMount() {
+    await this.callAndStore();
+    // listen when browser close
+    window.addEventListener("onbeforeunload", () => {
+      localStorage.clear();
+    });
+    // // refresh token
+    if (this.props.auth.accessToken !== null) {
+      const now = new Date().getTime();
+      const last = this.props.auth.accessToken.expiresOn.getTime();
+      const refresh = last - now;
+      setTimeout(async () => {
+        await this.callAndStore();
+      }, refresh);
+    }
+  }
+
+  // eslint-disable-next-line react/sort-comp
+  async callAndStore() {
     await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
-    // listen when browser close
-    window.addEventListener('onbeforeunload', ()=>{
-      localStorage.clear();
-    });
   }
+
+  // eslint-disable-next-line class-methods-use-this
   async callToken() {
-   const token = await authProvider.getAccessToken();
-   localStorage.setItem('token', token.accessToken);
+    const token = await authProvider.getAccessToken();
+    localStorage.setItem("token", token.accessToken);
   }
 
   async getToken() {
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem("token");
     if (token === null) {
       if (this.props.auth === null) {
         token = null;
-      } else if(this.props.auth.accessToken !== null) {
+      } else if (this.props.auth.accessToken !== null) {
         token = this.props.auth.accessToken.accessToken;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
       }
     }
     return token;
@@ -45,7 +61,7 @@ class Dashboard extends React.Component {
 
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
-    localStorage.setItem('sfToken', this.props.user.result.accessToken);
+    localStorage.setItem("sfToken", this.props.user.result.accessToken);
   }
 
   toggle = () => {
@@ -56,7 +72,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { collapsed } = this.state;
-    const { child } = this.props;
+    const { child, user } = this.props;
 
     return (
       <Layout style={{ minHeight: "100vh" }}>
@@ -64,10 +80,12 @@ class Dashboard extends React.Component {
         <Layout style={{ opacity: !collapsed ? "0.3" : "1" }}>
           <Header collapsed={collapsed} toggle={this.toggle} />
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
-            <div
-              style={{ padding: 24, background: "#fff", borderRadius: 5 }}
-            >
-              <MappedRouter routes={child} />
+            <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
+              {Object.keys(user).length ? (
+                <MappedRouter routes={child} />
+              ) : (
+                <center><Spin /></center>
+              )}
             </div>
           </Content>
           <Footer />
@@ -77,10 +95,9 @@ class Dashboard extends React.Component {
   }
 }
 
-
 const mapDispatchtoProps = dispatch => ({
-  GetInfoUser: (token) => dispatch(GetInfoUser(token))
-})
+  GetInfoUser: token => dispatch(GetInfoUser(token))
+});
 const mapStateToProps = state => ({
   auth: state.authReducer,
   user: state.userReducers

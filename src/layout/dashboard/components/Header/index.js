@@ -6,7 +6,6 @@ import { Link } from "react-router-dom";
 import Logo from "../../../../assets/xl.png";
 import Indonesia from "../../../../assets/flags/004-indonesia.svg";
 import myAvatar from "../../../../assets/users/300_23.jpg";
-import "./header-styles.scss";
 import { useMediaQuery } from "react-responsive";
 import MenuList from "../../../../routes/MenuList";
 import _ from  'lodash';
