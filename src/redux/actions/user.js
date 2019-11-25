@@ -2,7 +2,10 @@ import {
   getUserInfo as getUserInfoAction,
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
-} from  '../../service/auth/index';
+} from '../../service/auth/index';
+
+import { Success } from '../status-code-type';
+
 import { getUserInfo, errGetUserInfo, errGetMyTeam, getMyTeam, startGetMyTeam } from '../action.type';
 import _ from  'lodash';
 
@@ -32,8 +35,11 @@ export const GetMyTeamKPI = (idUser) => {
     });
     try {
       const resp = await getMyTeamAction(idUser);
-      if (resp.status_code !== 0) {
-        // handle when err
+      if (resp.status_code !== Success) {
+        dispatch({
+          type: errGetMyTeam,
+          data: []
+        });
       }
       let arayTeam = resp.data.result;
       arayTeam = await Promise.all(arayTeam.map( async (myT) => {

@@ -1,0 +1,12 @@
+export const Success = 0;
+export const INVALID_LOGIN_TOKEN = 1001;
+export const ODATA_RESPONSE_ERROR = 1003;
+export const FAILED_SAVE_OR_UPDATE_KPIS = 2001;
+export const FAILED_DELETE_KPIS = 2002;
+export const REQUEST_NOT_RECOGNIZED = 9001;
+export const NOT_AUTHORIZED = 9003;
+export const TOKEN_ERROR = 0;
+export const JSON_PARSING_ERROR = 9004;
+export const OPERATION_NOT_AUTHORIZED = 9005;
+export const BAD_REQUEST = 9006;
+export const GENERAL = 9999;
