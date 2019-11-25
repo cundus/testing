@@ -20,12 +20,12 @@ class Planning extends Component {
     } = this.props;
     const { user } = userReducers.result;
     await getKpiList(user.userId);
+    await getLatestGoalKpi();
     // const { kpiReducers } = this.props;
     // const { page } = kpiReducers;
     // if (page === 'create-kpi') {
     //   history.push('/planning/kpi/draft-planning');
     // }
-    getLatestGoalKpi();
   }
 
   render() {
