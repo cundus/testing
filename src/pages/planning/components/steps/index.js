@@ -32,17 +32,17 @@ const StepWizzard = (props) => {
     if (wizzard === 0) {
       message.warning('Please fill form first');
     } else if (wizzard === 1) {
-      confirm({
-        title: 'Are u sure?',
-        async onOk() {
-          if (current === 0) {
+      if (current === 0) {
+        confirm({
+          title: 'Are u sure?',
+          async onOk() {
             history.push('/planning/kpi/create-planning');
-          } else {
-            history.push('/planning/kpi/submit-planning');
-          }
-        },
-        onCancel() {}
-      });
+          },
+          onCancel() {}
+        });
+      } else {
+        message.warning('U cannot be able to go');
+      }
     } else {
       message.warning('U cannot be able to back');
     }

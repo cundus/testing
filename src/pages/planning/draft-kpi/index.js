@@ -88,9 +88,23 @@ class DraftKPI extends Component {
     });
   };
 
+  handleSaveDraft = () => {
+    const { history /* , doSavingDraft */ } = this.props;
+    // const { dataOwn, dataSelectedCascade } = this.state;
+    // const dataSaving = dataOwn.concat(dataSelectedCascade);
+    confirm({
+      title: 'Are u sure?',
+      async onOk() {
+        // await doSavingDraft(dataSaving);
+        history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
+  };
+
   render() {
     const { dataSource } = this.state;
-    const { handleChange, handleDelete, handleSubmit } = this;
+    const { handleChange, handleDelete, handleSubmit, handleSaveDraft } = this;
     return (
       <div>
         <div>
@@ -108,6 +122,9 @@ class DraftKPI extends Component {
           handleDelete={handleDelete}
         />
         <div style={{ textAlign: 'center' }}>
+          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+            Save as Draft
+          </Button>
           <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
             Submit To Superior
           </Button>
