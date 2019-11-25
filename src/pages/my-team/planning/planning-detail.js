@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import  { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import  { Spin, Input, Button, Divider, Typography } from 'antd';
-import  { GetMyTeamKPIDetail } from  '../../../redux/actions/user';
-import { doGetLatestGoalKpi, doGetKpiList } from '../../../redux/actions/kpi';
+import  { GetMyTeamKPIDetail, GetUserDetail } from '../../../redux/actions/user';
+import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 const { TextArea } = Input;
 const {Title, Text } = Typography;
@@ -25,6 +25,7 @@ class PlanningDetail extends Component {
     const newData = [];
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
+    await this.props.getUserDetail(this.props.match.params.id);
     const mydata = this.props.myteamdetail;
     if (mydata[0].error !== true) {
       mydata.map((itemKpi) => {
@@ -77,12 +78,12 @@ class PlanningDetail extends Component {
               <Divider />
               <Text strong>View KPI </Text>
               <Text>
-                {`View KPI of.`}
+                {`View KPI of ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}
               </Text>
               <Divider />
             </div>
             <div style={{ textAlign: 'center' }}>
-              <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name}`}</Title>
+              <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
             </div>
              <TablePlanningDetails
                dataSource={this.state.dataSource}
@@ -109,12 +110,14 @@ class PlanningDetail extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   getTeamDetailKPI: (idUser) => dispatch(GetMyTeamKPIDetail(idUser)),
-  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi())
+  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
+  getUserDetail: (idUser) => dispatch(GetUserDetail(idUser))
 });
 
 const mapStateToProps = (state) => ({
   myteamdetail: state.myTeamDetailReducers,
   kpi: state.kpiReducers,
+  userDetail: state.userDetailReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);
 

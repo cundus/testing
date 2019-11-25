@@ -4,10 +4,12 @@ import userReducers from './users';
 import kpiReducers from './kpi';
 import myteamReducers from './myTeam';
 import myTeamDetailReducers from './myTeamDetail';
+import userDetailReducers from './userDetail';
 export default combineReducers({
   authReducer,
   userReducers,
   kpiReducers,
   myteamReducers,
-  myTeamDetailReducers
+  myTeamDetailReducers,
+  userDetailReducers
 });
