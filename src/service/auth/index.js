@@ -13,6 +13,16 @@ export const getUserInfo = (token) => customAxios({
   }
 });
 
+export const getUserDetail = (idUser) => customAxios({
+  url: `/user/getUserByid/${idUser}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${token}`
+  }
+});
+
 export const getMyTeam = (idUser) => customAxios({
   url: `/user/team/${idUser}`,
   method: 'GET',
