@@ -36,6 +36,7 @@ class SubmitedKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
+        typeKpi: 'Self KPI',
         description: itemKpi.description,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
