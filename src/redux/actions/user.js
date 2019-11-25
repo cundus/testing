@@ -2,7 +2,8 @@ import {
   getUserInfo as getUserInfoAction,
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
-  getMyTeamDetailKPI as getMyTeamDetailKPIAction
+  getMyTeamDetailKPI as getMyTeamDetailKPIAction,
+  getUserDetail as getUserDetailAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -15,7 +16,10 @@ import {
   startGetMyTeam,
   errGetMyTeamDetail,
   getMyTeamDetail,
-  startGetMyTeamDetail
+  startGetMyTeamDetail,
+  getUserDetail,
+  errUserDetail,
+  startUserDetail
 } from '../action.type';
 import _ from  'lodash';
 
@@ -106,6 +110,37 @@ export const GetMyTeamKPIDetail = (idUser) => {
       dispatch({
         type: errGetMyTeamDetail,
         data: []
+      });
+    }
+  };
+};
+
+export const GetUserDetail = (idUser) => {
+  return async (dispatch) => {
+    dispatch({
+      type: startUserDetail,
+      data: {}
+    });
+    try {
+      const resp = await getUserDetailAction(idUser);
+      if (resp.status_code !== Success) {
+        dispatch({
+          type: errUserDetail,
+          data: {
+            error: true
+          }
+        });
+      }
+      dispatch({
+        type: getUserDetail,
+        data: resp.data.result
+      });
+    } catch (error) {
+      dispatch({
+        type: errUserDetail,
+        data: {
+          error: true
+        }
       });
     }
   };
