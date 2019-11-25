@@ -12,15 +12,21 @@ class CreateOwn extends Component {
     super(props);
     this.columns = [
       {
-        title: 'KPI',
-        dataIndex: 'kpi',
-        placeholder: 'Enter KPI subject',
+        title: 'Cascading/Self KPI',
+        dataIndex: 'typeKpi',
+        placeholder: 'Cascading/Self KPI',
+        editable: false
+      },
+      {
+        title: 'KPI Subject',
+        dataIndex: 'description',
+        placeholder: 'Enter 2019 baseline',
         editable: true
       },
       {
-        title: '2020 Baseline',
+        title: '2019 Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2020 baseline',
+        placeholder: 'Enter 2019 baseline',
         editable: true
       },
       {
@@ -32,19 +38,19 @@ class CreateOwn extends Component {
       },
       {
         title: 'L1',
-        dataIndex: 'l1',
+        dataIndex: 'L1',
         placeholder: 'Enter Level 1',
         editable: true
       },
       {
         title: 'L2',
-        dataIndex: 'l2',
+        dataIndex: 'L2',
         placeholder: 'Enter Level 2',
         editable: true
       },
       {
         title: 'L3',
-        dataIndex: 'l3',
+        dataIndex: 'L3',
         placeholder: 'Enter Level 3',
         editable: true
       },

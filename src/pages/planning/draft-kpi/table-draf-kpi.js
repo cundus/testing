@@ -25,7 +25,7 @@ class TableDrafKPI extends Component {
         editable: true
       },
       {
-        title: 'Weight (100%)',
+        title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         type: 'number',
