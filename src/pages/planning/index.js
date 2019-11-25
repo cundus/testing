@@ -15,18 +15,17 @@ class Planning extends Component {
     const {
       getLatestGoalKpi,
       getKpiList,
-      userReducers,
-      history
+      userReducers
+      // history
     } = this.props;
     const { user } = userReducers.result;
     await getKpiList(user.userId);
-    const { kpiReducers } = this.props;
-    const { page } = kpiReducers;
-    if (page === 'create-kpi') {
-      getLatestGoalKpi();
-    } else if (page === 'draft-kpi') {
-      history.push('/planning/kpi/draft-planning');
-    }
+    // const { kpiReducers } = this.props;
+    // const { page } = kpiReducers;
+    // if (page === 'create-kpi') {
+    //   history.push('/planning/kpi/draft-planning');
+    // }
+    getLatestGoalKpi();
   }
 
   render() {
