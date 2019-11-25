@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'antd';
+import {
+  Button,
+  Modal,
+  Typography,
+  Divider
+} from 'antd';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
 
 const { confirm } = Modal;
+const { Text } = Typography;
 
 class DraftKPI extends Component {
   constructor(props) {
@@ -20,19 +26,34 @@ class DraftKPI extends Component {
   }
 
   getAllData = () => {
-    const { draft } = this.props;
+    const { kpiReducers } = this.props;
+    const { dataKpi } = kpiReducers;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataKpi.map((itemKpi) => {
+      const data = {
+        key: itemKpi.id,
+        description: itemKpi.description,
+        baseline: itemKpi.baseline,
+        weight: itemKpi.weight,
+        l1: itemKpi.metrics[0].description,
+        l2: itemKpi.metrics[1].description,
+        l3: itemKpi.metrics[2].description
+      };
+      newData.push(data);
+    });
     this.setState({
-      dataSource: draft.draftData
+      dataSource: newData
     });
   };
 
   handleSubmit = () => {
-    const { history, doSavingDraft } = this.props;
-    const { dataSource } = this.state;
+    const { history /* , doSavingDraft */ } = this.props;
+    // const { dataSource } = this.state;
     confirm({
       title: 'Are u sure?',
       async onOk() {
-        await doSavingDraft(dataSource);
+        // await doSavingDraft(dataSource);
         history.push('/planning/kpi/submit-planning');
       },
       onCancel() {}
@@ -40,7 +61,8 @@ class DraftKPI extends Component {
   };
 
   handleChange = (row) => {
-    const newData = [...this.state.dataSource];
+    const { dataSource } = this.state;
+    const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
@@ -51,9 +73,10 @@ class DraftKPI extends Component {
   };
 
   handleDelete = (key) => {
-    const dataSource = [...this.state.dataSource];
+    const { dataSource } = this.state;
+    const data = [...dataSource];
     this.setState({
-      dataSource: dataSource.filter((item) => item.key !== key)
+      dataSource: data.filter((item) => item.key !== key)
     });
   };
 
@@ -62,6 +85,15 @@ class DraftKPI extends Component {
     const { handleChange, handleDelete, handleSubmit } = this;
     return (
       <div>
+        <div>
+          <Divider />
+          <Text strong>KPI Save Draft </Text>
+          <Text>
+            This is a draft of your KPI. You can still edit these KPI(s) then
+            submit to your superior.
+          </Text>
+          <Divider />
+        </div>
         <TableDrafKPI
           dataSource={dataSource}
           handleChange={handleChange}
@@ -78,11 +110,11 @@ class DraftKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  draft: state.draft
+  kpiReducers: state.kpiReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  // doSavingDraft: (data) => dispatch(doSaveDraft(data))
 });
 
 const connectToComponent = connect(
@@ -91,3 +123,8 @@ const connectToComponent = connect(
 )(DraftKPI);
 
 export default withRouter(connectToComponent);
+
+DraftKPI.propTypes = {
+  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
+};

@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { Tabs, Modal } from 'antd';
+import PropTypes from 'prop-types';
+import {
+  Tabs,
+  Modal,
+  Typography,
+  Divider
+} from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { doSaveDraft } from '../../../redux/actions/kpiPlanning';
+import { doSaveDraft } from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
 
+const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -84,12 +91,14 @@ class CreateKPI extends Component {
   };
 
   handleDeleteRow = (key) => {
-    const dataOwn = [...this.state.dataOwn];
-    this.setState({ dataOwn: dataOwn.filter((item) => item.key !== key) });
+    const { dataOwn } = this.state;
+    const data = [...dataOwn];
+    this.setState({ dataOwn: data.filter((item) => item.key !== key) });
   };
 
   handleChangeField = (row) => {
-    const newData = [...this.state.dataOwn];
+    const { dataOwn } = this.state;
+    const newData = [...dataOwn];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
@@ -114,9 +123,23 @@ class CreateKPI extends Component {
       handleSaveDraft,
       handleSelectData
     } = this;
-
+    const { kpiReducers } = this.props;
+    const { dataGoal } = kpiReducers;
+    const { name } = dataGoal;
     return (
       <div>
+        <div>
+          <Divider />
+          <Text strong>Create New KPI </Text>
+          <Text>
+            {`Please complete the following form. You can create your own KPI or
+            cascade from your Superior's KPI.`}
+          </Text>
+          <Divider />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <Title level={4}>{`Performance Management - ${name}`}</Title>
+        </div>
         <Tabs defaultActiveKey="1" type="card">
           <TabPane tab="Creat Own KPI" key="1">
             <CreateOwn
@@ -152,7 +175,7 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  draft: state.draft
+  kpiReducers: state.kpiReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -165,3 +188,9 @@ const connectToComponent = connect(
 )(CreateKPI);
 
 export default withRouter(connectToComponent);
+
+CreateKPI.propTypes = {
+  doSavingDraft: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
+};

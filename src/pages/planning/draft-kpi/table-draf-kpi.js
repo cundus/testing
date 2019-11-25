@@ -14,8 +14,8 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'KPI Subject',
-        dataIndex: 'kpi',
-        placeholder: 'Enter 2020 baseline',
+        dataIndex: 'description',
+        placeholder: 'Enter 2019 baseline',
         editable: true
       },
       {
