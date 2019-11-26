@@ -34,7 +34,10 @@ export const GetInfoUser = (token) => {
     } catch (error) {
       dispatch({
         type: errGetUserInfo,
-        data: error
+        data: {
+          error: true,
+          errorCode: error.response.status
+        }
       });
     }
   };
@@ -77,7 +80,10 @@ export const GetMyTeamKPI = (idUser) => {
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
-        data: []
+        data: [{
+          error: true,
+          errorCode: error.response.status
+        }]
       });
     }
   };
@@ -109,7 +115,10 @@ export const GetMyTeamKPIDetail = (idUser) => {
     } catch (error) {
       dispatch({
         type: errGetMyTeamDetail,
-        data: []
+        data: [{
+          error: true,
+          errorCode: error.response.status
+        }]
       });
     }
   };
@@ -139,7 +148,8 @@ export const GetUserDetail = (idUser) => {
       dispatch({
         type: errUserDetail,
         data: {
-          error: true
+          error: true,
+          errorCode: error.response.status
         }
       });
     }
