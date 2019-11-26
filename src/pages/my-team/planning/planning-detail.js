@@ -6,7 +6,7 @@ import  { GetMyTeamKPIDetail, GetUserDetail } from '../../../redux/actions/user'
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 const { TextArea } = Input;
-const {Title, Text } = Typography;
+const { Title, Text } = Typography;
 
 
 class PlanningDetail extends Component {
@@ -74,17 +74,25 @@ class PlanningDetail extends Component {
         {
          (this.props.myteamdetail.length > 0 ) ?
            <div>
-             <div>
-              <Divider />
-              <Text strong>View KPI </Text>
-              <Text>
-                {`View KPI of ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}
-              </Text>
-              <Divider />
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
-            </div>
+             {
+              (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
+                <div>
+                  <Divider />
+                  <Text strong>View KPI </Text>
+                  <Text>
+                    {`View KPI of ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}
+                  </Text>
+                  <Divider />
+                </div>
+                : <div></div>
+             }
+             {
+              (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
+                <div style={{ textAlign: 'center' }}>
+                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
+                </div>
+                : <div></div>
+            }
              <TablePlanningDetails
                dataSource={this.state.dataSource}
                handleChange={this.handleChange}
