@@ -1,8 +1,8 @@
 version: '3'
 
 services:
-  sample-app-prod:
+  PMGM_FRONTEND:
     container_name: PMGM_FRONTEND
     build: .
     ports:
-      - '8080:80'
+      - '80:80'
