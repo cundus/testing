@@ -8,7 +8,7 @@ import {
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { doSaveDraft } from '../../../redux/actions/kpi';
+import { doSaveKpi } from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
@@ -179,7 +179,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  doSavingKpi: (data) => dispatch(doSaveKpi(data))
 });
 
 const connectToComponent = connect(

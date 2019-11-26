@@ -18,3 +18,11 @@ export const getKpiList = (id) => customAxios({
     Authorization: `Bearer ${token}`
   }
 });
+
+export const saveKpi = (id) => customAxios({
+  url: `/kpi/byid/${id}`,
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
