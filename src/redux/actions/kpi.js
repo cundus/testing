@@ -11,8 +11,7 @@ import {
 } from '../action.type';
 
 import {
-  Success,
-  UNHANDLED_ERROR
+  Success
 } from '../status-code-type';
 
 import { getLatestGoalKpi, getKpiList, saveKpi } from '../../service/kpiPlanning';
@@ -36,19 +35,36 @@ export const doGetLatestGoalKpi = () => async (dispatch) => {
         data: payload.data.result
       });
     } else {
-      throw payload;
+      dispatch({
+        type: GET_LATEST_GOAL_KPI_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
     }
   } catch (error) {
-    dispatch({
-      type: GET_LATEST_GOAL_KPI_FAILED,
-      loading: false,
-      status: error,
-      message: error
-    });
+    if (error.response) {
+      dispatch({
+        type: GET_LATEST_GOAL_KPI_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_LATEST_GOAL_KPI_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something went wrong',
+        error
+      });
+    }
   }
 };
 
-export const doSaveKpi = (data) => async (dispatch) => {
+export const doSaveKpi = (data, id) => async (dispatch) => {
   dispatch({
     type: SAVE_KPI,
     loading: true,
@@ -56,7 +72,7 @@ export const doSaveKpi = (data) => async (dispatch) => {
     message: null
   });
   try {
-    const payload = await saveKpi(data);
+    const payload = await saveKpi(data, id);
     if (payload.data.status_code === Success) {
       dispatch({
         type: SAVE_KPI_SUCCESS,
@@ -65,22 +81,28 @@ export const doSaveKpi = (data) => async (dispatch) => {
         message: payload.data.status_description
       });
     } else {
-      throw payload;
-    }
-  } catch (error) {
-    if (error.data) {
       dispatch({
         type: SAVE_KPI_FAILED,
         loading: false,
-        status: error.data.status_code,
-        message: error.data.status_description,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response) {
+      dispatch({
+        type: SAVE_KPI_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
         error
       });
     } else {
       dispatch({
         type: SAVE_KPI_FAILED,
         loading: false,
-        status: UNHANDLED_ERROR,
+        status: null,
         message: 'Something went wrong',
         error
       });
@@ -108,22 +130,28 @@ export const doGetKpiList = (id) => async (dispatch) => {
         data: payload.data.result
       });
     } else {
-      throw payload;
-    }
-  } catch (error) {
-    if (error.data) {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: error.data.status_code,
-        message: error.data.status_description,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_KPI_LIST_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
         error
       });
     } else {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: UNHANDLED_ERROR,
+        status: null,
         message: 'Something went wrong',
         error
       });

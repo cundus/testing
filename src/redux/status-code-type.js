@@ -10,4 +10,3 @@ export const JSON_PARSING_ERROR = 9004;
 export const OPERATION_NOT_AUTHORIZED = 9005;
 export const BAD_REQUEST = 9006;
 export const GENERAL = 9999;
-export const UNHANDLED_ERROR = 12345;

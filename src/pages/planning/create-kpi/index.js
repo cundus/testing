@@ -12,6 +12,7 @@ import { doSaveKpi } from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
+import { Success } from '../../../redux/status-code-type';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -42,14 +43,49 @@ class CreateKPI extends Component {
   }
 
   handleSaveDraft = () => {
-    const { history /* , doSavingDraft */ } = this.props;
-    // const { dataOwn, dataSelectedCascade } = this.state;
-    // const dataSaving = dataOwn.concat(dataSelectedCascade);
+    const { history, doSavingKpi, userReducers } = this.props;
+    const { user } = userReducers.result;
+    const { dataOwn, dataSelectedCascade } = this.state;
+    const dataSaving = dataOwn.concat(dataSelectedCascade);
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSaving.map((itemKpi) => {
+      const data = {
+        key: 0,
+        typeKpi: 'Self KPI',
+        description: itemKpi.description,
+        baseline: itemKpi.baseline,
+        weight: [
+          {
+            orderNo: 0,
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            orderNo: 0,
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            orderNo: 0,
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
+    });
     confirm({
       title: 'Are u sure?',
       async onOk() {
-        // await doSavingDraft(dataSaving);
-        history.push('/planning/kpi/draft-planning');
+        await doSavingKpi(newData, user.userId);
+        const { kpiReducers } = this.props;
+        const { loading, status } = kpiReducers;
+        if (!loading && status === Success) {
+          history.push('/planning/kpi/draft-planning');
+        } else {
+          // adsa
+        }
       },
       onCancel() {}
     });
@@ -77,12 +113,12 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
-      kpi: '',
+      description: '',
       baseline: '',
       weight: '',
-      l1: '',
-      l2: '',
-      l3: ''
+      L1: '',
+      L2: '',
+      L3: ''
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
@@ -175,11 +211,12 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
+  kpiReducers: state.kpiReducers,
+  userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data) => dispatch(doSaveKpi(data))
+  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id))
 });
 
 const connectToComponent = connect(
@@ -190,7 +227,8 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 CreateKPI.propTypes = {
-  // doSavingDraft: PropTypes.func,
+  doSavingKpi: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  userReducers: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 };

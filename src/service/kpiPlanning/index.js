@@ -19,10 +19,13 @@ export const getKpiList = (id) => customAxios({
   }
 });
 
-export const saveKpi = (id) => customAxios({
+export const saveKpi = (data, id) => customAxios({
   url: `/kpi/byid/${id}`,
   method: 'POST',
   headers: {
     Authorization: `Bearer ${token}`
+  },
+  data: {
+    kpis: data
   }
 });
