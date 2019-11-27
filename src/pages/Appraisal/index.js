@@ -4,11 +4,13 @@ import {
   Tabs,
   Modal,
   Typography,
-  Divider
+  Divider,
+  Card,
+  Col,
+  Row
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { doGetLatestGoalKpi } from '../../redux/actions/kpi';
 import TableKPI from './kpi';
 import TableValue from './value';
 
@@ -135,22 +137,63 @@ class Appraisal extends Component {
             {` Final end year appraisal score & ratings`}
           </Text>
           <Divider />
-        <div>
-          <Tabs defaultActiveKey="1" type="card">
-            <TabPane tab="KPI" key="1">
-              <TableKPI
-                dataOwn={[]}
-                handleChangeField={handleChangeField}
-              />
-            </TabPane>
-            <TabPane tab="VALUE" key="2">
-              <TableValue
-                dataOwn={[]}
-                handleChangeField={handleChangeField}
-              />
-            </TabPane>
-          </Tabs>
-        </div>
+          <center>
+            <Row>
+              <Col xl={8}>
+                <Card style={{ width: 300, background: 'rgba(255, 184, 34, 0.07)' }}>
+                <Col xl={16}>
+                    <Text strong>Your Score</Text>
+                  </Col>
+                  <Col xl={6}>
+                  <div style={{background: '#1dc9b7', borderRadius: '5%', fontSize: '20px', padding:'20%'}} >
+                    <Text style={{ color: 'white'}}>2.2</Text>
+                  </div>
+                  </Col>
+                </Card>
+              </Col>
+              <Col xl={8}>
+                <Card style={{ width: 300, background: '#fff0fd' }}>
+                  <Col xl={16}>
+                    <Text strong>Your Ratting</Text>
+                  </Col>
+                  <Col xl={6}>
+                  <div style={{background: '#fd26eb', borderRadius: '5%', fontSize: '20px', padding:'20%'}} >
+                    <Text style={{ color: 'white'}}>2.2</Text>
+                  </div>
+                  </Col>
+                </Card>
+              </Col>
+              <Col xl={8}>
+                <Card style={{ width: 300, background: '#f3effe' }}>
+                  <Col xl={16}>
+                    <Text strong>Team Score</Text>
+                  </Col>
+                  <Col xl={6}>
+                  <div style={{background: '#581df1', borderRadius: '5%', fontSize: '20px', padding:'20%'}} >
+                    <Text style={{ color: 'white'}}>2.2</Text>
+                  </div>
+                  </Col>
+                </Card>
+              </Col>
+            </Row>
+          </center>
+          <br/>
+          <div>
+            <Tabs defaultActiveKey="1" type="card">
+              <TabPane tab="KPI" key="1">
+                <TableKPI
+                  dataOwn={[]}
+                  handleChangeField={handleChangeField}
+                />
+              </TabPane>
+             <TabPane tab="VALUE" key="2">
+               <TableValue
+                 dataOwn={[]}
+                 handleChangeField={handleChangeField}
+               />
+             </TabPane>
+            </Tabs>
+          </div>
         </div>
       </div>
     );
