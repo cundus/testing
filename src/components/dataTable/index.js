@@ -1,18 +1,29 @@
 import React from 'react';
-import { Table, Input, InputNumber, Form } from 'antd';
+import {
+  Table,
+  Input,
+  InputNumber,
+  Form
+} from 'antd';
+import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 const { TextArea } = Input;
 
 const EditableContext = React.createContext();
 
-const EditableRow = ({ form, index, ...props }) => (
+const EditableRow = ({ form, ...props }) => (
   <EditableContext.Provider value={form}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <tr {...props} />
   </EditableContext.Provider>
 );
 
 const EditableFormRow = Form.create()(EditableRow);
+
+EditableRow.propTypes = {
+  form: PropTypes.instanceOf(Object)
+};
 
 class EditableCell extends React.Component {
   change = (e) => {
@@ -48,7 +59,6 @@ class EditableCell extends React.Component {
             <InputNumber
               id={title}
               className="input"
-              ref={(node) => (this.input = node)}
               placeholder={placeholder}
               type={type}
               onChange={this.change}
@@ -58,7 +68,6 @@ class EditableCell extends React.Component {
             <TextArea
               id={title}
               className="input"
-              ref={(node) => (this.input = node)}
               placeholder={placeholder}
               autoSize={{ minRows: 3, maxRows: 5 }}
               onChange={this.change}
@@ -72,18 +81,13 @@ class EditableCell extends React.Component {
 
   render() {
     const {
-      editable,
-      dataIndex,
-      title,
-      record,
-      index,
-      handleChange,
       children,
       action,
       ...restProps
     } = this.props;
 
     return (
+      // eslint-disable-next-line react/jsx-props-no-spreading
       <td {...restProps}>
         {action ? (
           children
@@ -94,6 +98,19 @@ class EditableCell extends React.Component {
     );
   }
 }
+
+EditableCell.propTypes = {
+  editable: PropTypes.bool,
+  dataIndex: PropTypes.string,
+  title: PropTypes.string,
+  record: PropTypes.instanceOf(Object),
+  index: PropTypes.string,
+  handleChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  type: PropTypes.string,
+  children: PropTypes.instanceOf(Object),
+  action: PropTypes.bool
+};
 
 const DataTable = (props) => {
   const { dataSource, handleChange, columns } = props;
@@ -125,7 +142,7 @@ const DataTable = (props) => {
     <div>
       <Table
         components={components}
-        rowClassName={() => 'editable-row'}
+        rowClassName="editable-row"
         bordered
         dataSource={dataSource}
         columns={columnList}
@@ -138,3 +155,9 @@ const DataTable = (props) => {
 };
 
 export default DataTable;
+
+DataTable.propTypes = {
+  dataSource: PropTypes.instanceOf(Array),
+  handleChange: PropTypes.func,
+  columns: PropTypes.instanceOf(Array)
+};
