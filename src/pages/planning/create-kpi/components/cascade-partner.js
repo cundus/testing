@@ -50,7 +50,7 @@ class CascadePartner extends Component {
         editable: true
       },
       {
-        title: "",
+        title: "Action",
         dataIndex: "action",
         action: true,
         render: (text, record) =>

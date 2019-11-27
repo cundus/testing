@@ -50,8 +50,8 @@ class TableDrafKPI extends Component {
         editable: true
       },
       {
-        title: 'operation',
-        dataIndex: 'operation',
+        title: 'Action',
+        dataIndex: 'action',
         action: true,
         render: (text, record) =>
           this.props.dataSource.length >= 1 ? (
