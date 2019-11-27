@@ -76,7 +76,7 @@ class CreateKPI extends Component {
       newData.push(data);
     });
     confirm({
-      title: 'Are u sure?',
+      title: 'Are you sure?',
       async onOk() {
         await doSavingKpi(newData, user.userId);
         const { kpiReducers } = this.props;

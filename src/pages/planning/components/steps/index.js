@@ -34,17 +34,17 @@ const StepWizzard = (props) => {
     } else if (wizzard === 1) {
       if (current === 0) {
         confirm({
-          title: 'Are u sure?',
+          title: 'Are you sure?',
           async onOk() {
             history.push('/planning/kpi/create-planning');
           },
           onCancel() {}
         });
       } else {
-        message.warning('U cannot be able to go');
+        message.warning('You cannot be able to go');
       }
     } else {
-      message.warning('U cannot be able to back');
+      message.warning('You cannot be able to back');
     }
   };
 

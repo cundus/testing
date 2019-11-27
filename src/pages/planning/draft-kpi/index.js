@@ -59,7 +59,7 @@ class DraftKPI extends Component {
     const { history /* , doSavingDraft */ } = this.props;
     // const { dataSource } = this.state;
     confirm({
-      title: 'Are u sure?',
+      title: 'Are you sure?',
       async onOk() {
         // await doSavingDraft(dataSource);
         history.push('/planning/kpi/submit-planning');
