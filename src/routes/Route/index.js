@@ -17,6 +17,8 @@ const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-
 const SubmitedKPIPage = React.lazy(() => import('../../pages/planning/submited-kpi'));
 const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
+const MonitoringPage = React.lazy(()=> import('../../pages/monitoring/index'));
+const AppraisalPage = React.lazy(()=> import('../../pages/Appraisal/index'));
 
 export const routes = [
   {
@@ -92,6 +94,18 @@ export const routes = [
             component: Lazyload(MyTeamPlaningDetailPage),
             exact: true,
             title: 'Planning Detail'
+          },
+          {
+            path: '/monitoring',
+            component: Lazyload(MonitoringPage),
+            exact: true,
+            title: 'Monitoring'
+          },
+          {
+            path: '/Appraisal',
+            component: Lazyload(AppraisalPage),
+            exact: true,
+            title: 'Appraisal'
           }
         ]
       }
