@@ -19,7 +19,8 @@ const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/
 const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
 const MonitoringPage = React.lazy(()=> import('../../pages/monitoring/index'));
 const AppraisalPage = React.lazy(()=> import('../../pages/Appraisal/index'));
-
+const MonitoringTeamPage = React.lazy(()=> import('../../pages/my-team/monitoring/monitoring'));
+const AppraisalTeamPage = React.lazy(()=> import('../../pages/my-team/appraisal/appraisal'));
 export const routes = [
   {
     path: '/',
@@ -96,13 +97,25 @@ export const routes = [
             title: 'Planning Detail'
           },
           {
+            path: '/my-team/monitoring',
+            component: Lazyload(MonitoringTeamPage),
+            exact: true,
+            title: 'Monitoring'
+          },
+          {
+            path: '/my-team/appraisal',
+            component: Lazyload(AppraisalTeamPage),
+            exact: true,
+            title: 'Appraisal'
+          },
+          {
             path: '/monitoring',
             component: Lazyload(MonitoringPage),
             exact: true,
             title: 'Monitoring'
           },
           {
-            path: '/Appraisal',
+            path: '/appraisal',
             component: Lazyload(AppraisalPage),
             exact: true,
             title: 'Appraisal'
