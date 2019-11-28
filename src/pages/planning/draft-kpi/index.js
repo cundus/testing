@@ -18,7 +18,8 @@ class DraftKPI extends Component {
     super(props);
     this.state = {
       dataSource: [],
-      weightTotal: null
+      weightTotal: null,
+      weightTotalErr: false
     };
   }
 
@@ -34,7 +35,7 @@ class DraftKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
-      let dataMetrics = itemKpi.metrics.map((metric) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
@@ -44,8 +45,8 @@ class DraftKPI extends Component {
       const data = {
         key: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.description,
-        baseline: itemKpi.baseline,
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
         weight: itemKpi.weight,
         ...dataMetrics
       };
@@ -68,7 +69,17 @@ class DraftKPI extends Component {
       }
     });
     if (typeof totalWeight === 'number') {
-      this.setState({ weightTotal: totalWeight });
+      if (totalWeight === 100) {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: false
+        });
+      } else {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: true
+        });
+      }
     }
   }
 
@@ -121,7 +132,7 @@ class DraftKPI extends Component {
   };
 
   render() {
-    const { dataSource, weightTotal } = this.state;
+    const { dataSource, weightTotal, weightTotalErr } = this.state;
     const {
       handleChange,
       handleDelete,
@@ -137,11 +148,12 @@ class DraftKPI extends Component {
             This is a draft of your KPI. You can still edit these KPI(s) then
             submit to your superior.
           </Text>
-          <Divider />
-          <Text>
+          <br />
+          <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
-            {weightTotal}
+            {` ${weightTotal}`}
           </Text>
+          <Divider />
         </div>
         <TableDrafKPI
           dataSource={dataSource}

@@ -51,6 +51,8 @@ class EditableCell extends React.Component {
         { type === 'number' ? form.getFieldDecorator(dataIndex, {
           rules: [
             {
+              min: 1,
+              max: 100,
               type: 'number',
               required: true
             }
