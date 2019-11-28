@@ -55,7 +55,8 @@ class CreateKPI extends Component {
         typeKpi: 'Self KPI',
         description: itemKpi.description,
         baseline: itemKpi.baseline,
-        weight: [
+        weight: itemKpi.weight,
+        metrics: [
           {
             orderNo: 0,
             label: 'L1',
@@ -177,7 +178,7 @@ class CreateKPI extends Component {
           <Title level={4}>{`Performance Management - ${name}`}</Title>
         </div>
         <Tabs defaultActiveKey="1" type="card">
-          <TabPane tab="Creat Own KPI" key="1">
+          <TabPane tab="Create Own KPI" key="1">
             <CreateOwn
               dataOwn={dataOwn}
               handleSaveDraft={handleSaveDraft}

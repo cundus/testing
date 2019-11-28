@@ -28,9 +28,11 @@ EditableRow.propTypes = {
 class EditableCell extends React.Component {
   change = (e) => {
     const { record, handleChange } = this.props;
-    this.form.validateFields((error, values) => {
-      handleChange({ ...record, ...values });
-    });
+    setTimeout(() => {
+      this.form.validateFields((error, values) => {
+        handleChange({ ...record, ...values });
+      });
+    }, 100);
   };
 
   renderCell = (form) => {

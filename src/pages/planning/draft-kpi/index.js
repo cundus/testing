@@ -17,7 +17,8 @@ class DraftKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      weightTotal: null
     };
   }
 
@@ -53,7 +54,20 @@ class DraftKPI extends Component {
     this.setState({
       dataSource: newData
     });
+    this.liveCount(newData);
   };
+
+  liveCount = (data) => {
+    let totalWeight = 0;
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        totalWeight += itemKpi.weight;
+      } else {
+        totalWeight += 0;
+      }
+    });
+    this.setState({ weightTotal: totalWeight });
+  }
 
   handleSubmit = () => {
     const { history /* , doSavingDraft */ } = this.props;
@@ -78,6 +92,7 @@ class DraftKPI extends Component {
       ...row
     });
     this.setState({ dataSource: newData });
+    this.liveCount(newData);
   };
 
   handleDelete = (key) => {
@@ -103,8 +118,10 @@ class DraftKPI extends Component {
   };
 
   render() {
-    const { dataSource } = this.state;
-    const { handleChange, handleDelete, handleSubmit, handleSaveDraft } = this;
+    const { dataSource, weightTotal } = this.state;
+    const {
+ handleChange, handleDelete, handleSubmit, handleSaveDraft 
+} = this;
     return (
       <div>
         <div>
@@ -115,6 +132,10 @@ class DraftKPI extends Component {
             submit to your superior.
           </Text>
           <Divider />
+          <Text>
+            Total KPI Weight :
+            {weightTotal}
+          </Text>
         </div>
         <TableDrafKPI
           dataSource={dataSource}
