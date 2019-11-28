@@ -30,7 +30,7 @@ class EditableCell extends React.Component {
     const { record, handleChange } = this.props;
     setTimeout(() => {
       this.form.validateFields((error, values) => {
-        handleChange({ ...record, ...values });
+        handleChange({ ...record, ...error, ...values });
       });
     }, 100);
   };
@@ -48,34 +48,37 @@ class EditableCell extends React.Component {
 
     return (
       <Form.Item style={{ margin: 0 }}>
-        {form.getFieldDecorator(dataIndex, {
+        { type === 'number' ? form.getFieldDecorator(dataIndex, {
           rules: [
             {
-              required: true,
-              message: `${title} is required`
+              type: 'number',
+              required: true
             }
           ],
           initialValue: record[dataIndex]
         })(
-          type === 'number' ? (
-            <InputNumber
-              id={title}
-              className="input"
-              placeholder={placeholder}
-              type={type}
-              onChange={this.change}
-              disabled={!editable}
-            />
-          ) : (
-            <TextArea
-              id={title}
-              className="input"
-              placeholder={placeholder}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              onChange={this.change}
-              disabled={!editable}
-            />
-          )
+          <InputNumber
+            id={title}
+            placeholder={placeholder}
+            autoSize={{ minRows: 3, maxRows: 5 }}
+            onChange={this.change}
+            disabled={!editable}
+          />
+        ) : form.getFieldDecorator(dataIndex, {
+          rules: [
+            {
+              required: true
+            }
+          ],
+          initialValue: record[dataIndex]
+        })(
+          <TextArea
+            id={title}
+            placeholder={placeholder}
+            autoSize={{ minRows: 3, maxRows: 5 }}
+            onChange={this.change}
+            disabled={!editable}
+          />
         )}
       </Form.Item>
     );

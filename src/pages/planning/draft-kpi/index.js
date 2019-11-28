@@ -59,6 +59,7 @@ class DraftKPI extends Component {
 
   liveCount = (data) => {
     let totalWeight = 0;
+    // eslint-disable-next-line array-callback-return
     data.map((itemKpi) => {
       if (itemKpi.weight) {
         totalWeight += itemKpi.weight;
@@ -66,7 +67,9 @@ class DraftKPI extends Component {
         totalWeight += 0;
       }
     });
-    this.setState({ weightTotal: totalWeight });
+    if (typeof totalWeight === 'number') {
+      this.setState({ weightTotal: totalWeight });
+    }
   }
 
   handleSubmit = () => {
@@ -120,8 +123,11 @@ class DraftKPI extends Component {
   render() {
     const { dataSource, weightTotal } = this.state;
     const {
- handleChange, handleDelete, handleSubmit, handleSaveDraft 
-} = this;
+      handleChange,
+      handleDelete,
+      handleSubmit,
+      handleSaveDraft
+    } = this;
     return (
       <div>
         <div>
