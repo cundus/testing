@@ -89,16 +89,51 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    // const { history /* , doSavingDraft */ } = this.props;
-    const { /* dataSource */ kpiErr, kpiErrMessage } = this.state;
+    const { doSavingKpi, userReducers } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataSource,
+      kpiErr,
+      kpiErrMessage
+    } = this.state;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSource.map((itemKpi) => {
+      const data = {
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
+        weight: itemKpi.weight,
+        metricLookup: [
+          {
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
+    });
     if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {
       confirm({
         title: 'Are you sure?',
-        async onOk() {
-          // await doSavingDraft(dataSource);
-          // history.push('/planning/kpi/submit-planning');
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been submitted to supervisor');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
         },
         onCancel() {}
       });
