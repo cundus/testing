@@ -2,7 +2,8 @@ import {
   getUserInfo as getUserInfoAction,
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
-  getMyTeamDetailKPI as getMyTeamDetailKPIAction
+  getMyTeamDetailKPI as getMyTeamDetailKPIAction,
+  getUserDetail as getUserDetailAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -15,7 +16,10 @@ import {
   startGetMyTeam,
   errGetMyTeamDetail,
   getMyTeamDetail,
-  startGetMyTeamDetail
+  startGetMyTeamDetail,
+  getUserDetail,
+  errUserDetail,
+  startUserDetail
 } from '../action.type';
 import _ from  'lodash';
 
@@ -30,7 +34,10 @@ export const GetInfoUser = (token) => {
     } catch (error) {
       dispatch({
         type: errGetUserInfo,
-        data: error
+        data: {
+          error: true,
+          errorCode: error.response.status
+        }
       });
     }
   };
@@ -73,7 +80,10 @@ export const GetMyTeamKPI = (idUser) => {
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
-        data: []
+        data: [{
+          error: true,
+          errorCode: error.response.status
+        }]
       });
     }
   };
@@ -105,7 +115,42 @@ export const GetMyTeamKPIDetail = (idUser) => {
     } catch (error) {
       dispatch({
         type: errGetMyTeamDetail,
-        data: []
+        data: [{
+          error: true,
+          errorCode: error.response.status
+        }]
+      });
+    }
+  };
+};
+
+export const GetUserDetail = (idUser) => {
+  return async (dispatch) => {
+    dispatch({
+      type: startUserDetail,
+      data: {}
+    });
+    try {
+      const resp = await getUserDetailAction(idUser);
+      if (resp.status_code !== Success) {
+        dispatch({
+          type: errUserDetail,
+          data: {
+            error: true
+          }
+        });
+      }
+      dispatch({
+        type: getUserDetail,
+        data: resp.data.result
+      });
+    } catch (error) {
+      dispatch({
+        type: errUserDetail,
+        data: {
+          error: true,
+          errorCode: error.response.status
+        }
       });
     }
   };

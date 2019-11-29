@@ -15,6 +15,10 @@ export const GET_KPI_LIST_FAILED = 'GET_KPI_LIST_FAILED';
 export const getUserInfo = 'GET_USER_INFO';
 export const errGetUserInfo = 'ERR_GET_USER_INFO';
 
+export const getUserDetail = 'GET_USER_DETAIL';
+export const errUserDetail = 'ERR_GET_USER_DETAIL';
+export const startUserDetail = 'START_GET_USER_DETAIL';
+
 export const getMyTeam = 'GET_MY_TEAM';
 export const errGetMyTeam = 'ERR_GET_MY_TEAM';
 export const startGetMyTeam = 'START_GET_MY_TEAM';
