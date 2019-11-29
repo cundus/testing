@@ -29,17 +29,20 @@ class PlanningDetail extends Component {
     const mydata = this.props.myteamdetail;
     if (mydata[0].error !== true) {
       mydata.map((itemKpi) => {
-        let dataMetrics = itemKpi.metrics.map((metric) => {
-          return `{"${metric.label}":"${metric.description}"}`;
-        });
-        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-        dataMetrics = dataMetrics.reduce((result, current) => {
-          return Object.assign(result, current);
-        }, {});
+        let dataMetrics = undefined;
+        if (itemKpi.metricLookup !== null) {
+          dataMetrics = itemKpi.metricLookup.map((metric) => {
+            return `{"${metric.label}":"${metric.description}"}`;
+          });
+          dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+          dataMetrics = dataMetrics.reduce((result, current) => {
+            return Object.assign(result, current);
+          }, {});
+        }
         const data = {
           key: itemKpi.id,
-          description: itemKpi.description,
-          baseline: itemKpi.baseline,
+          description: itemKpi.name,
+          baseline: itemKpi.metric,
           weight: itemKpi.weight,
           ...dataMetrics,
           feedback: ''
