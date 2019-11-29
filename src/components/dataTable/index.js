@@ -27,10 +27,15 @@ EditableRow.propTypes = {
 
 class EditableCell extends React.Component {
   change = (e) => {
-    const { record, handleChange } = this.props;
+    const { record, handleChange, handleError } = this.props;
     setTimeout(() => {
       this.form.validateFields((error, values) => {
         handleChange({ ...record, ...error, ...values });
+        if (error) {
+          handleError(true);
+        } else {
+          handleError(false);
+        }
       });
     }, 100);
   };
@@ -89,15 +94,20 @@ class EditableCell extends React.Component {
   render() {
     const {
       children,
-      action,
+      editable,
       ...restProps
     } = this.props;
 
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <td {...restProps}>
-        {action ? (
-          children
+        {!editable ? (
+          <div
+            className="editable-cell-value-wrap"
+            style={{ paddingRight: 24 }}
+          >
+            {children}
+          </div>
         ) : (
           <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
         )}
@@ -113,6 +123,7 @@ EditableCell.propTypes = {
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
   handleChange: PropTypes.func,
+  handleError: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
   children: PropTypes.instanceOf(Object),
@@ -120,7 +131,12 @@ EditableCell.propTypes = {
 };
 
 const DataTable = (props) => {
-  const { dataSource, handleChange, columns } = props;
+  const {
+    dataSource,
+    handleChange,
+    columns,
+    handleError
+  } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
 
@@ -141,7 +157,8 @@ const DataTable = (props) => {
         type: col.type,
         action: col.action,
         placeholder: col.placeholder,
-        handleChange
+        handleChange,
+        handleError
       })
     };
   });
@@ -166,5 +183,6 @@ export default DataTable;
 DataTable.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
   handleChange: PropTypes.func,
+  handleError: PropTypes.func,
   columns: PropTypes.instanceOf(Array)
 };

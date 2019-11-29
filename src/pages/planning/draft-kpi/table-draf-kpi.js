@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Popconfirm, Tooltip, Icon } from 'antd';
+import {
+  Button,
+  Popconfirm,
+  Tooltip,
+  Icon
+} from 'antd';
 import { DataTable } from '../../../components';
 
 class TableDrafKPI extends Component {
@@ -7,26 +12,30 @@ class TableDrafKPI extends Component {
     super(props);
     this.columns = [
       {
-        title: 'Cascading/Self KPI',
+        title: 'Cascading / Self KPI',
         dataIndex: 'typeKpi',
+        align: 'center',
         placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
         title: 'KPI Subject',
         dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline',
+        align: 'center',
+        placeholder: 'Enter KPI Subject',
         editable: true
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline',
+        align: 'center',
+        placeholder: 'Enter baseline',
         editable: true
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
+        align: 'center',
         placeholder: 'Enter KPI Weight',
         type: 'number',
         editable: true
@@ -34,49 +43,56 @@ class TableDrafKPI extends Component {
       {
         title: 'L1',
         dataIndex: 'L1',
+        align: 'center',
         placeholder: 'Enter Level 1',
         editable: true
       },
       {
         title: 'L2',
         dataIndex: 'L2',
+        align: 'center',
         placeholder: 'Enter Level 2',
         editable: true
       },
       {
         title: 'L3',
         dataIndex: 'L3',
+        align: 'center',
         placeholder: 'Enter Level 3',
         editable: true
       },
       {
         title: 'Action',
+        align: 'center',
         dataIndex: 'action',
         action: true,
         render: (text, record) =>
-          this.props.dataSource.length >= 1 ? (
+          // eslint-disable-next-line implicit-arrow-linebreak
+          (this.props.dataSource.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
+              // eslint-disable-next-line react/jsx-no-bind
               onConfirm={() => this.props.handleDelete(record.key)}
             >
-              <Tooltip placement="bottomRight" title={'delete'}>
-                <Button>
+              <Tooltip placement="bottomRight" title="delete">
+                <Button type="danger" ghost>
                   <Icon type="delete" />
                 </Button>
               </Tooltip>
             </Popconfirm>
-          ) : null
+          ) : null)
       }
     ];
   }
 
   render() {
     const { columns } = this;
-    const { handleChange, dataSource } = this.props;
+    const { handleChange, dataSource, handleError } = this.props;
     return (
       <div>
         <DataTable
           columns={columns}
+          handleError={handleError}
           dataSource={dataSource}
           handleChange={handleChange}
         />

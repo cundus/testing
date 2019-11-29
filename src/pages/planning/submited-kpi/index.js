@@ -27,7 +27,7 @@ class SubmitedKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
-      let dataMetrics = itemKpi.metrics.map((metric) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
@@ -37,8 +37,8 @@ class SubmitedKPI extends Component {
       const data = {
         key: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.description,
-        baseline: itemKpi.baseline,
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
         weight: itemKpi.weight,
         ...dataMetrics
       };

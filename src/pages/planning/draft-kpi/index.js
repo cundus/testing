@@ -3,7 +3,8 @@ import {
   Button,
   Modal,
   Typography,
-  Divider
+  Divider,
+  message
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -19,7 +20,8 @@ class DraftKPI extends Component {
     this.state = {
       dataSource: [],
       weightTotal: null,
-      weightTotalErr: false
+      weightTotalErr: false,
+      kpiErr: false
     };
   }
 
@@ -85,15 +87,19 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const { history /* , doSavingDraft */ } = this.props;
-    // const { dataSource } = this.state;
-    confirm({
-      title: 'Are you sure?',
-      async onOk() {
-        // await doSavingDraft(dataSource);
-        history.push('/planning/kpi/submit-planning');
-      },
-      onCancel() {}
-    });
+    const { /* dataSource */ kpiErr, kpiErrMessage } = this.state;
+    if (kpiErr) {
+      message.warning(kpiErrMessage);
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        async onOk() {
+          // await doSavingDraft(dataSource);
+          // history.push('/planning/kpi/submit-planning');
+        },
+        onCancel() {}
+      });
+    }
   };
 
   handleChange = (row) => {
@@ -108,6 +114,26 @@ class DraftKPI extends Component {
     this.setState({ dataSource: newData });
     this.liveCount(newData);
   };
+
+  handleError = (statusErr) => {
+    const { totalWeight } = this.state;
+    if (statusErr) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Please fill the form'
+      });
+    } else if (totalWeight !== 100) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+      });
+    } else {
+      this.setState({
+        kpiErr: false,
+        kpiErrMessage: ''
+      });
+    }
+  }
 
   handleDelete = (key) => {
     const { dataSource } = this.state;
@@ -137,7 +163,8 @@ class DraftKPI extends Component {
       handleChange,
       handleDelete,
       handleSubmit,
-      handleSaveDraft
+      handleSaveDraft,
+      handleError
     } = this;
     return (
       <div>
@@ -151,12 +178,13 @@ class DraftKPI extends Component {
           <br />
           <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
-            {` ${weightTotal}`}
+            {` ${weightTotal}%`}
           </Text>
           <Divider />
         </div>
         <TableDrafKPI
           dataSource={dataSource}
+          handleError={handleError}
           handleChange={handleChange}
           handleDelete={handleDelete}
         />

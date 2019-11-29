@@ -36,10 +36,10 @@
 }
 .ant-table {
   td {
-    white-space: nowrap;
+    // white-space: nowrap;
   }
   th {
-    white-space: nowrap;
+    // white-space: nowrap;
   }
 }
 .ant-input:disabled {
@@ -49,4 +49,12 @@
 .ant-input-number-input:disabled {
   background-color: #f7f8fa;
   color: black;
+}
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
 }
