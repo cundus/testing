@@ -163,13 +163,13 @@ class DraftKPI extends Component {
   };
 
   handleError = (statusErr) => {
-    const { totalWeight } = this.state;
+    const { weightTotal } = this.state;
     if (statusErr) {
       this.setState({
         kpiErr: true,
         kpiErrMessage: 'Please fill the form'
       });
-    } else if (totalWeight !== 100) {
+    } else if (weightTotal !== 100) {
       this.setState({
         kpiErr: true,
         kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
@@ -185,9 +185,11 @@ class DraftKPI extends Component {
   handleDelete = (key) => {
     const { dataSource } = this.state;
     const data = [...dataSource];
+    const newData = data.filter((item) => item.key !== key);
     this.setState({
-      dataSource: data.filter((item) => item.key !== key)
+      dataSource: newData
     });
+    this.liveCount(newData);
   };
 
   handleSaveDraft = () => {
