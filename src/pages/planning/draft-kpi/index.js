@@ -46,6 +46,7 @@ class DraftKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
+        id: itemKpi.id,
         typeKpi: 'Self KPI',
         description: itemKpi.name,
         baseline: itemKpi.metric,

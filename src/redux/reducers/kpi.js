@@ -23,7 +23,10 @@ const initialState = {
     dueDate: '',
     parentPlanId: null
   },
-  dataKpi: []
+  dataKpi: [],
+  loadingSaveKPI: false,
+  statusSaveKPI: null,
+  messageSaveKPI: ''
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -71,23 +74,23 @@ const kpiReducers = (state = initialState, action) => {
     case SAVE_KPI:
       return {
         ...state,
-        loading: action.loading,
-        status: action.status,
-        message: action.message
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
     case SAVE_KPI_SUCCESS:
       return {
         ...state,
-        loading: action.loading,
-        status: action.status,
-        message: action.message
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
     case SAVE_KPI_FAILED:
       return {
         ...state,
-        loading: action.loading,
-        status: action.status,
-        message: action.message
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
     default:
       return { ...state };

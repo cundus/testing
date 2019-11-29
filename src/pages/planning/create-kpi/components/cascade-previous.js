@@ -75,13 +75,14 @@ class CascadePrevious extends Component {
   };
 
   render() {
-    const { dataCascadePrevious, handleSaveDraft } = this.props;
+    const { dataCascadePrevious, handleSaveDraft, handleError } = this.props;
     const { columns } = this;
 
     return (
       <div>
         <DataTable
           columns={columns}
+          handleError={handleError}
           dataSource={dataCascadePrevious}
         />
         <div style={{ textAlign: "center" }}>

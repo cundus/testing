@@ -75,13 +75,15 @@ class CreateOwn extends Component {
       dataOwn,
       handleAddRow,
       handleChangeField,
-      handleSaveDraft
+      handleSaveDraft,
+      handleError
     } = this.props;
     return (
       <div>
         <DataTable
           columns={columns}
           dataSource={dataOwn}
+          handleError={handleError}
           handleChange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>

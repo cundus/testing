@@ -75,13 +75,14 @@ class CascadePartner extends Component {
   };
 
   render() {
-    const { dataCascadePartner, handleSaveDraft } = this.props;
+    const { dataCascadePartner, handleSaveDraft, handleError } = this.props;
     const { columns } = this;
 
     return (
       <div>
         <DataTable
           columns={columns}
+          handleError={handleError}
           dataSource={dataCascadePartner}
         />
         <div style={{ textAlign: "center" }}>

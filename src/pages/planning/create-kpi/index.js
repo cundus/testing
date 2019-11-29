@@ -4,7 +4,8 @@ import {
   Tabs,
   Modal,
   Typography,
-  Divider
+  Divider,
+  message
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -38,37 +39,40 @@ class CreateKPI extends Component {
       cascadePrevious: false,
       dataCascadePartner: [],
       dataCascadePrevious: [],
-      dataSelectedCascade: []
+      dataSelectedCascade: [],
+      kpiErr: true,
+      kpiErrMessage: 'Please fill the form'
     };
   }
 
-  handleSaveDraft = () => {
-    const { history, doSavingKpi, userReducers } = this.props;
+  handleSaveDraft = async () => {
+    const { doSavingKpi, userReducers, history } = this.props;
     const { user } = userReducers.result;
-    const { dataOwn, dataSelectedCascade } = this.state;
+    const {
+      dataOwn,
+      dataSelectedCascade,
+      kpiErr,
+      kpiErrMessage
+    } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     const newData = [];
     // eslint-disable-next-line array-callback-return
     dataSaving.map((itemKpi) => {
       const data = {
-        key: 0,
-        typeKpi: 'Self KPI',
-        description: itemKpi.description,
-        baseline: itemKpi.baseline,
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
         weight: itemKpi.weight,
-        metrics: [
+        metricLookup: [
           {
-            orderNo: 0,
             label: 'L1',
             description: itemKpi.L1
           },
           {
-            orderNo: 0,
             label: 'L2',
             description: itemKpi.L2
           },
           {
-            orderNo: 0,
             label: 'L3',
             description: itemKpi.L3
           }
@@ -76,20 +80,24 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
-    confirm({
-      title: 'Are you sure?',
-      async onOk() {
-        await doSavingKpi(newData, user.userId);
-        const { kpiReducers } = this.props;
-        const { loading, status } = kpiReducers;
-        if (!loading && status === Success) {
-          history.push('/planning/kpi/draft-planning');
-        } else {
-          // adsa
-        }
-      },
-      onCancel() {}
-    });
+    if (kpiErr) {
+      message.warning(kpiErrMessage);
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been saved');
+            history.push('/planning/kpi/draft-planning');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
+        },
+        onCancel() {}
+      });
+    }
   };
 
   handleSelectData = (record) => {
@@ -114,6 +122,7 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
+      id: null,
       description: '',
       baseline: '',
       weight: '',
@@ -126,6 +135,20 @@ class CreateKPI extends Component {
       dataOwnId: dataOwnId + 1
     });
   };
+
+  handleError = (statusErr) => {
+    if (statusErr) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Please fill the form'
+      });
+    } else {
+      this.setState({
+        kpiErr: false,
+        kpiErrMessage: ''
+      });
+    }
+  }
 
   handleDeleteRow = (key) => {
     const { dataOwn } = this.state;
@@ -158,7 +181,8 @@ class CreateKPI extends Component {
       handleChangeField,
       handleDeleteRow,
       handleSaveDraft,
-      handleSelectData
+      handleSelectData,
+      handleError
     } = this;
     const { kpiReducers } = this.props;
     const { dataGoal } = kpiReducers;
@@ -183,6 +207,7 @@ class CreateKPI extends Component {
               dataOwn={dataOwn}
               handleSaveDraft={handleSaveDraft}
               handleAddRow={handleAddRow}
+              handleError={handleError}
               handleChangeField={handleChangeField}
               handleDeleteRow={handleDeleteRow}
             />
@@ -191,6 +216,7 @@ class CreateKPI extends Component {
             <CascadePartner
               dataCascadePartner={dataCascadePartner}
               dataSelectedCascade={dataSelectedCascade}
+              handleError={handleError}
               handleSaveDraft={handleSaveDraft}
               handleSelectData={handleSelectData}
             />
@@ -200,6 +226,7 @@ class CreateKPI extends Component {
               <CascadePrevious
                 dataCascadePrevious={dataCascadePrevious}
                 dataSelectedCascade={dataSelectedCascade}
+                handleError={handleError}
                 handleSaveDraft={handleSaveDraft}
                 handleSelectData={handleSelectData}
               />
