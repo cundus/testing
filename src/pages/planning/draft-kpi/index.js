@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
+import { doSaveKpi } from '../../../redux/actions/kpi';
+import { Success } from '../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text } = Typography;
@@ -87,7 +89,7 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    const { history /* , doSavingDraft */ } = this.props;
+    // const { history /* , doSavingDraft */ } = this.props;
     const { /* dataSource */ kpiErr, kpiErrMessage } = this.state;
     if (kpiErr) {
       message.warning(kpiErrMessage);
@@ -145,17 +147,72 @@ class DraftKPI extends Component {
   };
 
   handleSaveDraft = () => {
-    const { history /* , doSavingDraft */ } = this.props;
-    // const { dataOwn, dataSelectedCascade } = this.state;
-    // const dataSaving = dataOwn.concat(dataSelectedCascade);
-    confirm({
-      title: 'Are u sure?',
-      async onOk() {
-        // await doSavingDraft(dataSaving);
-        history.push('/planning/kpi/draft-planning');
-      },
-      onCancel() {}
+    const { doSavingKpi, userReducers } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataSource,
+      kpiErr,
+      kpiErrMessage,
+      totalWeight
+    } = this.state;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSource.map((itemKpi) => {
+      const data = {
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
+        weight: itemKpi.weight,
+        metricLookup: [
+          {
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
     });
+    if (kpiErr) {
+      if (totalWeight !== 100) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(newData, user.userId);
+            const { kpiReducers } = this.props;
+            if (kpiReducers.statusSaveKPI === Success) {
+              message.success('Your KPI has been saved');
+            } else {
+              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      } else {
+        message.warning(kpiErrMessage);
+      }
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been saved');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
+        },
+        onCancel() {}
+      });
+    }
   };
 
   render() {
@@ -203,11 +260,12 @@ class DraftKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
+  kpiReducers: state.kpiReducers,
+  userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  doSavingKpi: (data) => dispatch(doSaveKpi(data))
 });
 
 const connectToComponent = connect(
@@ -219,5 +277,7 @@ export default withRouter(connectToComponent);
 
 DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired
+  doSavingKpi: PropTypes.func,
+  userReducers: PropTypes.instanceOf(Object)
+  // history: PropTypes.instanceOf(Object).isRequired
 };
