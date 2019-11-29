@@ -45,7 +45,7 @@ class PlanningDetail extends Component {
           baseline: itemKpi.metric,
           weight: itemKpi.weight,
           ...dataMetrics,
-          feedback: ''
+          feedback: itemKpi.feedback
         };
         newData.push(data);
       });
