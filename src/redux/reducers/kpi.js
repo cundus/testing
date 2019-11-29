@@ -1,7 +1,7 @@
 import {
-  SAVE_DRAFT,
-  SAVE_DRAFT_SUCCESS,
-  SAVE_DRAFT_FAILED,
+  SAVE_KPI,
+  SAVE_KPI_SUCCESS,
+  SAVE_KPI_FAILED,
   GET_LATEST_GOAL_KPI,
   GET_LATEST_GOAL_KPI_SUCCESS,
   GET_LATEST_GOAL_KPI_FAILED,
@@ -23,7 +23,10 @@ const initialState = {
     dueDate: '',
     parentPlanId: null
   },
-  dataKpi: []
+  dataKpi: [],
+  loadingSaveKPI: false,
+  statusSaveKPI: null,
+  messageSaveKPI: ''
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -59,9 +62,7 @@ const kpiReducers = (state = initialState, action) => {
         loading: action.loading,
         status: action.status,
         message: action.message,
-        dataKpi: action.data,
-        page: action.page,
-        action: action.pages
+        dataKpi: action.data
       };
     case GET_KPI_LIST_FAILED:
       return {
@@ -70,20 +71,26 @@ const kpiReducers = (state = initialState, action) => {
         status: action.status,
         message: action.message
       };
-    case SAVE_DRAFT:
+    case SAVE_KPI:
       return {
         ...state,
-        isDoSaveDraft: action.isDoSaveDraft
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
-    case SAVE_DRAFT_SUCCESS:
+    case SAVE_KPI_SUCCESS:
       return {
         ...state,
-        isDoSaveDraft: action.isDoSaveDraft
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
-    case SAVE_DRAFT_FAILED:
+    case SAVE_KPI_FAILED:
       return {
         ...state,
-        isDoSaveDraft: action.isDoSaveDraft
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
       };
     default:
       return { ...state };

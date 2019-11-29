@@ -24,15 +24,6 @@ const MenuList = [
   },
   {
     id: 4,
-    path: '/planning/kpi/create-non-kpi-planning',
-    menuLevel: 2,
-    title: 'Create Non KPI',
-    parent: 'Planning',
-    icon: 'plus-circle',
-    theme: 'outlined'
-  },
-  {
-    id: 5,
     path: '/planning/kpi-planning',
     menuLevel: 2,
     title: 'View My KPI',
@@ -41,7 +32,7 @@ const MenuList = [
     theme: 'outlined'
   },
   {
-    id: 6,
+    id: 5,
     path: '/monitoring',
     menuLevel: 1,
     title: 'Monitoring',

@@ -3,12 +3,16 @@ import {
   Button,
   Modal,
   Typography,
-  Divider
+  Divider,
+  message,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
+import { doSaveKpi, doGetKpiList } from '../../../redux/actions/kpi';
+import { Success } from '../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text } = Typography;
@@ -17,7 +21,10 @@ class DraftKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      weightTotal: 0,
+      weightTotalErr: false,
+      kpiErr: false
     };
   }
 
@@ -25,7 +32,10 @@ class DraftKPI extends Component {
     this.getAllData();
   }
 
-  getAllData = () => {
+  getAllData = async () => {
+    const { userReducers, getKpiList } = this.props;
+    const { user } = userReducers.result;
+    await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
@@ -33,7 +43,7 @@ class DraftKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
-      let dataMetrics = itemKpi.metrics.map((metric) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
@@ -42,9 +52,10 @@ class DraftKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
+        id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.description,
-        baseline: itemKpi.baseline,
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
         weight: itemKpi.weight,
         ...dataMetrics
       };
@@ -53,19 +64,85 @@ class DraftKPI extends Component {
     this.setState({
       dataSource: newData
     });
+    this.liveCount(newData);
   };
 
-  handleSubmit = () => {
-    const { history /* , doSavingDraft */ } = this.props;
-    // const { dataSource } = this.state;
-    confirm({
-      title: 'Are u sure?',
-      async onOk() {
-        // await doSavingDraft(dataSource);
-        history.push('/planning/kpi/submit-planning');
-      },
-      onCancel() {}
+  liveCount = (data) => {
+    let totalWeight = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        totalWeight += itemKpi.weight;
+      } else {
+        totalWeight += 0;
+      }
     });
+    if (typeof totalWeight === 'number') {
+      if (totalWeight === 100) {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: false
+        });
+      } else {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: true
+        });
+      }
+    }
+  }
+
+  handleSubmit = () => {
+    const { doSavingKpi, userReducers, history } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataSource,
+      kpiErr,
+      kpiErrMessage
+    } = this.state;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSource.map((itemKpi) => {
+      const data = {
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
+        weight: itemKpi.weight,
+        metricLookup: [
+          {
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
+    });
+    if (kpiErr) {
+      message.warning(kpiErrMessage);
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been submitted to supervisor');
+            history.push('/planning/kpi/submit-planning');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
+        },
+        onCancel() {}
+      });
+    }
   };
 
   handleChange = (row) => {
@@ -78,7 +155,28 @@ class DraftKPI extends Component {
       ...row
     });
     this.setState({ dataSource: newData });
+    this.liveCount(newData);
   };
+
+  handleError = (statusErr) => {
+    const { totalWeight } = this.state;
+    if (statusErr) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Please fill the form'
+      });
+    } else if (totalWeight !== 100) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+      });
+    } else {
+      this.setState({
+        kpiErr: false,
+        kpiErrMessage: ''
+      });
+    }
+  }
 
   handleDelete = (key) => {
     const { dataSource } = this.state;
@@ -89,22 +187,85 @@ class DraftKPI extends Component {
   };
 
   handleSaveDraft = () => {
-    const { history /* , doSavingDraft */ } = this.props;
-    // const { dataOwn, dataSelectedCascade } = this.state;
-    // const dataSaving = dataOwn.concat(dataSelectedCascade);
-    confirm({
-      title: 'Are u sure?',
-      async onOk() {
-        // await doSavingDraft(dataSaving);
-        history.push('/planning/kpi/draft-planning');
-      },
-      onCancel() {}
+    const { doSavingKpi, userReducers } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataSource,
+      kpiErr,
+      kpiErrMessage,
+      totalWeight
+    } = this.state;
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSource.map((itemKpi) => {
+      const data = {
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
+        weight: itemKpi.weight,
+        metricLookup: [
+          {
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
     });
+    if (kpiErr) {
+      if (totalWeight !== 100) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(newData, user.userId);
+            const { kpiReducers } = this.props;
+            if (kpiReducers.statusSaveKPI === Success) {
+              message.success('Your KPI has been saved');
+            } else {
+              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      } else {
+        message.warning(kpiErrMessage);
+      }
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been saved');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
+        },
+        onCancel() {}
+      });
+    }
   };
 
   render() {
-    const { dataSource } = this.state;
-    const { handleChange, handleDelete, handleSubmit, handleSaveDraft } = this;
+    const { dataSource, weightTotal, weightTotalErr } = this.state;
+    const {
+      handleChange,
+      handleDelete,
+      handleSubmit,
+      handleSaveDraft,
+      handleError
+    } = this;
+    const { kpiReducers } = this.props;
+    const { loading } = kpiReducers;
     return (
       <div>
         <div>
@@ -114,32 +275,46 @@ class DraftKPI extends Component {
             This is a draft of your KPI. You can still edit these KPI(s) then
             submit to your superior.
           </Text>
+          <br />
+          <Text type={weightTotalErr ? 'danger' : ''}>
+            Total KPI Weight :
+            {` ${weightTotal}%`}
+          </Text>
           <Divider />
         </div>
-        <TableDrafKPI
-          dataSource={dataSource}
-          handleChange={handleChange}
-          handleDelete={handleDelete}
-        />
-        <div style={{ textAlign: 'center' }}>
-          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
-            Save as Draft
-          </Button>
-          <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
-            Submit To Superior
-          </Button>
-        </div>
+        {loading ?
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div> :
+          <div>
+            <TableDrafKPI
+              dataSource={dataSource}
+              handleError={handleError}
+              handleChange={handleChange}
+              handleDelete={handleDelete}
+            />
+            <div style={{ textAlign: 'center' }}>
+              <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+                Save as Draft
+              </Button>
+              <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
+                Submit To Superior
+              </Button>
+            </div>
+          </div>}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
+  kpiReducers: state.kpiReducers,
+  userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  doSavingKpi: (data) => dispatch(doSaveKpi(data)),
+  getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(
@@ -151,5 +326,8 @@ export default withRouter(connectToComponent);
 
 DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  doSavingKpi: PropTypes.func,
+  getKpiList: PropTypes.func,
+  userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired
 };

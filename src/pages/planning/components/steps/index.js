@@ -30,21 +30,21 @@ const StepWizzard = (props) => {
   const onWizzardChange = (current) => {
     // setWizzard(current);
     if (wizzard === 0) {
-      message.warning('Please fill form first');
+      message.warning('Please fill the form');
     } else if (wizzard === 1) {
       if (current === 0) {
         confirm({
-          title: 'Are u sure?',
+          title: 'Are you sure?',
           async onOk() {
             history.push('/planning/kpi/create-planning');
           },
           onCancel() {}
         });
       } else {
-        message.warning('U cannot be able to go');
+        message.warning('Sorry, You cannot be able to go');
       }
     } else {
-      message.warning('U cannot be able to back');
+      message.warning('Sorry, You cannot be able to back');
     }
   };
 

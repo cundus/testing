@@ -4,14 +4,17 @@ import {
   Tabs,
   Modal,
   Typography,
-  Divider
+  Divider,
+  message,
+  Spin
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { doSaveDraft } from '../../../redux/actions/kpi';
+import { doSaveKpi, doGetKpiList, doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
+import { Success } from '../../../redux/status-code-type';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -37,22 +40,104 @@ class CreateKPI extends Component {
       cascadePrevious: false,
       dataCascadePartner: [],
       dataCascadePrevious: [],
-      dataSelectedCascade: []
+      dataSelectedCascade: [],
+      kpiErr: true,
+      kpiErrMessage: 'Please fill the form'
     };
   }
 
-  handleSaveDraft = () => {
-    const { history /* , doSavingDraft */ } = this.props;
-    // const { dataOwn, dataSelectedCascade } = this.state;
-    // const dataSaving = dataOwn.concat(dataSelectedCascade);
-    confirm({
-      title: 'Are u sure?',
-      async onOk() {
-        // await doSavingDraft(dataSaving);
-        history.push('/planning/kpi/draft-planning');
-      },
-      onCancel() {}
+  componentDidMount() {
+    this.getAllData();
+  }
+
+  getAllData = async () => {
+    const { userReducers, getKpiList, getLatestGoalKpi } = this.props;
+    const { user } = userReducers.result;
+    getLatestGoalKpi();
+    await getKpiList(user.userId);
+    const { kpiReducers } = this.props;
+    const { dataKpi } = kpiReducers;
+    const newData = [];
+
+    // for fetching data metrics API
+    // eslint-disable-next-line array-callback-return
+    dataKpi.map((itemKpi) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
+        return `{"${metric.label}":"${metric.description}"}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
+      const data = {
+        key: itemKpi.id,
+        id: itemKpi.id,
+        typeKpi: 'Self KPI',
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
+        weight: itemKpi.weight,
+        ...dataMetrics
+      };
+      newData.push(data);
     });
+    // this.setState({
+    //   dataOwn: newData
+    // });
+  };
+
+  handleSaveDraft = async () => {
+    const { doSavingKpi, userReducers, history } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataOwn,
+      dataSelectedCascade,
+      kpiErr,
+      kpiErrMessage
+    } = this.state;
+    const dataSaving = dataOwn.concat(dataSelectedCascade);
+    const newData = [];
+    // eslint-disable-next-line array-callback-return
+    dataSaving.map((itemKpi) => {
+      const data = {
+        id: itemKpi.id,
+        name: itemKpi.description,
+        metric: itemKpi.baseline,
+        weight: itemKpi.weight,
+        metricLookup: [
+          {
+            label: 'L1',
+            description: itemKpi.L1
+          },
+          {
+            label: 'L2',
+            description: itemKpi.L2
+          },
+          {
+            label: 'L3',
+            description: itemKpi.L3
+          }
+        ]
+      };
+      newData.push(data);
+    });
+    if (kpiErr) {
+      message.warning(kpiErrMessage);
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        onOk: async () => {
+          await doSavingKpi(newData, user.userId);
+          const { kpiReducers } = this.props;
+          if (kpiReducers.statusSaveKPI === Success) {
+            message.success('Your KPI has been saved');
+            history.push('/planning/kpi/draft-planning');
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+          }
+        },
+        onCancel() {}
+      });
+    }
   };
 
   handleSelectData = (record) => {
@@ -77,18 +162,33 @@ class CreateKPI extends Component {
     const { dataOwnId, dataOwn } = this.state;
     const newData = {
       key: dataOwnId,
-      kpi: '',
+      id: null,
+      description: '',
       baseline: '',
       weight: '',
-      l1: '',
-      l2: '',
-      l3: ''
+      L1: '',
+      L2: '',
+      L3: ''
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
       dataOwnId: dataOwnId + 1
     });
   };
+
+  handleError = (statusErr) => {
+    if (statusErr) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Please fill the form'
+      });
+    } else {
+      this.setState({
+        kpiErr: false,
+        kpiErrMessage: ''
+      });
+    }
+  }
 
   handleDeleteRow = (key) => {
     const { dataOwn } = this.state;
@@ -121,10 +221,11 @@ class CreateKPI extends Component {
       handleChangeField,
       handleDeleteRow,
       handleSaveDraft,
-      handleSelectData
+      handleSelectData,
+      handleError
     } = this;
     const { kpiReducers } = this.props;
-    const { dataGoal } = kpiReducers;
+    const { dataGoal, loading } = kpiReducers;
     const { name } = dataGoal;
     return (
       <div>
@@ -137,49 +238,61 @@ class CreateKPI extends Component {
           </Text>
           <Divider />
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <Title level={4}>{`Performance Management - ${name}`}</Title>
-        </div>
-        <Tabs defaultActiveKey="1" type="card">
-          <TabPane tab="Creat Own KPI" key="1">
-            <CreateOwn
-              dataOwn={dataOwn}
-              handleSaveDraft={handleSaveDraft}
-              handleAddRow={handleAddRow}
-              handleChangeField={handleChangeField}
-              handleDeleteRow={handleDeleteRow}
-            />
-          </TabPane>
-          <TabPane tab="Cascade From Supervisor" key="2">
-            <CascadePartner
-              dataCascadePartner={dataCascadePartner}
-              dataSelectedCascade={dataSelectedCascade}
-              handleSaveDraft={handleSaveDraft}
-              handleSelectData={handleSelectData}
-            />
-          </TabPane>
-          {cascadePrevious && (
-            <TabPane tab="Cascade From Previous Year" key="3">
-              <CascadePrevious
-                dataCascadePrevious={dataCascadePrevious}
-                dataSelectedCascade={dataSelectedCascade}
-                handleSaveDraft={handleSaveDraft}
-                handleSelectData={handleSelectData}
-              />
-            </TabPane>
-          )}
-        </Tabs>
+        {loading ?
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div> :
+          <div>
+            <div style={{ textAlign: 'center' }}>
+              <Title level={4}>{`Performance Management - ${name}`}</Title>
+            </div>
+            <Tabs defaultActiveKey="1" type="card">
+              <TabPane tab="Create Own KPI" key="1">
+                <CreateOwn
+                  dataOwn={dataOwn}
+                  handleSaveDraft={handleSaveDraft}
+                  handleAddRow={handleAddRow}
+                  handleError={handleError}
+                  handleChangeField={handleChangeField}
+                  handleDeleteRow={handleDeleteRow}
+                />
+              </TabPane>
+              <TabPane tab="Cascade From Supervisor" key="2">
+                <CascadePartner
+                  dataCascadePartner={dataCascadePartner}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                />
+              </TabPane>
+              {cascadePrevious && (
+                <TabPane tab="Cascade From Previous Year" key="3">
+                  <CascadePrevious
+                    dataCascadePrevious={dataCascadePrevious}
+                    dataSelectedCascade={dataSelectedCascade}
+                    handleError={handleError}
+                    handleSaveDraft={handleSaveDraft}
+                    handleSelectData={handleSelectData}
+                  />
+                </TabPane>
+              )}
+            </Tabs>
+          </div>}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
+  kpiReducers: state.kpiReducers,
+  userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingDraft: (data) => dispatch(doSaveDraft(data))
+  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
+  getKpiList: (id) => dispatch(doGetKpiList(id)),
+  getLatestGoalKpi: (id) => dispatch(doGetLatestGoalKpi())
 });
 
 const connectToComponent = connect(
@@ -190,7 +303,10 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 CreateKPI.propTypes = {
-  // doSavingDraft: PropTypes.func,
+  doSavingKpi: PropTypes.func,
+  getKpiList: PropTypes.func,
+  getLatestGoalKpi: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  userReducers: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 };
