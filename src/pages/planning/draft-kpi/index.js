@@ -81,12 +81,16 @@ class DraftKPI extends Component {
       if (totalWeight === 100) {
         this.setState({
           weightTotal: totalWeight,
-          weightTotalErr: false
+          weightTotalErr: false,
+          kpiErr: false,
+          kpiErrMessage: ''
         });
       } else {
         this.setState({
           weightTotal: totalWeight,
-          weightTotalErr: true
+          weightTotalErr: true,
+          kpiErr: true,
+          kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
         });
       }
     }
