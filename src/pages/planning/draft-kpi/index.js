@@ -4,13 +4,14 @@ import {
   Modal,
   Typography,
   Divider,
-  message
+  message,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveKpi } from '../../../redux/actions/kpi';
+import { doSaveKpi, doGetKpiList } from '../../../redux/actions/kpi';
 import { Success } from '../../../redux/status-code-type';
 
 const { confirm } = Modal;
@@ -21,7 +22,7 @@ class DraftKPI extends Component {
     super(props);
     this.state = {
       dataSource: [],
-      weightTotal: null,
+      weightTotal: 0,
       weightTotalErr: false,
       kpiErr: false
     };
@@ -31,7 +32,10 @@ class DraftKPI extends Component {
     this.getAllData();
   }
 
-  getAllData = () => {
+  getAllData = async () => {
+    const { userReducers, getKpiList } = this.props;
+    const { user } = userReducers.result;
+    await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
@@ -259,6 +263,8 @@ class DraftKPI extends Component {
       handleSaveDraft,
       handleError
     } = this;
+    const { kpiReducers } = this.props;
+    const { loading } = kpiReducers;
     return (
       <div>
         <div>
@@ -275,20 +281,26 @@ class DraftKPI extends Component {
           </Text>
           <Divider />
         </div>
-        <TableDrafKPI
-          dataSource={dataSource}
-          handleError={handleError}
-          handleChange={handleChange}
-          handleDelete={handleDelete}
-        />
-        <div style={{ textAlign: 'center' }}>
-          <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
-            Save as Draft
-          </Button>
-          <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
-            Submit To Superior
-          </Button>
-        </div>
+        {loading ?
+          <div style={{ textAlign: 'center' }}>
+            <Spin />
+          </div> :
+          <div>
+            <TableDrafKPI
+              dataSource={dataSource}
+              handleError={handleError}
+              handleChange={handleChange}
+              handleDelete={handleDelete}
+            />
+            <div style={{ textAlign: 'center' }}>
+              <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+                Save as Draft
+              </Button>
+              <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
+                Submit To Superior
+              </Button>
+            </div>
+          </div>}
       </div>
     );
   }
@@ -300,7 +312,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data) => dispatch(doSaveKpi(data))
+  doSavingKpi: (data) => dispatch(doSaveKpi(data)),
+  getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(
@@ -313,6 +326,7 @@ export default withRouter(connectToComponent);
 DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
+  getKpiList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object)
   // history: PropTypes.instanceOf(Object).isRequired
 };
