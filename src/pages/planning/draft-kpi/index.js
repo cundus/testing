@@ -93,7 +93,7 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    const { doSavingKpi, userReducers } = this.props;
+    const { doSavingKpi, userReducers, history } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -135,6 +135,7 @@ class DraftKPI extends Component {
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been submitted to supervisor');
+            history.push('/planning/kpi/submit-planning');
           } else {
             message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
           }
@@ -327,6 +328,6 @@ DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object)
-  // history: PropTypes.instanceOf(Object).isRequired
+  userReducers: PropTypes.instanceOf(Object),
+  history: PropTypes.instanceOf(Object).isRequired
 };

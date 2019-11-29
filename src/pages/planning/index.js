@@ -10,8 +10,7 @@ class Planning extends Component {
     this.getKPIData();
   }
 
-  getKPIData = async (e) => {
-  }
+  getKPIData = async (e) => {}
 
   render() {
     const { child, history } = this.props;
