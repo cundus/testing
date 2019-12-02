@@ -49,7 +49,7 @@ class CreateOwn extends Component {
         editable: true
       },
       {
-        title: '',
+        title: 'Action',
         dataIndex: 'action',
         action: true,
         render: (text, record) =>
@@ -75,13 +75,15 @@ class CreateOwn extends Component {
       dataOwn,
       handleAddRow,
       handleChangeField,
-      handleSaveDraft
+      handleSaveDraft,
+      handleError
     } = this.props;
     return (
       <div>
         <DataTable
           columns={columns}
           dataSource={dataOwn}
+          handleError={handleError}
           handleChange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>

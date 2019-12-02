@@ -27,7 +27,7 @@ const browserHistory = createBrowserHistory();
 const App = (props) => {
   return (
     <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
-      {({ login, logout, authenticationState }) => {
+      {({ login, logout, authenticationState, error }) => {
         if (authenticationState === AuthenticationState.Authenticated) {
           return (
             <Provider store={store}>
@@ -50,6 +50,8 @@ const App = (props) => {
         ) {
           localStorage.clear();
           return <div></div>;
+        } else if (error) {
+          window.location.reload();
         }
       }}
     </AzureAD>

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import  { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import  { Spin, Input, Button, Divider, Typography } from 'antd';
+import { Spin, Input, Button, Divider, Typography, Modal } from 'antd';
 import  { GetMyTeamKPIDetail, GetUserDetail } from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 const { TextArea } = Input;
 const { Title, Text } = Typography;
-
+const {confirm } = Modal;
 
 class PlanningDetail extends Component {
   constructor(props) {
@@ -29,20 +29,23 @@ class PlanningDetail extends Component {
     const mydata = this.props.myteamdetail;
     if (mydata[0].error !== true) {
       mydata.map((itemKpi) => {
-        let dataMetrics = itemKpi.metrics.map((metric) => {
-          return `{"${metric.label}":"${metric.description}"}`;
-        });
-        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-        dataMetrics = dataMetrics.reduce((result, current) => {
-          return Object.assign(result, current);
-        }, {});
+        let dataMetrics = undefined;
+        if (itemKpi.metricLookup !== null) {
+          dataMetrics = itemKpi.metricLookup.map((metric) => {
+            return `{"${metric.label}":"${metric.description}"}`;
+          });
+          dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+          dataMetrics = dataMetrics.reduce((result, current) => {
+            return Object.assign(result, current);
+          }, {});
+        }
         const data = {
           key: itemKpi.id,
-          description: itemKpi.description,
-          baseline: itemKpi.baseline,
+          description: itemKpi.name,
+          baseline: itemKpi.metric,
           weight: itemKpi.weight,
           ...dataMetrics,
-          feedback: ''
+          feedback: itemKpi.feedback
         };
         newData.push(data);
       });
@@ -67,6 +70,29 @@ class PlanningDetail extends Component {
     });
     this.setState({ dataSource: newData });
   };
+
+  handleFeedback = () => {
+    confirm({
+      title: 'Are you sure to send Feedbacks ?',
+      async onOk() {
+        // await doSavingDraft(dataSaving);
+        // history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
+  }
+
+  handleApprove = () => {
+    confirm({
+      title: 'Are you sure to Approve ?',
+      async onOk() {
+        // await doSavingDraft(dataSaving);
+        // history.push('/planning/kpi/draft-planning');
+      },
+      onCancel() {}
+    });
+  }
+
 
   render() {
     return(
@@ -104,7 +130,14 @@ class PlanningDetail extends Component {
              <br/>
              <br/>
              <center>
-               <Button type="primary">Save Feedbacks</Button>
+               <Button
+                style={{ 'background-color': 'orange', color: 'white'}}
+                onClick={this.handleFeedback}
+               >
+                Send Feedbacks
+               </Button>
+               &nbsp;&nbsp;
+               <Button onClick={this.handleApprove} type="primary">Approve</Button>
              </center>
             </div>:
            <center>

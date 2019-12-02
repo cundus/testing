@@ -24,15 +24,6 @@ const MenuList = [
   },
   {
     id: 4,
-    path: '/planning/kpi/create-non-kpi-planning',
-    menuLevel: 2,
-    title: 'Create Non KPI',
-    parent: 'Planning',
-    icon: 'plus-circle',
-    theme: 'outlined'
-  },
-  {
-    id: 5,
     path: '/planning/kpi-planning',
     menuLevel: 2,
     title: 'View My KPI',
@@ -41,19 +32,53 @@ const MenuList = [
     theme: 'outlined'
   },
   {
-    id: 6,
+    id: 5,
+    path: '/monitoring',
+    menuLevel: 1,
+    title: 'Monitoring',
+    parent: 'none',
+    theme: 'outlined'
+  },
+  {
+    id: 7,
+    path: '/appraisal',
+    menuLevel: 1,
+    title: 'Appraisal',
+    parent: 'none',
+    theme: 'outlined'
+  },
+  {
+    id: 8,
     path: '/my-team/',
     menuLevel: 1,
     title: 'My Team',
     parent: 'none'
   },
   {
-    id: 7,
+    id: 9,
     path: '/my-team/planning/',
     menuLevel: 2,
     title: 'Planning',
     parent: 'My Team',
     icon: 'calendar',
+    theme: 'outlined'
+  },
+  {
+    id: 10,
+    path: '/my-team/monitoring/',
+    menuLevel: 2,
+    title: 'Monitoring',
+    parent: 'My Team',
+    icon: 'bar-chart',
+    theme: 'outlined'
+  },
+  {
+    id: 11,
+    path: '/my-team/appraisal/',
+    menuLevel: 2,
+    title: 'Appraisal',
+    parent: 'My Team',
+    icon: 'check-square',
     theme: 'outlined'
   }
 ];
