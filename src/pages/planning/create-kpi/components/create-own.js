@@ -14,13 +14,13 @@ class CreateOwn extends Component {
       {
         title: 'KPI Subject',
         dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline',
+        placeholder: 'Enter KPI Subject',
         editable: true
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline',
+        placeholder: 'Enter baseline',
         editable: true
       },
       {
@@ -50,21 +50,24 @@ class CreateOwn extends Component {
       },
       {
         title: 'Action',
+        align: 'center',
         dataIndex: 'action',
         action: true,
         render: (text, record) =>
-          this.props.dataOwn.length >= 1 ? (
+          // eslint-disable-next-line implicit-arrow-linebreak
+          (this.props.dataOwn.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
-              onConfirm={() => this.props.handleDeleteRow(record.key)}
+              // eslint-disable-next-line react/jsx-no-bind
+              onConfirm={() => this.props.handleDelete(record.key)}
             >
-              <Tooltip placement="bottomRight" title={'delete'}>
-                <Button>
+              <Tooltip placement="bottomRight" title="delete">
+                <Button type="danger" ghost>
                   <Icon type="delete" />
                 </Button>
               </Tooltip>
             </Popconfirm>
-          ) : null
+          ) : null)
       }
     ];
   }

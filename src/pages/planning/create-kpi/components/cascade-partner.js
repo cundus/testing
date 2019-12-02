@@ -15,13 +15,13 @@ class CascadePartner extends Component {
       {
         title: 'KPI Subject',
         dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline',
+        placeholder: 'Enter KPI Subject',
         editable: true
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline',
+        placeholder: 'Enter baseline',
         editable: true
       },
       {
