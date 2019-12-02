@@ -93,17 +93,17 @@ const Header = (props) => {
           {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
           <Row type="flex" justify="space-between" align="middle">
             <Dropdown overlay={notifMenu} placement="bottomRight">
-              <a href="#">
+              <a>
                 <Icon style={{ fontSize: 18 }} type="bell" />
               </a>
             </Dropdown>
             <Dropdown overlay={langMenu} placement="bottomRight">
-              <a href="#">
+              <a>
                 <img src={Indonesia} alt="flag" className="flagIcon" />
               </a>
             </Dropdown>
             <Dropdown overlay={accountMenu} placement="bottomRight" trigger={['click']}>
-              <a className="accountWrapper" href="#">
+              <a className="accountWrapper">
                 {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
                 <Avatar
                   shape="square"
