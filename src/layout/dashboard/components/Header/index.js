@@ -10,7 +10,7 @@ import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
 import myAvatar from '../../../../assets/users/300_23.jpg';
 import MenuList from '../../../../routes/MenuList';
-import accountMenu from './components/accountMenu';
+import { accountMenu, langMenu, notifMenu } from './components/menus';
 
 const { Text } = Typography;
 const { REACT_APP_API_URL } = process.env;
@@ -22,7 +22,7 @@ const Header = (props) => {
   const { collapsed, toggle } = props;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}`:myAvatar;
+  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}` : myAvatar;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
@@ -92,14 +92,18 @@ const Header = (props) => {
         <Col xs={8} sm={8} md={8} lg={4}>
           {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
           <Row type="flex" justify="space-between" align="middle">
-            <div>
-              <Icon style={{ fontSize: 18 }} type="bell" />
-            </div>
-            <div>
-              <img src={Indonesia} alt="flag" className="flagIcon" />
-            </div>
-            <Dropdown overlay={accountMenu} placement="bottomLeft">
-              <div className="accountWrapper">
+            <Dropdown overlay={notifMenu} placement="bottomRight">
+              <a href="#">
+                <Icon style={{ fontSize: 18 }} type="bell" />
+              </a>
+            </Dropdown>
+            <Dropdown overlay={langMenu} placement="bottomRight">
+              <a href="#">
+                <img src={Indonesia} alt="flag" className="flagIcon" />
+              </a>
+            </Dropdown>
+            <Dropdown overlay={accountMenu} placement="bottomRight" trigger={['click']}>
+              <a className="accountWrapper" href="#">
                 {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
                 <Avatar
                   shape="square"
@@ -107,7 +111,7 @@ const Header = (props) => {
                   src={url}
                   className="avatar"
                 />
-              </div>
+              </a>
             </Dropdown>
           </Row>
           {/* </Menu> */}
