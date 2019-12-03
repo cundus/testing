@@ -40,6 +40,8 @@ class CreateKPI extends Component {
       ],
       dataOwnId: 2,
       cascadePrevious: false,
+      dataCascadeFirstManager: [],
+      dataCascadeSecondManager: [],
       dataCascadePrevious: [],
       dataSelectedCascade: [],
       kpiErr: true,
@@ -48,10 +50,10 @@ class CreateKPI extends Component {
   }
 
   componentDidMount() {
-    this.getAllData();
+    this.fetchAllData();
   }
 
-  getAllData = async () => {
+  fetchAllData = async () => {
     const {
       userReducers, getKpiList, getLatestGoalKpi, getKpiManagerList
     } = this.props;
@@ -59,10 +61,15 @@ class CreateKPI extends Component {
     getLatestGoalKpi();
     await getKpiList(user.userId);
     await getKpiManagerList(user.userId);
+    this.getOwnKpiList();
+    this.getFirstManagerKpiList();
+    this.getSecondManagerKpiList();
+  };
+
+  getOwnKpiList = () => {
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
-
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
@@ -84,10 +91,70 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
-    // this.setState({
-    //   dataOwn: newData
-    // });
-  };
+    this.setState({
+      dataOwn: newData
+    });
+  }
+
+  getFirstManagerKpiList = () => {
+    const { kpiReducers } = this.props;
+    const { dataFirstManagerKpi } = kpiReducers;
+    const newData = [];
+    // for fetching data metrics API
+    // eslint-disable-next-line array-callback-return
+    dataFirstManagerKpi.map((itemKpi) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
+        return `{"${metric.label}":"${metric.description}"}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
+      const data = {
+        key: itemKpi.id,
+        id: itemKpi.id,
+        typeKpi: 'Casacade from Supervisor',
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
+        weight: itemKpi.weight,
+        ...dataMetrics
+      };
+      newData.push(data);
+    });
+    this.setState({
+      dataCascadeFirstManager: newData
+    });
+  }
+
+  getSecondManagerKpiList = () => {
+    const { kpiReducers } = this.props;
+    const { dataSecondManagerKpi } = kpiReducers;
+    const newData = [];
+    // for fetching data metrics API
+    // eslint-disable-next-line array-callback-return
+    dataSecondManagerKpi.map((itemKpi) => {
+      let dataMetrics = itemKpi.metricLookup.map((metric) => {
+        return `{"${metric.label}":"${metric.description}"}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
+      const data = {
+        key: itemKpi.id,
+        id: itemKpi.id,
+        typeKpi: 'Casacade from Supervisor',
+        description: itemKpi.name,
+        baseline: itemKpi.metric,
+        weight: itemKpi.weight,
+        ...dataMetrics
+      };
+      newData.push(data);
+    });
+    this.setState({
+      dataCascadeSecondManager: newData
+    });
+  }
 
   handleSaveDraft = async () => {
     const { doSavingKpi, userReducers, history } = this.props;
@@ -217,7 +284,9 @@ class CreateKPI extends Component {
       cascadePrevious,
       dataOwn,
       dataCascadePrevious,
-      dataSelectedCascade
+      dataSelectedCascade,
+      dataCascadeFirstManager,
+      dataCascadeSecondManager
     } = this.state;
     const {
       handleAddRow,
@@ -229,7 +298,7 @@ class CreateKPI extends Component {
     } = this;
     const { kpiReducers } = this.props;
     const {
-      dataGoal, loading, dataFirstManager, dataSecondManager, dataFirstManagerKpi, dataSecondManagerKpi
+      dataGoal, loading, dataFirstManager, dataSecondManager
     } = kpiReducers;
     const { name } = dataGoal;
     return (
@@ -268,7 +337,7 @@ class CreateKPI extends Component {
                 key="2"
               >
                 <CascadePartner
-                  dataCascadePartner={dataFirstManagerKpi}
+                  dataCascadePartner={dataCascadeFirstManager}
                   dataSelectedCascade={dataSelectedCascade}
                   handleError={handleError}
                   handleSaveDraft={handleSaveDraft}
@@ -281,7 +350,7 @@ class CreateKPI extends Component {
                 key="3"
               >
                 <CascadePartner
-                  dataCascadePartner={dataSecondManagerKpi}
+                  dataCascadePartner={dataCascadeSecondManager}
                   dataSelectedCascade={dataSelectedCascade}
                   handleError={handleError}
                   handleSaveDraft={handleSaveDraft}

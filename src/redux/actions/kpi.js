@@ -174,7 +174,7 @@ export const doGetKpiManagerList = (id) => async (dispatch) => {
     page: ''
   });
   try {
-    const payload = await getKpiManagerList(id);
+    const payload = await getKpiManagerList('bbbb');
     if (payload.data.status_code === Success) {
       dispatch({
         type: GET_KPI_MANAGER_LIST_SUCCESS,

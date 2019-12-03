@@ -10,43 +10,43 @@ class CascadePrevious extends Component {
         title: 'KPI Subject',
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
-        editable: true
+        editable: false
       },
       {
         title: 'Baseline',
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
-        editable: true
+        editable: false
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         type: 'number',
-        editable: true
+        editable: false
       },
       {
         title: 'L1',
         dataIndex: 'L1',
         placeholder: 'Enter Level 1',
-        editable: true
+        editable: false
       },
       {
         title: 'L2',
         dataIndex: 'L2',
         placeholder: 'Enter Level 2',
-        editable: true
+        editable: false
       },
       {
         title: 'L3',
         dataIndex: 'L3',
         placeholder: 'Enter Level 3',
-        editable: true
+        editable: false
       },
       {
         title: "Action",
         dataIndex: "action",
-        action: true,
+        action: false,
         render: (text, record) =>
           this.props.dataCascadePrevious.length >= 1 ? (
             <Checkbox
@@ -62,7 +62,7 @@ class CascadePrevious extends Component {
     const { dataSelectedCascade } = this.props;
     const dataChecking = dataSelectedCascade.filter(item => item.key === record.key);
     if (dataChecking.length !== 0) {
-      return true;
+      return false;
     } else {
       return false;
     }
