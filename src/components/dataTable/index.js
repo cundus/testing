@@ -56,15 +56,14 @@ class EditableCell extends React.Component {
         { type === 'number' ? form.getFieldDecorator(dataIndex, {
           rules: [
             {
-              min: 1,
-              max: 100,
-              type: 'number',
-              required: true
+              required: true,
+              pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
+              message: `${title} is wrong`
             }
           ],
           initialValue: record[dataIndex]
         })(
-          <InputNumber
+          <TextArea
             id={title}
             placeholder={placeholder}
             autoSize={{ minRows: 3, maxRows: 5 }}
