@@ -27,9 +27,9 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "dev": "PORT=8080 react-app-rewired start",
-    "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "dev": "PORT=8080 react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

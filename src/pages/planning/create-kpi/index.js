@@ -10,7 +10,9 @@ import {
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { doSaveKpi, doGetKpiList, doGetLatestGoalKpi } from '../../../redux/actions/kpi';
+import {
+  doSaveKpi, doGetKpiList, doGetLatestGoalKpi, doGetKpiManagerList
+} from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import CascadePartner from './components/cascade-partner';
 import CascadePrevious from './components/cascade-previous';
@@ -38,7 +40,6 @@ class CreateKPI extends Component {
       ],
       dataOwnId: 2,
       cascadePrevious: false,
-      dataCascadePartner: [],
       dataCascadePrevious: [],
       dataSelectedCascade: [],
       kpiErr: true,
@@ -51,10 +52,13 @@ class CreateKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, getLatestGoalKpi } = this.props;
+    const {
+      userReducers, getKpiList, getLatestGoalKpi, getKpiManagerList
+    } = this.props;
     const { user } = userReducers.result;
     getLatestGoalKpi();
     await getKpiList(user.userId);
+    await getKpiManagerList(user.userId);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
@@ -213,7 +217,6 @@ class CreateKPI extends Component {
       cascadePrevious,
       dataOwn,
       dataCascadePrevious,
-      dataCascadePartner,
       dataSelectedCascade
     } = this.state;
     const {
@@ -225,7 +228,9 @@ class CreateKPI extends Component {
       handleError
     } = this;
     const { kpiReducers } = this.props;
-    const { dataGoal, loading } = kpiReducers;
+    const {
+      dataGoal, loading, dataFirstManager, dataSecondManager, dataFirstManagerKpi, dataSecondManagerKpi
+    } = kpiReducers;
     const { name } = dataGoal;
     return (
       <div>
@@ -257,17 +262,34 @@ class CreateKPI extends Component {
                   handleDeleteRow={handleDeleteRow}
                 />
               </TabPane>
-              <TabPane tab="Cascade From Supervisor" key="2">
+              {dataFirstManager.userId &&
+              <TabPane
+                tab={`Cascade From ${dataFirstManager.firstName} ${dataFirstManager.lastName}`}
+                key="2"
+              >
                 <CascadePartner
-                  dataCascadePartner={dataCascadePartner}
+                  dataCascadePartner={dataFirstManagerKpi}
                   dataSelectedCascade={dataSelectedCascade}
                   handleError={handleError}
                   handleSaveDraft={handleSaveDraft}
                   handleSelectData={handleSelectData}
                 />
-              </TabPane>
+              </TabPane>}
+              {dataSecondManager.userId &&
+              <TabPane
+                tab={`Cascade From ${dataSecondManager.firstName} ${dataSecondManager.lastName}`}
+                key="3"
+              >
+                <CascadePartner
+                  dataCascadePartner={dataSecondManagerKpi}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                />
+              </TabPane>}
               {cascadePrevious && (
-                <TabPane tab="Cascade From Previous Year" key="3">
+                <TabPane tab="Cascade From Previous Year" key="4">
                   <CascadePrevious
                     dataCascadePrevious={dataCascadePrevious}
                     dataSelectedCascade={dataSelectedCascade}
@@ -292,6 +314,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
+  getKpiManagerList: (id) => dispatch(doGetKpiManagerList(id)),
   getLatestGoalKpi: (id) => dispatch(doGetLatestGoalKpi())
 });
 
@@ -306,6 +329,7 @@ CreateKPI.propTypes = {
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,
+  getKpiManagerList: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   userReducers: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
