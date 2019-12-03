@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Typography,
   Divider,
-  Spin
+  Spin,
+  Input
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -11,6 +12,7 @@ import TableSubmitedKPI from './table-submited-kpi';
 import { doGetKpiList } from '../../../redux/actions/kpi';
 
 const { Text } = Typography;
+const { TextArea } = Input;
 
 class SubmitedKPI extends Component {
   constructor(props) {
@@ -101,6 +103,10 @@ class SubmitedKPI extends Component {
             {` ${weightTotal}%`}
           </Text>
           <Divider />
+        </div>
+        <div>
+          <Text>Challenge myself :</Text>
+          <TextArea placeholder="Challenge myself" label="Challenge myself" />
         </div>
         {loading ?
           <div style={{ textAlign: 'center' }}>

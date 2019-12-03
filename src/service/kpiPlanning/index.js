@@ -17,6 +17,14 @@ export const getKpiList = (id) => customAxios({
   }
 });
 
+export const getKpiManagerList = (id) => customAxios({
+  url: `/kpi/manager/${id}`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
 export const saveKpi = (data, id) => customAxios({
   url: `/kpi/byid/${id}`,
   method: 'POST',

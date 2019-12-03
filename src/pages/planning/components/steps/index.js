@@ -30,16 +30,14 @@ const StepWizzard = (props) => {
   const onWizzardChange = (current) => {
     // setWizzard(current);
     if (wizzard === 0) {
-      message.warning('Please fill the form');
+      if (current === 1) {
+        history.push('/planning/kpi/draft-planning');
+      } else {
+        message.warning('Sorry, You cannot be able to go');
+      }
     } else if (wizzard === 1) {
       if (current === 0) {
-        confirm({
-          title: 'Are you sure?',
-          async onOk() {
-            history.push('/planning/kpi/create-planning');
-          },
-          onCancel() {}
-        });
+        history.push('/planning/kpi/create-planning');
       } else {
         message.warning('Sorry, You cannot be able to go');
       }

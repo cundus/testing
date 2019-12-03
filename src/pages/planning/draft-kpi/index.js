@@ -5,7 +5,8 @@ import {
   Typography,
   Divider,
   message,
-  Spin
+  Spin,
+  Input
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -16,6 +17,7 @@ import { Success } from '../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text } = Typography;
+const { TextArea } = Input;
 
 class DraftKPI extends Component {
   constructor(props) {
@@ -270,7 +272,7 @@ class DraftKPI extends Component {
       handleSaveDraft,
       handleError
     } = this;
-    const { kpiReducers } = this.props;
+    const { kpiReducers, history } = this.props;
     const { loading } = kpiReducers;
     return (
       <div>
@@ -299,7 +301,18 @@ class DraftKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
             />
+            <div>
+              <Text>Challenge myself :</Text>
+              <TextArea placeholder="Challenge myself" label="Challenge myself" />
+            </div>
             <div style={{ textAlign: 'center' }}>
+              <Button
+                // eslint-disable-next-line react/jsx-no-bind
+                onClick={() => history.push("/planning/kpi/create-planning")}
+                style={{ margin: 10 }}
+              >
+                Add new Row
+              </Button>
               <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
                 Save as Draft
               </Button>

@@ -104,7 +104,6 @@ class EditableCell extends React.Component {
         {!editable ? (
           <div
             className="editable-cell-value-wrap"
-            style={{ paddingRight: 24 }}
           >
             {children}
           </div>
