@@ -10,18 +10,21 @@ class CascadePrevious extends Component {
         title: 'KPI Subject',
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
+        align: 'center',
         editable: false
       },
       {
         title: 'Baseline',
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
+        align: 'center',
         editable: false
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
+        align: 'center',
         type: 'number',
         editable: false
       },
@@ -29,22 +32,26 @@ class CascadePrevious extends Component {
         title: 'L1',
         dataIndex: 'L1',
         placeholder: 'Enter Level 1',
+        align: 'center',
         editable: false
       },
       {
         title: 'L2',
         dataIndex: 'L2',
         placeholder: 'Enter Level 2',
+        align: 'center',
         editable: false
       },
       {
         title: 'L3',
         dataIndex: 'L3',
         placeholder: 'Enter Level 3',
+        align: 'center',
         editable: false
       },
       {
         title: "Action",
+        align: 'center',
         dataIndex: "action",
         action: false,
         render: (text, record) =>

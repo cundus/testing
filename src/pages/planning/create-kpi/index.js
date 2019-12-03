@@ -44,8 +44,8 @@ class CreateKPI extends Component {
       dataCascadeSecondManager: [],
       dataCascadePrevious: [],
       dataSelectedCascade: [],
-      kpiErr: true,
-      kpiErrMessage: 'Please fill the form'
+      kpiErr: false,
+      kpiErrMessage: ''
     };
   }
 
@@ -92,7 +92,9 @@ class CreateKPI extends Component {
       newData.push(data);
     });
     this.setState({
-      dataOwn: newData
+      dataOwn: newData,
+      kpiErr: false,
+      kpiErrMessage: ''
     });
   }
 
