@@ -69,7 +69,7 @@ class CascadePartner extends Component {
 
   checkStatus = (record) => {
     const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter(item => item.key === record.key);
+    const dataChecking = dataSelectedCascade.filter(item => item.description === record.description);
     if (dataChecking.length !== 0) {
       return true;
     } else {
