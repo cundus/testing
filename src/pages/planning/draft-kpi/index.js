@@ -5,7 +5,6 @@ import {
   Typography,
   Divider,
   message,
-  Spin,
   Input
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -133,7 +132,7 @@ class DraftKPI extends Component {
       };
       newData.push(data);
     });
-    if (newData.length >= 19) {
+    if (newData.length >= 20) {
       message.warning('Maximum KPI is 20');
     } else if (kpiErr) {
       message.warning(kpiErrMessage);
