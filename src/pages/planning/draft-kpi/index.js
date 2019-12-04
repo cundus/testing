@@ -275,7 +275,7 @@ class DraftKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, history } = this.props;
-    const { loading } = kpiReducers;
+    const { loadingKpi } = kpiReducers;
     return (
       <div>
         <div>
@@ -292,37 +292,34 @@ class DraftKPI extends Component {
           </Text>
           <Divider />
         </div>
-        {loading ?
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div> :
+        <div>
+          <TableDrafKPI
+            loading={loadingKpi}
+            dataSource={dataSource}
+            handleError={handleError}
+            handleChange={handleChange}
+            handleDelete={handleDelete}
+          />
           <div>
-            <TableDrafKPI
-              dataSource={dataSource}
-              handleError={handleError}
-              handleChange={handleChange}
-              handleDelete={handleDelete}
-            />
-            <div>
-              <Text>Challenge myself :</Text>
-              <TextArea placeholder="Challenge myself" label="Challenge myself" />
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <Button
-                // eslint-disable-next-line react/jsx-no-bind
-                onClick={() => history.push('/planning/kpi/create-planning')}
-                style={{ margin: 10 }}
-              >
-                Add KPI
-              </Button>
-              <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
-                Save as Draft
-              </Button>
-              <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
-                Submit To Superior
-              </Button>
-            </div>
-          </div>}
+            <Text>Challenge myself :</Text>
+            <TextArea placeholder="Challenge myself" label="Challenge myself" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => history.push('/planning/kpi/create-planning')}
+              style={{ margin: 10 }}
+            >
+              Add KPI
+            </Button>
+            <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+              Save as Draft
+            </Button>
+            <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
+              Submit To Superior
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }

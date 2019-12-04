@@ -1,11 +1,18 @@
-import React, { Component } from "react";
-import { DataTable } from "../../../../components";
-import { Button, Checkbox } from "antd";
+import React, { Component } from 'react';
+import { Button, Checkbox } from 'antd';
+import { DataTable } from '../../../../components';
 
-class CascadePrevious extends Component {
+class Cascade extends Component {
   constructor(props) {
     super(props);
     this.columns = [
+      {
+        title: 'Supervisor\'s Name',
+        dataIndex: 'typeKpi',
+        placeholder: 'Enter KPI Subject',
+        align: 'center',
+        editable: false
+      },
       {
         title: 'KPI Subject',
         dataIndex: 'description',
@@ -25,6 +32,7 @@ class CascadePrevious extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
+        width: 80,
         type: 'number',
         editable: false
       },
@@ -50,43 +58,46 @@ class CascadePrevious extends Component {
         editable: false
       },
       {
-        title: "Action",
+        title: 'Action',
         align: 'center',
-        dataIndex: "action",
+        dataIndex: 'action',
         action: false,
         render: (text, record) =>
-          this.props.dataCascadePrevious.length >= 1 ? (
+          // eslint-disable-next-line react/destructuring-assignment
+          (this.props.dataSource.length >= 1 ? (
             <Checkbox
-              onChange={e => this.props.handleSelectData(record)}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={(e) => this.props.handleSelectData(record)}
               checked={this.checkStatus(record)}
             />
-          ) : null
+          ) : null)
       }
     ];
   }
 
-  checkStatus = record => {
+  checkStatus = (record) => {
     const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter(item => item.key === record.key);
+    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
     if (dataChecking.length !== 0) {
-      return false;
+      return true;
     } else {
       return false;
     }
   };
 
   render() {
-    const { dataCascadePrevious, handleSaveDraft, handleError } = this.props;
+    const { dataSource, handleSaveDraft, handleError, loading } = this.props;
     const { columns } = this;
 
     return (
       <div>
         <DataTable
           columns={columns}
+          loading={loading}
           handleError={handleError}
-          dataSource={dataCascadePrevious}
+          dataSource={dataSource}
         />
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: 'center' }}>
           <Button
             type="primary"
             onClick={handleSaveDraft}
@@ -99,4 +110,4 @@ class CascadePrevious extends Component {
     );
   }
 }
-export default CascadePrevious;
+export default Cascade;

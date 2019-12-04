@@ -14,7 +14,8 @@ import {
 } from '../action.type';
 
 const initialState = {
-  loading: false,
+  loadingGoal: false,
+  loadingKpi: false,
   status: null,
   message: '',
   page: '',
@@ -64,12 +65,12 @@ const kpiReducers = (state = initialState, action) => {
     case GET_LATEST_GOAL_KPI:
       return {
         ...state,
-        loading: action.loading
+        loadingGoal: action.loading
       };
     case GET_LATEST_GOAL_KPI_SUCCESS:
       return {
         ...state,
-        loading: action.loading,
+        loadingGoal: action.loading,
         status: action.status,
         message: action.message,
         dataGoal: action.data
@@ -77,19 +78,19 @@ const kpiReducers = (state = initialState, action) => {
     case GET_LATEST_GOAL_KPI_FAILED:
       return {
         ...state,
-        loading: action.loading,
+        loadingGoal: action.loading,
         status: action.status,
         message: action.message
       };
     case GET_KPI_LIST:
       return {
         ...state,
-        loading: action.loading
+        loadingKpi: action.loading
       };
     case GET_KPI_LIST_SUCCESS:
       return {
         ...state,
-        loading: action.loading,
+        loadingKpi: action.loading,
         status: action.status,
         message: action.message,
         dataKpi: action.data
@@ -97,7 +98,7 @@ const kpiReducers = (state = initialState, action) => {
     case GET_KPI_LIST_FAILED:
       return {
         ...state,
-        loading: action.loading,
+        loadingKpi: action.loading,
         status: action.status,
         message: action.message
       };
@@ -147,9 +148,7 @@ const kpiReducers = (state = initialState, action) => {
     case SAVE_KPI:
       return {
         ...state,
-        loadingKPI: action.loading,
-        statusSaveKPI: action.status,
-        messageSaveKPI: action.message
+        loadingSaveKPI: action.loading
       };
     case SAVE_KPI_SUCCESS:
       return {
