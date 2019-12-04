@@ -6,26 +6,30 @@ class TableDrafKPI extends Component {
     super(props);
     this.columns = [
       {
-        title: 'Cascading/Self KPI',
+        title: 'Cascading / Self KPI',
         dataIndex: 'typeKpi',
+        align: 'center',
         placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
         title: 'KPI Subject',
         dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline',
+        align: 'center',
+        placeholder: 'Enter KPI Subject',
         editable: false
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline',
+        align: 'center',
+        placeholder: 'Enter baseline',
         editable: false
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
+        align: 'center',
         placeholder: 'Enter KPI Weight',
         type: 'number',
         editable: false
@@ -33,18 +37,21 @@ class TableDrafKPI extends Component {
       {
         title: 'L1',
         dataIndex: 'L1',
+        align: 'center',
         placeholder: 'Enter Level 1',
         editable: false
       },
       {
         title: 'L2',
         dataIndex: 'L2',
+        align: 'center',
         placeholder: 'Enter Level 2',
         editable: false
       },
       {
         title: 'L3',
         dataIndex: 'L3',
+        align: 'center',
         placeholder: 'Enter Level 3',
         editable: false
       }
@@ -53,10 +60,11 @@ class TableDrafKPI extends Component {
 
   render() {
     const { columns } = this;
-    const { dataSource } = this.props;
+    const { dataSource, loading } = this.props;
     return (
       <div>
         <DataTable
+          loading={loading}
           columns={columns}
           dataSource={dataSource}
         />
