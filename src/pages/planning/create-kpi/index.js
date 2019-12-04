@@ -6,7 +6,6 @@ import {
   Typography,
   Divider,
   message,
-  Spin,
   Skeleton
 } from 'antd';
 import { withRouter } from 'react-router';
