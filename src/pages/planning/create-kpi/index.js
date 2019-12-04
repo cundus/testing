@@ -44,8 +44,8 @@ class CreateKPI extends Component {
       dataCascadeSecondManager: [],
       dataCascadePrevious: [],
       dataSelectedCascade: [],
-      kpiErr: true,
-      kpiErrMessage: 'Please fill the form'
+      kpiErr: false,
+      kpiErrMessage: ''
     };
   }
 
@@ -92,7 +92,10 @@ class CreateKPI extends Component {
       newData.push(data);
     });
     this.setState({
-      dataOwn: newData
+      dataOwn: newData,
+      dataSelectedCascade: newData,
+      kpiErr: false,
+      kpiErrMessage: ''
     });
   }
 
@@ -112,7 +115,7 @@ class CreateKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
-        id: itemKpi.id,
+        id: null,
         typeKpi: 'Casacade from Supervisor',
         description: itemKpi.name,
         baseline: itemKpi.metric,
@@ -191,6 +194,8 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
+    console.log(newData);
+    
     if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {

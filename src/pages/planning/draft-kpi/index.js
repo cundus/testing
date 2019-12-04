@@ -74,11 +74,13 @@ class DraftKPI extends Component {
     // eslint-disable-next-line array-callback-return
     data.map((itemKpi) => {
       if (itemKpi.weight) {
-        totalWeight += itemKpi.weight;
+        const weight = parseFloat(itemKpi.weight);
+        totalWeight += weight;
       } else {
         totalWeight += 0;
       }
     });
+    totalWeight = parseFloat(totalWeight);
     if (typeof totalWeight === 'number') {
       if (totalWeight === 100) {
         this.setState({
@@ -308,10 +310,10 @@ class DraftKPI extends Component {
             <div style={{ textAlign: 'center' }}>
               <Button
                 // eslint-disable-next-line react/jsx-no-bind
-                onClick={() => history.push("/planning/kpi/create-planning")}
+                onClick={() => history.push('/planning/kpi/create-planning')}
                 style={{ margin: 10 }}
               >
-                Add new Row
+                Add KPI
               </Button>
               <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
                 Save as Draft
