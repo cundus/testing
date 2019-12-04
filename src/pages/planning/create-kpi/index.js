@@ -6,7 +6,8 @@ import {
   Typography,
   Divider,
   message,
-  Spin
+  Spin,
+  Skeleton
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -14,8 +15,7 @@ import {
   doSaveKpi, doGetKpiList, doGetLatestGoalKpi, doGetKpiManagerList
 } from '../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
-import CascadePartner from './components/cascade-partner';
-import CascadePrevious from './components/cascade-previous';
+import Cascade from './components/cascade';
 import { Success } from '../../../redux/status-code-type';
 
 const { Title, Text } = Typography;
@@ -39,13 +39,12 @@ class CreateKPI extends Component {
         }
       ],
       dataOwnId: 2,
-      cascadePrevious: false,
-      dataCascadeFirstManager: [],
-      dataCascadeSecondManager: [],
-      dataCascadePrevious: [],
+      dataManagerKpi: [],
       dataSelectedCascade: [],
       kpiErr: false,
-      kpiErrMessage: ''
+      kpiErrMessage: '',
+      loadingOwn: true,
+      loadingManager: true
     };
   }
 
@@ -55,18 +54,17 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducers, getKpiList, getLatestGoalKpi, getKpiManagerList
+      userReducers, getLatestGoalKpi
     } = this.props;
     const { user } = userReducers.result;
     getLatestGoalKpi();
-    await getKpiList(user.userId);
-    await getKpiManagerList(user.userId);
-    this.getOwnKpiList();
-    this.getFirstManagerKpiList();
-    this.getSecondManagerKpiList();
+    this.getOwnKpiList(user.userId);
+    this.getManagerKpiList(user.userId);
   };
 
-  getOwnKpiList = () => {
+  getOwnKpiList = async (id) => {
+    const { getKpiList } = this.props;
+    await getKpiList(id);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
@@ -94,14 +92,19 @@ class CreateKPI extends Component {
     this.setState({
       dataOwn: newData,
       dataSelectedCascade: newData,
+      loadingOwn: false,
       kpiErr: false,
       kpiErrMessage: ''
     });
   }
 
-  getFirstManagerKpiList = () => {
+  getManagerKpiList = async (id) => {
+    const { getKpiManagerList } = this.props;
+    await getKpiManagerList(id);
     const { kpiReducers } = this.props;
-    const { dataFirstManagerKpi } = kpiReducers;
+    const {
+      dataFirstManagerKpi, dataFirstManager, dataSecondManagerKpi, dataSecondManager
+    } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -116,7 +119,7 @@ class CreateKPI extends Component {
       const data = {
         key: itemKpi.id,
         id: null,
-        typeKpi: 'Casacade from Supervisor',
+        typeKpi: `${dataFirstManager.firstName} ${dataFirstManager.lastName}`,
         description: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
@@ -124,17 +127,6 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
-    this.setState({
-      dataCascadeFirstManager: newData
-    });
-  }
-
-  getSecondManagerKpiList = () => {
-    const { kpiReducers } = this.props;
-    const { dataSecondManagerKpi } = kpiReducers;
-    const newData = [];
-    // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
     dataSecondManagerKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
@@ -145,8 +137,8 @@ class CreateKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
-        id: itemKpi.id,
-        typeKpi: 'Casacade from Supervisor',
+        id: null,
+        typeKpi: `${dataSecondManager.firstName} ${dataSecondManager.lastName}`,
         description: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
@@ -155,7 +147,8 @@ class CreateKPI extends Component {
       newData.push(data);
     });
     this.setState({
-      dataCascadeSecondManager: newData
+      dataManagerKpi: newData,
+      loadingManager: false
     });
   }
 
@@ -194,8 +187,6 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
-    console.log(newData);
-    
     if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {
@@ -286,12 +277,11 @@ class CreateKPI extends Component {
 
   render() {
     const {
-      cascadePrevious,
       dataOwn,
-      dataCascadePrevious,
       dataSelectedCascade,
-      dataCascadeFirstManager,
-      dataCascadeSecondManager
+      dataManagerKpi,
+      loadingOwn,
+      loadingManager
     } = this.state;
     const {
       handleAddRow,
@@ -303,7 +293,7 @@ class CreateKPI extends Component {
     } = this;
     const { kpiReducers } = this.props;
     const {
-      dataGoal, loading, dataFirstManager, dataSecondManager
+      dataGoal, loadingGoal
     } = kpiReducers;
     const { name } = dataGoal;
     return (
@@ -317,64 +307,39 @@ class CreateKPI extends Component {
           </Text>
           <Divider />
         </div>
-        {loading ?
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div> :
-          <div>
-            <div style={{ textAlign: 'center' }}>
+        <div>
+          <center>
+            <Skeleton active loading={loadingGoal} paragraph={false} title={{width: 500}}>
               <Title level={4}>{`Performance Management - ${name}`}</Title>
-            </div>
-            <Tabs defaultActiveKey="1" type="card">
-              <TabPane tab="Create Own KPI" key="1">
-                <CreateOwn
-                  dataOwn={dataOwn}
-                  handleSaveDraft={handleSaveDraft}
-                  handleAddRow={handleAddRow}
-                  handleError={handleError}
-                  handleChangeField={handleChangeField}
-                  handleDeleteRow={handleDeleteRow}
-                />
-              </TabPane>
-              {dataFirstManager.userId &&
-              <TabPane
-                tab={`Cascade From ${dataFirstManager.firstName} ${dataFirstManager.lastName}`}
-                key="2"
-              >
-                <CascadePartner
-                  dataCascadePartner={dataCascadeFirstManager}
-                  dataSelectedCascade={dataSelectedCascade}
-                  handleError={handleError}
-                  handleSaveDraft={handleSaveDraft}
-                  handleSelectData={handleSelectData}
-                />
-              </TabPane>}
-              {dataSecondManager.userId &&
-              <TabPane
-                tab={`Cascade From ${dataSecondManager.firstName} ${dataSecondManager.lastName}`}
-                key="3"
-              >
-                <CascadePartner
-                  dataCascadePartner={dataCascadeSecondManager}
-                  dataSelectedCascade={dataSelectedCascade}
-                  handleError={handleError}
-                  handleSaveDraft={handleSaveDraft}
-                  handleSelectData={handleSelectData}
-                />
-              </TabPane>}
-              {cascadePrevious && (
-                <TabPane tab="Cascade From Previous Year" key="4">
-                  <CascadePrevious
-                    dataCascadePrevious={dataCascadePrevious}
-                    dataSelectedCascade={dataSelectedCascade}
-                    handleError={handleError}
-                    handleSaveDraft={handleSaveDraft}
-                    handleSelectData={handleSelectData}
-                  />
-                </TabPane>
-              )}
-            </Tabs>
-          </div>}
+            </Skeleton>
+          </center>
+          <Tabs defaultActiveKey="1" type="card">
+            <TabPane tab="Create Own KPI" key="1">
+              <CreateOwn
+                loading={loadingOwn}
+                dataSource={dataOwn}
+                handleSaveDraft={handleSaveDraft}
+                handleAddRow={handleAddRow}
+                handleError={handleError}
+                handleChangeField={handleChangeField}
+                handleDeleteRow={handleDeleteRow}
+              />
+            </TabPane>
+            <TabPane
+              tab="Cascade From Supervisor"
+              key="2"
+            >
+              <Cascade
+                loading={loadingManager}
+                dataSource={dataManagerKpi}
+                dataSelectedCascade={dataSelectedCascade}
+                handleError={handleError}
+                handleSaveDraft={handleSaveDraft}
+                handleSelectData={handleSelectData}
+              />
+            </TabPane>
+          </Tabs>
+        </div>
       </div>
     );
   }

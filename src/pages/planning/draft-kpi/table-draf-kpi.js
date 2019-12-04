@@ -87,10 +87,11 @@ class TableDrafKPI extends Component {
 
   render() {
     const { columns } = this;
-    const { handleChange, dataSource, handleError } = this.props;
+    const { handleChange, dataSource, handleError, loading } = this.props;
     return (
       <div>
         <DataTable
+          loading={loading}
           columns={columns}
           handleError={handleError}
           dataSource={dataSource}

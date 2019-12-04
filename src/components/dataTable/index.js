@@ -133,7 +133,8 @@ const DataTable = (props) => {
     dataSource,
     handleChange,
     columns,
-    handleError
+    handleError,
+    loading
   } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -163,6 +164,7 @@ const DataTable = (props) => {
   return (
     <div>
       <Table
+        loading={loading}
         components={components}
         rowClassName="editable-row"
         bordered
@@ -182,5 +184,6 @@ DataTable.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
   handleChange: PropTypes.func,
   handleError: PropTypes.func,
+  loading: PropTypes.bool,
   columns: PropTypes.instanceOf(Array)
 };
