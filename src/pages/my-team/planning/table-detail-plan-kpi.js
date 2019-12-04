@@ -50,6 +50,7 @@ class TableEditMyKPI extends Component {
     const { dataSource } = this.props;
     const { columns } = this;
     const {handleChange } = this.props;
+    const isLoading = (dataSource.length > 0 ) ? false: true;
     return (
       <div>
         {/* <Layout> */}
@@ -57,6 +58,7 @@ class TableEditMyKPI extends Component {
           columns={columns}
           dataSource={dataSource}
           handleChange={handleChange}
+          loading={isLoading}
         />
         {/* </Layout> */}
       </div>

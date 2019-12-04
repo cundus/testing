@@ -5,7 +5,8 @@ import {
   Typography,
   Divider,
   message,
-  Spin
+  Spin,
+  Input
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -16,6 +17,7 @@ import { Success } from '../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text } = Typography;
+const { TextArea } = Input;
 
 class DraftKPI extends Component {
   constructor(props) {
@@ -72,11 +74,13 @@ class DraftKPI extends Component {
     // eslint-disable-next-line array-callback-return
     data.map((itemKpi) => {
       if (itemKpi.weight) {
-        totalWeight += itemKpi.weight;
+        const weight = parseFloat(itemKpi.weight);
+        totalWeight += weight;
       } else {
         totalWeight += 0;
       }
     });
+    totalWeight = parseFloat(totalWeight);
     if (typeof totalWeight === 'number') {
       if (totalWeight === 100) {
         this.setState({
@@ -270,8 +274,8 @@ class DraftKPI extends Component {
       handleSaveDraft,
       handleError
     } = this;
-    const { kpiReducers } = this.props;
-    const { loading } = kpiReducers;
+    const { kpiReducers, history } = this.props;
+    const { loadingKpi } = kpiReducers;
     return (
       <div>
         <div>
@@ -288,26 +292,34 @@ class DraftKPI extends Component {
           </Text>
           <Divider />
         </div>
-        {loading ?
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div> :
+        <div>
+          <TableDrafKPI
+            loading={loadingKpi}
+            dataSource={dataSource}
+            handleError={handleError}
+            handleChange={handleChange}
+            handleDelete={handleDelete}
+          />
           <div>
-            <TableDrafKPI
-              dataSource={dataSource}
-              handleError={handleError}
-              handleChange={handleChange}
-              handleDelete={handleDelete}
-            />
-            <div style={{ textAlign: 'center' }}>
-              <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
-                Save as Draft
-              </Button>
-              <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
-                Submit To Superior
-              </Button>
-            </div>
-          </div>}
+            <Text>Challenge myself :</Text>
+            <TextArea placeholder="Challenge myself" label="Challenge myself" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => history.push('/planning/kpi/create-planning')}
+              style={{ margin: 10 }}
+            >
+              Add KPI
+            </Button>
+            <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+              Save as Draft
+            </Button>
+            <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
+              Submit To Superior
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
