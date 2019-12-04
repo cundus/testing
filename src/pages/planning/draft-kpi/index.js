@@ -135,6 +135,8 @@ class DraftKPI extends Component {
     });
     if (kpiErr) {
       message.warning(kpiErrMessage);
+    } else if (newData.length >= 19) {
+      message.warning('Maximum KPI is 20');
     } else {
       confirm({
         title: 'Are you sure?',
