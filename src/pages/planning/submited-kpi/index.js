@@ -90,7 +90,7 @@ class SubmitedKPI extends Component {
   render() {
     const { dataSource, weightTotal, weightTotalErr } = this.state;
     const { kpiReducers } = this.props;
-    const { loading } = kpiReducers;
+    const { loadingKpi } = kpiReducers;
     return (
       <div>
         <div>
@@ -104,15 +104,11 @@ class SubmitedKPI extends Component {
           </Text>
           <Divider />
         </div>
+        <TableSubmitedKPI dataSource={dataSource} loading={loadingKpi} />
         <div>
           <Text>Challenge myself :</Text>
-          <TextArea placeholder="Challenge myself" label="Challenge myself" />
+          <TextArea placeholder="Challenge myself" label="Challenge myself" disabled />
         </div>
-        {loading ?
-          <div style={{ textAlign: 'center' }}>
-            <Spin />
-          </div> :
-          <TableSubmitedKPI dataSource={dataSource} />}
       </div>
     );
   }
