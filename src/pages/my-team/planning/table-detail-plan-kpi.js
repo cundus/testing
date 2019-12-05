@@ -1,10 +1,21 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+
 import { DataTable } from "../../../components";
 
 class TableEditMyKPI extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: []
+    };
+    this.getColumns();
+  }
+
+  getColumns = async () =>{
+    const { kpiReducers } = this.props;
+    const { dataMetrics } = kpiReducers;
+    const newColumns = [
       {
         title: 'KPI Subject',
         dataIndex: 'description',
@@ -20,34 +31,32 @@ class TableEditMyKPI extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         type: 'number'
-      },
-      {
-        title: 'L1',
-        dataIndex: 'L1',
-        placeholder: 'Enter Level 1'
-      },
-      {
-        title: 'L2',
-        dataIndex: 'L2',
-        placeholder: 'Enter Level 2'
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        placeholder: 'Enter Level 3'
-      },
-      {
-        title: 'Feedback',
-        dataIndex: 'feedback',
-        placeholder: 'Feedback',
-        editable: true
       }
     ];
+    await dataMetrics.map((itemMetric) => {
+      const data = {
+        title: itemMetric.label,
+        dataIndex: itemMetric.label,
+        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        align: 'center',
+        width: 200
+      };
+      newColumns.push(data);
+    });
+    newColumns.push({
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      placeholder: 'Feedback',
+      editable: true
+    });
+    this.setState({
+      columns: newColumns
+    });
   }
 
   render() {
     const { dataSource } = this.props;
-    const { columns } = this;
+    const { columns } = this.state;
     const {handleChange } = this.props;
     const isLoading = (dataSource.length > 0 ) ? false: true;
     return (
@@ -64,4 +73,15 @@ class TableEditMyKPI extends Component {
     );
   }
 }
-export default TableEditMyKPI;
+const mapStateToProps = (state) => ({
+  kpiReducers: state.kpiReducers
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TableEditMyKPI);
+
+export default connectToComponent;
