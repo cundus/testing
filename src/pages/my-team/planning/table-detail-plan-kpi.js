@@ -13,17 +13,10 @@ class TableEditMyKPI extends Component {
     this.getColumns();
   }
 
-<<<<<<< HEAD
-  getColumns = async (props) => {
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
-    this.columns = [
-=======
   getColumns = async () =>{
     const { kpiReducers } = this.props;
     const { dataMetrics } = kpiReducers;
     const newColumns = [
->>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
       {
         title: 'KPI Subject',
         dataIndex: 'description',
