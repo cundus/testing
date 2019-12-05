@@ -49,17 +49,6 @@ class TableEditMyKPI extends Component {
         align: 'center',
         width: 200
       };
-<<<<<<< HEAD
-      this.columns.push(data);
-    });
-    this.columns.push(
-      {
-        title: 'Feedback',
-        dataIndex: 'feedback',
-        placeholder: 'Feedback',
-        editable: true
-      });
-=======
       newColumns.push(data);
     });
     newColumns.push({
@@ -71,7 +60,6 @@ class TableEditMyKPI extends Component {
     this.setState({
       columns: newColumns
     });
->>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
   }
 
   render() {
