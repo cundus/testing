@@ -1,9 +1,19 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../components";
+import { connect } from 'react-redux';
 
 class TableEditMyKPI extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      columns: []
+    };
+    this.getColumns();
+  }
+
+  getColumns = async (props) => {
+    const { kpiReducers } = this.props;
+    const { dataMetrics } = kpiReducers;
     this.columns = [
       {
         title: 'KPI Subject',
@@ -20,29 +30,25 @@ class TableEditMyKPI extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         type: 'number'
-      },
-      {
-        title: 'L1',
-        dataIndex: 'L1',
-        placeholder: 'Enter Level 1'
-      },
-      {
-        title: 'L2',
-        dataIndex: 'L2',
-        placeholder: 'Enter Level 2'
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        placeholder: 'Enter Level 3'
-      },
+      }
+    ];
+    await dataMetrics.map((itemMetric) => {
+      const data = {
+        title: itemMetric.label,
+        dataIndex: itemMetric.label,
+        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        align: 'center',
+        width: 200
+      };
+      this.columns.push(data);
+    });
+    this.columns.push(
       {
         title: 'Feedback',
         dataIndex: 'feedback',
         placeholder: 'Feedback',
         editable: true
-      }
-    ];
+      });
   }
 
   render() {
@@ -64,4 +70,15 @@ class TableEditMyKPI extends Component {
     );
   }
 }
-export default TableEditMyKPI;
+const mapStateToProps = (state) => ({
+  kpiReducers: state.kpiReducers
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TableEditMyKPI);
+
+export default connectToComponent;

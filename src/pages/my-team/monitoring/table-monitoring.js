@@ -69,7 +69,6 @@ class TableMonitoring extends Component {
 
   render() {
     const { dataSource } = this.state;
-    console.log('ds', dataSource)
     const { columns } = this;
     return (
       <div>
