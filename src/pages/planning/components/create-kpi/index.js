@@ -12,10 +12,10 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import {
   doSaveKpi, doGetKpiList, doGetLatestGoalKpi, doGetKpiManagerList
-} from '../../../redux/actions/kpi';
+} from '../../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import Cascade from './components/cascade';
-import { Success } from '../../../redux/status-code-type';
+import { Success } from '../../../../redux/status-code-type';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -153,7 +153,7 @@ class CreateKPI extends Component {
   }
 
   handleSaveDraft = async () => {
-    const { doSavingKpi, userReducers, history } = this.props;
+    const { doSavingKpi, userReducers, stepChange } = this.props;
     const { user } = userReducers.result;
     const {
       dataOwn,
@@ -197,7 +197,7 @@ class CreateKPI extends Component {
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been saved');
-            history.push('/planning/kpi/draft-planning');
+            stepChange(1); // go to draft
           } else {
             message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
           }
@@ -370,6 +370,5 @@ CreateKPI.propTypes = {
   getLatestGoalKpi: PropTypes.func,
   getKpiManagerList: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
-  userReducers: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired
+  userReducers: PropTypes.instanceOf(Object).isRequired
 };

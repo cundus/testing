@@ -1,23 +1,54 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import StepWizzard from './components/steps';
-import { MappedRouter } from '../../routes/RouteGenerator';
-import { doGetLatestGoalKpi, doGetKpiList } from '../../redux/actions/kpi';
+import { message } from 'antd';
+import {
+  Step, CreateKpi, DraftKpi, SubmitKpi
+} from './components';
 
 class Planning extends Component {
-  componentDidMount() {
-    this.getKPIData();
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 0
+    };
   }
 
-  getKPIData = async (e) => {}
+  stepChange = (current) => {
+    const { step } = this.state;
+    if (step === 0) {
+      if (current === 1) {
+        this.setState({
+          step: current
+        });
+      } else {
+        message.warning('Sorry, You cannot be able to go');
+      }
+    } else if (step === 1) {
+      if (current === 0) {
+        this.setState({
+          step: current
+        });
+      } else {
+        message.warning('Sorry, You cannot be able to go');
+      }
+    } else {
+      message.warning('Sorry, You cannot be able to back');
+    }
+  };
 
   render() {
-    const { child, history } = this.props;
+    const { step } = this.state;
+    const { stepChange } = this;
     return (
       <div>
-        <StepWizzard history={history} />
-        <MappedRouter routes={child} />
+        <Step step={step} stepChange={stepChange} />
+        {/* eslint-disable-next-line no-nested-ternary */}
+        {step === 0 ?
+          <CreateKpi stepChange={stepChange} /> :
+          step === 1 ?
+            <DraftKpi stepChange={stepChange} /> :
+            step === 2 &&
+            <SubmitKpi stepChange={stepChange} />}
       </div>
     );
   }
@@ -29,8 +60,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
-  getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(
@@ -39,8 +68,3 @@ const connectToComponent = connect(
 )(Planning);
 
 export default connectToComponent;
-
-Planning.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  child: PropTypes.instanceOf(Object).isRequired
-};

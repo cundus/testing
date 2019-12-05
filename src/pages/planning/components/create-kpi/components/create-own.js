@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
-import { DataTable } from '../../../../components';
+import { DataTable } from '../../../../../components';
 
 class CreateOwn extends Component {
   constructor(props) {
@@ -149,6 +149,6 @@ CreateOwn.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
-  kpiReducers: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

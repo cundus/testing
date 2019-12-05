@@ -105,6 +105,7 @@ const Header = (props) => {
                   shape="square"
                   size={isDesktopOrLaptop ? 'large' : 'default'}
                   src={url}
+                  icon="user"
                   className="avatar"
                 />
               </div>
