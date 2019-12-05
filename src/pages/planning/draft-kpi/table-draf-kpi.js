@@ -91,11 +91,11 @@ class TableDrafKPI extends Component {
     return (
       <div>
         <DataTable
-          loading={loading}
           columns={columns}
-          handleError={handleError}
-          dataSource={dataSource}
-          handleChange={handleChange}
+          loading={loading}
+          datasource={dataSource}
+          handleerror={handleError}
+          handlechange={handleChange}
         />
       </div>
     );

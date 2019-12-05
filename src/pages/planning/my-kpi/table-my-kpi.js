@@ -149,16 +149,14 @@ class TableMyKPI extends Component {
 
   render() {
     const { dataSource } = this.state;
-    const { columns, handleAdd, handleChange, handleDelete } = this;
+    const { columns, handleChange } = this;
     return (
       <div>
         {/* <Layout> */}
           <DataTable
             columns={columns}
-            dataSource={dataSource}
-            handleAdd={handleAdd}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
+            datasource={dataSource}
+            handlechange={handleChange}
           />
         {/* </Layout> */}
       </div>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import DataTable from '../../../components/dataTable/index';
-import {Avatar, Tag, Button} from 'antd';
-import { Link } from 'react-router-dom';
+import {Avatar, Button} from 'antd';
 const {
   REACT_APP_API_URL
 } = process.env;
@@ -77,7 +76,7 @@ class TableMonitoring extends Component {
         {/* <Layout> */}
         <DataTable
           columns={columns}
-          dataSource={dataSource}
+          datasource={dataSource}
         />
         {/* </Layout> */}
       </div>

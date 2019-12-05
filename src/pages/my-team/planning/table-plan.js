@@ -98,7 +98,7 @@ class TablePlan extends Component {
         {/* <Layout> */}
         <DataTable
           columns={columns}
-          dataSource={dataSource}
+          datasource={dataSource}
         />
         {/* </Layout> */}
       </div>

@@ -66,7 +66,7 @@ class TableDrafKPI extends Component {
         <DataTable
           loading={loading}
           columns={columns}
-          dataSource={dataSource}
+          datasource={dataSource}
         />
       </div>
     );

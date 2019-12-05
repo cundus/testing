@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Typography,
   Divider,
-  Spin,
   Input
 } from 'antd';
 import PropTypes from 'prop-types';

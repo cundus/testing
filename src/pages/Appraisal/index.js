@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import TableKPI from './kpi';
 import TableValue from './value';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 const { confirm } = Modal;
 const { TabPane } = Tabs;
 
@@ -126,8 +126,6 @@ class Appraisal extends Component {
     const {
       handleChangeField,
     } = this;
-    const { kpiReducers } = this.props;
-    const { dataGoal } = kpiReducers;
     return (
       <div>
         <div>

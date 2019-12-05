@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
@@ -55,23 +56,26 @@ class CreateOwn extends Component {
       {
         title: 'Action',
         align: 'center',
+        editable: false,
         dataIndex: 'action',
-        action: true,
-        render: (text, record) =>
-          // eslint-disable-next-line implicit-arrow-linebreak
-          (this.props.dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              // eslint-disable-next-line react/jsx-no-bind
-              onConfirm={() => this.props.handleDelete(record.key)}
-            >
-              <Tooltip placement="bottomRight" title="delete">
-                <Button type="danger" ghost>
-                  <Icon type="delete" />
-                </Button>
-              </Tooltip>
-            </Popconfirm>
-          ) : null)
+        render: (text, record) => {
+          const { handleDelete, dataSource } = this.props;
+          return (
+            dataSource.length >= 1 ? (
+              <Popconfirm
+                title="Sure to delete?"
+                // eslint-disable-next-line react/jsx-no-bind
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <Tooltip placement="bottomRight" title="delete">
+                  <Button type="danger" ghost>
+                    <Icon type="delete" />
+                  </Button>
+                </Tooltip>
+              </Popconfirm>
+            ) : null
+          );
+        }
       }
     ];
   }
@@ -91,9 +95,9 @@ class CreateOwn extends Component {
         <DataTable
           columns={columns}
           loading={loading}
-          dataSource={dataSource}
-          handleError={handleError}
-          handleChange={handleChangeField}
+          datasource={dataSource}
+          handleerror={handleError}
+          handlechange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>
           <Button onClick={handleAddRow} style={{ margin: 10 }}>
@@ -112,3 +116,13 @@ class CreateOwn extends Component {
   }
 }
 export default CreateOwn;
+
+CreateOwn.propTypes = {
+  dataSource: PropTypes.instanceOf(Array),
+  handleAddRow: PropTypes.func,
+  handleChangeField: PropTypes.func,
+  handleSaveDraft: PropTypes.func,
+  handleError: PropTypes.func,
+  handleDelete: PropTypes.func,
+  loading: PropTypes.bool
+};

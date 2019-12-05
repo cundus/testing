@@ -94,8 +94,8 @@ class Cascade extends Component {
         <DataTable
           columns={columns}
           loading={loading}
-          handleError={handleError}
-          dataSource={dataSource}
+          datasource={dataSource}
+          handleerror={handleError}
         />
         <div style={{ textAlign: 'center' }}>
           <Button
