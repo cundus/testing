@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import "antd/dist/antd.css";
 import { Layout, Spin } from "antd";
 import { GetInfoUser } from "../../redux/actions/user";
+import { doGetMetrics } from '../../redux/actions/kpi';
 
 import { Footer, Header, Sidebar } from "./components";
 import { MappedRouter } from "../../routes/RouteGenerator";
@@ -62,6 +63,7 @@ class Dashboard extends React.Component {
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
     localStorage.setItem("sfToken", this.props.user.result.accessToken);
+    await this.props.getMetrics();
   }
 
   toggle = () => {
@@ -72,7 +74,7 @@ class Dashboard extends React.Component {
 
   render() {
     const { collapsed } = this.state;
-    const { child, user } = this.props;
+    const { child, user, kpi } = this.props;
 
     return (
       <Layout style={{ minHeight: "100vh" }}>
@@ -81,7 +83,7 @@ class Dashboard extends React.Component {
           <Header collapsed={collapsed} toggle={this.toggle} />
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
-              {Object.keys(user).length ? (
+              {Object.keys(user).length && !kpi.loadingMetric ? (
                 <MappedRouter routes={child} />
               ) : (
                 <center><Spin /></center>
@@ -96,10 +98,12 @@ class Dashboard extends React.Component {
 }
 
 const mapDispatchtoProps = dispatch => ({
-  GetInfoUser: token => dispatch(GetInfoUser(token))
+  GetInfoUser: token => dispatch(GetInfoUser(token)),
+  getMetrics: () => (dispatch(doGetMetrics()))
 });
 const mapStateToProps = state => ({
   auth: state.authReducer,
-  user: state.userReducers
+  user: state.userReducers,
+  kpi: state.kpiReducers
 });
 export default connect(mapStateToProps, mapDispatchtoProps)(Dashboard);

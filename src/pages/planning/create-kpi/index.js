@@ -326,7 +326,7 @@ class CreateKPI extends Component {
               />
             </TabPane>
             <TabPane
-              tab="Cascade From Supervisor"
+              tab="Cascade From Superior"
               key="2"
             >
               <Cascade

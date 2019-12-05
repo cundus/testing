@@ -10,10 +10,14 @@ import {
   GET_KPI_LIST_FAILED,
   GET_KPI_MANAGER_LIST,
   GET_KPI_MANAGER_LIST_SUCCESS,
-  GET_KPI_MANAGER_LIST_FAILED
+  GET_KPI_MANAGER_LIST_FAILED,
+  GET_METRICS,
+  GET_METRICS_SUCCESS,
+  GET_METRICS_FAILED
 } from '../action.type';
 
 const initialState = {
+  loadingMetric: false,
   loadingGoal: false,
   loadingKpi: false,
   status: null,
@@ -57,11 +61,32 @@ const initialState = {
     userName: null
   },
   dataFirstManagerKpi: [],
-  dataSecondManagerKpi: []
+  dataSecondManagerKpi: [],
+  dataMetrics: []
 };
 
 const kpiReducers = (state = initialState, action) => {
   switch (action.type) {
+    case GET_METRICS:
+      return {
+        ...state,
+        loadingMetric: action.loading
+      };
+    case GET_METRICS_SUCCESS:
+      return {
+        ...state,
+        loadingMetric: action.loading,
+        status: action.status,
+        message: action.message,
+        dataMetrics: action.data
+      };
+    case GET_METRICS_FAILED:
+      return {
+        ...state,
+        loadingMetric: action.loading,
+        status: action.status,
+        message: action.message
+      };
     case GET_LATEST_GOAL_KPI:
       return {
         ...state,
