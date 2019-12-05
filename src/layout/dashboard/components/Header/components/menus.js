@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 export const accountMenu = (
   <Menu>
     <Menu.Item>
-        Message
+        {/* Message */}
     </Menu.Item>
   </Menu>
   );
@@ -12,10 +12,10 @@ export const accountMenu = (
 export const langMenu = (
   <Menu>
     <Menu.Item>
-        Indonesia
+        {/* Indonesia */}
     </Menu.Item>
     <Menu.Item>
-        English
+        {/* English */}
     </Menu.Item>
   </Menu>
  );
@@ -23,10 +23,10 @@ export const langMenu = (
 export const notifMenu = (
   <Menu>
     <Menu.Item>
-        +1 chat
+        {/* +1 chat */}
     </Menu.Item>
     <Menu.Item>
-        +2 else
+        {/* +2 else */}
     </Menu.Item>
   </Menu>
 );

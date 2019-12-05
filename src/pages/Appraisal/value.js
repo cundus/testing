@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Popconfirm,
-  Tooltip,
-  Icon
-} from 'antd';
 import DataTable from '../../components/dataTable';
 
 class Value extends Component {
@@ -49,8 +43,8 @@ class Value extends Component {
       <div>
         <DataTable
           columns={columns}
-          dataSource={dataOwn}
-          handleChange={handleChangeField}
+          datasource={dataOwn}
+          handlechange={handleChangeField}
         />
       </div>
     );

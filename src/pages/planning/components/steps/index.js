@@ -3,13 +3,11 @@ import { withRouter } from 'react-router-dom';
 import {
   Steps,
   Icon,
-  message,
-  Modal
+  message
 } from 'antd';
 import { useMediaQuery } from 'react-responsive';
 
 const { Step } = Steps;
-const { confirm } = Modal;
 
 const StepWizzard = (props) => {
   const [wizzard, setWizzard] = useState(0);

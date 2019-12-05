@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
@@ -7,12 +9,22 @@ import { DataTable } from '../../../../components';
 class CreateOwn extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: []
+    };
+    this.getColumns();
+  }
+
+  getColumns = async () => {
+    const { kpiReducers } = this.props;
+    const { dataMetrics } = kpiReducers;
+    const newColumns = [
       {
         title: 'KPI Subject',
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        width: 200,
         editable: true
       },
       {
@@ -20,6 +32,7 @@ class CreateOwn extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        width: 200,
         editable: true
       },
       {
@@ -30,40 +43,34 @@ class CreateOwn extends Component {
         width: 90,
         type: 'number',
         editable: true
-      },
-      {
-        title: 'L1',
-        dataIndex: 'L1',
-        placeholder: 'Enter Level 1',
+      }
+    ];
+    // eslint-disable-next-line array-callback-return
+    await dataMetrics.map((itemMetric) => {
+      const data = {
+        title: itemMetric.label,
+        dataIndex: itemMetric.label,
+        placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
+        width: 200,
         editable: true
-      },
-      {
-        title: 'L2',
-        dataIndex: 'L2',
-        placeholder: 'Enter Level 2',
-        align: 'center',
-        editable: true
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        placeholder: 'Enter Level 3',
-        align: 'center',
-        editable: true
-      },
-      {
-        title: 'Action',
-        align: 'center',
-        dataIndex: 'action',
-        action: true,
-        render: (text, record) =>
-          // eslint-disable-next-line implicit-arrow-linebreak
-          (this.props.dataSource.length >= 1 ? (
+      };
+      newColumns.push(data);
+    });
+    const action = {
+      title: 'Action',
+      align: 'center',
+      editable: false,
+      width: 100,
+      dataIndex: 'action',
+      render: (text, record) => {
+        const { dataSource, handleDelete } = this.props;
+        return (
+          dataSource.length >= 1 ? (
             <Popconfirm
               title="Sure to delete?"
               // eslint-disable-next-line react/jsx-no-bind
-              onConfirm={() => this.props.handleDelete(record.key)}
+              onConfirm={() => handleDelete(record.key)}
             >
               <Tooltip placement="bottomRight" title="delete">
                 <Button type="danger" ghost>
@@ -71,13 +78,18 @@ class CreateOwn extends Component {
                 </Button>
               </Tooltip>
             </Popconfirm>
-          ) : null)
+          ) : null
+        );
       }
-    ];
+    };
+    await newColumns.push(action);
+    this.setState({
+      columns: newColumns
+    });
   }
 
   render() {
-    const { columns } = this;
+    const { columns } = this.state;
     const {
       dataSource,
       handleAddRow,
@@ -91,9 +103,9 @@ class CreateOwn extends Component {
         <DataTable
           columns={columns}
           loading={loading}
-          dataSource={dataSource}
-          handleError={handleError}
-          handleChange={handleChangeField}
+          datasource={dataSource}
+          handleerror={handleError}
+          handlechange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>
           <Button onClick={handleAddRow} style={{ margin: 10 }}>
@@ -111,4 +123,27 @@ class CreateOwn extends Component {
     );
   }
 }
-export default CreateOwn;
+
+const mapStateToProps = (state) => ({
+  kpiReducers: state.kpiReducers
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateOwn);
+
+export default connectToComponent;
+
+CreateOwn.propTypes = {
+  dataSource: PropTypes.instanceOf(Array),
+  handleAddRow: PropTypes.func,
+  handleChangeField: PropTypes.func,
+  handleSaveDraft: PropTypes.func,
+  handleError: PropTypes.func,
+  handleDelete: PropTypes.func,
+  kpiReducers: PropTypes.func,
+  loading: PropTypes.bool
+};

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { DataTable } from "../../../components";
-import { Button, Popconfirm } from "antd";
 
 class TableEditMyKPI extends Component {
   constructor(props) {
@@ -56,8 +55,8 @@ class TableEditMyKPI extends Component {
         {/* <Layout> */}
         <DataTable
           columns={columns}
-          dataSource={dataSource}
-          handleChange={handleChange}
+          datasource={dataSource}
+          handlechange={handleChange}
           loading={isLoading}
         />
         {/* </Layout> */}
