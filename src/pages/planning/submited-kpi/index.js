@@ -106,7 +106,12 @@ class SubmitedKPI extends Component {
         <TableSubmitedKPI dataSource={dataSource} loading={loadingKpi} />
         <div>
           <Text>Challenge myself :</Text>
-          <TextArea placeholder="Challenge myself" label="Challenge myself" disabled />
+          <TextArea
+            id="challenge-input"
+            placeholder="Challenge myself"
+            label="Challenge myself"
+            disabled
+          />
         </div>
       </div>
     );
