@@ -21,15 +21,11 @@ const RenderedRoute = (Component, child ) => (props) => {
   const { pathname } = location;
   const token = localStorage.getItem('token');
   if (token !== null) {
-    if (pathname === '/' ||
+    if (pathname === '' ||
+    pathname === '/' ||
     pathname === '/planning' ||
     pathname === '/planning/') {
       return (<Redirect to="/home" />);
-    } else if (pathname === '/planning/kpi' ||
-      pathname === '/planning/kpi/') {
-      return (<Redirect to="/planning/kpi/create-planning" />);
-    } else if (pathname === '/planning/kpi/create-planning') {
-      // return (<Redirect to="/planning/kpi/create-planning" />);
     }
   }
   // if (token === null && !isLogin && pathname !== '/login') {
