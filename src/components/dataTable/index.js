@@ -43,16 +43,16 @@ class EditableCell extends React.Component {
     this.form = form;
     const {
       editable,
-      dataIndex,
+      dataindex,
       record,
       placeholder,
       type,
       title
     } = this.props;
-
+    const index = dataindex;
     return (
       <Form.Item style={{ margin: 0 }}>
-        { type === 'number' ? form.getFieldDecorator(dataIndex, {
+        { type === 'number' ? form.getFieldDecorator(index, {
           rules: [
             {
               required: true,
@@ -60,7 +60,7 @@ class EditableCell extends React.Component {
               message: `${title} is wrong`
             }
           ],
-          initialValue: record[dataIndex]
+          initialValue: record[index]
         })(
           <TextArea
             id={title}
@@ -69,13 +69,13 @@ class EditableCell extends React.Component {
             onChange={this.change}
             disabled={!editable}
           />
-        ) : form.getFieldDecorator(dataIndex, {
+        ) : form.getFieldDecorator(index, {
           rules: [
             {
               required: true
             }
           ],
-          initialValue: record[dataIndex]
+          initialValue: record[index]
         })(
           <TextArea
             id={title}
@@ -115,7 +115,7 @@ class EditableCell extends React.Component {
 
 EditableCell.propTypes = {
   editable: PropTypes.bool,
-  dataIndex: PropTypes.string,
+  dataindex: PropTypes.string,
   title: PropTypes.string,
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
@@ -149,7 +149,7 @@ const DataTable = (props) => {
       onCell: (record) => ({
         record,
         editable: col.editable,
-        dataIndex: col.dataIndex,
+        dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
@@ -165,7 +165,7 @@ const DataTable = (props) => {
         components={components}
         rowClassName="editable-row"
         bordered
-        datasource={datasource}
+        dataSource={datasource}
         columns={columnList}
         scroll={isDesktopOrLaptop ? { x: false } : { x: true }}
         pagination={false}

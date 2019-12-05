@@ -322,7 +322,7 @@ class CreateKPI extends Component {
                 handleAddRow={handleAddRow}
                 handleError={handleError}
                 handleChangeField={handleChangeField}
-                handleDeleteRow={handleDeleteRow}
+                handleDelete={handleDeleteRow}
               />
             </TabPane>
             <TabPane
