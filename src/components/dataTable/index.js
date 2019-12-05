@@ -63,7 +63,7 @@ class EditableCell extends React.Component {
           initialValue: record[index]
         })(
           <TextArea
-            id={title}
+            id={`${title}-${index}`}
             placeholder={placeholder}
             autoSize={{ minRows: 3, maxRows: 5 }}
             onChange={this.change}
@@ -78,7 +78,7 @@ class EditableCell extends React.Component {
           initialValue: record[index]
         })(
           <TextArea
-            id={title}
+            id={`${title}-${index}`}
             placeholder={placeholder}
             autoSize={{ minRows: 3, maxRows: 5 }}
             onChange={this.change}

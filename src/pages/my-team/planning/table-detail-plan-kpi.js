@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+
 import { DataTable } from "../../../components";
 import { connect } from 'react-redux';
 
@@ -11,10 +13,17 @@ class TableEditMyKPI extends Component {
     this.getColumns();
   }
 
+<<<<<<< HEAD
   getColumns = async (props) => {
     const { kpiReducers } = this.props;
     const { dataMetrics } = kpiReducers;
     this.columns = [
+=======
+  getColumns = async () =>{
+    const { kpiReducers } = this.props;
+    const { dataMetrics } = kpiReducers;
+    const newColumns = [
+>>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
       {
         title: 'KPI Subject',
         dataIndex: 'description',
@@ -40,6 +49,7 @@ class TableEditMyKPI extends Component {
         align: 'center',
         width: 200
       };
+<<<<<<< HEAD
       this.columns.push(data);
     });
     this.columns.push(
@@ -49,11 +59,24 @@ class TableEditMyKPI extends Component {
         placeholder: 'Feedback',
         editable: true
       });
+=======
+      newColumns.push(data);
+    });
+    newColumns.push({
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      placeholder: 'Feedback',
+      editable: true
+    });
+    this.setState({
+      columns: newColumns
+    });
+>>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
   }
 
   render() {
     const { dataSource } = this.props;
-    const { columns } = this;
+    const { columns } = this.state;
     const {handleChange } = this.props;
     const isLoading = (dataSource.length > 0 ) ? false: true;
     return (
@@ -81,4 +104,8 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(TableEditMyKPI);
 
+<<<<<<< HEAD
 export default connectToComponent;
+=======
+export default connectToComponent;
+>>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
