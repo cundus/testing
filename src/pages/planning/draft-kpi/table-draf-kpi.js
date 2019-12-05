@@ -100,7 +100,7 @@ class TableDrafKPI extends Component {
     const { columns } = this.state;
     const {
       dataSource,
-      handleChangeField,
+      handleChange,
       handleError,
       loading
     } = this.props;
@@ -111,7 +111,7 @@ class TableDrafKPI extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
-          handlechange={handleChangeField}
+          handlechange={handleChange}
         />
       </div>
     );
@@ -133,7 +133,7 @@ export default connectToComponent;
 
 TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  handleChangeField: PropTypes.func,
+  handleChange: PropTypes.func,
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
   kpiReducers: PropTypes.func,

@@ -108,10 +108,15 @@ class CreateOwn extends Component {
           handlechange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>
-          <Button onClick={handleAddRow} style={{ margin: 10 }}>
+          <Button
+            id="add-row-crate-own"
+            onClick={handleAddRow}
+            style={{ margin: 10 }}
+          >
             Add a row
           </Button>
           <Button
+            id="save-draft"
             onClick={handleSaveDraft}
             type="primary"
             style={{ margin: 10 }}

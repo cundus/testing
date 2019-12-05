@@ -303,20 +303,32 @@ class DraftKPI extends Component {
           />
           <div>
             <Text>Challenge myself :</Text>
-            <TextArea placeholder="Challenge myself" label="Challenge myself" />
+            <TextArea
+              id="challenge-input"
+              placeholder="Challenge myself"
+              label="Challenge myself"
+            />
           </div>
           <div style={{ textAlign: 'center' }}>
             <Button
+              id="add-kpi"
               // eslint-disable-next-line react/jsx-no-bind
               onClick={() => history.push('/planning/kpi/create-planning')}
               style={{ margin: 10 }}
             >
               Add KPI
             </Button>
-            <Button onClick={handleSaveDraft} style={{ margin: 10 }}>
+            <Button
+              id="save-draft"
+              onClick={handleSaveDraft}
+              style={{ margin: 10 }}
+            >
               Save as Draft
             </Button>
-            <Button onClick={handleSubmit} type="primary" style={{ margin: 10 }}>
+            <Button
+              id="submit-superior"
+              onClick={handleSubmit}
+              type="primary" style={{ margin: 10 }}>
               Submit To Superior
             </Button>
           </div>
