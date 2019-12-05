@@ -22,6 +22,7 @@ class Cascade extends Component {
         dataIndex: 'typeKpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        width: 200,
         editable: false
       },
       {
@@ -29,6 +30,7 @@ class Cascade extends Component {
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        width: 200,
         editable: false
       },
       {
@@ -36,6 +38,7 @@ class Cascade extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        width: 200,
         editable: false
       },
       {
@@ -55,6 +58,7 @@ class Cascade extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
+        width: 150,
         editable: false
       };
       newColumns.push(data);
@@ -63,6 +67,7 @@ class Cascade extends Component {
       title: 'Action',
       align: 'center',
       editable: false,
+      width: 100,
       dataIndex: 'action',
       render: (text, record) => {
         const { dataSource, handleSelectData } = this.props;

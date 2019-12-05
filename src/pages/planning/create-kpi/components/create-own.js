@@ -24,6 +24,7 @@ class CreateOwn extends Component {
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        width: 200,
         editable: true
       },
       {
@@ -31,6 +32,7 @@ class CreateOwn extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        width: 200,
         editable: true
       },
       {
@@ -50,6 +52,7 @@ class CreateOwn extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
+        width: 200,
         editable: true
       };
       newColumns.push(data);
@@ -58,6 +61,7 @@ class CreateOwn extends Component {
       title: 'Action',
       align: 'center',
       editable: false,
+      width: 100,
       dataIndex: 'action',
       render: (text, record) => {
         const { dataSource, handleDelete } = this.props;
