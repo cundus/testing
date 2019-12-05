@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import { DataTable } from "../../../components";
-import { connect } from 'react-redux';
 
 class TableEditMyKPI extends Component {
   constructor(props) {
@@ -85,8 +84,4 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(TableEditMyKPI);
 
-<<<<<<< HEAD
 export default connectToComponent;
-=======
-export default connectToComponent;
->>>>>>> 105f5512a857f73333428cd3205de7f4c10d2316
