@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, Checkbox } from 'antd';
-import { DataTable } from '../../../../components';
+import {
+ Button, Popconfirm, Tooltip, Icon
+} from 'antd';
+import { DataTable } from '../../../../../components';
 
-class Cascade extends Component {
+class CreateOwn extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,20 +20,12 @@ class Cascade extends Component {
     const { dataMetrics } = kpiReducers;
     const newColumns = [
       {
-        title: 'Supervisor\'s Name',
-        dataIndex: 'typeKpi',
-        placeholder: 'Enter KPI Subject',
-        align: 'center',
-        width: 200,
-        editable: false
-      },
-      {
         title: 'KPI Subject',
         dataIndex: 'description',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
-        editable: false
+        editable: true
       },
       {
         title: 'Baseline',
@@ -39,16 +33,16 @@ class Cascade extends Component {
         placeholder: 'Enter baseline',
         align: 'center',
         width: 200,
-        editable: false
+        editable: true
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
-        width: 80,
+        width: 90,
         type: 'number',
-        editable: false
+        editable: true
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -58,8 +52,8 @@ class Cascade extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
-        width: 150,
-        editable: false
+        width: 200,
+        editable: true
       };
       newColumns.push(data);
     });
@@ -70,14 +64,20 @@ class Cascade extends Component {
       width: 100,
       dataIndex: 'action',
       render: (text, record) => {
-        const { dataSource, handleSelectData } = this.props;
+        const { dataSource, handleDelete } = this.props;
         return (
           dataSource.length >= 1 ? (
-            <Checkbox
+            <Popconfirm
+              title="Sure to delete?"
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={(e) => handleSelectData(record)}
-              checked={this.checkStatus(record)}
-            />
+              onConfirm={() => handleDelete(record.key)}
+            >
+              <Tooltip placement="bottomRight" title="delete">
+                <Button type="danger" ghost>
+                  <Icon type="delete" />
+                </Button>
+              </Tooltip>
+            </Popconfirm>
           ) : null
         );
       }
@@ -88,23 +88,16 @@ class Cascade extends Component {
     });
   }
 
-
-  checkStatus = (record) => {
-    const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
-    if (dataChecking.length !== 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   render() {
-    const {
-      dataSource, handleSaveDraft, handleError, loading
-    } = this.props;
     const { columns } = this.state;
-
+    const {
+      dataSource,
+      handleAddRow,
+      handleChangeField,
+      handleSaveDraft,
+      handleError,
+      loading
+    } = this.props;
     return (
       <div>
         <DataTable
@@ -112,12 +105,20 @@ class Cascade extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
+          handlechange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>
           <Button
+            id="add-row-crate-own"
+            onClick={handleAddRow}
+            style={{ margin: 10 }}
+          >
+            Add a row
+          </Button>
+          <Button
             id="save-draft"
-            type="primary"
             onClick={handleSaveDraft}
+            type="primary"
             style={{ margin: 10 }}
           >
             Save Draft
@@ -137,16 +138,17 @@ const mapDispatchToProps = (dispatch) => ({});
 const connectToComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Cascade);
+)(CreateOwn);
 
 export default connectToComponent;
 
-Cascade.propTypes = {
+CreateOwn.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  dataSelectedCascade: PropTypes.instanceOf(Array),
+  handleAddRow: PropTypes.func,
+  handleChangeField: PropTypes.func,
   handleSaveDraft: PropTypes.func,
-  handleSelectData: PropTypes.func,
   handleError: PropTypes.func,
+  handleDelete: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

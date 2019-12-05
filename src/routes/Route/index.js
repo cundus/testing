@@ -5,16 +5,14 @@ import Lazyload from '../../components/lazyLoad';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from '../../layout';
-import PlanningPage from '../../pages/planning';
+// import PlanningPage from '../../pages/planning';
 // import Clear from '../../layout/clear';
 
 // Shared Pages
 const HomePage = React.lazy(() => import('../../pages/home/home'));
-const CreatePlanningPage = React.lazy(() => import('../../pages/planning/create-kpi'));
-const DraftKPIPage = React.lazy(() => import('../../pages/planning/draft-kpi'));
+const PlanningPage = React.lazy(() => import('../../pages/planning'));
 const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
 const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
-const SubmitedKPIPage = React.lazy(() => import('../../pages/planning/submited-kpi'));
 const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
 const MonitoringPage = React.lazy(() => import('../../pages/monitoring/index'));
@@ -35,30 +33,10 @@ export const routes = [
         exact: true
       },
       {
-        path: '/planning/kpi',
-        component: PlanningPage,
-        exact: false,
-        title: 'Planning',
-        child: [
-          {
-            path: '/planning/kpi/create-planning',
-            component: Lazyload(CreatePlanningPage),
-            exact: true,
-            title: 'Create KPI'
-          },
-          {
-            path: '/planning/kpi/draft-planning',
-            component: Lazyload(DraftKPIPage),
-            exact: true,
-            title: 'Draft KPI'
-          },
-          {
-            path: '/planning/kpi/submit-planning',
-            component: Lazyload(SubmitedKPIPage),
-            exact: true,
-            title: 'Draft KPI'
-          }
-        ]
+        path: '/planning/create-planning',
+        component: Lazyload(PlanningPage),
+        exact: true,
+        title: 'Planning'
       },
       {
         path: '/planning/kpi-planning',

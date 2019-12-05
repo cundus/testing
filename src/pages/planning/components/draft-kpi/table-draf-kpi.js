@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
-import { DataTable } from '../../../components';
+import { DataTable } from '../../../../components';
 
 class TableDrafKPI extends Component {
   constructor(props) {
