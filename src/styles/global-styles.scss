@@ -55,6 +55,14 @@
 }
 
 .editable-cell-value-wrap {
-  // padding: 2.5px 2.5px;
-  cursor: pointer;
+  padding: 0px 0px;
+  margin: 0px;
+  // cursor: pointer;
+}
+.ant-table-tbody {
+  tr { 
+    td {
+      padding: 10px 5px;
+    }
+  }
 }
