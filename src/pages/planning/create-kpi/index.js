@@ -126,6 +126,7 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
+    // eslint-disable-next-line array-callback-return
     dataSecondManagerKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
@@ -308,7 +309,7 @@ class CreateKPI extends Component {
         </div>
         <div>
           <center>
-            <Skeleton active loading={loadingGoal} paragraph={false} title={{width: 500}}>
+            <Skeleton active loading={loadingGoal} paragraph={false} title={{ width: 500 }}>
               <Title level={4}>{`Performance Management - ${name}`}</Title>
             </Skeleton>
           </center>
@@ -321,11 +322,11 @@ class CreateKPI extends Component {
                 handleAddRow={handleAddRow}
                 handleError={handleError}
                 handleChangeField={handleChangeField}
-                handleDeleteRow={handleDeleteRow}
+                handleDelete={handleDeleteRow}
               />
             </TabPane>
             <TabPane
-              tab="Cascade From Supervisor"
+              tab="Cascade From Superior"
               key="2"
             >
               <Cascade

@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Table,
   Input,
-  InputNumber,
   Form
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -27,14 +26,14 @@ EditableRow.propTypes = {
 
 class EditableCell extends React.Component {
   change = (e) => {
-    const { record, handleChange, handleError } = this.props;
+    const { record, handlechange, handleerror } = this.props;
     setTimeout(() => {
       this.form.validateFields((error, values) => {
-        handleChange({ ...record, ...error, ...values });
+        handlechange({ ...record, ...error, ...values });
         if (error) {
-          handleError(true);
+          handleerror(true);
         } else {
-          handleError(false);
+          handleerror(false);
         }
       });
     }, 100);
@@ -44,16 +43,16 @@ class EditableCell extends React.Component {
     this.form = form;
     const {
       editable,
-      dataIndex,
+      dataindex,
       record,
       placeholder,
       type,
       title
     } = this.props;
-
+    const index = dataindex;
     return (
       <Form.Item style={{ margin: 0 }}>
-        { type === 'number' ? form.getFieldDecorator(dataIndex, {
+        { type === 'number' ? form.getFieldDecorator(index, {
           rules: [
             {
               required: true,
@@ -61,7 +60,7 @@ class EditableCell extends React.Component {
               message: `${title} is wrong`
             }
           ],
-          initialValue: record[dataIndex]
+          initialValue: record[index]
         })(
           <TextArea
             id={title}
@@ -70,13 +69,13 @@ class EditableCell extends React.Component {
             onChange={this.change}
             disabled={!editable}
           />
-        ) : form.getFieldDecorator(dataIndex, {
+        ) : form.getFieldDecorator(index, {
           rules: [
             {
               required: true
             }
           ],
-          initialValue: record[dataIndex]
+          initialValue: record[index]
         })(
           <TextArea
             id={title}
@@ -116,24 +115,23 @@ class EditableCell extends React.Component {
 
 EditableCell.propTypes = {
   editable: PropTypes.bool,
-  dataIndex: PropTypes.string,
+  dataindex: PropTypes.string,
   title: PropTypes.string,
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
-  handleChange: PropTypes.func,
-  handleError: PropTypes.func,
+  handlechange: PropTypes.func,
+  handleerror: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  children: PropTypes.instanceOf(Object),
-  action: PropTypes.bool
+  children: PropTypes.instanceOf(Object)
 };
 
 const DataTable = (props) => {
   const {
-    dataSource,
-    handleChange,
+    datasource,
+    handlechange,
     columns,
-    handleError,
+    handleerror,
     loading
   } = props;
 
@@ -151,13 +149,12 @@ const DataTable = (props) => {
       onCell: (record) => ({
         record,
         editable: col.editable,
-        dataIndex: col.dataIndex,
+        dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
-        action: col.action,
         placeholder: col.placeholder,
-        handleChange,
-        handleError
+        handlechange,
+        handleerror
       })
     };
   });
@@ -168,7 +165,7 @@ const DataTable = (props) => {
         components={components}
         rowClassName="editable-row"
         bordered
-        dataSource={dataSource}
+        dataSource={datasource}
         columns={columnList}
         scroll={isDesktopOrLaptop ? { x: false } : { x: true }}
         pagination={false}
@@ -181,9 +178,9 @@ const DataTable = (props) => {
 export default DataTable;
 
 DataTable.propTypes = {
-  dataSource: PropTypes.instanceOf(Array),
-  handleChange: PropTypes.func,
-  handleError: PropTypes.func,
+  datasource: PropTypes.instanceOf(Array),
+  handlechange: PropTypes.func,
+  handleerror: PropTypes.func,
   loading: PropTypes.bool,
   columns: PropTypes.instanceOf(Array)
 };

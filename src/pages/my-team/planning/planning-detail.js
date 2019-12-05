@@ -28,6 +28,7 @@ class PlanningDetail extends Component {
     await this.props.getUserDetail(this.props.match.params.id);
     const mydata = this.props.myteamdetail;
     if (mydata[0].error !== true) {
+      // eslint-disable-next-line array-callback-return
       mydata.map((itemKpi) => {
         let dataMetrics = undefined;
         if (itemKpi.metricLookup !== null) {

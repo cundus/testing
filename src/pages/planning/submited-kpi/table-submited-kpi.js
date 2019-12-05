@@ -1,75 +1,105 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { DataTable } from '../../../components';
 
 class TableDrafKPI extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: []
+    };
+    this.getColumns();
+  }
+
+  getColumns = async () => {
+    const { kpiReducers } = this.props;
+    const { dataMetrics } = kpiReducers;
+    const newColumns = [
       {
         title: 'Cascading / Self KPI',
         dataIndex: 'typeKpi',
         align: 'center',
+        width: 200,
         placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
         title: 'KPI Subject',
         dataIndex: 'description',
-        align: 'center',
         placeholder: 'Enter KPI Subject',
+        align: 'center',
+        width: 200,
         editable: false
       },
       {
         title: 'Baseline',
         dataIndex: 'baseline',
-        align: 'center',
         placeholder: 'Enter baseline',
+        align: 'center',
+        width: 200,
         editable: false
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
-        align: 'center',
         placeholder: 'Enter KPI Weight',
+        align: 'center',
+        width: 90,
         type: 'number',
-        editable: false
-      },
-      {
-        title: 'L1',
-        dataIndex: 'L1',
-        align: 'center',
-        placeholder: 'Enter Level 1',
-        editable: false
-      },
-      {
-        title: 'L2',
-        dataIndex: 'L2',
-        align: 'center',
-        placeholder: 'Enter Level 2',
-        editable: false
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        align: 'center',
-        placeholder: 'Enter Level 3',
         editable: false
       }
     ];
+    // eslint-disable-next-line array-callback-return
+    await dataMetrics.map((itemMetric) => {
+      const data = {
+        title: itemMetric.label,
+        dataIndex: itemMetric.label,
+        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        align: 'center',
+        width: 150,
+        editable: false
+      };
+      newColumns.push(data);
+    });
+    this.setState({
+      columns: newColumns
+    });
   }
 
   render() {
-    const { columns } = this;
-    const { dataSource, loading } = this.props;
+    const { columns } = this.state;
+    const {
+      dataSource,
+      loading
+    } = this.props;
     return (
       <div>
         <DataTable
-          loading={loading}
           columns={columns}
-          dataSource={dataSource}
+          loading={loading}
+          datasource={dataSource}
         />
       </div>
     );
   }
 }
-export default TableDrafKPI;
+
+const mapStateToProps = (state) => ({
+  kpiReducers: state.kpiReducers
+});
+
+const mapDispatchToProps = (dispatch) => ({});
+
+const connectToComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TableDrafKPI);
+
+export default connectToComponent;
+
+TableDrafKPI.propTypes = {
+  dataSource: PropTypes.instanceOf(Array),
+  kpiReducers: PropTypes.func,
+  loading: PropTypes.bool
+};

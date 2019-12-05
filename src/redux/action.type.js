@@ -15,6 +15,10 @@ export const GET_KPI_LIST = 'GET_KPI_LIST';
 export const GET_KPI_LIST_SUCCESS = 'GET_KPI_LIST_SUCCESS';
 export const GET_KPI_LIST_FAILED = 'GET_KPI_LIST_FAILED';
 
+export const GET_METRICS = 'GET_METRICS';
+export const GET_METRICS_SUCCESS = 'GET_METRICS_SUCCESS';
+export const GET_METRICS_FAILED = 'GET_METRICS_FAILED';
+
 // AUTH AND USER
 export const getUserInfo = 'GET_USER_INFO';
 export const errGetUserInfo = 'ERR_GET_USER_INFO';

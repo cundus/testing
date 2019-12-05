@@ -1,10 +1,4 @@
 import React, { Component } from 'react';
-import {
-  Button,
-  Popconfirm,
-  Tooltip,
-  Icon
-} from 'antd';
 import DataTable from '../../components/dataTable';
 
 class KPI extends Component {
@@ -73,8 +67,8 @@ class KPI extends Component {
       <div>
         <DataTable
           columns={columns}
-          dataSource={dataOwn}
-          handleChange={handleChangeField}
+          datasource={dataOwn}
+          handlechange={handleChangeField}
         />
       </div>
     );
