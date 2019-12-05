@@ -15,7 +15,7 @@ const MenuList = [
   },
   {
     id: 3,
-    path: '/planning/kpi/create-planning',
+    path: '/planning/create-planning',
     menuLevel: 2,
     title: 'Create KPI',
     parent: 'Planning',

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { DataTable } from '../../../components';
+import {
+ Button, Popconfirm, Tooltip, Icon
+} from 'antd';
+import { DataTable } from '../../../../components';
 
 class TableDrafKPI extends Component {
   constructor(props) {
@@ -30,7 +33,7 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
-        editable: false
+        editable: true
       },
       {
         title: 'Baseline',
@@ -38,7 +41,7 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter baseline',
         align: 'center',
         width: 200,
-        editable: false
+        editable: true
       },
       {
         title: 'Weight (%)',
@@ -47,7 +50,7 @@ class TableDrafKPI extends Component {
         align: 'center',
         width: 90,
         type: 'number',
-        editable: false
+        editable: true
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -58,10 +61,36 @@ class TableDrafKPI extends Component {
         placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
         width: 150,
-        editable: false
+        editable: true
       };
       newColumns.push(data);
     });
+    const action = {
+      title: 'Action',
+      align: 'center',
+      editable: false,
+      width: 100,
+      dataIndex: 'action',
+      render: (text, record) => {
+        const { dataSource, handleDelete } = this.props;
+        return (
+          dataSource.length >= 1 ? (
+            <Popconfirm
+              title="Sure to delete?"
+              // eslint-disable-next-line react/jsx-no-bind
+              onConfirm={() => handleDelete(record.key)}
+            >
+              <Tooltip placement="bottomRight" title="delete">
+                <Button type="danger" ghost>
+                  <Icon type="delete" />
+                </Button>
+              </Tooltip>
+            </Popconfirm>
+          ) : null
+        );
+      }
+    };
+    await newColumns.push(action);
     this.setState({
       columns: newColumns
     });
@@ -71,6 +100,8 @@ class TableDrafKPI extends Component {
     const { columns } = this.state;
     const {
       dataSource,
+      handleChange,
+      handleError,
       loading
     } = this.props;
     return (
@@ -79,6 +110,8 @@ class TableDrafKPI extends Component {
           columns={columns}
           loading={loading}
           datasource={dataSource}
+          handleerror={handleError}
+          handlechange={handleChange}
         />
       </div>
     );
@@ -100,6 +133,9 @@ export default connectToComponent;
 
 TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  kpiReducers: PropTypes.func,
+  handleChange: PropTypes.func,
+  handleError: PropTypes.func,
+  handleDelete: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

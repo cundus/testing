@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
- Button, Popconfirm, Tooltip, Icon
-} from 'antd';
-import { DataTable } from '../../../components';
+import { Button, Checkbox } from 'antd';
+import { DataTable } from '../../../../../components';
 
-class TableDrafKPI extends Component {
+class Cascade extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,11 +18,11 @@ class TableDrafKPI extends Component {
     const { dataMetrics } = kpiReducers;
     const newColumns = [
       {
-        title: 'Cascading / Self KPI',
+        title: 'Supervisor\'s Name',
         dataIndex: 'typeKpi',
+        placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
-        placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
@@ -33,7 +31,7 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
-        editable: true
+        editable: false
       },
       {
         title: 'Baseline',
@@ -41,16 +39,16 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter baseline',
         align: 'center',
         width: 200,
-        editable: true
+        editable: false
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
-        width: 90,
+        width: 80,
         type: 'number',
-        editable: true
+        editable: false
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -61,7 +59,7 @@ class TableDrafKPI extends Component {
         placeholder: `Enter Level ${itemMetric.orderNo}`,
         align: 'center',
         width: 150,
-        editable: true
+        editable: false
       };
       newColumns.push(data);
     });
@@ -72,20 +70,14 @@ class TableDrafKPI extends Component {
       width: 100,
       dataIndex: 'action',
       render: (text, record) => {
-        const { dataSource, handleDelete } = this.props;
+        const { dataSource, handleSelectData } = this.props;
         return (
           dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
+            <Checkbox
               // eslint-disable-next-line react/jsx-no-bind
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <Tooltip placement="bottomRight" title="delete">
-                <Button type="danger" ghost>
-                  <Icon type="delete" />
-                </Button>
-              </Tooltip>
-            </Popconfirm>
+              onChange={(e) => handleSelectData(record)}
+              checked={this.checkStatus(record)}
+            />
           ) : null
         );
       }
@@ -96,14 +88,23 @@ class TableDrafKPI extends Component {
     });
   }
 
+
+  checkStatus = (record) => {
+    const { dataSelectedCascade } = this.props;
+    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
+    if (dataChecking.length !== 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   render() {
-    const { columns } = this.state;
     const {
-      dataSource,
-      handleChange,
-      handleError,
-      loading
+      dataSource, handleSaveDraft, handleError, loading
     } = this.props;
+    const { columns } = this.state;
+
     return (
       <div>
         <DataTable
@@ -111,8 +112,17 @@ class TableDrafKPI extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
-          handlechange={handleChange}
         />
+        <div style={{ textAlign: 'center' }}>
+          <Button
+            id="save-draft"
+            type="primary"
+            onClick={handleSaveDraft}
+            style={{ margin: 10 }}
+          >
+            Save Draft
+          </Button>
+        </div>
       </div>
     );
   }
@@ -127,15 +137,16 @@ const mapDispatchToProps = (dispatch) => ({});
 const connectToComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(TableDrafKPI);
+)(Cascade);
 
 export default connectToComponent;
 
-TableDrafKPI.propTypes = {
+Cascade.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  handleChange: PropTypes.func,
+  dataSelectedCascade: PropTypes.instanceOf(Array),
+  handleSaveDraft: PropTypes.func,
+  handleSelectData: PropTypes.func,
   handleError: PropTypes.func,
-  handleDelete: PropTypes.func,
-  kpiReducers: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

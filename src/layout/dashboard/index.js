@@ -75,7 +75,6 @@ class Dashboard extends React.Component {
   render() {
     const { collapsed } = this.state;
     const { child, user, kpi } = this.props;
-
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />

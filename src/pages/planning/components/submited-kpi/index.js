@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
-import { doGetKpiList } from '../../../redux/actions/kpi';
+import { doGetKpiList } from '../../../../redux/actions/kpi';
 
 const { Text } = Typography;
 const { TextArea } = Input;

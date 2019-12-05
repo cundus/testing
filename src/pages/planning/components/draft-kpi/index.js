@@ -11,8 +11,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveKpi, doGetKpiList } from '../../../redux/actions/kpi';
-import { Success } from '../../../redux/status-code-type';
+import { doSaveKpi, doGetKpiList } from '../../../../redux/actions/kpi';
+import { Success } from '../../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text } = Typography;
@@ -100,7 +100,7 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    const { doSavingKpi, userReducers, history } = this.props;
+    const { doSavingKpi, userReducers, stepChange } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -144,7 +144,7 @@ class DraftKPI extends Component {
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been submitted to supervisor');
-            history.push('/planning/kpi/submit-planning');
+            stepChange(2); // go to submit page
           } else {
             message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
           }
@@ -275,7 +275,7 @@ class DraftKPI extends Component {
       handleSaveDraft,
       handleError
     } = this;
-    const { kpiReducers, history } = this.props;
+    const { kpiReducers, stepChange } = this.props;
     const { loadingKpi } = kpiReducers;
     return (
       <div>
@@ -313,7 +313,7 @@ class DraftKPI extends Component {
             <Button
               id="add-kpi"
               // eslint-disable-next-line react/jsx-no-bind
-              onClick={() => history.push('/planning/kpi/create-planning')}
+              onClick={() => stepChange(0) /* go back add */}
               style={{ margin: 10 }}
             >
               Add KPI
@@ -359,6 +359,5 @@ DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
-  history: PropTypes.instanceOf(Object).isRequired
+  userReducers: PropTypes.instanceOf(Object)
 };
