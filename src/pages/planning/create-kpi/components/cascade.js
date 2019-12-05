@@ -115,6 +115,7 @@ class Cascade extends Component {
         />
         <div style={{ textAlign: 'center' }}>
           <Button
+            id="save-draft"
             type="primary"
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
