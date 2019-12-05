@@ -100,6 +100,6 @@ export default connectToComponent;
 
 TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  kpiReducers: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

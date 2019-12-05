@@ -147,6 +147,6 @@ Cascade.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleSelectData: PropTypes.func,
   handleError: PropTypes.func,
-  kpiReducers: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

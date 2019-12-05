@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 // Stores Redux
 // import Stores from '../../redux/store/index';
 
-const RenderedRoute = (Component, child, title, auth) => (props) => {
+const RenderedRoute = (Component, child ) => (props) => {
   // const store = Stores.getState();
   // if (store.authReducer.accessToken === null) {
   //   (async () => {
@@ -20,8 +20,17 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   const { location } = props;
   const { pathname } = location;
   const token = localStorage.getItem('token');
-  if (pathname === '/' && token !== null) {
-    return (<Redirect to="/home" />);
+  if (token !== null) {
+    if (pathname === '/' ||
+    pathname === '/planning' ||
+    pathname === '/planning/') {
+      return (<Redirect to="/home" />);
+    } else if (pathname === '/planning/kpi' ||
+      pathname === '/planning/kpi/') {
+      return (<Redirect to="/planning/kpi/create-planning" />);
+    } else if (pathname === '/planning/kpi/create-planning') {
+      // return (<Redirect to="/planning/kpi/create-planning" />);
+    }
   }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
@@ -38,25 +47,24 @@ export const MainRouter = ({
   component,
   title,
   exact = false,
-  child = [],
-  auth
+  child = []
 }) => (
   // console.log(auth)
   <Route
     exact={exact}
     path={path}
-    render={RenderedRoute(component, child, title, auth)}
+    render={RenderedRoute(component, child, title)}
   />
 );
 
 export const MappedRouter = (props) => {
   const { routes } = props;
   return (
-    <React.Fragment>
+    <>
       {routes.map((route, i) => (
         <MainRouter key={i} {...route} auth={props.auth} />
       ))}
-    </React.Fragment>
+    </>
   );
 };
 

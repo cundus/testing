@@ -136,6 +136,6 @@ TableDrafKPI.propTypes = {
   handleChange: PropTypes.func,
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
-  kpiReducers: PropTypes.func,
+  kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

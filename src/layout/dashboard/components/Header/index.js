@@ -22,7 +22,7 @@ const Header = (props) => {
   const { collapsed, toggle } = props;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}` : '';
+  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}` : myAvatar;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
@@ -100,12 +100,12 @@ const Header = (props) => {
             </Dropdown>
             <Dropdown overlay={accountMenu} placement="bottomRight" trigger={['click']}>
               <div className="accountWrapper">
-                {isDesktopOrLaptop && <Text>{name ? `Hi, ${name}` : ''}</Text>}
+                {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
                 <Avatar
                   shape="square"
                   size={isDesktopOrLaptop ? 'large' : 'default'}
                   src={url}
-                  icon='user'
+                  icon="user"
                   className="avatar"
                 />
               </div>
