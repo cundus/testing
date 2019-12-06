@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button, Checkbox } from 'antd';
-import { DataTable } from '../../../../../components';
+import { DataTable } from '../../../../components';
 
-class Cascade extends Component {
+class TableDrafKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,11 +17,11 @@ class Cascade extends Component {
     const { dataMetrics } = kpiReducers;
     const newColumns = [
       {
-        title: 'Supervisor\'s Name',
+        title: 'Cascading / Self KPI',
         dataIndex: 'typeKpi',
-        placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
+        placeholder: 'Cascading/Self KPI',
         editable: false
       },
       {
@@ -62,66 +61,33 @@ class Cascade extends Component {
       };
       newColumns.push(data);
     });
-    const action = {
-      title: 'Action',
+    const Feedback = {
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      placeholder: 'Enter KPI Feedback',
       align: 'center',
-      editable: false,
-      width: 100,
-      dataIndex: 'action',
-      render: (text, record) => {
-        const { dataSource, handleSelectData } = this.props;
-        return (
-          dataSource.length >= 1 ? (
-            <Checkbox
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={(e) => handleSelectData(record)}
-              checked={this.checkStatus(record)}
-            />
-          ) : null
-        );
-      }
+      color: 'rgb(250, 247, 187)',
+      editable: false
     };
-    await newColumns.push(action);
+    await newColumns.push(Feedback);
     this.setState({
       columns: newColumns
     });
   }
 
-
-  checkStatus = (record) => {
-    const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
-    if (dataChecking.length !== 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   render() {
-    const {
-      dataSource, handleSaveDraft, handleError, loading
-    } = this.props;
     const { columns } = this.state;
-
+    const {
+      dataSource,
+      loading
+    } = this.props;
     return (
       <div>
         <DataTable
           columns={columns}
           loading={loading}
           datasource={dataSource}
-          handleerror={handleError}
         />
-        <div style={{ textAlign: 'center' }}>
-          <Button
-            id="save-draft"
-            type="primary"
-            onClick={handleSaveDraft}
-            style={{ margin: 10 }}
-          >
-            Save Draft
-          </Button>
-        </div>
       </div>
     );
   }
@@ -136,16 +102,12 @@ const mapDispatchToProps = (dispatch) => ({});
 const connectToComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Cascade);
+)(TableDrafKPI);
 
 export default connectToComponent;
 
-Cascade.propTypes = {
+TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  dataSelectedCascade: PropTypes.instanceOf(Array),
-  handleSaveDraft: PropTypes.func,
-  handleSelectData: PropTypes.func,
-  handleError: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

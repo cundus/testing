@@ -48,7 +48,6 @@ class TableDrafKPI extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
-        width: 90,
         type: 'number',
         editable: true
       }
