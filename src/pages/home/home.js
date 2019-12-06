@@ -32,7 +32,7 @@ class Home extends Component {
                 <img alt={"plannning"} src={FileIcon} className='purple' style={{width:120, height: 120}}/>
                 <h1>Planning</h1>
                 <p className='qoute-text'>Create New KPI or Cascade</p>
-                <Link to={'/planning/kpi/create-planning'}><Button shape='round' className='homeBtn  purpleBtn'>Create KPI</Button></Link>
+                <Link to={'/planning/create-planning'}><Button shape='round' className='homeBtn  purpleBtn'>Create KPI</Button></Link>
               </Col>
               <Col xl={size} lg={size} md={size} xs={24} className='grid'>
                 <br/><br/>
