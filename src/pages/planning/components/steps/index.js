@@ -29,8 +29,12 @@ const StepWizzard = (props) => {
           icon={<Icon type="file-done" style={{ fontSize: 32 }} />}
         />
         <Step
-          title={isDesktopOrLaptop && 'Submit & Complete'}
+          title={isDesktopOrLaptop && 'Submit'}
           icon={<Icon type="check" style={{ fontSize: 32 }} />}
+        />
+        <Step
+          title={isDesktopOrLaptop && 'Review'}
+          icon={<Icon type="form" style={{ fontSize: 32 }} />}
         />
       </Steps>
     </div>
