@@ -231,26 +231,7 @@ class DraftKPI extends Component {
       };
       newData.push(data);
     });
-    if (kpiErr) {
-      if (totalWeight !== 100) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doSavingKpi(newData, user.userId);
-            this.getAllData();
-            const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success) {
-              message.success('Your KPI has been saved');
-            } else {
-              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-            }
-          },
-          onCancel() {}
-        });
-      } else {
-        message.warning(kpiErrMessage);
-      }
-    } else {
+    if (!kpiErr || kpiErrMessage === 'Sorry, Total KPI Weight must be 100%') {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
@@ -265,6 +246,8 @@ class DraftKPI extends Component {
         },
         onCancel() {}
       });
+    } else {
+      message.warning(kpiErrMessage);
     }
   };
 
