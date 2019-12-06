@@ -90,7 +90,6 @@ class CreateKPI extends Component {
     });
     this.setState({
       dataOwn: newData,
-      dataSelectedCascade: newData,
       loadingOwn: false,
       kpiErr: false,
       kpiErrMessage: ''

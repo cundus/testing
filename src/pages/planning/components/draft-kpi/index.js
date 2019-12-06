@@ -144,7 +144,7 @@ class DraftKPI extends Component {
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been submitted to supervisor');
-            stepChange(2); // go to submit page
+            stepChange(2, true); // go to submit page
           } else {
             message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
           }
@@ -237,6 +237,7 @@ class DraftKPI extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(newData, user.userId);
+            this.getAllData();
             const { kpiReducers } = this.props;
             if (kpiReducers.statusSaveKPI === Success) {
               message.success('Your KPI has been saved');
@@ -254,6 +255,7 @@ class DraftKPI extends Component {
         title: 'Are you sure?',
         onOk: async () => {
           await doSavingKpi(newData, user.userId);
+          this.getAllData();
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been saved');
@@ -344,7 +346,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data) => dispatch(doSaveKpi(data)),
+  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 

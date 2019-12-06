@@ -13,20 +13,24 @@ class Planning extends Component {
     };
   }
 
-  stepChange = (current) => {
+  stepChange = (target, access) => {
     const { step } = this.state;
     if (step === 0) {
-      if (current === 1) {
+      if (target === 1) {
         this.setState({
-          step: current
+          step: target
         });
       } else {
         message.warning('Sorry, You cannot be able to go');
       }
     } else if (step === 1) {
-      if (current === 0) {
+      if (target === 0) {
         this.setState({
-          step: current
+          step: target
+        });
+      } else if (target === 2 && access) {
+        this.setState({
+          step: target
         });
       } else {
         message.warning('Sorry, You cannot be able to go');

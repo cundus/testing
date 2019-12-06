@@ -20,13 +20,11 @@ const RenderedRoute = (Component, child ) => (props) => {
   const { location } = props;
   const { pathname } = location;
   const token = localStorage.getItem('token');
-  if (token !== null) {
-    if (pathname === '' ||
-    pathname === '/' ||
-    pathname === '/planning' ||
-    pathname === '/planning/') {
-      return (<Redirect to="/home" />);
-    }
+  if ((pathname === '' ||
+  pathname === '/' ||
+  pathname === '/planning' ||
+  pathname === '/planning/') && token !== null) {
+    return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
