@@ -19,11 +19,11 @@ const RenderedRoute = (Component, child ) => (props) => {
   // const { isLogin } = state.auth;
   const { location } = props;
   const { pathname } = location;
-  const token = localStorage.getItem('token');
-  if ((pathname === '' ||
+  // const token = localStorage.getItem('token');
+  if (pathname === '' ||
   pathname === '/' ||
   pathname === '/planning' ||
-  pathname === '/planning/') && token !== null) {
+  pathname === '/planning/') {
     return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
