@@ -15,22 +15,22 @@ const MenuList = [
   },
   {
     id: 3,
-    path: '/planning/create-planning',
+    path: '/planning/kpi',
     menuLevel: 2,
     title: 'Create KPI',
     parent: 'Planning',
     icon: 'plus-circle',
     theme: 'filled'
   },
-  {
-    id: 4,
-    path: '/planning/kpi-planning',
-    menuLevel: 2,
-    title: 'View My KPI',
-    parent: 'Planning',
-    icon: 'search',
-    theme: 'outlined'
-  },
+  // {
+  //   id: 4,
+  //   path: '/planning/kpi-planning',
+  //   menuLevel: 2,
+  //   title: 'View My KPI',
+  //   parent: 'Planning',
+  //   icon: 'search',
+  //   theme: 'outlined'
+  // },
   {
     id: 5,
     path: '/monitoring',

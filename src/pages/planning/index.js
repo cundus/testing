@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message } from 'antd';
 import {
-  Step, CreateKpi, DraftKpi, SubmitKpi
+  Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
 
 class Planning extends Component {
@@ -49,10 +49,13 @@ class Planning extends Component {
         {/* eslint-disable-next-line no-nested-ternary */}
         {step === 0 ?
           <CreateKpi stepChange={stepChange} /> :
+          // eslint-disable-next-line no-nested-ternary
           step === 1 ?
             <DraftKpi stepChange={stepChange} /> :
-            step === 2 &&
-            <SubmitKpi stepChange={stepChange} />}
+            step === 2 ?
+              <SubmitKpi stepChange={stepChange} /> :
+              step === 3 &&
+              <ReviewKpi stepChange={stepChange} />}
       </div>
     );
   }

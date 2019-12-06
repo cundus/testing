@@ -11,8 +11,8 @@ import { Dashboard as DashboardLayout } from '../../layout';
 // Shared Pages
 const HomePage = React.lazy(() => import('../../pages/home/home'));
 const PlanningPage = React.lazy(() => import('../../pages/planning'));
-const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
-const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
+// const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
+// const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
 const MyTeamPlaningPAge = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
 const MonitoringPage = React.lazy(() => import('../../pages/monitoring/index'));
@@ -33,22 +33,10 @@ export const routes = [
         exact: true
       },
       {
-        path: '/planning/create-planning',
+        path: '/planning/kpi',
         component: Lazyload(PlanningPage),
         exact: true,
         title: 'Planning'
-      },
-      {
-        path: '/planning/kpi-planning',
-        component: Lazyload(MyKpiPage),
-        exact: true,
-        title: 'KPI Planning'
-      },
-      {
-        path: '/planning/kpi-planning/edit',
-        component: Lazyload(EditMyKpiPage),
-        exact: true,
-        title: 'Edit Kpi Planning'
       },
       {
         path: '/my-team/planning/',
