@@ -203,8 +203,7 @@ class DraftKPI extends Component {
     const {
       dataSource,
       kpiErr,
-      kpiErrMessage,
-      totalWeight
+      kpiErrMessage
     } = this.state;
     const newData = [];
     // eslint-disable-next-line array-callback-return
@@ -231,26 +230,7 @@ class DraftKPI extends Component {
       };
       newData.push(data);
     });
-    if (kpiErr) {
-      if (totalWeight !== 100) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doSavingKpi(newData, user.userId);
-            this.getAllData();
-            const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success) {
-              message.success('Your KPI has been saved');
-            } else {
-              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-            }
-          },
-          onCancel() {}
-        });
-      } else {
-        message.warning(kpiErrMessage);
-      }
-    } else {
+    if (!kpiErr && kpiErrMessage !== 'Please fill the form') {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
@@ -265,6 +245,8 @@ class DraftKPI extends Component {
         },
         onCancel() {}
       });
+    } else {
+      message.warning(kpiErrMessage);
     }
   };
 
@@ -330,7 +312,8 @@ class DraftKPI extends Component {
             <Button
               id="submit-superior"
               onClick={handleSubmit}
-              type="primary" style={{ margin: 10 }}>
+              type="primary" style={{ margin: 10 }}
+            >
               Submit To Superior
             </Button>
           </div>
@@ -358,6 +341,7 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 DraftKPI.propTypes = {
+  stepChange: PropTypes.func,
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

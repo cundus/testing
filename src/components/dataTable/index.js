@@ -93,27 +93,44 @@ class EditableCell extends React.Component {
     const {
       children,
       editable,
+      color,
       ...restProps
     } = this.props;
 
-    return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      <td {...restProps}>
-        {!editable ? (
-          <div
-            className="editable-cell-value-wrap"
-          >
-            {children}
-          </div>
+    if (color) {
+      return (
+        <td style={{ backgroundColor: color }}>
+          {!editable ? (
+            <div
+              className="editable-cell-value-wrap"
+            >
+              {children}
+            </div>
         ) : (
           <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
         )}
-      </td>
-    );
+        </td>
+      );
+    } else {
+      return (
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <td {...restProps}>
+          {!editable ? (
+            <div
+              className="editable-cell-value-wrap"
+            >
+              {children}
+            </div>
+            ) : (
+              <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+            )}
+        </td>);
+    }
   }
 }
 
 EditableCell.propTypes = {
+  color: PropTypes.string,
   editable: PropTypes.bool,
   dataindex: PropTypes.string,
   title: PropTypes.string,
@@ -153,6 +170,7 @@ const DataTable = (props) => {
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
+        color: col.color,
         handlechange,
         handleerror
       })
