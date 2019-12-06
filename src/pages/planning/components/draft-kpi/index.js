@@ -140,8 +140,6 @@ class DraftKPI extends Component {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          console.log(user);
-          
           await doSavingKpi(newData, user.userId);
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
@@ -238,7 +236,6 @@ class DraftKPI extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            console.log(user.userId);
             await doSavingKpi(newData, user.userId);
             this.getAllData();
             const { kpiReducers } = this.props;
@@ -257,7 +254,6 @@ class DraftKPI extends Component {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          console.log(user.userId);
           await doSavingKpi(newData, user.userId);
           this.getAllData();
           const { kpiReducers } = this.props;
