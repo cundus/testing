@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 // Stores Redux
 // import Stores from '../../redux/store/index';
 
-const RenderedRoute = (Component, child ) => (props) => {
+const RenderedRoute = (Component, child) => (props) => {
   // const store = Stores.getState();
   // if (store.authReducer.accessToken === null) {
   //   (async () => {
@@ -20,8 +20,8 @@ const RenderedRoute = (Component, child ) => (props) => {
   const { location } = props;
   const { pathname } = location;
   // const token = localStorage.getItem('token');
-  const token = localStorage.getItem('token');
-  if (pathname === '/' && token !== null) {
+  // const token = localStorage.getItem('token');
+  if (pathname === '' || pathname === '/') {
     return (<Redirect to="/home" />);
   }
   // if (token === null && !isLogin && pathname !== '/login') {
