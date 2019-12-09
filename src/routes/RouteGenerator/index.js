@@ -21,9 +21,9 @@ const RenderedRoute = (Component, child) => (props) => {
   const { pathname } = location;
   // const token = localStorage.getItem('token');
   // const token = localStorage.getItem('token');
-  if (pathname === '' || pathname === '/') {
-    return (<Redirect to="/home" />);
-  }
+  // if (pathname === '' || pathname === '/') {
+  //   return (<Redirect to="/home" />);
+  // }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
   // } else if (token !== null && isLogin && pathname !== '/dashboard/home' && child.length <= 0) {
