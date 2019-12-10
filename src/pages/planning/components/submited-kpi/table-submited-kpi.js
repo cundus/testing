@@ -13,8 +13,7 @@ class TableDrafKPI extends Component {
   }
 
   getColumns = async () => {
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
+    const { dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'Cascading / Self KPI',
@@ -100,6 +99,6 @@ export default connectToComponent;
 
 TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  kpiReducers: PropTypes.instanceOf(Object),
+  dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool
 };

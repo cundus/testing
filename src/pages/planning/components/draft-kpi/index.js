@@ -108,7 +108,8 @@ class DraftKPI extends Component {
     const {
       dataSource,
       kpiErr,
-      kpiErrMessage
+      kpiErrMessage,
+      challengeYour
     } = this.state;
     const newData = [];
     // eslint-disable-next-line array-callback-return
@@ -131,7 +132,8 @@ class DraftKPI extends Component {
             label: 'L3',
             description: itemKpi.L3
           }
-        ]
+        ],
+        challangeYourSelf: challengeYour
       };
       newData.push(data);
     });
@@ -210,7 +212,8 @@ class DraftKPI extends Component {
     const {
       dataSource,
       kpiErr,
-      kpiErrMessage
+      kpiErrMessage,
+      challengeYour
     } = this.state;
     const newData = [];
     // eslint-disable-next-line array-callback-return
@@ -233,7 +236,8 @@ class DraftKPI extends Component {
             label: 'L3',
             description: itemKpi.L3
           }
-        ]
+        ],
+        challangeYourSelf: challengeYour
       };
       newData.push(data);
     });
@@ -301,7 +305,7 @@ class DraftKPI extends Component {
             <TextArea
               id="challenge-input"
               placeholder="Challenge yourself"
-              label="Challenge myself"
+              label="Challenge yourself"
               value={challengeYour}
               onChange={changeChallenge}
             />

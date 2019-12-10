@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Typography,
   Divider,
-  Input
+  Input,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -18,7 +19,8 @@ class SubmitedKPI extends Component {
     super(props);
     this.state = {
       dataSource: [],
-      weightTotal: 0
+      weightTotal: 0,
+      challengeYour: ''
     };
   }
 
@@ -31,7 +33,7 @@ class SubmitedKPI extends Component {
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
+    const { dataKpi, challenge } = kpiReducers;
     const newData = [];
 
     // for fetching data metrics API
@@ -56,7 +58,8 @@ class SubmitedKPI extends Component {
       newData.push(data);
     });
     this.setState({
-      dataSource: newData
+      dataSource: newData,
+      challengeYour: challenge
     });
     this.weightCount(newData);
   };
@@ -87,9 +90,11 @@ class SubmitedKPI extends Component {
   }
 
   render() {
-    const { dataSource, weightTotal, weightTotalErr } = this.state;
+    const {
+      dataSource, weightTotal, weightTotalErr, challengeYour
+    } = this.state;
     const { kpiReducers } = this.props;
-    const { loadingKpi } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics } = kpiReducers;
     return (
       <div>
         <div>
@@ -103,13 +108,19 @@ class SubmitedKPI extends Component {
           </Text>
           <Divider />
         </div>
-        <TableSubmitedKPI dataSource={dataSource} loading={loadingKpi} />
+        {!loadingKpi ?
+          <TableSubmitedKPI
+            dataMetrics={dataKpiMetrics}
+            dataSource={dataSource}
+            loading={loadingKpi}
+          /> : <center><Spin /></center>}
         <div>
-          <Text>Challenge myself :</Text>
+          <Text>Challenge yourself :</Text>
           <TextArea
             id="challenge-input"
-            placeholder="Challenge myself"
-            label="Challenge myself"
+            placeholder="Challenge yourself"
+            label="Challenge yourself"
+            value={challengeYour}
             disabled
           />
         </div>
