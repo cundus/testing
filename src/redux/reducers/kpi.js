@@ -62,7 +62,9 @@ const initialState = {
   },
   dataFirstManagerKpi: [],
   dataSecondManagerKpi: [],
-  dataMetrics: []
+  dataMetrics: [],
+  dataKpiMetrics: [],
+  dataKpiManagerMetrics: []
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -118,7 +120,11 @@ const kpiReducers = (state = initialState, action) => {
         loadingKpi: action.loading,
         status: action.status,
         message: action.message,
-        dataKpi: action.data
+        dataKpi: action.data.kpiList,
+        dataKpiMetrics: action.data.labelList,
+        challenge: action.data.challangeYourSelf,
+        currentStep: action.data.currentStep,
+        holderUserId: action.data.holderUserId
       };
     case GET_KPI_LIST_FAILED:
       return {
@@ -138,30 +144,17 @@ const kpiReducers = (state = initialState, action) => {
         loadingManagerKpi: action.loading,
         statusManagerKpi: action.status,
         messageManagerKpi: action.message,
+        dataManagerKpi: action.data,
         dataFirstManager: {
           firstName: action.data.firstManager.manager.firstName,
-          lastName: action.data.firstManager.manager.lastName,
-          cellPhone: action.data.firstManager.manager.cellPhone,
-          email: action.data.firstManager.manager.email,
-          empId: action.data.firstManager.manager.empId,
-          manager: action.data.firstManager.manager.manager,
-          managerId: action.data.firstManager.manager.managerId,
-          userId: action.data.firstManager.manager.userId,
-          userName: action.data.firstManager.manager.userName
+          lastName: action.data.firstManager.manager.lastName
         },
-        dataSecondManager: {
-          firstName: action.data.secondManager.manager.firstName,
-          lastName: action.data.secondManager.manager.lastName,
-          cellPhone: action.data.secondManager.manager.cellPhone,
-          email: action.data.secondManager.manager.email,
-          empId: action.data.secondManager.manager.empId,
-          manager: action.data.secondManager.manager.manager,
-          managerId: action.data.secondManager.manager.managerId,
-          userId: action.data.secondManager.manager.userId,
-          userName: action.data.secondManager.manager.userName
-        },
+        // dataSecondManager: {
+        //   firstName: action.data.secondManager.manager.firstName,
+        //   lastName: action.data.secondManager.manager.lastName
+        // },
         dataFirstManagerKpi: action.data.firstManager.kpi,
-        dataSecondManagerKpi: action.data.secondManager.kpi
+        // dataSecondManagerKpi: action.data.secondManager.kpi
       };
     case GET_KPI_MANAGER_LIST_FAILED:
       return {

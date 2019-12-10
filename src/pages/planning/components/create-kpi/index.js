@@ -6,7 +6,8 @@ import {
   Typography,
   Divider,
   message,
-  Skeleton
+  Skeleton,
+  Spin
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -106,7 +107,8 @@ class CreateKPI extends Component {
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
-    dataFirstManagerKpi.map((itemKpi) => {
+    // eslint-disable-next-line no-unused-expressions
+    dataFirstManagerKpi && dataFirstManagerKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
       });
@@ -124,9 +126,11 @@ class CreateKPI extends Component {
         ...dataMetrics
       };
       newData.push(data);
+      return data;
     });
     // eslint-disable-next-line array-callback-return
-    dataSecondManagerKpi.map((itemKpi) => {
+    // eslint-disable-next-line no-unused-expressions
+    dataSecondManagerKpi && dataSecondManagerKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${metric.description}"}`;
       });
@@ -144,6 +148,7 @@ class CreateKPI extends Component {
         ...dataMetrics
       };
       newData.push(data);
+      return data;
     });
     this.setState({
       dataManagerKpi: newData,
@@ -292,7 +297,7 @@ class CreateKPI extends Component {
     } = this;
     const { kpiReducers } = this.props;
     const {
-      dataGoal, loadingGoal
+      dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
     } = kpiReducers;
     const { name } = dataGoal;
     return (
@@ -314,28 +319,30 @@ class CreateKPI extends Component {
           </center>
           <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="Create Own KPI" key="1">
-              <CreateOwn
-                loading={loadingOwn}
-                dataSource={dataOwn}
-                handleSaveDraft={handleSaveDraft}
-                handleAddRow={handleAddRow}
-                handleError={handleError}
-                handleChangeField={handleChangeField}
-                handleDelete={handleDeleteRow}
-              />
+              {!loadingOwn ?
+                <CreateOwn
+                  dataSource={dataOwn}
+                  dataMetrics={dataKpiMetrics}
+                  handleSaveDraft={handleSaveDraft}
+                  handleAddRow={handleAddRow}
+                  handleError={handleError}
+                  handleChangeField={handleChangeField}
+                  handleDelete={handleDeleteRow}
+                /> : <center><Spin /></center>}
             </TabPane>
             <TabPane
               tab="Cascade From Superior"
               key="2"
             >
-              <Cascade
-                loading={loadingManager}
-                dataSource={dataManagerKpi}
-                dataSelectedCascade={dataSelectedCascade}
-                handleError={handleError}
-                handleSaveDraft={handleSaveDraft}
-                handleSelectData={handleSelectData}
-              />
+              {!loadingManager ?
+                <Cascade
+                  dataSource={dataManagerKpi}
+                  dataMetrics={dataKpiManagerMetrics}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                /> : <center><Spin /></center>}
             </TabPane>
           </Tabs>
         </div>
@@ -364,6 +371,7 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 CreateKPI.propTypes = {
+  stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,

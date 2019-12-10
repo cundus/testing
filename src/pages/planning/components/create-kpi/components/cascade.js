@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button, Checkbox } from 'antd';
 import { DataTable } from '../../../../../components';
 
@@ -8,14 +7,14 @@ class Cascade extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: []
+      columns: [],
+      loading: true
     };
     this.getColumns();
   }
 
   getColumns = async () => {
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
+    const { dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'Supervisor\'s Name',
@@ -83,7 +82,8 @@ class Cascade extends Component {
     };
     await newColumns.push(action);
     this.setState({
-      columns: newColumns
+      columns: newColumns,
+      loading: false
     });
   }
 
@@ -100,9 +100,9 @@ class Cascade extends Component {
 
   render() {
     const {
-      dataSource, handleSaveDraft, handleError, loading
+      dataSource, handleSaveDraft, handleError
     } = this.props;
-    const { columns } = this.state;
+    const { columns, loading } = this.state;
 
     return (
       <div>
@@ -127,18 +127,7 @@ class Cascade extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
-});
-
-const mapDispatchToProps = (dispatch) => ({});
-
-const connectToComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Cascade);
-
-export default connectToComponent;
+export default Cascade;
 
 Cascade.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
@@ -146,6 +135,5 @@ Cascade.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleSelectData: PropTypes.func,
   handleError: PropTypes.func,
-  kpiReducers: PropTypes.instanceOf(Object),
-  loading: PropTypes.bool
+  dataMetrics: PropTypes.instanceOf(Array)
 };
