@@ -5,7 +5,8 @@ import {
   Typography,
   Divider,
   message,
-  Input
+  Input,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -25,6 +26,7 @@ class DraftKPI extends Component {
       dataSource: [],
       weightTotal: 0,
       weightTotalErr: false,
+      challengeYour: '',
       kpiErr: false
     };
   }
@@ -38,7 +40,7 @@ class DraftKPI extends Component {
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
+    const { dataKpi, challenge } = kpiReducers;
     const newData = [];
 
     // for fetching data metrics API
@@ -63,7 +65,8 @@ class DraftKPI extends Component {
       newData.push(data);
     });
     this.setState({
-      dataSource: newData
+      dataSource: newData,
+      challengeYour: challenge
     });
     this.liveCount(newData);
   };
@@ -167,6 +170,10 @@ class DraftKPI extends Component {
     this.liveCount(newData);
   };
 
+  changeChallenge = ({ target: { value } }) => {
+    this.setState({ challengeYour: value });
+  };
+
   handleError = (statusErr) => {
     const { weightTotal } = this.state;
     if (statusErr) {
@@ -203,8 +210,7 @@ class DraftKPI extends Component {
     const {
       dataSource,
       kpiErr,
-      kpiErrMessage,
-      totalWeight
+      kpiErrMessage
     } = this.state;
     const newData = [];
     // eslint-disable-next-line array-callback-return
@@ -252,16 +258,19 @@ class DraftKPI extends Component {
   };
 
   render() {
-    const { dataSource, weightTotal, weightTotalErr } = this.state;
+    const {
+      dataSource, weightTotal, weightTotalErr, challengeYour
+    } = this.state;
     const {
       handleChange,
       handleDelete,
       handleSubmit,
       handleSaveDraft,
+      changeChallenge,
       handleError
     } = this;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics } = kpiReducers;
     return (
       <div>
         <div>
@@ -279,19 +288,22 @@ class DraftKPI extends Component {
           <Divider />
         </div>
         <div>
-          <TableDrafKPI
-            loading={loadingKpi}
-            dataSource={dataSource}
-            handleError={handleError}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+          {!loadingKpi ?
+            <TableDrafKPI
+              dataMetrics={dataKpiMetrics}
+              dataSource={dataSource}
+              handleError={handleError}
+              handleChange={handleChange}
+              handleDelete={handleDelete}
+            /> : <center><Spin /></center>}
           <div>
-            <Text>Challenge myself :</Text>
+            <Text>Challenge yourself :</Text>
             <TextArea
               id="challenge-input"
-              placeholder="Challenge myself"
+              placeholder="Challenge yourself"
               label="Challenge myself"
+              value={challengeYour}
+              onChange={changeChallenge}
             />
           </div>
           <div style={{ textAlign: 'center' }}>
@@ -313,7 +325,8 @@ class DraftKPI extends Component {
             <Button
               id="submit-superior"
               onClick={handleSubmit}
-              type="primary" style={{ margin: 10 }}>
+              type="primary" style={{ margin: 10 }}
+            >
               Submit To Superior
             </Button>
           </div>
@@ -344,5 +357,6 @@ DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object)
+  userReducers: PropTypes.instanceOf(Object),
+  stepChange: PropTypes.func
 };
