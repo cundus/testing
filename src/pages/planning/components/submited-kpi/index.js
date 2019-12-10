@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class SubmitedKPI extends Component {
@@ -91,7 +91,7 @@ class SubmitedKPI extends Component {
 
   render() {
     const {
-      dataSource, weightTotal, weightTotalErr, challengeYour
+      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
     const { kpiReducers } = this.props;
     const { loadingKpi, dataKpiMetrics } = kpiReducers;
@@ -110,6 +110,7 @@ class SubmitedKPI extends Component {
         </div>
         {!loadingKpi ?
           <TableSubmitedKPI
+            isFeedback={isFeedback}
             dataMetrics={dataKpiMetrics}
             dataSource={dataSource}
             loading={loadingKpi}
@@ -124,6 +125,18 @@ class SubmitedKPI extends Component {
             disabled
           />
         </div>
+        {isFeedback &&
+          <div style={{
+            marginTop: 20,
+            paddingBottom: 10,
+            paddingTop: 10,
+            backgroundColor: 'rgb(250, 247, 187)',
+            overflow: 'hidden'
+          }}
+          >
+            <Text strong>General Feedback :</Text>
+            <Paragraph>The L1-L3 Target are too easy. Please revise as i suggested per line items of this KPI. Maybe you can add 1 more KPI items, such as "Datawarhouse Maintinance" , rating 15%</Paragraph>
+          </div>}
       </div>
     );
   }

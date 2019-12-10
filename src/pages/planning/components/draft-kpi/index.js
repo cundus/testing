@@ -16,7 +16,7 @@ import { doSaveKpi, doGetKpiList } from '../../../../redux/actions/kpi';
 import { Success } from '../../../../redux/status-code-type';
 
 const { confirm } = Modal;
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class DraftKPI extends Component {
@@ -263,7 +263,7 @@ class DraftKPI extends Component {
 
   render() {
     const {
-      dataSource, weightTotal, weightTotalErr, challengeYour
+      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
     const {
       handleChange,
@@ -295,6 +295,7 @@ class DraftKPI extends Component {
           {!loadingKpi ?
             <TableDrafKPI
               dataMetrics={dataKpiMetrics}
+              isFeedback={isFeedback}
               dataSource={dataSource}
               handleError={handleError}
               handleChange={handleChange}
@@ -310,6 +311,18 @@ class DraftKPI extends Component {
               onChange={changeChallenge}
             />
           </div>
+          {isFeedback &&
+            <div style={{
+              marginTop: 20,
+              paddingBottom: 10,
+              paddingTop: 10,
+              backgroundColor: 'rgb(250, 247, 187)',
+              overflow: 'hidden'
+            }}
+            >
+              <Text strong>General Feedback :</Text>
+              <Paragraph>The L1-L3 Target are too easy. Please revise as i suggested per line items of this KPI. Maybe you can add 1 more KPI items, such as "Datawarhouse Maintinance" , rating 15%</Paragraph>
+            </div>}
           <div style={{ textAlign: 'center' }}>
             <Button
               id="add-kpi"

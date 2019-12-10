@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import TableReviewKPI from './table-review-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class ReviewKPI extends Component {
@@ -114,7 +114,7 @@ class ReviewKPI extends Component {
             loading={loadingKpi}
           /> : <center><Spin /></center>}
         <div>
-          <Text>Challenge yourself :</Text>
+          <Text strong>Challenge yourself :</Text>
           <TextArea
             id="challenge-input"
             placeholder="Challenge yourself"
@@ -122,6 +122,17 @@ class ReviewKPI extends Component {
             value={challengeYour}
             disabled
           />
+        </div>
+        <div style={{
+          marginTop: 20,
+          paddingBottom: 10,
+          paddingTop: 10,
+          backgroundColor: 'rgb(250, 247, 187)',
+          overflow: 'hidden'
+        }}
+        >
+          <Text strong>General Feedback :</Text>
+          <Paragraph>The L1-L3 Target are too easy. Please revise as i suggested per line items of this KPI. Maybe you can add 1 more KPI items, such as "Datawarhouse Maintinance" , rating 15%</Paragraph>
         </div>
       </div>
     );
