@@ -113,33 +113,39 @@ class DraftKPI extends Component {
       kpiErrMessage,
       challengeYour
     } = this.state;
-    const newData = [];
+    const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
+        baseline: itemKpi.baseline,
         name: itemKpi.kpi,
-        metric: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         metricLookup: [
           {
             label: 'L1',
-            description: itemKpi.L1
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
             label: 'L2',
-            description: itemKpi.L2
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
             label: 'L3',
-            description: itemKpi.L3
-          }
-        ],
-        challangeYourSelf: challengeYour
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+          }]
       };
-      newData.push(data);
+      newDataKpi.push(data);
     });
-    if (newData.length > 20) {
+    const data = {
+      challangeYourSelf: challengeYour,
+      kpiList: newDataKpi
+    };
+    if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
     } else if (kpiErr) {
       message.warning(kpiErrMessage);
@@ -147,7 +153,7 @@ class DraftKPI extends Component {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          await doSavingKpi(newData, user.userId);
+          await doSavingKpi(data, user.userId);
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been submitted to supervisor');
