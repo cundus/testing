@@ -1,16 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import {
   Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
+import { doGetKpiList } from '../../redux/actions/kpi';
 
 class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0
+      step: 3,
+      loading: true
     };
+    this.getKpi();
+  }
+
+  getKpi = async () => {
+    const {
+      step
+    } = this.state;
+    const {
+      userReducers
+    } = this.props;
+    const { user } = userReducers.result;
+    const { getKpiList } = this.props;
+    await getKpiList(user.userId);
+    const { kpiReducers } = this.props;
+    const { dataKpi } = kpiReducers;
+    if (dataKpi.length !== 0 && step === 0) {
+      this.stepChange(1);
+    }
+    this.setState({
+      loading: false
+    });
   }
 
   stepChange = (target, access) => {
@@ -41,14 +64,16 @@ class Planning extends Component {
   };
 
   render() {
-    const { step } = this.state;
+    const { step, loading } = this.state;
     const { stepChange } = this;
     return (
       <div>
-        <Step step={step} stepChange={stepChange} />
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {step === 0 ?
-          <CreateKpi stepChange={stepChange} /> :
+        {loading ? <center><Spin /></center> :
+        <div>
+          <Step step={step} stepChange={stepChange} />
+          {/* eslint-disable-next-line no-nested-ternary */}
+          {step === 0 ?
+            <CreateKpi stepChange={stepChange} /> :
           // eslint-disable-next-line no-nested-ternary
           step === 1 ?
             <DraftKpi stepChange={stepChange} /> :
@@ -56,6 +81,7 @@ class Planning extends Component {
               <SubmitKpi stepChange={stepChange} /> :
               step === 3 &&
               <ReviewKpi stepChange={stepChange} />}
+        </div>}
       </div>
     );
   }
@@ -67,6 +93,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
@@ -12,16 +11,18 @@ class CreateOwn extends Component {
     this.state = {
       columns: []
     };
+  }
+
+  componentDidMount() {
     this.getColumns();
   }
 
   getColumns = async () => {
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
+    const { dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
@@ -49,7 +50,7 @@ class CreateOwn extends Component {
       const data = {
         title: itemMetric.label,
         dataIndex: itemMetric.label,
-        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
         width: 200,
         editable: true
@@ -128,18 +129,7 @@ class CreateOwn extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
-});
-
-const mapDispatchToProps = (dispatch) => ({});
-
-const connectToComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateOwn);
-
-export default connectToComponent;
+export default CreateOwn;
 
 CreateOwn.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
@@ -148,6 +138,6 @@ CreateOwn.propTypes = {
   handleSaveDraft: PropTypes.func,
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
-  kpiReducers: PropTypes.instanceOf(Object),
+  dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool
 };

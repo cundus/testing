@@ -29,7 +29,6 @@ class Dashboard extends React.Component {
       const last = this.props.auth.accessToken.expiresOn.getTime();
       const refresh = last - now;
       setInterval(async () => {
-        localStorage.removeItem('token');
         await this.callAndStore();
       }, refresh);
     }
