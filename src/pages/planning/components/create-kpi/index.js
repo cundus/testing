@@ -6,7 +6,8 @@ import {
   Typography,
   Divider,
   message,
-  Skeleton
+  Skeleton,
+  Spin
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -71,7 +72,8 @@ class CreateKPI extends Component {
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -81,9 +83,10 @@ class CreateKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.name,
-        baseline: itemKpi.metric,
+        kpi: itemKpi.name,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics
       };
       newData.push(data);
@@ -101,14 +104,15 @@ class CreateKPI extends Component {
     await getKpiManagerList(id);
     const { kpiReducers } = this.props;
     const {
-      dataFirstManagerKpi, dataFirstManager, dataSecondManagerKpi, dataSecondManager
+      dataFirstManager, dataSecondManager
     } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
-    dataFirstManagerKpi.map((itemKpi) => {
+    // eslint-disable-next-line no-unused-expressions
+    dataFirstManager && dataFirstManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -117,18 +121,21 @@ class CreateKPI extends Component {
       const data = {
         key: itemKpi.id,
         id: null,
-        typeKpi: `${dataFirstManager.firstName} ${dataFirstManager.lastName}`,
+        typeKpi: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
         description: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics
       };
       newData.push(data);
+      return data;
     });
-    // eslint-disable-next-line array-callback-return
-    dataSecondManagerKpi.map((itemKpi) => {
+    // eslint-disable-next-line no-unused-expressions
+    dataSecondManager && dataSecondManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -141,9 +148,11 @@ class CreateKPI extends Component {
         description: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics
       };
       newData.push(data);
+      return data;
     });
     this.setState({
       dataManagerKpi: newData,
@@ -152,7 +161,11 @@ class CreateKPI extends Component {
   }
 
   handleSaveDraft = async () => {
-    const { doSavingKpi, userReducers, stepChange } = this.props;
+    const {
+      doSavingKpi, userReducers, stepChange
+    } = this.props;
+    // eslint-disable-next-line react/destructuring-assignment
+    const { challenge } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
       dataOwn,
@@ -161,38 +174,45 @@ class CreateKPI extends Component {
       kpiErrMessage
     } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
-    const newData = [];
+    const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSaving.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        name: itemKpi.description,
-        metric: itemKpi.baseline,
+        baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         metricLookup: [
           {
             label: 'L1',
-            description: itemKpi.L1
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
             label: 'L2',
-            description: itemKpi.L2
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
             label: 'L3',
-            description: itemKpi.L3
-          }
-        ]
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+          }]
       };
-      newData.push(data);
+      newDataKpi.push(data);
     });
+    const data = {
+      challangeYourSelf: challenge,
+      kpiList: newDataKpi
+    };
     if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          await doSavingKpi(newData, user.userId);
+          await doSavingKpi(data, user.userId);
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been saved');
@@ -292,7 +312,7 @@ class CreateKPI extends Component {
     } = this;
     const { kpiReducers } = this.props;
     const {
-      dataGoal, loadingGoal
+      dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
     } = kpiReducers;
     const { name } = dataGoal;
     return (
@@ -314,28 +334,30 @@ class CreateKPI extends Component {
           </center>
           <Tabs defaultActiveKey="1" type="card">
             <TabPane tab="Create Own KPI" key="1">
-              <CreateOwn
-                loading={loadingOwn}
-                dataSource={dataOwn}
-                handleSaveDraft={handleSaveDraft}
-                handleAddRow={handleAddRow}
-                handleError={handleError}
-                handleChangeField={handleChangeField}
-                handleDelete={handleDeleteRow}
-              />
+              {!loadingOwn ?
+                <CreateOwn
+                  dataSource={dataOwn}
+                  dataMetrics={dataKpiMetrics}
+                  handleSaveDraft={handleSaveDraft}
+                  handleAddRow={handleAddRow}
+                  handleError={handleError}
+                  handleChangeField={handleChangeField}
+                  handleDelete={handleDeleteRow}
+                /> : <center><Spin /></center>}
             </TabPane>
             <TabPane
               tab="Cascade From Superior"
               key="2"
             >
-              <Cascade
-                loading={loadingManager}
-                dataSource={dataManagerKpi}
-                dataSelectedCascade={dataSelectedCascade}
-                handleError={handleError}
-                handleSaveDraft={handleSaveDraft}
-                handleSelectData={handleSelectData}
-              />
+              {!loadingManager ?
+                <Cascade
+                  dataSource={dataManagerKpi}
+                  dataMetrics={dataKpiManagerMetrics}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                /> : <center><Spin /></center>}
             </TabPane>
           </Tabs>
         </div>
@@ -364,6 +386,7 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 CreateKPI.propTypes = {
+  stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,

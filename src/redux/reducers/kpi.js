@@ -23,14 +23,7 @@ const initialState = {
   status: null,
   message: '',
   page: '',
-  dataGoal: {
-    id: null,
-    name: '',
-    description: '',
-    startDate: '',
-    dueDate: '',
-    parentPlanId: null
-  },
+  dataGoal: {},
   dataKpi: [],
   loadingSaveKPI: false,
   statusSaveKPI: null,
@@ -38,31 +31,11 @@ const initialState = {
   loadingManagerKpi: false,
   statusManagerKpi: null,
   messageManagerKpi: '',
-  dataFirstManager: {
-    firstName: null,
-    lastName: null,
-    cellPhone: null,
-    email: null,
-    empId: null,
-    manager: false,
-    managerId: null,
-    userId: null,
-    userName: null
-  },
-  dataSecondManager: {
-    firstName: null,
-    lastName: null,
-    cellPhone: null,
-    email: null,
-    empId: null,
-    manager: false,
-    managerId: null,
-    userId: null,
-    userName: null
-  },
-  dataFirstManagerKpi: [],
-  dataSecondManagerKpi: [],
-  dataMetrics: []
+  dataFirstManager: {},
+  dataSecondManager: {},
+  dataMetrics: [],
+  dataKpiMetrics: [],
+  dataKpiManagerMetrics: []
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -118,7 +91,12 @@ const kpiReducers = (state = initialState, action) => {
         loadingKpi: action.loading,
         status: action.status,
         message: action.message,
-        dataKpi: action.data
+        dataKpi: action.data.kpiList,
+        dataKpiMetrics: action.data.labelList,
+        generalFeedback: action.data.challengeOthersRatingComments[0],
+        challenge: action.data.challangeYourSelf,
+        currentStep: action.data.currentStep,
+        holderUserId: action.data.holderUserId
       };
     case GET_KPI_LIST_FAILED:
       return {
@@ -138,30 +116,9 @@ const kpiReducers = (state = initialState, action) => {
         loadingManagerKpi: action.loading,
         statusManagerKpi: action.status,
         messageManagerKpi: action.message,
-        dataFirstManager: {
-          firstName: action.data.firstManager.manager.firstName,
-          lastName: action.data.firstManager.manager.lastName,
-          cellPhone: action.data.firstManager.manager.cellPhone,
-          email: action.data.firstManager.manager.email,
-          empId: action.data.firstManager.manager.empId,
-          manager: action.data.firstManager.manager.manager,
-          managerId: action.data.firstManager.manager.managerId,
-          userId: action.data.firstManager.manager.userId,
-          userName: action.data.firstManager.manager.userName
-        },
-        dataSecondManager: {
-          firstName: action.data.secondManager.manager.firstName,
-          lastName: action.data.secondManager.manager.lastName,
-          cellPhone: action.data.secondManager.manager.cellPhone,
-          email: action.data.secondManager.manager.email,
-          empId: action.data.secondManager.manager.empId,
-          manager: action.data.secondManager.manager.manager,
-          managerId: action.data.secondManager.manager.managerId,
-          userId: action.data.secondManager.manager.userId,
-          userName: action.data.secondManager.manager.userName
-        },
-        dataFirstManagerKpi: action.data.firstManager.kpi,
-        dataSecondManagerKpi: action.data.secondManager.kpi
+        dataFirstManager: action.data.firstManager,
+        dataSecondManager: action.data.secondManager,
+        dataKpiManagerMetrics: action.data.labelList
       };
     case GET_KPI_MANAGER_LIST_FAILED:
       return {
