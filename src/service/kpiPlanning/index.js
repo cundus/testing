@@ -31,9 +31,7 @@ export const saveKpi = (data, id) => customAxios({
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   },
-  data: {
-    kpis: data
-  }
+  data
 });
 
 export const getMetrics = () => customAxios({

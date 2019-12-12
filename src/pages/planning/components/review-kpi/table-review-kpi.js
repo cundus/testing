@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { DataTable } from '../../../../components';
 
 class TableDrafKPI extends Component {
@@ -13,8 +12,7 @@ class TableDrafKPI extends Component {
   }
 
   getColumns = async () => {
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
+    const { dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'Cascading / Self KPI',
@@ -93,21 +91,10 @@ class TableDrafKPI extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
-});
-
-const mapDispatchToProps = (dispatch) => ({});
-
-const connectToComponent = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TableDrafKPI);
-
-export default connectToComponent;
+export default TableDrafKPI;
 
 TableDrafKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  kpiReducers: PropTypes.instanceOf(Object),
+  dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool
 };

@@ -5,7 +5,8 @@ import {
   Typography,
   Divider,
   message,
-  Input
+  Input,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -15,7 +16,7 @@ import { doSaveKpi, doGetKpiList } from '../../../../redux/actions/kpi';
 import { Success } from '../../../../redux/status-code-type';
 
 const { confirm } = Modal;
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class DraftKPI extends Component {
@@ -25,6 +26,7 @@ class DraftKPI extends Component {
       dataSource: [],
       weightTotal: 0,
       weightTotalErr: false,
+      challengeYour: '',
       kpiErr: false
     };
   }
@@ -38,14 +40,15 @@ class DraftKPI extends Component {
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
+    const { dataKpi, challenge } = kpiReducers;
     const newData = [];
 
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -55,15 +58,17 @@ class DraftKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.name,
-        baseline: itemKpi.metric,
+        kpi: itemKpi.name,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics
       };
       newData.push(data);
     });
     this.setState({
-      dataSource: newData
+      dataSource: newData,
+      challengeYour: challenge
     });
     this.liveCount(newData);
   };
@@ -105,34 +110,42 @@ class DraftKPI extends Component {
     const {
       dataSource,
       kpiErr,
-      kpiErrMessage
+      kpiErrMessage,
+      challengeYour
     } = this.state;
-    const newData = [];
+    const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        name: itemKpi.description,
-        metric: itemKpi.baseline,
+        baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         metricLookup: [
           {
             label: 'L1',
-            description: itemKpi.L1
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
             label: 'L2',
-            description: itemKpi.L2
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
             label: 'L3',
-            description: itemKpi.L3
-          }
-        ]
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+          }]
       };
-      newData.push(data);
+      newDataKpi.push(data);
     });
-    if (newData.length > 20) {
+    const data = {
+      challangeYourSelf: challengeYour,
+      kpiList: newDataKpi
+    };
+    if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
     } else if (kpiErr) {
       message.warning(kpiErrMessage);
@@ -140,7 +153,7 @@ class DraftKPI extends Component {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          await doSavingKpi(newData, user.userId);
+          await doSavingKpi(data, user.userId);
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
             message.success('Your KPI has been submitted to supervisor');
@@ -165,6 +178,10 @@ class DraftKPI extends Component {
     });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
+  };
+
+  changeChallenge = ({ target: { value } }) => {
+    this.setState({ challengeYour: value });
   };
 
   handleError = (statusErr) => {
@@ -204,38 +221,45 @@ class DraftKPI extends Component {
       dataSource,
       kpiErr,
       kpiErrMessage,
-      totalWeight
+      challengeYour
     } = this.state;
-    const newData = [];
+    const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        name: itemKpi.description,
-        metric: itemKpi.baseline,
+        baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         metricLookup: [
           {
             label: 'L1',
-            description: itemKpi.L1
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
             label: 'L2',
-            description: itemKpi.L2
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
             label: 'L3',
-            description: itemKpi.L3
-          }
-        ]
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+          }]
       };
-      newData.push(data);
+      newDataKpi.push(data);
     });
+    const data = {
+      challangeYourSelf: challengeYour,
+      kpiList: newDataKpi
+    };
     if (!kpiErr || kpiErrMessage === 'Sorry, Total KPI Weight must be 100%') {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          await doSavingKpi(newData, user.userId);
+          await doSavingKpi(data, user.userId);
           this.getAllData();
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
@@ -252,16 +276,19 @@ class DraftKPI extends Component {
   };
 
   render() {
-    const { dataSource, weightTotal, weightTotalErr } = this.state;
+    const {
+      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
+    } = this.state;
     const {
       handleChange,
       handleDelete,
       handleSubmit,
       handleSaveDraft,
+      changeChallenge,
       handleError
     } = this;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
         <div>
@@ -279,21 +306,37 @@ class DraftKPI extends Component {
           <Divider />
         </div>
         <div>
-          <TableDrafKPI
-            loading={loadingKpi}
-            dataSource={dataSource}
-            handleError={handleError}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-          />
+          {!loadingKpi ?
+            <TableDrafKPI
+              dataMetrics={dataKpiMetrics}
+              isFeedback={isFeedback}
+              dataSource={dataSource}
+              handleError={handleError}
+              handleChange={handleChange}
+              handleDelete={handleDelete}
+            /> : <center><Spin /></center>}
           <div>
-            <Text>Challenge myself :</Text>
+            <Text>Challenge yourself :</Text>
             <TextArea
               id="challenge-input"
-              placeholder="Challenge myself"
-              label="Challenge myself"
+              placeholder="Challenge yourself"
+              label="Challenge yourself"
+              value={challengeYour}
+              onChange={changeChallenge}
             />
           </div>
+          {isFeedback &&
+            <div style={{
+              marginTop: 20,
+              paddingBottom: 10,
+              paddingTop: 10,
+              backgroundColor: 'rgb(250, 247, 187)',
+              overflow: 'hidden'
+            }}
+            >
+              <Text strong>General Feedback :</Text>
+              <Paragraph>{generalFeedback}</Paragraph>
+            </div>}
           <div style={{ textAlign: 'center' }}>
             <Button
               id="add-kpi"
@@ -313,7 +356,8 @@ class DraftKPI extends Component {
             <Button
               id="submit-superior"
               onClick={handleSubmit}
-              type="primary" style={{ margin: 10 }}>
+              type="primary" style={{ margin: 10 }}
+            >
               Submit To Superior
             </Button>
           </div>
@@ -344,5 +388,6 @@ DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object)
+  userReducers: PropTypes.instanceOf(Object),
+  stepChange: PropTypes.func
 };

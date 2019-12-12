@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
   Typography,
   Divider,
-  Input
+  Input,
+  Spin
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -10,7 +11,7 @@ import { connect } from 'react-redux';
 import TableReviewKPI from './table-review-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
 
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class ReviewKPI extends Component {
@@ -18,6 +19,7 @@ class ReviewKPI extends Component {
     super(props);
     this.state = {
       dataSource: [],
+      challengeYour: '',
       weightTotal: 0
     };
   }
@@ -31,14 +33,15 @@ class ReviewKPI extends Component {
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
+    const { dataKpi, challenge } = kpiReducers;
     const newData = [];
 
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -49,14 +52,16 @@ class ReviewKPI extends Component {
         id: itemKpi.id,
         typeKpi: 'Self KPI',
         description: itemKpi.name,
-        baseline: itemKpi.metric,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
-        ...dataMetrics
+        ...dataMetrics,
+        feedback: itemKpi.othersRatingComments[0]
       };
       newData.push(data);
     });
     this.setState({
-      dataSource: newData
+      dataSource: newData,
+      challengeYour: challenge
     });
     this.weightCount(newData);
   };
@@ -87,9 +92,11 @@ class ReviewKPI extends Component {
   }
 
   render() {
-    const { dataSource, weightTotal, weightTotalErr } = this.state;
+    const {
+      dataSource, weightTotal, weightTotalErr, challengeYour
+    } = this.state;
     const { kpiReducers } = this.props;
-    const { loadingKpi } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
         <div>
@@ -102,15 +109,32 @@ class ReviewKPI extends Component {
           </Text>
           <Divider />
         </div>
-        <TableReviewKPI dataSource={dataSource} loading={loadingKpi} />
+        {!loadingKpi ?
+          <TableReviewKPI
+            dataMetrics={dataKpiMetrics}
+            dataSource={dataSource}
+            loading={loadingKpi}
+          /> : <center><Spin /></center>}
         <div>
-          <Text>Challenge myself :</Text>
+          <Text strong>Challenge yourself :</Text>
           <TextArea
             id="challenge-input"
-            placeholder="Challenge myself"
-            label="Challenge myself"
+            placeholder="Challenge yourself"
+            label="Challenge yourself"
+            value={challengeYour}
             disabled
           />
+        </div>
+        <div style={{
+          marginTop: 20,
+          paddingBottom: 10,
+          paddingTop: 10,
+          backgroundColor: 'rgb(250, 247, 187)',
+          overflow: 'hidden'
+        }}
+        >
+          <Text strong>General Feedback :</Text>
+          <Paragraph>{generalFeedback}</Paragraph>
         </div>
       </div>
     );
