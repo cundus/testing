@@ -22,7 +22,7 @@ class CreateOwn extends Component {
     const newColumns = [
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,

@@ -23,14 +23,7 @@ const initialState = {
   status: null,
   message: '',
   page: '',
-  dataGoal: {
-    id: null,
-    name: '',
-    description: '',
-    startDate: '',
-    dueDate: '',
-    parentPlanId: null
-  },
+  dataGoal: {},
   dataKpi: [],
   loadingSaveKPI: false,
   statusSaveKPI: null,
@@ -38,30 +31,8 @@ const initialState = {
   loadingManagerKpi: false,
   statusManagerKpi: null,
   messageManagerKpi: '',
-  dataFirstManager: {
-    firstName: null,
-    lastName: null,
-    cellPhone: null,
-    email: null,
-    empId: null,
-    manager: false,
-    managerId: null,
-    userId: null,
-    userName: null
-  },
-  dataSecondManager: {
-    firstName: null,
-    lastName: null,
-    cellPhone: null,
-    email: null,
-    empId: null,
-    manager: false,
-    managerId: null,
-    userId: null,
-    userName: null
-  },
-  dataFirstManagerKpi: [],
-  dataSecondManagerKpi: [],
+  dataFirstManager: {},
+  dataSecondManager: {},
   dataMetrics: [],
   dataKpiMetrics: [],
   dataKpiManagerMetrics: []
@@ -145,17 +116,9 @@ const kpiReducers = (state = initialState, action) => {
         loadingManagerKpi: action.loading,
         statusManagerKpi: action.status,
         messageManagerKpi: action.message,
-        dataManagerKpi: action.data,
-        dataFirstManager: {
-          firstName: action.data.firstManager.manager.firstName,
-          lastName: action.data.firstManager.manager.lastName
-        },
-        // dataSecondManager: {
-        //   firstName: action.data.secondManager.manager.firstName,
-        //   lastName: action.data.secondManager.manager.lastName
-        // },
-        dataFirstManagerKpi: action.data.firstManager.kpi,
-        // dataSecondManagerKpi: action.data.secondManager.kpi
+        dataFirstManager: action.data.firstManager,
+        dataSecondManager: action.data.secondManager,
+        dataKpiManagerMetrics: action.data.labelList
       };
     case GET_KPI_MANAGER_LIST_FAILED:
       return {

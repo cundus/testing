@@ -40,7 +40,8 @@ class SubmitedKPI extends Component {
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
