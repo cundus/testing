@@ -130,13 +130,23 @@ export const doGetKpiList = (id) => async (dispatch) => {
   try {
     const payload = await getKpiList(id);
     if (payload.data.status_code === Success) {
-      dispatch({
-        type: GET_KPI_LIST_SUCCESS,
-        loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
-        data: payload.data.result
-      });
+      if (payload.data.result) {
+        dispatch({
+          type: GET_KPI_LIST_SUCCESS,
+          loading: false,
+          status: payload.data.status_code,
+          message: payload.data.status_description,
+          data: payload.data.result
+        });
+      } else {
+        dispatch({
+          type: GET_KPI_LIST_FAILED,
+          loading: false,
+          status: 9999,
+          message: 'Internal server error',
+          error: payload
+        });
+      }
     } else {
       dispatch({
         type: GET_KPI_LIST_FAILED,

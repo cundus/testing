@@ -103,7 +103,7 @@ const kpiReducers = (state = initialState, action) => {
         ...state,
         loadingKpi: action.loading,
         status: action.status,
-        message: action.message
+        errMessage: action.message
       };
     case GET_KPI_MANAGER_LIST:
       return {
