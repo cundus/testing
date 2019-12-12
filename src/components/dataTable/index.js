@@ -2,7 +2,8 @@ import React from 'react';
 import {
   Table,
   Input,
-  Form
+  Form,
+  Switch
 } from 'antd';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
@@ -39,6 +40,17 @@ class EditableCell extends React.Component {
     }, 100);
   };
 
+  changeSwitch = (checked) => {
+    const { record, handlechange } = this.props;
+    handlechange({
+      ...record,
+      achievementType: checked ? 1 : 0,
+      L1: '',
+      L2: '',
+      L3: ''
+    });
+  };
+
   renderCell = (form) => {
     this.form = form;
     const {
@@ -50,25 +62,59 @@ class EditableCell extends React.Component {
       title
     } = this.props;
     const index = dataindex;
-    return (
-      <Form.Item style={{ margin: 0 }}>
-        { type === 'number' ? form.getFieldDecorator(index, {
-          rules: [
-            {
-              required: true,
-              pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
-              message: `${title} is wrong`
-            }
-          ],
-          initialValue: record[index]
-        })(
-          <TextArea
-            id={`${title}-${index}`}
-            placeholder={placeholder}
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.change}
-            disabled={!editable}
-          />
+    if (index === 'kpi') {
+      return (
+        <div>
+          <Form.Item style={{ margin: 0 }}>
+            {form.getFieldDecorator(index, {
+              rules: [
+                {
+                  required: true
+                }
+              ],
+              initialValue: record[index]
+            })(
+              <TextArea
+                id={`${title}-${index}`}
+                placeholder={placeholder}
+                autoSize={{ minRows: 2, maxRows: 4 }}
+                onChange={this.change}
+                disabled={!editable}
+              />
+          )}
+          </Form.Item>
+          <div style={{ flexDirection: 'row' }}>
+            <Switch
+              size="small"
+              checked={record.achievementType !== 0}
+              checkedChildren="Quantitative"
+              style={{ width: '100%' }}
+              onChange={this.changeSwitch}
+              unCheckedChildren="Qualitative"
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { type === 'number' ? form.getFieldDecorator(index, {
+            rules: [
+              {
+                required: true,
+                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
+                message: `${title} is wrong`
+              }
+            ],
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              onChange={this.change}
+              disabled={!editable}
+            />
         ) : form.getFieldDecorator(index, {
           rules: [
             {
@@ -85,8 +131,9 @@ class EditableCell extends React.Component {
             disabled={!editable}
           />
         )}
-      </Form.Item>
-    );
+        </Form.Item>
+      );
+    }
   };
 
   render() {

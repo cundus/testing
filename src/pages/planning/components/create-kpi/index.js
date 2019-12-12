@@ -83,7 +83,7 @@ class CreateKPI extends Component {
         id: itemKpi.id,
         typeKpi: 'Self KPI',
         description: itemKpi.name,
-        baseline: itemKpi.metric,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         ...dataMetrics
       };
@@ -170,24 +170,48 @@ class CreateKPI extends Component {
     // eslint-disable-next-line array-callback-return
     dataSaving.map((itemKpi) => {
       const data = {
-        id: itemKpi.id,
-        name: itemKpi.description,
-        metric: itemKpi.baseline,
-        weight: itemKpi.weight,
-        metricLookup: [
+        // challengeOthersRatingComments: [
+        //   "string"
+        // ],
+        // challengeSelfRatingComment: "string",
+        // currentStep: "string",
+        // holderUserId: "string",
+        kpiList: [
           {
-            label: 'L1',
-            description: itemKpi.L1
-          },
-          {
-            label: 'L2',
-            description: itemKpi.L2
-          },
-          {
-            label: 'L3',
-            description: itemKpi.L3
+            baseline: itemKpi.baseline,
+            // description: itemKpi.description,
+            id: itemKpi.id,
+            metricLookup: [
+              {
+                // achievementNumeric: 0,
+                description: itemKpi.L1,
+                // id: 0,
+                label: 'L1'
+                // orderNo: 0
+              },
+              {
+                label: 'L2',
+                description: itemKpi.L2
+              },
+              {
+                label: 'L3',
+                description: itemKpi.L3
+              }
+            ],
+            name: itemKpi.description,
+            // othersRatingComments: [
+            //   "string"
+            // ],
+            // selfRatingComment: "string",
+            weight: itemKpi.weight
           }
         ]
+        // "labelList": [
+        //   {
+        //     "index": 0,
+        //     "label": "string"
+        //   }
+        // ]
       };
       newData.push(data);
     });

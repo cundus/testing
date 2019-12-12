@@ -27,7 +27,7 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
@@ -55,7 +55,7 @@ class TableDrafKPI extends Component {
       const data = {
         title: itemMetric.label,
         dataIndex: itemMetric.label,
-        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
         width: 150,
         editable: true

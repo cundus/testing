@@ -47,7 +47,8 @@ class DraftKPI extends Component {
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${metric.description}"}`;
+        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -57,9 +58,10 @@ class DraftKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.name,
-        baseline: itemKpi.metric,
+        kpi: itemKpi.name,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics
       };
       newData.push(data);
@@ -116,7 +118,7 @@ class DraftKPI extends Component {
     dataSource.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        name: itemKpi.description,
+        name: itemKpi.kpi,
         metric: itemKpi.baseline,
         weight: itemKpi.weight,
         metricLookup: [
@@ -215,37 +217,43 @@ class DraftKPI extends Component {
       kpiErrMessage,
       challengeYour
     } = this.state;
-    const newData = [];
+    const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        name: itemKpi.description,
-        metric: itemKpi.baseline,
+        baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         metricLookup: [
           {
             label: 'L1',
-            description: itemKpi.L1
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
             label: 'L2',
-            description: itemKpi.L2
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
             label: 'L3',
-            description: itemKpi.L3
-          }
-        ],
-        challangeYourSelf: challengeYour
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+          }]
       };
-      newData.push(data);
+      newDataKpi.push(data);
     });
+    const data = {
+      challangeYourSelf: challengeYour,
+      kpiList: newDataKpi
+    };
     if (!kpiErr || kpiErrMessage === 'Sorry, Total KPI Weight must be 100%') {
       confirm({
         title: 'Are you sure?',
         onOk: async () => {
-          await doSavingKpi(newData, user.userId);
+          await doSavingKpi(data, user.userId);
           this.getAllData();
           const { kpiReducers } = this.props;
           if (kpiReducers.statusSaveKPI === Success) {
@@ -274,7 +282,7 @@ class DraftKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi, dataKpiMetrics } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
         <div>
@@ -321,7 +329,7 @@ class DraftKPI extends Component {
             }}
             >
               <Text strong>General Feedback :</Text>
-              <Paragraph>The L1-L3 Target are too easy. Please revise as i suggested per line items of this KPI. Maybe you can add 1 more KPI items, such as "Datawarhouse Maintinance" , rating 15%</Paragraph>
+              <Paragraph>{generalFeedback}</Paragraph>
             </div>}
           <div style={{ textAlign: 'center' }}>
             <Button
