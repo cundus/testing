@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Spin } from 'antd';
+import { withRouter } from 'react-router-dom';
 import {
   Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
@@ -10,7 +11,7 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 3,
+      step: 0,
       loading: true
     };
     this.getKpi();
@@ -21,19 +22,25 @@ class Planning extends Component {
       step
     } = this.state;
     const {
-      userReducers
+      userReducers,
+      history
     } = this.props;
     const { user } = userReducers.result;
     const { getKpiList } = this.props;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
-    if (dataKpi.length !== 0 && step === 0) {
-      this.stepChange(1);
+    const { errMessage, dataKpi, status } = kpiReducers;
+    if (status === 0) {
+      if (dataKpi.length !== 0 && step === 0) {
+        this.stepChange(1);
+      }
+      this.setState({
+        loading: false
+      });
+    } else {
+      message.warning(`Sorry, ${errMessage}`);
+      history.goBack();
     }
-    this.setState({
-      loading: false
-    });
   }
 
   stepChange = (target, access) => {
@@ -101,4 +108,4 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(Planning);
 
-export default connectToComponent;
+export default withRouter(connectToComponent);
