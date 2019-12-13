@@ -20,7 +20,8 @@ class SubmitedKPI extends Component {
     this.state = {
       dataSource: [],
       weightTotal: 0,
-      challengeYour: ''
+      challengeYour: '',
+      isFeedback: false
     };
   }
 
