@@ -140,40 +140,22 @@ class EditableCell extends React.Component {
     const {
       children,
       editable,
-      color,
       ...restProps
     } = this.props;
-    if (color) {
-      return (
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        <td style={{ backgroundColor: color }}>
-          {!editable ? (
-            <div
-              className="editable-cell-value-wrap"
-            >
-              {children}
-            </div>
-          ) : (
-            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-          )}
-        </td>
-      );
-    } else {
-      return (
+    return (
       // eslint-disable-next-line react/jsx-props-no-spreading
-        <td {...restProps}>
-          {!editable ? (
-            <div
-              className="editable-cell-value-wrap"
-            >
-              {children}
-            </div>
+      <td {...restProps}>
+        {!editable ? (
+          <div
+            className="editable-cell-value-wrap"
+          >
+            {children}
+          </div>
           ) : (
             <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
           )}
-        </td>
-      );
-    }
+      </td>
+    );
   }
 }
 

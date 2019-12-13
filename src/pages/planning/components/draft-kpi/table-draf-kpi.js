@@ -93,7 +93,7 @@ class TableDrafKPI extends Component {
       dataIndex: 'feedback',
       placeholder: 'Enter KPI Feedback',
       align: 'center',
-      color: 'rgb(250, 247, 187)',
+      className: '.ant-table-th-yellow',
       editable: false
     };
     if (isFeedback) {
