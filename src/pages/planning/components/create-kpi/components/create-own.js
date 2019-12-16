@@ -96,11 +96,13 @@ class CreateOwn extends Component {
       handleChangeField,
       handleSaveDraft,
       handleError,
-      loading
+      loading,
+      form
     } = this.props;
     return (
       <div>
         <DataTable
+          form={form}
           columns={columns}
           loading={loading}
           datasource={dataSource}
@@ -139,5 +141,6 @@ CreateOwn.propTypes = {
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
   dataMetrics: PropTypes.instanceOf(Array),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  form: PropTypes.instanceOf(Object)
 };
