@@ -28,7 +28,7 @@ class Dashboard extends React.Component {
       const now = new Date().getTime();
       const last = this.props.auth.accessToken.expiresOn.getTime();
       const refresh = last - now;
-      setTimeout(async () => {
+      setInterval(async () => {
         await this.callAndStore();
       }, refresh);
     }

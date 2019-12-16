@@ -98,7 +98,7 @@ export const GetMyTeamKPIDetail = (idUser) => {
     });
     try {
       const resp = await getMyTeamDetailKPIAction(idUser);
-      if (resp.status_code !== Success || resp.data.result.length <= 0) {
+      if (resp.status.status_code !== Success || resp.data.kpiList.result.length <= 0) {
         dispatch({
           type: errGetMyTeamDetail,
           data: [{
@@ -106,7 +106,7 @@ export const GetMyTeamKPIDetail = (idUser) => {
           }]
         });
       }
-      if (resp.data.result.length > 0) {
+      if (resp.data.result.kpiList.length > 0) {
         dispatch({
           type: getMyTeamDetail,
           data: resp.data.result
@@ -132,7 +132,7 @@ export const GetUserDetail = (idUser) => {
     });
     try {
       const resp = await getUserDetailAction(idUser);
-      if (resp.status_code !== Success) {
+      if (resp.data.status_code !== Success) {
         dispatch({
           type: errUserDetail,
           data: {

@@ -1,22 +1,25 @@
 import React, { Component } from "react";
-import  { GetMyTeamKPI } from  '../../../redux/actions/user';
 import  { connect } from 'react-redux';
 import  { Spin, Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
+import { GetMyTeamKPI } from '../../../redux/actions/user';
 import TableMonitoring from './table-monitoring';
+
 const { Text } = Typography;
 
 class Monitoring extends Component {
   componentDidMount() {
-    this.props.getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    const { getMyTeamKPI } = this.props;
+    getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
   }
 
   render() {
+    const { myteam } = this.props;
     return(
       <div>
         {
-          (Object.keys(this.props.myteam).length)?
+          (Object.keys(myteam).length)?
             <div>
                <div>
                 <Divider />
@@ -26,7 +29,7 @@ class Monitoring extends Component {
                 </Text>
                 <Divider />
               </div>
-             <TableMonitoring team={this.props.myteam} />
+             <TableMonitoring team={myteam} />
             </div>:
             <center>
               <Spin/>
@@ -37,11 +40,11 @@ class Monitoring extends Component {
   }
 }
 
-const mapDispatchtoProps = dispatch => ({
+const mapDispatchtoProps = (dispatch) => ({
   getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.authReducer,
   user: state.userReducers,
   myteam: state.myteamReducers
