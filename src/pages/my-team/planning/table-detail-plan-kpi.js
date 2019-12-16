@@ -13,8 +13,7 @@ class TableEditMyKPI extends Component {
   }
 
   getColumns = async () =>{
-    const { kpiReducers } = this.props;
-    const { dataMetrics } = kpiReducers;
+    const { kpiReducers, dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -37,7 +36,7 @@ class TableEditMyKPI extends Component {
       const data = {
         title: itemMetric.label,
         dataIndex: itemMetric.label,
-        placeholder: `Enter Level ${itemMetric.orderNo}`,
+        placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
         width: 200
       };

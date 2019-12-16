@@ -9,17 +9,33 @@ import { GetMyTeamKPI } from '../../../redux/actions/user';
 const { Text } = Typography;
 
 class Planning extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: []
+    };
+  }
+
+  async componentDidMount() {
     const { getMyTeamKPI } = this.props;
-    getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    await getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    const newData = this.props.myteam.result.map( d => {
+      d.costumAction = {
+        idUser: d.userId,
+        status: d.status
+      };
+      return d;
+    });
+    this.setState({ dataSource: newData });
   }
 
   render() {
     const { myteam } = this.props;
+    const { dataSource } = this.state;
     return(
       <div>
         {
-          (Object.keys(myteam).length)?
+          (Object.keys(dataSource).length > 0 )?
             <div>
               <div>
                 <Divider />
@@ -29,7 +45,7 @@ class Planning extends Component {
                 </Text>
                 <Divider />
               </div>
-              <TablePlanning team={myteam} />
+              <TablePlanning team={dataSource} />
             </div>:
             <center>
               <Spin />

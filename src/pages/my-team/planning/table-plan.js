@@ -59,16 +59,24 @@ class TablePlan extends Component {
           } else if (text === 2) {
             status = 'Completed';
             color = '#1dc9b7';
+          } else {
+            status = 'None';
+            color = 'RED';
           }
           return (<Tag color={color}>{status}</Tag>);
         }
       },
       {
         title: 'Action',
-        dataIndex: 'userId',
+        dataIndex: 'costumAction',
         placeholder: 'action',
         action: true,
-        render: (text) => (<Button type={'primary'}><Link to={`/my-team/planning/${text}`}>View</Link></Button>)
+        render: (text) => (
+          <Button type={'primary'} disabled={isNaN(text.status)}>
+            <Link to={`/my-team/planning/${text.idUser}`}>
+              View
+            </Link>
+          </Button>)
       }
     ];
 
@@ -83,10 +91,9 @@ class TablePlan extends Component {
 
   getAllData = () => {
     const { team } = this.props;
-    const { result } = team;
     this.setState(
       {
-        dataSource: result,
+        dataSource: team,
       }
     );
   }
