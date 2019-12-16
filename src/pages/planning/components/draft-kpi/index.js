@@ -38,7 +38,7 @@ class DraftKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList } = this.props;
+    const { userReducers, getKpiList, form } = this.props;
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
@@ -67,6 +67,10 @@ class DraftKPI extends Component {
         ...dataMetrics
       };
       newData.push(data);
+    });
+
+    form.getFieldValue({
+      dataKpi: newData
     });
     this.setState({
       dataSource: newData,
@@ -184,6 +188,8 @@ class DraftKPI extends Component {
       ...item,
       ...row
     });
+    console.log(newData, 'assa');
+    
     this.setState({ dataSource: newData });
     this.liveCount(newData);
   };

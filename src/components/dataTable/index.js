@@ -13,23 +13,24 @@ const { TextArea } = Input;
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
-  change = (e) => {
+  change = (key) => {
     const { record, handlechange, form } = this.props;
-    setTimeout(() => {
-      form.setFields((values) => {
-        handlechange({ ...record, ...values });
+    setTimeout(() => form.validateFields((errors, values) => {
+      const newData = values.dataKpi;
+      const index = newData.findIndex(() => record.key === key);
+      const item = newData[index];
+      handlechange({
+        ...record,
+        ...item
       });
-    }, 100);
+    }), 1);
   };
 
   changeSwitch = (checked) => {
     const { record, handlechange } = this.props;
     handlechange({
       ...record,
-      achievementType: checked ? 1 : 0,
-      L1: '',
-      L2: '',
-      L3: ''
+      achievementType: checked ? 1 : 0
     });
   };
 
@@ -39,6 +40,7 @@ class EditableCell extends React.Component {
       dataindex,
       record,
       placeholder,
+      indexarr,
       title,
       form
     } = this.props;
@@ -48,7 +50,7 @@ class EditableCell extends React.Component {
       return (
         <div>
           <Form.Item style={{ margin: 0 }}>
-            {form.getFieldDecorator(formIndex, {
+            {form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
               rules: [
                 {
                   required: true,
@@ -60,19 +62,20 @@ class EditableCell extends React.Component {
               <TextArea
                 id={`${title}-${index}-${record}`}
                 placeholder={placeholder}
+                // eslint-disable-next-line react/jsx-no-bind
+                onChange={() => this.change(record.key)}
                 autoSize={{ minRows: 2, maxRows: 4 }}
-                onChange={this.change}
                 disabled={!editable}
               />
           )}
           </Form.Item>
-          <div style={{ flexDirection: 'row' }}>
+          <div>
             <Switch
               size="small"
               checked={record.achievementType !== 0}
-              checkedChildren="Quantitative"
               style={{ width: '100%' }}
               onChange={this.changeSwitch}
+              checkedChildren="Quantitative"
               unCheckedChildren="Qualitative"
             />
           </div>
@@ -81,7 +84,7 @@ class EditableCell extends React.Component {
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { index === 'weight' ? form.getFieldDecorator(formIndex, {
+          { index === 'weight' ? form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
             rules: [
               {
                 required: true,
@@ -97,11 +100,12 @@ class EditableCell extends React.Component {
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(record.key)}
               autoSize={{ minRows: 3, maxRows: 5 }}
-              onChange={this.change}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(formIndex, {
+        ) : form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
           rules: [
             {
               required: true,
@@ -113,8 +117,9 @@ class EditableCell extends React.Component {
           <TextArea
             id={`${title}-${formIndex}`}
             placeholder={placeholder}
+            // eslint-disable-next-line react/jsx-no-bind
+            onChange={() => this.change(record.key)}
             autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.change}
             disabled={!editable}
           />
         )}
@@ -147,6 +152,7 @@ class EditableCell extends React.Component {
 }
 
 EditableCell.propTypes = {
+  indexarr: PropTypes.number,
   color: PropTypes.string,
   editable: PropTypes.bool,
   dataindex: PropTypes.string,
@@ -182,6 +188,7 @@ const DataTable = (props) => {
         record,
         form,
         datasource,
+        indexarr: index,
         editable: col.editable,
         dataindex: col.dataIndex,
         title: col.title,
