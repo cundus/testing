@@ -291,7 +291,7 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { kpiReducers } = this.props;
+    const { kpiReducers, form } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
     } = kpiReducers;
@@ -317,6 +317,7 @@ class CreateKPI extends Component {
             <TabPane tab="Create Own KPI" key="1">
               {!loadingOwn ?
                 <CreateOwn
+                  form={form}
                   dataSource={dataOwn}
                   dataMetrics={dataKpiMetrics}
                   handleSaveDraft={handleSaveDraft}
