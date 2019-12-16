@@ -107,7 +107,9 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    const { doSavingKpi, userReducers, stepChange } = this.props;
+    const {
+      doSavingKpi, userReducers, stepChange, form
+    } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -152,19 +154,23 @@ class DraftKPI extends Component {
     } else if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {
-      confirm({
-        title: 'Are you sure?',
-        onOk: async () => {
-          await doSavingKpi(data, user.userId);
-          const { kpiReducers } = this.props;
-          if (kpiReducers.statusSaveKPI === Success) {
-            message.success('Your KPI has been submitted to supervisor');
-            stepChange(2, true); // go to submit page
-          } else {
-            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-          }
-        },
-        onCancel() {}
+      form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              await doSavingKpi(data, user.userId);
+              const { kpiReducers } = this.props;
+              if (kpiReducers.statusSaveKPI === Success) {
+                message.success('Your KPI has been submitted to supervisor');
+                stepChange(2, true); // go to submit page
+              } else {
+                message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+              }
+            },
+            onCancel() {}
+          });
+        }
       });
     }
   };
@@ -186,14 +192,9 @@ class DraftKPI extends Component {
     this.setState({ challengeYour: value });
   };
 
-  handleError = (statusErr) => {
+  handleError = () => {
     const { weightTotal } = this.state;
-    if (statusErr) {
-      this.setState({
-        kpiErr: true,
-        kpiErrMessage: 'Please fill the form'
-      });
-    } else if (weightTotal !== 100) {
+    if (weightTotal !== 100) {
       this.setState({
         kpiErr: true,
         kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
@@ -217,7 +218,7 @@ class DraftKPI extends Component {
   };
 
   handleSaveDraft = () => {
-    const { doSavingKpi, userReducers } = this.props;
+    const { doSavingKpi, userReducers, form } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -257,23 +258,27 @@ class DraftKPI extends Component {
       challangeYourSelf: challengeYour,
       kpiList: newDataKpi
     };
-    if (!kpiErr || kpiErrMessage === 'Sorry, Total KPI Weight must be 100%') {
-      confirm({
-        title: 'Are you sure?',
-        onOk: async () => {
-          await doSavingKpi(data, user.userId);
-          this.getAllData();
-          const { kpiReducers } = this.props;
-          if (kpiReducers.statusSaveKPI === Success) {
-            message.success('Your KPI has been saved');
-          } else {
-            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-          }
-        },
-        onCancel() {}
-      });
-    } else {
+    if (kpiErr) {
       message.warning(kpiErrMessage);
+    } else {
+      form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              await doSavingKpi(data, user.userId);
+              this.getAllData();
+              const { kpiReducers } = this.props;
+              if (kpiReducers.statusSaveKPI === Success) {
+                message.success('Your KPI has been saved');
+              } else {
+                message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+              }
+            },
+            onCancel() {}
+          });
+        }
+      });
     }
   };
 
