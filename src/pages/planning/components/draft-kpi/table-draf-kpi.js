@@ -110,11 +110,13 @@ class TableDrafKPI extends Component {
       dataSource,
       handleChange,
       handleError,
-      loading
+      loading,
+      form
     } = this.props;
     return (
       <div>
         <DataTable
+          form={form}
           columns={columns}
           loading={loading}
           datasource={dataSource}
@@ -135,5 +137,6 @@ TableDrafKPI.propTypes = {
   handleDelete: PropTypes.func,
   isFeedback: PropTypes.bool,
   dataMetrics: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

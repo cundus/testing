@@ -30,13 +30,14 @@ class CreateKPI extends Component {
       dataOwn: [
         {
           key: 1,
-          typeKpi: 'Self KPI',
-          kpi: '',
+          id: null,
+          achievementType: 0,
+          name: '',
           baseline: '',
           weight: '',
-          l1: '',
-          l2: '',
-          l3: ''
+          L1: '',
+          L2: '',
+          L3: ''
         }
       ],
       dataOwnId: 2,
@@ -244,7 +245,8 @@ class CreateKPI extends Component {
     const newData = {
       key: dataOwnId,
       id: null,
-      description: '',
+      achievementType: 0,
+      name: '',
       baseline: '',
       weight: '',
       L1: '',
@@ -357,7 +359,7 @@ const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getKpiManagerList: (id) => dispatch(doGetKpiManagerList(id)),
-  getLatestGoalKpi: (id) => dispatch(doGetLatestGoalKpi())
+  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi())
 });
 
 const connectToComponent = connect(

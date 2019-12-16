@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Spin } from 'antd';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
@@ -27,12 +28,12 @@ class Planning extends Component {
     } = this.props;
     const { user } = userReducers.result;
     const { getKpiList } = this.props;
-    // await getKpiList(user.userId);
+    await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { errMessage, dataKpi, status } = kpiReducers;
     if (status === 0) {
       if (dataKpi.length !== 0 && step === 0) {
-        // this.stepChange(1);
+        this.stepChange(1);
       }
       this.setState({
         loading: false
@@ -109,3 +110,10 @@ const connectToComponent = connect(
 )(Planning);
 
 export default withRouter(connectToComponent);
+
+Planning.propTypes = {
+  kpiReducers: PropTypes.instanceOf(Object),
+  userReducers: PropTypes.instanceOf(Object),
+  history: PropTypes.instanceOf(Object),
+  getKpiList: PropTypes.func
+};

@@ -6,7 +6,8 @@ import {
   Divider,
   message,
   Input,
-  Spin
+  Spin,
+  Form
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -288,7 +289,7 @@ class DraftKPI extends Component {
       changeChallenge,
       handleError
     } = this;
-    const { kpiReducers, stepChange } = this.props;
+    const { kpiReducers, stepChange, form } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
@@ -309,6 +310,7 @@ class DraftKPI extends Component {
         <div>
           {!loadingKpi ?
             <TableDrafKPI
+              form={form}
               dataMetrics={dataKpiMetrics}
               isFeedback={isFeedback}
               dataSource={dataSource}
@@ -383,12 +385,13 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(DraftKPI);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));
 
 DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
-  stepChange: PropTypes.func
+  stepChange: PropTypes.func,
+  form: PropTypes.instanceOf(Object)
 };
