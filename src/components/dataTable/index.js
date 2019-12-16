@@ -12,30 +12,12 @@ const { TextArea } = Input;
 
 const EditableContext = React.createContext();
 
-const EditableRow = ({ form, ...props }) => (
-  <EditableContext.Provider value={form}>
-    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <tr {...props} />
-  </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-
-EditableRow.propTypes = {
-  form: PropTypes.instanceOf(Object)
-};
-
 class EditableCell extends React.Component {
   change = (e) => {
-    const { record, handlechange, handleerror } = this.props;
+    const { record, handlechange, form } = this.props;
     setTimeout(() => {
-      this.form.validateFields((error, values) => {
-        handlechange({ ...record, ...error, ...values });
-        if (error) {
-          handleerror(true);
-        } else {
-          handleerror(false);
-        }
+      form.setFields((values) => {
+        handlechange({ ...record, ...values });
       });
     }, 100);
   };
@@ -51,31 +33,32 @@ class EditableCell extends React.Component {
     });
   };
 
-  renderCell = (form) => {
-    this.form = form;
+  renderCell = () => {
     const {
       editable,
       dataindex,
       record,
       placeholder,
-      type,
-      title
+      title,
+      form
     } = this.props;
     const index = dataindex;
+    const formIndex = index + record.key;
     if (index === 'kpi') {
       return (
         <div>
           <Form.Item style={{ margin: 0 }}>
-            {form.getFieldDecorator(index, {
+            {form.getFieldDecorator(formIndex, {
               rules: [
                 {
-                  required: true
+                  required: true,
+                  message: `${title} is required`
                 }
               ],
               initialValue: record[index]
             })(
               <TextArea
-                id={`${title}-${index}`}
+                id={`${title}-${index}-${record}`}
                 placeholder={placeholder}
                 autoSize={{ minRows: 2, maxRows: 4 }}
                 onChange={this.change}
@@ -98,12 +81,15 @@ class EditableCell extends React.Component {
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { type === 'number' ? form.getFieldDecorator(index, {
+          { index === 'weight' ? form.getFieldDecorator(formIndex, {
             rules: [
               {
                 required: true,
-                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
-                message: `${title} is wrong`
+                message: 'Weight is required'
+              },
+              {
+                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)?$'),
+                message: 'Weight\'s value must between 1 to 100'
               }
             ],
             initialValue: record[index]
@@ -115,16 +101,17 @@ class EditableCell extends React.Component {
               onChange={this.change}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(index, {
+        ) : form.getFieldDecorator(formIndex, {
           rules: [
             {
-              required: true
+              required: true,
+              message: `${title} is required`
             }
           ],
           initialValue: record[index]
         })(
           <TextArea
-            id={`${title}-${index}`}
+            id={`${title}-${formIndex}`}
             placeholder={placeholder}
             autoSize={{ minRows: 3, maxRows: 5 }}
             onChange={this.change}
@@ -167,48 +154,49 @@ EditableCell.propTypes = {
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
   handlechange: PropTypes.func,
-  handleerror: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  children: PropTypes.instanceOf(Object)
+  children: PropTypes.instanceOf(Object),
+  form: PropTypes.instanceOf(Object)
 };
 
 const DataTable = (props) => {
   const {
-    datasource,
-    handlechange,
-    columns,
-    handleerror,
-    loading
-  } = props;
+      datasource,
+      handlechange,
+      columns,
+      loading,
+      form
+    } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-
   const components = {
     body: {
-      row: EditableFormRow,
       cell: EditableCell
     }
   };
   const columnList = columns.map((col) => {
     return {
       ...col,
-      onCell: (record) => ({
+      onCell: (record, index) => ({
         record,
+        form,
+        datasource,
         editable: col.editable,
         dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
         color: col.color,
-        handlechange,
-        handleerror
+        handlechange
       })
     };
   });
+
   return (
     <div>
       <Table
+        form={form}
         loading={loading}
         components={components}
         rowClassName="editable-row"
@@ -228,7 +216,7 @@ export default DataTable;
 DataTable.propTypes = {
   datasource: PropTypes.instanceOf(Array),
   handlechange: PropTypes.func,
-  handleerror: PropTypes.func,
   loading: PropTypes.bool,
-  columns: PropTypes.instanceOf(Array)
+  columns: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object)
 };

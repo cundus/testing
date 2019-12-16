@@ -12,7 +12,7 @@ class Planning extends Component {
     super(props);
     this.state = {
       step: 0,
-      loading: true
+      loading: false
     };
     this.getKpi();
   }
@@ -27,12 +27,12 @@ class Planning extends Component {
     } = this.props;
     const { user } = userReducers.result;
     const { getKpiList } = this.props;
-    await getKpiList(user.userId);
+    // await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { errMessage, dataKpi, status } = kpiReducers;
     if (status === 0) {
       if (dataKpi.length !== 0 && step === 0) {
-        this.stepChange(1);
+        // this.stepChange(1);
       }
       this.setState({
         loading: false
