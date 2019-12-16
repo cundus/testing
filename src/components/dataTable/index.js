@@ -12,18 +12,33 @@ const { TextArea } = Input;
 
 const EditableContext = React.createContext();
 
-class EditableCell extends React.Component {
-  change = (index) => {
-    const { record, handlechange, form } = this.props;
-    setTimeout(() => form.validateFields((errors, values) => {
-      const item = values.dataKpi[index];
-      handlechange({
-        ...record,
-        ...item
-      });
-    }), 100);
-  };
+const EditableRow = ({ form, ...props }) => (
+  <EditableContext.Provider value={form}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <tr {...props} />
+  </EditableContext.Provider>
+);
 
+const EditableFormRow = Form.create()(EditableRow);
+
+EditableRow.propTypes = {
+  form: PropTypes.instanceOf(Object)
+};
+
+class EditableCell extends React.Component {
+  change = (e) => {
+    const { record, handlechange, handleerror } = this.props;
+    setTimeout(() => {
+      this.form.validateFields((error, values) => {
+        handlechange({ ...record, ...error, ...values });
+        if (error) {
+          handleerror(true);
+        } else {
+          handleerror(false);
+        }
+      });
+    }, 100);
+  };
 
   changeSwitch = (checked) => {
     const { record, handlechange } = this.props;
@@ -36,33 +51,25 @@ class EditableCell extends React.Component {
     });
   };
 
-  renderCell = () => {
+  renderCell = (form) => {
+    this.form = form;
     const {
       editable,
       dataindex,
       record,
       placeholder,
-      indexarr,
-      title,
-      form
+      type,
+      title
     } = this.props;
     const index = dataindex;
-    const { typeKpi } = record;
-    let type = '';
-    if (typeKpi.includes('Self')) {
-      type = 'dataKpi';
-    } else {
-      type = 'dataManagerKpi';
-    }
     if (index === 'kpi') {
       return (
         <div>
           <Form.Item style={{ margin: 0 }}>
-            {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            {form.getFieldDecorator(index, {
               rules: [
                 {
-                  required: true,
-                  message: `${title} is required`
+                  required: true
                 }
               ],
               initialValue: record[index]
@@ -70,136 +77,33 @@ class EditableCell extends React.Component {
               <TextArea
                 id={`${title}-${index}`}
                 placeholder={placeholder}
-                // eslint-disable-next-line react/jsx-no-bind
-                onChange={() => this.change(indexarr)}
                 autoSize={{ minRows: 2, maxRows: 4 }}
+                onChange={this.change}
                 disabled={!editable}
               />
           )}
           </Form.Item>
-          <div>
+          <div style={{ flexDirection: 'row' }}>
             <Switch
               size="small"
               checked={record.achievementType !== 0}
+              checkedChildren="Quantitative"
               style={{ width: '100%' }}
               onChange={this.changeSwitch}
-              checkedChildren="Quantitative"
               unCheckedChildren="Qualitative"
             />
           </div>
         </div>
       );
-    } else if (record.achievementType === 1 && title === 'L1') {
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: [
-              {
-                required: true,
-                message: `${title} is required`
-              },
-              {
-                validator: async (rule, value, callback, source) => {
-                  const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
-                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
-                  if (parseFloat(L1) >= parseFloat(L2)) {
-                    callback('Value lower than L2');
-                  }
-                }
-              }
-            ],
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr)}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 1 && title === 'L2') {
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: [
-              {
-                required: true,
-                message: `${title} is required`
-              },
-              {
-                validator: async (rule, value, callback, source) => {
-                  const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
-                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
-                  const L3 = form.getFieldValue(`${type}[${indexarr}].L3`);
-                  if (parseFloat(L2) >= parseFloat(L3)) {
-                    callback('Value must lower than L3');
-                  } else if (parseFloat(L2) <= parseFloat(L1)) {
-                    callback('Value must higher than L1');
-                  }
-                }
-              }
-            ],
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr)}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 1 && title === 'L3') {
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: [
-              {
-                required: true,
-                message: `${title} is required`
-              },
-              {
-                validator: async (rule, value, callback, source) => {
-                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
-                  const L3 = form.getFieldValue(`${type}[${indexarr}].L3`);
-                  if (parseFloat(L3) <= parseFloat(L2)) {
-                    callback('Value must higher than L2');
-                  }
-                }
-              }
-            ],
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr)}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { index === 'weight' ? form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+          { type === 'number' ? form.getFieldDecorator(index, {
             rules: [
               {
                 required: true,
-                message: 'Weight is required'
-              },
-              {
-                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)?$'),
-                message: 'Weight\'s value between 1 to 100'
+                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
+                message: `${title} is wrong`
               }
             ],
             initialValue: record[index]
@@ -207,16 +111,14 @@ class EditableCell extends React.Component {
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr)}
               autoSize={{ minRows: 3, maxRows: 5 }}
+              onChange={this.change}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+        ) : form.getFieldDecorator(index, {
           rules: [
             {
-              required: true,
-              message: `${title} is required`
+              required: true
             }
           ],
           initialValue: record[index]
@@ -224,9 +126,8 @@ class EditableCell extends React.Component {
           <TextArea
             id={`${title}-${index}`}
             placeholder={placeholder}
-            // eslint-disable-next-line react/jsx-no-bind
-            onChange={() => this.change(indexarr)}
             autoSize={{ minRows: 3, maxRows: 5 }}
+            onChange={this.change}
             disabled={!editable}
           />
         )}
@@ -239,29 +140,44 @@ class EditableCell extends React.Component {
     const {
       children,
       editable,
+      color,
       ...restProps
     } = this.props;
-    return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      <td {...restProps}>
-        {!editable ? (
-          <div
-            className="editable-cell-value-wrap"
-          >
-            {children}
-          </div>
-          ) : (
-            <div>
-              <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+    if (color) {
+      return (
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <td style={{ backgroundColor: color }}>
+          {!editable ? (
+            <div
+              className="editable-cell-value-wrap"
+            >
+              {children}
             </div>
+          ) : (
+            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
           )}
-      </td>
-    );
+        </td>
+      );
+    } else {
+      return (
+      // eslint-disable-next-line react/jsx-props-no-spreading
+        <td {...restProps}>
+          {!editable ? (
+            <div
+              className="editable-cell-value-wrap"
+            >
+              {children}
+            </div>
+          ) : (
+            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+          )}
+        </td>
+      );
+    }
   }
 }
 
 EditableCell.propTypes = {
-  indexarr: PropTypes.number,
   color: PropTypes.string,
   editable: PropTypes.bool,
   dataindex: PropTypes.string,
@@ -269,50 +185,48 @@ EditableCell.propTypes = {
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
   handlechange: PropTypes.func,
+  handleerror: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  children: PropTypes.instanceOf(Object),
-  form: PropTypes.instanceOf(Object)
+  children: PropTypes.instanceOf(Object)
 };
 
 const DataTable = (props) => {
   const {
-      datasource,
-      handlechange,
-      columns,
-      loading,
-      form
-    } = props;
+    datasource,
+    handlechange,
+    columns,
+    handleerror,
+    loading
+  } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+
   const components = {
     body: {
+      row: EditableFormRow,
       cell: EditableCell
     }
   };
   const columnList = columns.map((col) => {
     return {
       ...col,
-      onCell: (record, index) => ({
+      onCell: (record) => ({
         record,
-        form,
-        datasource,
-        indexarr: index,
         editable: col.editable,
         dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
         color: col.color,
-        handlechange
+        handlechange,
+        handleerror
       })
     };
   });
-
   return (
     <div>
       <Table
-        form={form}
         loading={loading}
         components={components}
         rowClassName="editable-row"
@@ -332,7 +246,7 @@ export default DataTable;
 DataTable.propTypes = {
   datasource: PropTypes.instanceOf(Array),
   handlechange: PropTypes.func,
+  handleerror: PropTypes.func,
   loading: PropTypes.bool,
-  columns: PropTypes.instanceOf(Array),
-  form: PropTypes.instanceOf(Object)
+  columns: PropTypes.instanceOf(Array)
 };

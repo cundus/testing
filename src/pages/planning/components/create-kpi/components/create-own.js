@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
-import { DataTable } from '../../../../../components';
+import DataTable from '../../../../../components/dataTable/newTable';
 
 class CreateOwn extends Component {
   constructor(props) {
