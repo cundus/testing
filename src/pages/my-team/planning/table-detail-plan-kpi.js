@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { DataTable } from "../../../components";
+import { DataTable } from '../../../components';
 
 class TableEditMyKPI extends Component {
   constructor(props) {
