@@ -13,7 +13,9 @@ class PlanningDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      globalfeedback: '',
+      labelList: []
     };
   }
 
@@ -26,14 +28,16 @@ class PlanningDetail extends Component {
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
     await this.props.getUserDetail(this.props.match.params.id);
-    const mydata = this.props.myteamdetail;
+    const mydata = this.props.myteamdetail.kpiList;
+    const globalFeedback = this.props.myteamdetail.challengeOthersRatingComments;
     if (mydata[0].error !== true) {
       // eslint-disable-next-line array-callback-return
       mydata.map((itemKpi) => {
         let dataMetrics = undefined;
         if (itemKpi.metricLookup !== null) {
           dataMetrics = itemKpi.metricLookup.map((metric) => {
-            return `{"${metric.label}":"${metric.description}"}`;
+            return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+              metric.achievementText : metric.achievementNumeric}"}`;
           });
           dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
           dataMetrics = dataMetrics.reduce((result, current) => {
@@ -46,16 +50,20 @@ class PlanningDetail extends Component {
           baseline: itemKpi.metric,
           weight: itemKpi.weight,
           ...dataMetrics,
-          feedback: itemKpi.feedback
+          feedback: itemKpi.othersRatingComments.comment
         };
         newData.push(data);
       });
       this.setState({
         dataSource: newData,
+        globalfeedback: globalFeedback.comment,
+        labelList: this.props.myteamdetail.labelList
       });
     } else {
       this.setState({
         dataSource: [],
+        globalfeedback: '',
+        labelList: this.props.myteamdetail.labelList
       });
     }
   }
@@ -94,12 +102,15 @@ class PlanningDetail extends Component {
     });
   }
 
+  changeGlobalfeedback = ({ target: { value } }) => {
+    this.setState({ globalfeedback: value });
+  };
 
   render() {
     return(
       <div>
         {
-         (this.props.myteamdetail.length > 0 ) ?
+         (this.state.dataSource.length > 0  ) ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
@@ -123,9 +134,12 @@ class PlanningDetail extends Component {
              <TablePlanningDetails
                dataSource={this.state.dataSource}
                handleChange={this.handleChange}
+               dataMetrics={this.state.labelList}
              />
              <h3><b>General feedbacks:</b></h3>
              <TextArea
+               value={this.state.globalfeedback}
+               onChange={this.changeGlobalfeedback}
                placeholder={'Please make necessary changes on KPI items, please refer to my KPI or just cascading it.'}
              />
              <br/>

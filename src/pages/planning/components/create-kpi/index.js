@@ -7,7 +7,8 @@ import {
   Divider,
   message,
   Skeleton,
-  Spin
+  Spin,
+  Form
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -29,20 +30,19 @@ class CreateKPI extends Component {
       dataOwn: [
         {
           key: 1,
-          typeKpi: 'Self KPI',
-          kpi: '',
+          id: null,
+          achievementType: 0,
+          name: '',
           baseline: '',
           weight: '',
-          l1: '',
-          l2: '',
-          l3: ''
+          L1: '',
+          L2: '',
+          L3: ''
         }
       ],
       dataOwnId: 2,
       dataManagerKpi: [],
       dataSelectedCascade: [],
-      kpiErr: false,
-      kpiErrMessage: '',
       loadingOwn: true,
       loadingManager: true
     };
@@ -63,7 +63,7 @@ class CreateKPI extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList } = this.props;
+    const { getKpiList, form } = this.props;
     await getKpiList(id);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
@@ -91,16 +91,17 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
+    form.getFieldValue({
+      dataKpi: newData
+    });
     this.setState({
       dataOwn: newData,
-      loadingOwn: false,
-      kpiErr: false,
-      kpiErrMessage: ''
+      loadingOwn: false
     });
   }
 
   getManagerKpiList = async (id) => {
-    const { getKpiManagerList } = this.props;
+    const { getKpiManagerList, form } = this.props;
     await getKpiManagerList(id);
     const { kpiReducers } = this.props;
     const {
@@ -154,6 +155,9 @@ class CreateKPI extends Component {
       newData.push(data);
       return data;
     });
+    form.getFieldValue({
+      dataManagerKpi: newData
+    });
     this.setState({
       dataManagerKpi: newData,
       loadingManager: false
@@ -162,16 +166,14 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducers, stepChange
+      doSavingKpi, userReducers, stepChange, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
     const { challenge } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
       dataOwn,
-      dataSelectedCascade,
-      kpiErr,
-      kpiErrMessage
+      dataSelectedCascade
     } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     const newDataKpi = [];
@@ -206,24 +208,24 @@ class CreateKPI extends Component {
       challangeYourSelf: challenge,
       kpiList: newDataKpi
     };
-    if (kpiErr) {
-      message.warning(kpiErrMessage);
-    } else {
-      confirm({
-        title: 'Are you sure?',
-        onOk: async () => {
-          await doSavingKpi(data, user.userId);
-          const { kpiReducers } = this.props;
-          if (kpiReducers.statusSaveKPI === Success) {
-            message.success('Your KPI has been saved');
-            stepChange(1); // go to draft
-          } else {
-            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-          }
-        },
-        onCancel() {}
-      });
-    }
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(data, user.userId);
+            const { kpiReducers } = this.props;
+            if (kpiReducers.statusSaveKPI === Success) {
+              message.success('Your KPI has been saved');
+              stepChange(1); // go to draft
+            } else {
+              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      }
+    });
   };
 
   handleSelectData = (record) => {
@@ -249,7 +251,9 @@ class CreateKPI extends Component {
     const newData = {
       key: dataOwnId,
       id: null,
-      description: '',
+      typeKpi: 'Self KPI',
+      achievementType: 0,
+      name: '',
       baseline: '',
       weight: '',
       L1: '',
@@ -261,20 +265,6 @@ class CreateKPI extends Component {
       dataOwnId: dataOwnId + 1
     });
   };
-
-  handleError = (statusErr) => {
-    if (statusErr) {
-      this.setState({
-        kpiErr: true,
-        kpiErrMessage: 'Please fill the form'
-      });
-    } else {
-      this.setState({
-        kpiErr: false,
-        kpiErrMessage: ''
-      });
-    }
-  }
 
   handleDeleteRow = (key) => {
     const { dataOwn } = this.state;
@@ -310,7 +300,7 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { kpiReducers } = this.props;
+    const { kpiReducers, form } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
     } = kpiReducers;
@@ -336,6 +326,7 @@ class CreateKPI extends Component {
             <TabPane tab="Create Own KPI" key="1">
               {!loadingOwn ?
                 <CreateOwn
+                  form={form}
                   dataSource={dataOwn}
                   dataMetrics={dataKpiMetrics}
                   handleSaveDraft={handleSaveDraft}
@@ -375,7 +366,7 @@ const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getKpiManagerList: (id) => dispatch(doGetKpiManagerList(id)),
-  getLatestGoalKpi: (id) => dispatch(doGetLatestGoalKpi())
+  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi())
 });
 
 const connectToComponent = connect(
@@ -383,7 +374,7 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(CreateKPI);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
   stepChange: PropTypes.func,
@@ -391,6 +382,7 @@ CreateKPI.propTypes = {
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,
   getKpiManagerList: PropTypes.func,
+  form: PropTypes.instanceOf(Object),
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   userReducers: PropTypes.instanceOf(Object).isRequired
 };

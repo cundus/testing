@@ -1,18 +1,16 @@
-import React, { Component } from "react";
-import  { connect } from  'react-redux';
-import { withRouter, Link } from  'react-router-dom'
-import { Row, Col, Button/*, Icon */} from 'antd';
-import  './home-styles.scss';
-import  { GetInfoUser } from '../../redux/actions/user';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Link } from 'react-router-dom';
+import { Row, Col, Button } from 'antd';
+import './home-styles.scss';
+import _ from 'lodash';
+import { GetInfoUser } from '../../redux/actions/user';
 
 // icons list
 import collaborationIcon from '../../assets/icons/collaboration.svg';
-import CustomerIcon from  '../../assets/icons/customer.svg';
+import CustomerIcon from '../../assets/icons/customer.svg';
 import FileIcon from '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
-
-import _ from  'lodash';
-
 
 class Home extends Component {
   async componentDidMount() {
@@ -24,12 +22,12 @@ class Home extends Component {
     if (!isManager) {
       size = 8;
     }
-    return(
-      <div style={{textAlign: "center" }}>
-            <Row style={{paddingTop:50}}>
+    return (
+      <div style={{textAlign: 'center'}}>
+            <Row style={{ paddingTop: 50 }}>
               <Col xl={size} lg={size} md={size} xs={24} className='grid'>
                 <br/><br/>
-                <img alt={"plannning"} src={FileIcon} className='purple' style={{width:120, height: 120}}/>
+                <img alt={'plannning'} src={FileIcon} className='purple' style={{width:120, height: 120}}/>
                 <h1>Planning</h1>
                 <p className='qoute-text'>Create New KPI or Cascade</p>
                 <Link to={'planning/kpi'}><Button shape='round' className='homeBtn  purpleBtn'>Create KPI</Button></Link>
@@ -58,16 +56,16 @@ class Home extends Component {
               </Col>
             </Row>
       </div>
-    )
+    );
   }
 }
-const mapDispatchtoProps = dispatch => ({
+const mapDispatchtoProps = (dispatch) => ({
   GetInfoUser: (token) => dispatch(GetInfoUser(token))
-})
-const mapStateToProps = state => ({
+});
+const mapStateToProps = (state) => ({
   auth: state.authReducer,
   user: state.userReducers
 });
-const connectToComponent=  connect(mapStateToProps, mapDispatchtoProps)(Home);
+const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Home);
 
 export default withRouter(connectToComponent);

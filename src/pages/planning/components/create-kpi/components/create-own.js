@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
-import { DataTable } from '../../../../../components';
+import DataTable from '../../../../../components/dataTable/newTable';
 
 class CreateOwn extends Component {
   constructor(props) {
@@ -96,11 +96,13 @@ class CreateOwn extends Component {
       handleChangeField,
       handleSaveDraft,
       handleError,
-      loading
+      loading,
+      form
     } = this.props;
     return (
       <div>
         <DataTable
+          form={form}
           columns={columns}
           loading={loading}
           datasource={dataSource}
@@ -139,5 +141,6 @@ CreateOwn.propTypes = {
   handleError: PropTypes.func,
   handleDelete: PropTypes.func,
   dataMetrics: PropTypes.instanceOf(Array),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  form: PropTypes.instanceOf(Object)
 };

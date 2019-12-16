@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
-import { DataTable } from '../../../../components';
+import DataTable from '../../../../components/dataTable/newTable';
 
 class TableDrafKPI extends Component {
   constructor(props) {
@@ -11,7 +11,10 @@ class TableDrafKPI extends Component {
     this.state = {
       columns: []
     };
-    this.getColumns();
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.getColumns(), 10);
   }
 
   getColumns = async () => {
@@ -93,7 +96,7 @@ class TableDrafKPI extends Component {
       dataIndex: 'feedback',
       placeholder: 'Enter KPI Feedback',
       align: 'center',
-      color: 'rgb(250, 247, 187)',
+      className: 'ant-table-th-yellow',
       editable: false
     };
     if (isFeedback) {
@@ -110,11 +113,13 @@ class TableDrafKPI extends Component {
       dataSource,
       handleChange,
       handleError,
-      loading
+      loading,
+      form
     } = this.props;
     return (
       <div>
         <DataTable
+          form={form}
           columns={columns}
           loading={loading}
           datasource={dataSource}
@@ -135,5 +140,6 @@ TableDrafKPI.propTypes = {
   handleDelete: PropTypes.func,
   isFeedback: PropTypes.bool,
   dataMetrics: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object),
   loading: PropTypes.bool
 };

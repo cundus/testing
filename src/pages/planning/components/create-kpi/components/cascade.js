@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Checkbox } from 'antd';
-import { DataTable } from '../../../../../components';
+import DataTable from '../../../../../components/dataTable/newTable';
 
 class Cascade extends Component {
   constructor(props) {
