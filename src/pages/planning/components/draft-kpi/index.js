@@ -48,6 +48,9 @@ class DraftKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
+      if (itemKpi.othersRatingComments.id) {
+        this.setState({ isFeedback: true });
+      }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -64,7 +67,8 @@ class DraftKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
-        ...dataMetrics
+        ...dataMetrics,
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });
@@ -345,7 +349,7 @@ class DraftKPI extends Component {
             }}
             >
               <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback}</Paragraph>
+              <Paragraph>{generalFeedback.comment}</Paragraph>
             </div>}
           <div style={{ textAlign: 'center' }}>
             <Button

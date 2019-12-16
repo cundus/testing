@@ -11,7 +11,10 @@ class TableDrafKPI extends Component {
     this.state = {
       columns: []
     };
-    this.getColumns();
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.getColumns(), 10);
   }
 
   getColumns = async () => {
@@ -93,7 +96,7 @@ class TableDrafKPI extends Component {
       dataIndex: 'feedback',
       placeholder: 'Enter KPI Feedback',
       align: 'center',
-      className: '.ant-table-th-yellow',
+      className: 'ant-table-th-yellow',
       editable: false
     };
     if (isFeedback) {

@@ -40,6 +40,9 @@ class SubmitedKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
+      if (itemKpi.othersRatingComments.id) {
+        this.setState({ isFeedback: true });
+      }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -55,7 +58,8 @@ class SubmitedKPI extends Component {
         description: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
-        ...dataMetrics
+        ...dataMetrics,
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });

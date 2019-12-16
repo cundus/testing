@@ -55,7 +55,7 @@ class ReviewKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         ...dataMetrics,
-        feedback: itemKpi.othersRatingComments[0]
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });
@@ -134,7 +134,7 @@ class ReviewKPI extends Component {
         }}
         >
           <Text strong>General Feedback :</Text>
-          <Paragraph>{generalFeedback}</Paragraph>
+          <Paragraph>{generalFeedback.comment}</Paragraph>
         </div>
       </div>
     );

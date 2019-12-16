@@ -64,7 +64,7 @@ class TableDrafKPI extends Component {
       dataIndex: 'feedback',
       placeholder: 'Enter KPI Feedback',
       align: 'center',
-      className: '.ant-table-th-yellow',
+      className: 'ant-table-th-yellow',
       editable: false
     };
     await newColumns.push(Feedback);
