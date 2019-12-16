@@ -63,7 +63,7 @@ class CreateKPI extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList } = this.props;
+    const { getKpiList, form } = this.props;
     await getKpiList(id);
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
@@ -91,6 +91,9 @@ class CreateKPI extends Component {
       };
       newData.push(data);
     });
+    form.getFieldValue({
+      dataKpi: newData
+    });
     this.setState({
       dataOwn: newData,
       loadingOwn: false
@@ -98,7 +101,7 @@ class CreateKPI extends Component {
   }
 
   getManagerKpiList = async (id) => {
-    const { getKpiManagerList } = this.props;
+    const { getKpiManagerList, form } = this.props;
     await getKpiManagerList(id);
     const { kpiReducers } = this.props;
     const {
@@ -151,6 +154,9 @@ class CreateKPI extends Component {
       };
       newData.push(data);
       return data;
+    });
+    form.getFieldValue({
+      dataManagerKpi: newData
     });
     this.setState({
       dataManagerKpi: newData,

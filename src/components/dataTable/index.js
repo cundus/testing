@@ -13,24 +13,26 @@ const { TextArea } = Input;
 const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
-  change = (key) => {
+  change = (index) => {
     const { record, handlechange, form } = this.props;
     setTimeout(() => form.validateFields((errors, values) => {
-      const newData = values.dataKpi;
-      const index = newData.findIndex(() => record.key === key);
-      const item = newData[index];
+      const item = values.dataKpi[index];
       handlechange({
         ...record,
         ...item
       });
-    }), 1);
+    }), 100);
   };
+
 
   changeSwitch = (checked) => {
     const { record, handlechange } = this.props;
     handlechange({
       ...record,
-      achievementType: checked ? 1 : 0
+      achievementType: checked ? 1 : 0,
+      L1: '',
+      L2: '',
+      L3: ''
     });
   };
 
@@ -45,12 +47,18 @@ class EditableCell extends React.Component {
       form
     } = this.props;
     const index = dataindex;
-    const formIndex = index + record.key;
+    const { typeKpi } = record;
+    let type = '';
+    if (typeKpi.includes('Self')) {
+      type = 'dataKpi';
+    } else {
+      type = 'dataManagerKpi';
+    }
     if (index === 'kpi') {
       return (
         <div>
           <Form.Item style={{ margin: 0 }}>
-            {form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
+            {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
               rules: [
                 {
                   required: true,
@@ -60,10 +68,10 @@ class EditableCell extends React.Component {
               initialValue: record[index]
             })(
               <TextArea
-                id={`${title}-${index}-${record}`}
+                id={`${title}-${index}`}
                 placeholder={placeholder}
                 // eslint-disable-next-line react/jsx-no-bind
-                onChange={() => this.change(record.key)}
+                onChange={() => this.change(indexarr)}
                 autoSize={{ minRows: 2, maxRows: 4 }}
                 disabled={!editable}
               />
@@ -84,7 +92,7 @@ class EditableCell extends React.Component {
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { index === 'weight' ? form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
+          { index === 'weight' ? form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             rules: [
               {
                 required: true,
@@ -101,11 +109,11 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(record.key)}
+              onChange={() => this.change(indexarr)}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(`dataKpi[${indexarr}].${index}`, {
+        ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
           rules: [
             {
               required: true,
@@ -115,10 +123,10 @@ class EditableCell extends React.Component {
           initialValue: record[index]
         })(
           <TextArea
-            id={`${title}-${formIndex}`}
+            id={`${title}-${index}`}
             placeholder={placeholder}
             // eslint-disable-next-line react/jsx-no-bind
-            onChange={() => this.change(record.key)}
+            onChange={() => this.change(indexarr)}
             autoSize={{ minRows: 3, maxRows: 5 }}
             disabled={!editable}
           />

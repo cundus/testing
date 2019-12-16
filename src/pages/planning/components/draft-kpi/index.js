@@ -180,6 +180,7 @@ class DraftKPI extends Component {
   };
 
   handleChange = (row) => {
+    const { form } = this.props;
     const { dataSource } = this.state;
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -188,8 +189,9 @@ class DraftKPI extends Component {
       ...item,
       ...row
     });
-    console.log(newData, 'assa');
-    
+    form.getFieldValue({
+      dataKpi: newData
+    });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
   };
@@ -264,28 +266,24 @@ class DraftKPI extends Component {
       challangeYourSelf: challengeYour,
       kpiList: newDataKpi
     };
-    if (kpiErr) {
-      message.warning(kpiErrMessage);
-    } else {
-      form.validateFieldsAndScroll((err, values) => {
-        if (!err) {
-          confirm({
-            title: 'Are you sure?',
-            onOk: async () => {
-              await doSavingKpi(data, user.userId);
-              this.getAllData();
-              const { kpiReducers } = this.props;
-              if (kpiReducers.statusSaveKPI === Success) {
-                message.success('Your KPI has been saved');
-              } else {
-                message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-              }
-            },
-            onCancel() {}
-          });
-        }
-      });
-    }
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(data, user.userId);
+            this.getAllData();
+            const { kpiReducers } = this.props;
+            if (kpiReducers.statusSaveKPI === Success) {
+              message.success('Your KPI has been saved');
+            } else {
+              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      }
+    });
   };
 
   render() {
@@ -302,6 +300,8 @@ class DraftKPI extends Component {
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
+    console.log(dataSource[0], 'lihat');
+    
     return (
       <div>
         <div>
