@@ -6,7 +6,8 @@ import {
   Divider,
   message,
   Input,
-  Spin
+  Spin,
+  Form
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -27,7 +28,8 @@ class DraftKPI extends Component {
       weightTotal: 0,
       weightTotalErr: false,
       challengeYour: '',
-      kpiErr: false
+      kpiErr: false,
+      isFeedback: false
     };
   }
 
@@ -36,7 +38,7 @@ class DraftKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList } = this.props;
+    const { userReducers, getKpiList, form } = this.props;
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
@@ -46,6 +48,9 @@ class DraftKPI extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
+      if (itemKpi.othersRatingComments.id) {
+        this.setState({ isFeedback: true });
+      }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -62,9 +67,14 @@ class DraftKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
-        ...dataMetrics
+        ...dataMetrics,
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
+    });
+
+    form.getFieldValue({
+      dataKpi: newData
     });
     this.setState({
       dataSource: newData,
@@ -105,7 +115,9 @@ class DraftKPI extends Component {
   }
 
   handleSubmit = () => {
-    const { doSavingKpi, userReducers, stepChange } = this.props;
+    const {
+      doSavingKpi, userReducers, stepChange, form
+    } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -150,24 +162,29 @@ class DraftKPI extends Component {
     } else if (kpiErr) {
       message.warning(kpiErrMessage);
     } else {
-      confirm({
-        title: 'Are you sure?',
-        onOk: async () => {
-          await doSavingKpi(data, user.userId);
-          const { kpiReducers } = this.props;
-          if (kpiReducers.statusSaveKPI === Success) {
-            message.success('Your KPI has been submitted to supervisor');
-            stepChange(2, true); // go to submit page
-          } else {
-            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-          }
-        },
-        onCancel() {}
+      form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              await doSavingKpi(data, user.userId);
+              const { kpiReducers } = this.props;
+              if (kpiReducers.statusSaveKPI === Success) {
+                message.success('Your KPI has been submitted to supervisor');
+                stepChange(2, true); // go to submit page
+              } else {
+                message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+              }
+            },
+            onCancel() {}
+          });
+        }
       });
     }
   };
 
   handleChange = (row) => {
+    const { form } = this.props;
     const { dataSource } = this.state;
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -175,6 +192,9 @@ class DraftKPI extends Component {
     newData.splice(index, 1, {
       ...item,
       ...row
+    });
+    form.getFieldValue({
+      dataKpi: newData
     });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
@@ -184,14 +204,9 @@ class DraftKPI extends Component {
     this.setState({ challengeYour: value });
   };
 
-  handleError = (statusErr) => {
+  handleError = () => {
     const { weightTotal } = this.state;
-    if (statusErr) {
-      this.setState({
-        kpiErr: true,
-        kpiErrMessage: 'Please fill the form'
-      });
-    } else if (weightTotal !== 100) {
+    if (weightTotal !== 100) {
       this.setState({
         kpiErr: true,
         kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
@@ -215,12 +230,10 @@ class DraftKPI extends Component {
   };
 
   handleSaveDraft = () => {
-    const { doSavingKpi, userReducers } = this.props;
+    const { doSavingKpi, userReducers, form } = this.props;
     const { user } = userReducers.result;
     const {
       dataSource,
-      kpiErr,
-      kpiErrMessage,
       challengeYour
     } = this.state;
     const newDataKpi = [];
@@ -255,24 +268,24 @@ class DraftKPI extends Component {
       challangeYourSelf: challengeYour,
       kpiList: newDataKpi
     };
-    if (!kpiErr || kpiErrMessage === 'Sorry, Total KPI Weight must be 100%') {
-      confirm({
-        title: 'Are you sure?',
-        onOk: async () => {
-          await doSavingKpi(data, user.userId);
-          this.getAllData();
-          const { kpiReducers } = this.props;
-          if (kpiReducers.statusSaveKPI === Success) {
-            message.success('Your KPI has been saved');
-          } else {
-            message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
-          }
-        },
-        onCancel() {}
-      });
-    } else {
-      message.warning(kpiErrMessage);
-    }
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(data, user.userId);
+            this.getAllData();
+            const { kpiReducers } = this.props;
+            if (kpiReducers.statusSaveKPI === Success) {
+              message.success('Your KPI has been saved');
+            } else {
+              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      }
+    });
   };
 
   render() {
@@ -287,7 +300,7 @@ class DraftKPI extends Component {
       changeChallenge,
       handleError
     } = this;
-    const { kpiReducers, stepChange } = this.props;
+    const { kpiReducers, stepChange, form } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
@@ -308,6 +321,7 @@ class DraftKPI extends Component {
         <div>
           {!loadingKpi ?
             <TableDrafKPI
+              form={form}
               dataMetrics={dataKpiMetrics}
               isFeedback={isFeedback}
               dataSource={dataSource}
@@ -335,7 +349,7 @@ class DraftKPI extends Component {
             }}
             >
               <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback}</Paragraph>
+              <Paragraph>{generalFeedback.comment}</Paragraph>
             </div>}
           <div style={{ textAlign: 'center' }}>
             <Button
@@ -382,12 +396,13 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(DraftKPI);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));
 
 DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
-  stepChange: PropTypes.func
+  stepChange: PropTypes.func,
+  form: PropTypes.instanceOf(Object)
 };

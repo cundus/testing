@@ -3,7 +3,8 @@ import {
   Typography,
   Divider,
   Input,
-  Spin
+  Spin,
+  Button
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -55,7 +56,7 @@ class ReviewKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         ...dataMetrics,
-        feedback: itemKpi.othersRatingComments[0]
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });
@@ -95,7 +96,7 @@ class ReviewKPI extends Component {
     const {
       dataSource, weightTotal, weightTotalErr, challengeYour
     } = this.state;
-    const { kpiReducers } = this.props;
+    const { kpiReducers, stepChange } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
@@ -134,8 +135,18 @@ class ReviewKPI extends Component {
         }}
         >
           <Text strong>General Feedback :</Text>
-          <Paragraph>{generalFeedback}</Paragraph>
+          <Paragraph>{generalFeedback.comment}</Paragraph>
         </div>
+        <center>
+          <Button
+            id="save-draft"
+            // eslint-disable-next-line react/jsx-no-bind
+            onClick={() => stepChange(1, true)}
+            style={{ margin: 10 }}
+          >
+            Edit My KPI
+          </Button>
+        </center>
       </div>
     );
   }

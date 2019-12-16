@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { message, Spin } from 'antd';
 import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import {
   Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
@@ -30,13 +31,23 @@ class Planning extends Component {
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { errMessage, dataKpi, status } = kpiReducers;
+    await dataKpi.map((itemKpi) => {
+      if (itemKpi.othersRatingComments.id) {
+        this.setState({
+          step: 3,
+          loading: false
+        });
+        return 3;
+      }
+    });
     if (status === 0) {
       if (dataKpi.length !== 0 && step === 0) {
         this.stepChange(1);
+        this.setState({
+          loading: false
+        });
+        return 1;
       }
-      this.setState({
-        loading: false
-      });
     } else {
       message.warning(`Sorry, ${errMessage}`);
       history.goBack();
@@ -64,6 +75,14 @@ class Planning extends Component {
         });
       } else {
         message.warning('Sorry, You cannot be able to go');
+      }
+    } else if (step === 3) {
+      if (target === 1 && access) {
+        this.setState({
+          step: target
+        });
+      } else {
+        message.warning('Sorry, You cannot be able to back');
       }
     } else {
       message.warning('Sorry, You cannot be able to back');
@@ -109,3 +128,10 @@ const connectToComponent = connect(
 )(Planning);
 
 export default withRouter(connectToComponent);
+
+Planning.propTypes = {
+  kpiReducers: PropTypes.instanceOf(Object),
+  userReducers: PropTypes.instanceOf(Object),
+  history: PropTypes.instanceOf(Object),
+  getKpiList: PropTypes.func
+};
