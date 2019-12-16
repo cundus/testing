@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import DataTable from '../../../components/dataTable/index';
-import {Avatar, Tag, Button} from 'antd';
+import React, { Component } from 'react';
+import {Avatar, Tag, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import DataTable from '../../../components/dataTable/index';
 const {
   REACT_APP_API_URL
 } = process.env;
@@ -11,41 +11,41 @@ class TablePlan extends Component {
     super(props);
     this.columns = [
       {
-        title: "Profile Pic",
-        dataIndex: "userId",
-        placeholder: "Profile",
+        title: 'Profile Pic',
+        dataIndex: 'userId',
+        placeholder: 'Profile',
         action: true,
         render:(text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
       },
       {
-        title: "Name",
-        dataIndex: "firstName",
-        placeholder: "name"
+        title: 'Name',
+        dataIndex: 'firstName',
+        placeholder: 'name'
       },
       {
-        title: "KPI Title",
-        dataIndex: "title",
-        placeholder: "KPI Title"
+        title: 'KPI Title',
+        dataIndex: 'title',
+        placeholder: 'KPI Title'
       },
       {
-        title: "KPI Score",
-        dataIndex: "score",
-        placeholder: "Score",
+        title: 'KPI Score',
+        dataIndex: 'score',
+        placeholder: 'Score'
       },
       {
-        title: "KPI Rating",
-        dataIndex: "ratting",
-        placeholder: "Rating",
+        title: 'KPI Rating',
+        dataIndex: 'ratting',
+        placeholder: 'Rating'
       },
       {
-        title: "Non-KPI Result",
-        dataIndex: "result",
-        placeholder: "Non-KPI Result",
+        title: 'Non-KPI Result',
+        dataIndex: 'result',
+        placeholder: 'Non-KPI Result'
       },
       {
-        title: "Status",
-        dataIndex: "status",
-        placeholder: "Status",
+        title: 'Status',
+        dataIndex: 'status',
+        placeholder: 'Status',
         action: true,
         render: (text) => {
           let status;
@@ -64,9 +64,9 @@ class TablePlan extends Component {
         }
       },
       {
-        title: "Action",
-        dataIndex: "userId",
-        placeholder: "action",
+        title: 'Action',
+        dataIndex: 'userId',
+        placeholder: 'action',
         action: true,
         render: (text) => (<Button type={'primary'}><Link to={`/my-team/planning/${text}`}>View</Link></Button>)
       }
@@ -82,16 +82,17 @@ class TablePlan extends Component {
   }
 
   getAllData = () => {
+    const { team } = this.props;
+    const { result } = team;
     this.setState(
       {
-        dataSource: this.props.team.result,
+        dataSource: result,
       }
     );
   }
 
   render() {
     const { dataSource } = this.state;
-    console.log('ds', dataSource)
     const { columns } = this;
     return (
       <div>
