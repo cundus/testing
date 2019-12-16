@@ -230,8 +230,6 @@ class DraftKPI extends Component {
     const { user } = userReducers.result;
     const {
       dataSource,
-      kpiErr,
-      kpiErrMessage,
       challengeYour
     } = this.state;
     const newDataKpi = [];
@@ -300,8 +298,6 @@ class DraftKPI extends Component {
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
-    console.log(dataSource[0], 'lihat');
-    
     return (
       <div>
         <div>

@@ -251,6 +251,7 @@ class CreateKPI extends Component {
     const newData = {
       key: dataOwnId,
       id: null,
+      typeKpi: 'Self KPI',
       achievementType: 0,
       name: '',
       baseline: '',

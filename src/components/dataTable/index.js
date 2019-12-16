@@ -89,6 +89,105 @@ class EditableCell extends React.Component {
           </div>
         </div>
       );
+    } else if (record.achievementType === 1 && title === 'L1') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: [
+              {
+                required: true,
+                message: `${title} is required`
+              },
+              {
+                validator: async (rule, value, callback, source) => {
+                  const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
+                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
+                  if (parseFloat(L1) >= parseFloat(L2)) {
+                    callback('Value lower than L2');
+                  }
+                }
+              }
+            ],
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    } else if (record.achievementType === 1 && title === 'L2') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: [
+              {
+                required: true,
+                message: `${title} is required`
+              },
+              {
+                validator: async (rule, value, callback, source) => {
+                  const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
+                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
+                  const L3 = form.getFieldValue(`${type}[${indexarr}].L3`);
+                  if (parseFloat(L2) >= parseFloat(L3)) {
+                    callback('Value must lower than L3');
+                  } else if (parseFloat(L2) <= parseFloat(L1)) {
+                    callback('Value must higher than L1');
+                  }
+                }
+              }
+            ],
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    } else if (record.achievementType === 1 && title === 'L3') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: [
+              {
+                required: true,
+                message: `${title} is required`
+              },
+              {
+                validator: async (rule, value, callback, source) => {
+                  const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
+                  const L3 = form.getFieldValue(`${type}[${indexarr}].L3`);
+                  if (parseFloat(L3) <= parseFloat(L2)) {
+                    callback('Value must higher than L2');
+                  }
+                }
+              }
+            ],
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
@@ -100,7 +199,7 @@ class EditableCell extends React.Component {
               },
               {
                 pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)?$'),
-                message: 'Weight\'s value must between 1 to 100'
+                message: 'Weight\'s value between 1 to 100'
               }
             ],
             initialValue: record[index]
@@ -152,7 +251,9 @@ class EditableCell extends React.Component {
             {children}
           </div>
           ) : (
-            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+            <div>
+              <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+            </div>
           )}
       </td>
     );
