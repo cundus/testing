@@ -31,6 +31,11 @@ export const getMyTeam = 'GET_MY_TEAM';
 export const errGetMyTeam = 'ERR_GET_MY_TEAM';
 export const startGetMyTeam = 'START_GET_MY_TEAM';
 
+export const submitFeedback = 'SUBMIT_FEEDBACK';
+export const successFeedback = 'SUCCESS_FEEDBACK';
+export const errSubmitFeedback = 'ERR_SUBMIT_FEEDBACK';
+
+
 export const getMyTeamDetail = 'GET_MY_TEAM_DETAIL';
 export const errGetMyTeamDetail = 'ERR_GET_MY_TEAM_DETAIL';
 export const startGetMyTeamDetail = 'START_GET_MY_TEAM_DETAIL';

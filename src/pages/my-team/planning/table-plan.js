@@ -73,7 +73,7 @@ class TablePlan extends Component {
         placeholder: 'action',
         action: true,
         render: (text) => (
-          <Button type={'primary'} disabled={isNaN(text.status)}>
+          <Button type={'primary'} disabled={isNaN(text.status) || text.status === 999 }>
             <Link to={`/my-team/planning/${text.idUser}`}>
               View
             </Link>
