@@ -34,3 +34,7 @@ export const startGetMyTeam = 'START_GET_MY_TEAM';
 export const getMyTeamDetail = 'GET_MY_TEAM_DETAIL';
 export const errGetMyTeamDetail = 'ERR_GET_MY_TEAM_DETAIL';
 export const startGetMyTeamDetail = 'START_GET_MY_TEAM_DETAIL';
+
+export const SUBMIT_NEXT = 'SUBMIT_NEXT';
+export const SUBMIT_NEXT_SUCCESS = 'SUBMIT_NEXT_SUCCESS';
+export const SUBMIT_NEXT_FAILED = 'SUBMIT_NEXT_FAILED';

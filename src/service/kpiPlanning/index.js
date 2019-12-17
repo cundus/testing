@@ -41,3 +41,11 @@ export const getMetrics = () => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const submitNext = (id) => customAxios({
+  url: `/kpi/submitNext/${id}?comment=already repaired`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
