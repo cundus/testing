@@ -5,11 +5,13 @@ import kpiReducers from './kpi';
 import myteamReducers from './myTeam';
 import myTeamDetailReducers from './myTeamDetail';
 import userDetailReducers from './userDetail';
+import feedbackReducers from './feedback';
 export default combineReducers({
   authReducer,
   userReducers,
   kpiReducers,
   myteamReducers,
   myTeamDetailReducers,
-  userDetailReducers
+  userDetailReducers,
+  feedbackReducers
 });
