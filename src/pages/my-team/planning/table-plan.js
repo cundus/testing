@@ -61,8 +61,8 @@ class TablePlan extends Component {
             status = 'Completed';
             color = '#1dc9b7';
           } else {
-            status = 'None';
-            color = 'RED';
+            status = 'N/A';
+            color = '#ccc';
           }
           return (<Tag color={color}>{status}</Tag>);
         }
