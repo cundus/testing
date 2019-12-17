@@ -49,6 +49,7 @@ class PlanningDetail extends Component {
           description: itemKpi.name,
           baseline: itemKpi.metric,
           weight: itemKpi.weight,
+          achievementType: itemKpi.achievementType,
           ...dataMetrics,
           feedback: itemKpi.othersRatingComments.comment
         };
@@ -135,6 +136,11 @@ class PlanningDetail extends Component {
                dataSource={this.state.dataSource}
                handleChange={this.handleChange}
                dataMetrics={this.state.labelList}
+             />
+             <h3><b>Chalenge My Self: </b></h3>
+             <TextArea
+              value={this.props.myteamdetail.challangeYourSelf}
+              disabled={true}
              />
              <h3><b>General feedbacks:</b></h3>
              <TextArea
