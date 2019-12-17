@@ -24,7 +24,7 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,

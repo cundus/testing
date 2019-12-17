@@ -136,44 +136,59 @@ class EditableCell extends React.Component {
     }
   };
 
-  render() {
+  disableCell = () => {
     const {
-      children,
-      editable,
-      color,
-      ...restProps
+      dataindex,
+      record
     } = this.props;
-    if (color) {
+    const index = dataindex;
+    if (index === 'description') {
       return (
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        <td style={{ backgroundColor: color }}>
-          {!editable ? (
-            <div
-              className="editable-cell-value-wrap"
-            >
-              {children}
-            </div>
-          ) : (
-            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-          )}
-        </td>
+        <div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+          <div>
+            <Switch
+              size="small"
+              checked={record.achievementType !== 0}
+              style={{ width: '100%' }}
+              checkedChildren="Quantitative"
+              unCheckedChildren="Qualitative"
+            />
+          </div>
+        </div>
       );
     } else {
       return (
-      // eslint-disable-next-line react/jsx-props-no-spreading
-        <td {...restProps}>
-          {!editable ? (
-            <div
-              className="editable-cell-value-wrap"
-            >
-              {children}
-            </div>
-          ) : (
-            <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-          )}
-        </td>
+        <div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+        </div>
       );
     }
+  };
+
+  render() {
+    const {
+      editable,
+      ...restProps
+    } = this.props;
+    return (
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      <td {...restProps}>
+        {!editable ? (
+          <div>
+            <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
+          </div>
+          ) : (
+            <div>
+              <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+            </div>
+          )}
+      </td>
+    );
   }
 }
 

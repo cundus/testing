@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { DataTable } from '../../../../components';
+import DataTable from '../../../../components/dataTable/newTable';
 
 class TableDrafKPI extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class TableDrafKPI extends Component {
       },
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,

@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveKpi, doGetKpiList } from '../../../../redux/actions/kpi';
+import { doSaveKpi, doGetKpiList, doSubmitNext } from '../../../../redux/actions/kpi';
 import { Success } from '../../../../redux/status-code-type';
 
 const { confirm } = Modal;
@@ -116,7 +116,7 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSavingKpi, userReducers, stepChange, form
+      doSavingKpi, userReducers, stepChange, form, submitNext
     } = this.props;
     const { user } = userReducers.result;
     const {
@@ -171,6 +171,7 @@ class DraftKPI extends Component {
               const { kpiReducers } = this.props;
               if (kpiReducers.statusSaveKPI === Success) {
                 message.success('Your KPI has been submitted to supervisor');
+                submitNext(user.userId);
                 stepChange(2, true); // go to submit page
               } else {
                 message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
@@ -388,7 +389,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
-  getKpiList: (id) => dispatch(doGetKpiList(id))
+  getKpiList: (id) => dispatch(doGetKpiList(id)),
+  submitNext: (id) => dispatch(doSubmitNext(id))
 });
 
 const connectToComponent = connect(
@@ -402,6 +404,7 @@ DraftKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
+  submitNext: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
