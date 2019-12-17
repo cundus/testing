@@ -86,7 +86,7 @@ class Planning extends Component {
         message.warning('Sorry, You cannot be able to back');
       }
     } else if (step === 2) {
-      if (target === 2) {
+      if (target === 3) {
         message.warning('Sorry, You cannot be able to go');
       } else {
         message.warning('Sorry, You cannot be able to back');
