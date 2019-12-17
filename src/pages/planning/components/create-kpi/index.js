@@ -123,7 +123,7 @@ class CreateKPI extends Component {
         key: itemKpi.id,
         id: null,
         typeKpi: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
-        description: itemKpi.name,
+        kpi: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
