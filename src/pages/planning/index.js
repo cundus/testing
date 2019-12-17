@@ -12,7 +12,7 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 3,
+      step: 0,
       loading: true
     };
     this.getKpi();
@@ -30,20 +30,28 @@ class Planning extends Component {
     const { getKpiList } = this.props;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { errMessage, dataKpi, status } = kpiReducers;
+    const {
+      errMessage, dataKpi, status, currentStep
+    } = kpiReducers;
     if (status === 0) {
       let feedback = false;
       if (dataKpi.length !== 0 && step === 0) {
-        await dataKpi.map((itemKpi) => {
-          if (itemKpi.othersRatingComments.id) {
-            if (feedback === false) {
-              this.stepChange(3, true);
-              feedback = true;
+        if (currentStep === 'Manager Goal Review') {
+          this.stepChange(2, true);
+        } else if (currentStep === 'Emp Goal Setting') {
+          await dataKpi.map((itemKpi) => {
+            if (itemKpi.othersRatingComments.id) {
+              if (feedback === false) {
+                this.stepChange(3, true);
+                feedback = true;
+              }
             }
+          });
+          if (feedback === false) {
+            this.stepChange(1);
           }
-        });
-        if (feedback === false) {
-          this.stepChange(1);
+        } else {
+          this.stepChange(3, true);
         }
       }
     } else {
