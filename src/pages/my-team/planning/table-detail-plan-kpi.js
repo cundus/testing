@@ -18,6 +18,7 @@ class TableEditMyKPI extends Component {
       {
         title: 'KPI Subject',
         dataIndex: 'description',
+        align: 'center',
         placeholder: 'Enter 2020 baseline'
       },
       {
