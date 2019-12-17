@@ -17,8 +17,8 @@ class Cascade extends Component {
     const { dataMetrics } = this.props;
     const newColumns = [
       {
-        title: 'Supervisor\'s Name',
-        dataIndex: 'typeKpi',
+        title: 'Superior\'s Name',
+        dataIndex: 'cascadeName',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,

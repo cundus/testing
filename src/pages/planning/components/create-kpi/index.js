@@ -68,6 +68,7 @@ class CreateKPI extends Component {
     const { kpiReducers } = this.props;
     const { dataKpi } = kpiReducers;
     const newData = [];
+    const newSelectedData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
@@ -79,23 +80,40 @@ class CreateKPI extends Component {
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
-      const data = {
-        key: itemKpi.id,
-        id: itemKpi.id,
-        typeKpi: 'Self KPI',
-        kpi: itemKpi.name,
-        baseline: itemKpi.baseline,
-        weight: itemKpi.weight,
-        achievementType: itemKpi.achievementType,
-        ...dataMetrics
-      };
-      newData.push(data);
+      if (itemKpi.cascadeType === 0) {
+        const data = {
+          key: itemKpi.id,
+          id: itemKpi.id,
+          cascadeType: itemKpi.cascadeType,
+          cascadeName: itemKpi.cascadeName,
+          kpi: itemKpi.name,
+          baseline: itemKpi.baseline,
+          weight: itemKpi.weight,
+          achievementType: itemKpi.achievementType,
+          ...dataMetrics
+        };
+        newData.push(data);
+      } else {
+        const data = {
+          key: itemKpi.id,
+          id: itemKpi.id,
+          cascadeType: itemKpi.cascadeType,
+          cascadeName: itemKpi.cascadeName,
+          kpi: itemKpi.name,
+          baseline: itemKpi.baseline,
+          weight: itemKpi.weight,
+          achievementType: itemKpi.achievementType,
+          ...dataMetrics
+        };
+        newSelectedData.push(data);
+      }
     });
     form.getFieldValue({
       dataKpi: newData
     });
     this.setState({
       dataOwn: newData,
+      dataSelectedCascade: newSelectedData,
       loadingOwn: false
     });
   }
@@ -122,7 +140,8 @@ class CreateKPI extends Component {
       const data = {
         key: itemKpi.id,
         id: null,
-        typeKpi: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
+        cascadeType: 1,
+        cascadeName: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
