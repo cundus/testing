@@ -250,12 +250,12 @@ class CreateKPI extends Component {
   handleSelectData = (record) => {
     const { dataSelectedCascade } = this.state;
     const dataChecking = dataSelectedCascade.filter(
-      (item) => item.key === record.key
+      (item) => item.kpi === record.kpi
     );
     if (dataChecking.length !== 0) {
       this.setState({
         dataSelectedCascade: dataSelectedCascade.filter(
-          (item) => item.key !== record.key
+          (item) => !item.statusCascade && item.kpi !== record.kpi
         )
       });
     } else {

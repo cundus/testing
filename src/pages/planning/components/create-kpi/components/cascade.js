@@ -90,7 +90,7 @@ class Cascade extends Component {
 
   checkStatus = (record) => {
     const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
+    const dataChecking = dataSelectedCascade.filter((item) => item.kpi === record.kpi);
     if (dataChecking.length !== 0) {
       return true;
     } else {
