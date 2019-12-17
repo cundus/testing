@@ -43,7 +43,7 @@ class Planning extends Component {
           }
         });
         if (feedback === false) {
-          // this.stepChange(1);
+          this.stepChange(1);
         }
       }
     } else {
