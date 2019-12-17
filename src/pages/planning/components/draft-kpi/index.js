@@ -170,8 +170,8 @@ class DraftKPI extends Component {
               await doSavingKpi(data, user.userId);
               const { kpiReducers } = this.props;
               if (kpiReducers.statusSaveKPI === Success) {
+                await submitNext(user.userId);
                 message.success('Your KPI has been submitted to supervisor');
-                submitNext(user.userId);
                 stepChange(2, true); // go to submit page
               } else {
                 message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);

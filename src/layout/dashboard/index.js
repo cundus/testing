@@ -63,7 +63,7 @@ class Dashboard extends React.Component {
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
     localStorage.setItem("sfToken", this.props.user.result.accessToken);
-    await this.props.getMetrics();
+    // await this.props.getMetrics();
   }
 
   toggle = () => {
@@ -82,7 +82,7 @@ class Dashboard extends React.Component {
           <Header collapsed={collapsed} toggle={this.toggle} />
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
-              {Object.keys(user).length && !kpi.loadingMetric ? (
+              {Object.keys(user).length ? (
                 <MappedRouter routes={child} />
               ) : (
                 <center><Spin /></center>
