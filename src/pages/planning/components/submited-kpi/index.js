@@ -102,7 +102,7 @@ class SubmitedKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
     const { kpiReducers } = this.props;
-    const { loadingKpi, dataKpiMetrics } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
         <div>
@@ -143,7 +143,7 @@ class SubmitedKPI extends Component {
           }}
           >
             <Text strong>General Feedback :</Text>
-            <Paragraph>The L1-L3 Target are too easy. Please revise as i suggested per line items of this KPI. Maybe you can add 1 more KPI items, such as "Datawarhouse Maintinance" , rating 15%</Paragraph>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
       </div>
     );
