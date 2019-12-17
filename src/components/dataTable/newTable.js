@@ -24,7 +24,6 @@ class EditableCell extends React.Component {
     }), 100);
   };
 
-
   changeSwitch = (checked) => {
     const { record, handlechange } = this.props;
     handlechange({
@@ -253,9 +252,42 @@ class EditableCell extends React.Component {
     }
   };
 
+  disableCell = () => {
+    const {
+      dataindex,
+      record
+    } = this.props;
+    const index = dataindex;
+    if (index === 'kpi') {
+      return (
+        <div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+          <div>
+            <Switch
+              size="small"
+              checked={record.achievementType !== 0}
+              style={{ width: '100%' }}
+              checkedChildren="Quantitative"
+              unCheckedChildren="Qualitative"
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+        </div>
+      );
+    }
+  };
+
   render() {
     const {
-      children,
       editable,
       ...restProps
     } = this.props;
@@ -263,10 +295,8 @@ class EditableCell extends React.Component {
       // eslint-disable-next-line react/jsx-props-no-spreading
       <td {...restProps}>
         {!editable ? (
-          <div
-            className="editable-cell-value-wrap"
-          >
-            {children}
+          <div>
+            <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
             <div>

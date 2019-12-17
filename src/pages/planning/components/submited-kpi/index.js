@@ -55,9 +55,10 @@ class SubmitedKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.name,
+        kpi: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics,
         feedback: itemKpi.othersRatingComments.comment
       };

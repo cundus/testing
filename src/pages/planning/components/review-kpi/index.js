@@ -52,9 +52,10 @@ class ReviewKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         typeKpi: 'Self KPI',
-        description: itemKpi.name,
+        kpi: itemKpi.name,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics,
         feedback: itemKpi.othersRatingComments.comment
       };

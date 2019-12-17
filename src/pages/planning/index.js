@@ -12,7 +12,7 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: 3,
       loading: true
     };
     this.getKpi();
@@ -31,45 +31,46 @@ class Planning extends Component {
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
     const { errMessage, dataKpi, status } = kpiReducers;
-    await dataKpi.map((itemKpi) => {
-      if (itemKpi.othersRatingComments.id) {
-        this.setState({
-          step: 3,
-          loading: false
-        });
-        return 3;
-      }
-    });
     if (status === 0) {
+      let feedback = false;
       if (dataKpi.length !== 0 && step === 0) {
-        this.stepChange(1);
-        this.setState({
-          loading: false
+        await dataKpi.map((itemKpi) => {
+          if (itemKpi.othersRatingComments.id) {
+            if (feedback === false) {
+              this.stepChange(3, true);
+              feedback = true;
+            }
+          }
         });
-        return 1;
+        if (feedback === false) {
+          // this.stepChange(1);
+        }
       }
     } else {
       message.warning(`Sorry, ${errMessage}`);
       history.goBack();
     }
+    this.setState({
+      loading: false
+    });
   }
 
   stepChange = (target, access) => {
     const { step } = this.state;
-    if (step === 0) {
-      if (target === 1) {
-        this.setState({
-          step: target
-        });
-      } else {
-        message.warning('Sorry, You cannot be able to go');
-      }
-    } else if (step === 1) {
+    if (step === 0 || step === 1) {
       if (target === 0) {
         this.setState({
           step: target
         });
+      } else if (target === 1) {
+        this.setState({
+          step: target
+        });
       } else if (target === 2 && access) {
+        this.setState({
+          step: target
+        });
+      } else if (target === 3 && access) {
         this.setState({
           step: target
         });
@@ -84,8 +85,12 @@ class Planning extends Component {
       } else {
         message.warning('Sorry, You cannot be able to back');
       }
-    } else {
-      message.warning('Sorry, You cannot be able to back');
+    } else if (step === 2) {
+      if (target === 2) {
+        message.warning('Sorry, You cannot be able to go');
+      } else {
+        message.warning('Sorry, You cannot be able to back');
+      }
     }
   };
 
