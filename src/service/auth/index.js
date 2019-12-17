@@ -52,3 +52,14 @@ export const getMyKPI = (idUser) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const feedbackUserKpi = (idUser, data) => customAxios({
+  url: `/user/team/send-feedback/${idUser}`,
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});

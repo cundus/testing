@@ -13,6 +13,7 @@ class TablePlan extends Component {
       {
         title: 'Profile Pic',
         dataIndex: 'userId',
+        align: 'center',
         placeholder: 'Profile',
         action: true,
         render:(text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
@@ -60,8 +61,8 @@ class TablePlan extends Component {
             status = 'Completed';
             color = '#1dc9b7';
           } else {
-            status = 'None';
-            color = 'RED';
+            status = 'N/A';
+            color = '#ccc';
           }
           return (<Tag color={color}>{status}</Tag>);
         }
@@ -72,7 +73,7 @@ class TablePlan extends Component {
         placeholder: 'action',
         action: true,
         render: (text) => (
-          <Button type={'primary'} disabled={isNaN(text.status)}>
+          <Button type={'primary'} disabled={isNaN(text.status) || text.status === 999 }>
             <Link to={`/my-team/planning/${text.idUser}`}>
               View
             </Link>

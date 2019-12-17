@@ -51,10 +51,12 @@ class ReviewKPI extends Component {
       const data = {
         key: itemKpi.id,
         id: itemKpi.id,
-        typeKpi: 'Self KPI',
-        description: itemKpi.name,
+        cascadeType: itemKpi.cascadeType,
+        typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
+        kpi: itemKpi.name,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
+        achievementType: itemKpi.achievementType,
         ...dataMetrics,
         feedback: itemKpi.othersRatingComments.comment
       };
@@ -97,7 +99,7 @@ class ReviewKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour
     } = this.state;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback, currentStep } = kpiReducers;
     return (
       <div>
         <div>
@@ -138,14 +140,15 @@ class ReviewKPI extends Component {
           <Paragraph>{generalFeedback.comment}</Paragraph>
         </div>
         <center>
-          <Button
-            id="save-draft"
-            // eslint-disable-next-line react/jsx-no-bind
-            onClick={() => stepChange(1, true)}
-            style={{ margin: 10 }}
-          >
-            Edit My KPI
-          </Button>
+          {currentStep === 'Emp Goal Setting' &&
+            <Button
+              id="save-draft"
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => stepChange(1, true)}
+              style={{ margin: 10 }}
+            >
+              Edit My KPI
+            </Button>}
         </center>
       </div>
     );
@@ -171,6 +174,6 @@ export default withRouter(connectToComponent);
 ReviewKPI.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object)
-  // history: PropTypes.instanceOf(Object).isRequired
+  userReducers: PropTypes.instanceOf(Object),
+  stepChange: PropTypes.func
 };

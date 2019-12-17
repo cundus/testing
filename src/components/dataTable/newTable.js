@@ -24,7 +24,6 @@ class EditableCell extends React.Component {
     }), 100);
   };
 
-
   changeSwitch = (checked) => {
     const { record, handlechange } = this.props;
     handlechange({
@@ -47,12 +46,12 @@ class EditableCell extends React.Component {
       form
     } = this.props;
     const index = dataindex;
-    const { typeKpi } = record;
+    const { cascadeType } = record;
     let type = '';
-    if (typeKpi.includes('Self')) {
-      type = 'dataKpi';
-    } else {
+    if (cascadeType === 1) {
       type = 'dataManagerKpi';
+    } else {
+      type = 'dataKpi';
     }
     if (index === 'kpi') {
       return (
@@ -103,7 +102,7 @@ class EditableCell extends React.Component {
                   const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
                   const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
                   if (parseFloat(L1) >= parseFloat(L2)) {
-                    callback('Value lower than L2');
+                    callback('Value must lower than L2');
                   }
                 }
               }
@@ -253,9 +252,43 @@ class EditableCell extends React.Component {
     }
   };
 
+  disableCell = () => {
+    const {
+      dataindex,
+      record,
+      children
+    } = this.props;
+    const index = dataindex;
+    if (index === 'kpi') {
+      return (
+        <div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+          <div>
+            <Switch
+              size="small"
+              checked={record.achievementType !== 0}
+              style={{ width: '100%' }}
+              checkedChildren="Quantitative"
+              unCheckedChildren="Qualitative"
+            />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="editable-cell-value-wrap">
+            {children}
+          </div>
+        </div>
+      );
+    }
+  };
+
   render() {
     const {
-      children,
       editable,
       ...restProps
     } = this.props;
@@ -263,10 +296,8 @@ class EditableCell extends React.Component {
       // eslint-disable-next-line react/jsx-props-no-spreading
       <td {...restProps}>
         {!editable ? (
-          <div
-            className="editable-cell-value-wrap"
-          >
-            {children}
+          <div>
+            <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
             <div>

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Spin, Input, Button, Divider, Typography, Modal } from 'antd';
-import  { GetMyTeamKPIDetail, GetUserDetail } from '../../../redux/actions/user';
+import { Spin, Input, Button, Divider, Typography, Modal, message } from 'antd';
+import  { GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi } from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 const { TextArea } = Input;
@@ -49,6 +49,7 @@ class PlanningDetail extends Component {
           description: itemKpi.name,
           baseline: itemKpi.metric,
           weight: itemKpi.weight,
+          achievementType: itemKpi.achievementType,
           ...dataMetrics,
           feedback: itemKpi.othersRatingComments.comment
         };
@@ -81,11 +82,24 @@ class PlanningDetail extends Component {
   };
 
   handleFeedback = () => {
+    const { giveFeedbackKpi, match, myteamdetail } = this.props;
+    const userId = match.params.id;
+    const { kpiList } = myteamdetail;
+    this.state.dataSource.map((item)=>{
+      kpiList.find(d => d.id === item.key).othersRatingComments.comment = item.feedback;
+    });
+    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
     confirm({
       title: 'Are you sure to send Feedbacks ?',
-      async onOk() {
-        // await doSavingDraft(dataSaving);
-        // history.push('/planning/kpi/draft-planning');
+      onOk: async () => {
+        await giveFeedbackKpi(userId, myteamdetail);
+        if (this.props.feedback.error === true) {
+          message.error(this.props.feedback.message);
+        }
+        if (this.props.feedback.success === true) {
+          this.props.history.push('/my-team/planning');
+        }
+
       },
       onCancel() {}
     });
@@ -95,7 +109,6 @@ class PlanningDetail extends Component {
     confirm({
       title: 'Are you sure to Approve ?',
       async onOk() {
-        // await doSavingDraft(dataSaving);
         // history.push('/planning/kpi/draft-planning');
       },
       onCancel() {}
@@ -136,6 +149,11 @@ class PlanningDetail extends Component {
                handleChange={this.handleChange}
                dataMetrics={this.state.labelList}
              />
+             <h3><b>Chalenge Yourself: </b></h3>
+             <TextArea
+              value={this.props.myteamdetail.challangeYourSelf}
+              disabled={true}
+             />
              <h3><b>General feedbacks:</b></h3>
              <TextArea
                value={this.state.globalfeedback}
@@ -167,13 +185,15 @@ class PlanningDetail extends Component {
 const mapDispatchtoProps = (dispatch) => ({
   getTeamDetailKPI: (idUser) => dispatch(GetMyTeamKPIDetail(idUser)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
-  getUserDetail: (idUser) => dispatch(GetUserDetail(idUser))
+  getUserDetail: (idUser) => dispatch(GetUserDetail(idUser)),
+  giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data))
 });
 
 const mapStateToProps = (state) => ({
   myteamdetail: state.myTeamDetailReducers,
   kpi: state.kpiReducers,
-  userDetail: state.userDetailReducers
+  userDetail: state.userDetailReducers,
+  feedback: state.feedbackReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);
 

@@ -3,7 +3,8 @@ import {
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
   getMyTeamDetailKPI as getMyTeamDetailKPIAction,
-  getUserDetail as getUserDetailAction
+  getUserDetail as getUserDetailAction,
+  feedbackUserKpi as feedbackUserKpiAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -19,7 +20,9 @@ import {
   startGetMyTeamDetail,
   getUserDetail,
   errUserDetail,
-  startUserDetail
+  startUserDetail,
+  successFeedback,
+  errSubmitFeedback,
 } from '../action.type';
 import _ from  'lodash';
 
@@ -119,6 +122,27 @@ export const GetMyTeamKPIDetail = (idUser) => {
           error: true,
           errorCode: error.response.status
         }]
+      });
+    }
+  };
+};
+
+export const GiveFeedbackKpi = (idUser, data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await feedbackUserKpiAction(idUser, data);
+      dispatch({
+        type: successFeedback,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errSubmitFeedback,
+        data: {
+          error: true,
+          message: 'Sorry error to submit feedback',
+          errorCode: error.response.status
+        }
       });
     }
   };

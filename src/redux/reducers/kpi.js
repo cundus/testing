@@ -13,7 +13,10 @@ import {
   GET_KPI_MANAGER_LIST_FAILED,
   GET_METRICS,
   GET_METRICS_SUCCESS,
-  GET_METRICS_FAILED
+  GET_METRICS_FAILED,
+  SUBMIT_NEXT,
+  SUBMIT_NEXT_SUCCESS,
+  SUBMIT_NEXT_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -140,6 +143,25 @@ const kpiReducers = (state = initialState, action) => {
         messageSaveKPI: action.message
       };
     case SAVE_KPI_FAILED:
+      return {
+        ...state,
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
+      };
+    case SUBMIT_NEXT:
+      return {
+        ...state,
+        loadingSaveKPI: action.loading
+      };
+    case SUBMIT_NEXT_SUCCESS:
+      return {
+        ...state,
+        loadingSaveKPI: action.loading,
+        statusSaveKPI: action.status,
+        messageSaveKPI: action.message
+      };
+    case SUBMIT_NEXT_FAILED:
       return {
         ...state,
         loadingSaveKPI: action.loading,
