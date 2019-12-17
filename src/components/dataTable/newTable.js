@@ -102,7 +102,7 @@ class EditableCell extends React.Component {
                   const L1 = form.getFieldValue(`${type}[${indexarr}].L1`);
                   const L2 = form.getFieldValue(`${type}[${indexarr}].L2`);
                   if (parseFloat(L1) >= parseFloat(L2)) {
-                    callback('Value lower than L2');
+                    callback('Value must lower than L2');
                   }
                 }
               }
