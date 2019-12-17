@@ -17,8 +17,8 @@ class Cascade extends Component {
     const { dataMetrics } = this.props;
     const newColumns = [
       {
-        title: 'Supervisor\'s Name',
-        dataIndex: 'typeKpi',
+        title: 'Superior\'s Name',
+        dataIndex: 'cascadeName',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
@@ -90,7 +90,7 @@ class Cascade extends Component {
 
   checkStatus = (record) => {
     const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter((item) => item.description === record.description);
+    const dataChecking = dataSelectedCascade.filter((item) => item.kpi === record.kpi);
     if (dataChecking.length !== 0) {
       return true;
     } else {

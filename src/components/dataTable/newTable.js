@@ -46,12 +46,12 @@ class EditableCell extends React.Component {
       form
     } = this.props;
     const index = dataindex;
-    const { typeKpi } = record;
+    const { cascadeType } = record;
     let type = '';
-    if (typeKpi.includes('Self')) {
-      type = 'dataKpi';
-    } else {
+    if (cascadeType === 1) {
       type = 'dataManagerKpi';
+    } else {
+      type = 'dataKpi';
     }
     if (index === 'kpi') {
       return (
