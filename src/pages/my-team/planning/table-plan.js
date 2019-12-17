@@ -13,6 +13,7 @@ class TablePlan extends Component {
       {
         title: 'Profile Pic',
         dataIndex: 'userId',
+        align: 'center',
         placeholder: 'Profile',
         action: true,
         render:(text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)

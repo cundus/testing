@@ -139,7 +139,8 @@ class EditableCell extends React.Component {
   disableCell = () => {
     const {
       dataindex,
-      record
+      record,
+      children
     } = this.props;
     const index = dataindex;
     if (index === 'description') {
@@ -163,7 +164,7 @@ class EditableCell extends React.Component {
       return (
         <div>
           <div className="editable-cell-value-wrap">
-            {record[index]}
+            {children}
           </div>
         </div>
       );
