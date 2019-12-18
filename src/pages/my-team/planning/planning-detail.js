@@ -1,13 +1,18 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Spin, Input, Button, Divider, Typography, Modal, message } from 'antd';
-import  { GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI } from '../../../redux/actions/user';
+import {
+ Spin, Input, Button, Divider, Typography, Modal, message, Form
+} from 'antd';
+import {
+  GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
+} from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
+
 const { TextArea } = Input;
 const { Title, Text } = Typography;
-const {confirm } = Modal;
+const { confirm } = Modal;
 
 class PlanningDetail extends Component {
   constructor(props) {
@@ -33,7 +38,7 @@ class PlanningDetail extends Component {
     if (mydata[0].error !== true) {
       // eslint-disable-next-line array-callback-return
       mydata.map((itemKpi) => {
-        let dataMetrics = undefined;
+        let dataMetrics;
         if (itemKpi.metricLookup !== null) {
           dataMetrics = itemKpi.metricLookup.map((metric) => {
             return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
@@ -70,9 +75,9 @@ class PlanningDetail extends Component {
   }
 
 
-  handleChange = row => {
+  handleChange = (row) => {
     const newData = [...this.state.dataSource];
-    const index = newData.findIndex(item => row.key === item.key);
+    const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -82,26 +87,32 @@ class PlanningDetail extends Component {
   };
 
   handleFeedback = () => {
-    const { giveFeedbackKpi, match, myteamdetail } = this.props;
+    const {
+ giveFeedbackKpi, match, myteamdetail, form 
+} = this.props;
     const userId = match.params.id;
     const { kpiList } = myteamdetail;
-    this.state.dataSource.map((item)=>{
-      kpiList.find(d => d.id === item.key).othersRatingComments.comment = item.feedback;
+    this.state.dataSource.map((item) => {
+      kpiList.find((d) => d.id === item.key).othersRatingComments.comment = item.feedback;
     });
     myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
-    confirm({
-      title: 'Are you sure to send Feedbacks ?',
-      onOk: async () => {
-        await giveFeedbackKpi(userId, myteamdetail);
-        if (this.props.feedback.error === true) {
-          message.error(this.props.feedback.message);
-        }
-        if (this.props.feedback.success === true) {
-          this.props.history.push('/my-team/planning');
-        }
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure to send Feedbacks ?',
+          onOk: async () => {
+            await giveFeedbackKpi(userId, myteamdetail);
+            if (this.props.feedback.error === true) {
+              message.error(this.props.feedback.message);
+            }
+            if (this.props.feedback.success === true) {
+              this.props.history.push('/my-team/planning');
+            }
 
-      },
-      onCancel() {}
+          },
+          onCancel() {}
+        });
+      }
     });
   }
 
@@ -134,10 +145,10 @@ class PlanningDetail extends Component {
   };
 
   render() {
-    return(
+    return (
       <div>
         {
-         (this.state.dataSource.length > 0  ) ?
+         (this.state.dataSource.length > 0 ) ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
@@ -148,47 +159,50 @@ class PlanningDetail extends Component {
                     {`View KPI of ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}
                   </Text>
                   <Divider />
-                </div>
-                : <div></div>
+                </div> :
+                <div />
              }
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
                 <div style={{ textAlign: 'center' }}>
                   <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
-                </div>
-                : <div></div>
+                </div> :
+                <div />
             }
              <TablePlanningDetails
                dataSource={this.state.dataSource}
+               form={this.props.form}
                handleChange={this.handleChange}
                dataMetrics={this.state.labelList}
              />
-             <h3><b>Chalenge Yourself: </b></h3>
+             <Text strong>Challenge yourself :</Text>
              <TextArea
-              value={this.props.myteamdetail.challangeYourSelf}
-              disabled={true}
+               value={this.props.myteamdetail.challangeYourSelf}
+               disabled
              />
-             <h3><b>General feedbacks:</b></h3>
+             <br />
+             <br />
+             <Text strong>General Feedbacks :</Text>
              <TextArea
                value={this.state.globalfeedback}
                onChange={this.changeGlobalfeedback}
-               placeholder={'Please make necessary changes on KPI items, please refer to my KPI or just cascading it.'}
+               placeholder="Please make necessary changes on KPI items, please refer to my KPI or just cascading it."
              />
-             <br/>
-             <br/>
+             <br />
+             <br />
              <center>
                <Button
-                style={{ 'background-color': 'orange', color: 'white'}}
-                onClick={this.handleFeedback}
+                 style={{ 'background-color': 'orange', color: 'white' }}
+                 onClick={this.handleFeedback}
                >
                 Send Feedbacks
                </Button>
                &nbsp;&nbsp;
                <Button onClick={this.handleApprove} type="primary">Approve</Button>
              </center>
-            </div>:
+           </div> :
            <center>
-              <Spin/>
+             <Spin />
            </center>
         }
       </div>
@@ -212,4 +226,4 @@ const mapStateToProps = (state) => ({
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));
