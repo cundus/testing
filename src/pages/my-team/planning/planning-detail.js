@@ -180,6 +180,8 @@ class PlanningDetail extends Component {
                value={this.props.myteamdetail.challangeYourSelf}
                disabled
              />
+             <br />
+             <br />
              <Text strong>General Feedbacks :</Text>
              <TextArea
                value={this.state.globalfeedback}
