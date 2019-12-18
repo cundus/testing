@@ -87,9 +87,7 @@ class PlanningDetail extends Component {
   };
 
   handleFeedback = () => {
-    const {
- giveFeedbackKpi, match, myteamdetail, form 
-} = this.props;
+    const { giveFeedbackKpi, match, myteamdetail, form } = this.props;
     const userId = match.params.id;
     const { kpiList } = myteamdetail;
     this.state.dataSource.map((item) => {
@@ -106,6 +104,7 @@ class PlanningDetail extends Component {
               message.error(this.props.feedback.message);
             }
             if (this.props.feedback.success === true) {
+              message.success('Feedback  Send');
               this.props.history.push('/my-team/planning');
             }
 
@@ -132,6 +131,7 @@ class PlanningDetail extends Component {
           message.error(this.props.feedback.message);
         }
         if (this.props.feedback.success === true) {
+          message.success('Approved Kpi');
           this.props.history.push('/my-team/planning');
         }
 
