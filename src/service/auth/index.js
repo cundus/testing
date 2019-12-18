@@ -63,3 +63,14 @@ export const feedbackUserKpi = (idUser, data) => customAxios({
   },
   data
 });
+
+export const approveUserKpi = (idUser, data) => customAxios({
+  url: `/user/team/approve/${idUser}`,
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
