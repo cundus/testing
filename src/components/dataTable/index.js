@@ -118,7 +118,7 @@ class EditableCell extends React.Component {
         ) : form.getFieldDecorator(index, {
           rules: [
             {
-              required: true
+              required: index !== 'feedback'
             }
           ],
           initialValue: record[index]
