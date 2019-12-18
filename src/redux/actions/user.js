@@ -4,7 +4,8 @@ import {
   getMyKPI as getMyKPIAction,
   getMyTeamDetailKPI as getMyTeamDetailKPIAction,
   getUserDetail as getUserDetailAction,
-  feedbackUserKpi as feedbackUserKpiAction
+  feedbackUserKpi as feedbackUserKpiAction,
+  approveUserKpi as approveUserKpiAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -141,6 +142,27 @@ export const GiveFeedbackKpi = (idUser, data) => {
         data: {
           error: true,
           message: 'Sorry error to submit feedback',
+          errorCode: error.response.status
+        }
+      });
+    }
+  };
+};
+
+export const ApproveKPI = (idUser, data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await approveUserKpiAction(idUser, data);
+      dispatch({
+        type: successFeedback,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errSubmitFeedback,
+        data: {
+          error: true,
+          message: 'Sorry error to approve kpi',
           errorCode: error.response.status
         }
       });
