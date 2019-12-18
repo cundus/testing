@@ -99,7 +99,9 @@ class ReviewKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour
     } = this.state;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback, currentStep } = kpiReducers;
+    const {
+      loadingKpi, dataKpiMetrics, generalFeedback, currentStep
+    } = kpiReducers;
     return (
       <div>
         <div>
@@ -140,14 +142,22 @@ class ReviewKPI extends Component {
           <Paragraph>{generalFeedback.comment}</Paragraph>
         </div>
         <center>
-          {currentStep === 'Emp Goal Setting' &&
+          {currentStep === ('Emp Goal Setting' || 'Manager Goal Review') ?
             <Button
               id="save-draft"
               // eslint-disable-next-line react/jsx-no-bind
               onClick={() => stepChange(1, true)}
+              type="primary"
               style={{ margin: 10 }}
             >
               Edit My KPI
+            </Button> :
+            <Button
+              id="save-draft"
+              style={{ margin: 10 }}
+              disabled
+            >
+            Your KPI Approved
             </Button>}
         </center>
       </div>
