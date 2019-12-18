@@ -149,7 +149,7 @@ class PlanningDetail extends Component {
                handleChange={this.handleChange}
                dataMetrics={this.state.labelList}
              />
-             <h3><b>Chalenge My Self: </b></h3>
+             <h3><b>Chalenge Yourself: </b></h3>
              <TextArea
               value={this.props.myteamdetail.challangeYourSelf}
               disabled={true}
