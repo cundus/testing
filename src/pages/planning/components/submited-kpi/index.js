@@ -117,34 +117,36 @@ class SubmitedKPI extends Component {
           <Divider />
         </div>
         {!loadingKpi ?
-          <TableSubmitedKPI
-            isFeedback={isFeedback}
-            dataMetrics={dataKpiMetrics}
-            dataSource={dataSource}
-            loading={loadingKpi}
-          /> : <center><Spin /></center>}
-        <div>
-          <Text>Challenge yourself :</Text>
-          <TextArea
-            id="challenge-input"
-            placeholder="Challenge yourself"
-            label="Challenge yourself"
-            value={challengeYour}
-            disabled
-          />
-        </div>
-        {isFeedback &&
-          <div style={{
-            marginTop: 20,
-            paddingBottom: 10,
-            paddingTop: 10,
-            backgroundColor: 'rgb(250, 247, 187)',
-            overflow: 'hidden'
-          }}
-          >
-            <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
-          </div>}
+          <div>
+            <TableSubmitedKPI
+              isFeedback={isFeedback}
+              dataMetrics={dataKpiMetrics}
+              dataSource={dataSource}
+              loading={loadingKpi}
+            />
+            <div>
+              <Text strong>Challenge yourself :</Text>
+              <TextArea
+                id="challenge-input"
+                placeholder="Challenge yourself"
+                label="Challenge yourself"
+                value={challengeYour}
+                disabled
+              />
+            </div>
+            {isFeedback &&
+            <div style={{
+              marginTop: 20,
+              paddingBottom: 10,
+              paddingTop: 10,
+              backgroundColor: 'rgb(250, 247, 187)',
+              overflow: 'hidden'
+            }}
+            >
+              <Text strong>General Feedback :</Text>
+              <Paragraph>{generalFeedback.comment}</Paragraph>
+            </div>}
+          </div> : <center><Spin /></center>}
       </div>
     );
   }

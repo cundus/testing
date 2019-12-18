@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DataTable from '../../../../components/dataTable/newTable';
+import { DataTable } from '../../../../components';
 
 class TableDrafKPI extends Component {
   constructor(props) {

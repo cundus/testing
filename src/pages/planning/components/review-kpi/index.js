@@ -99,7 +99,9 @@ class ReviewKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour
     } = this.state;
     const { kpiReducers, stepChange } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback, currentStep } = kpiReducers;
+    const {
+      loadingKpi, dataKpiMetrics, generalFeedback, currentStep
+    } = kpiReducers;
     return (
       <div>
         <div>
@@ -113,43 +115,53 @@ class ReviewKPI extends Component {
           <Divider />
         </div>
         {!loadingKpi ?
-          <TableReviewKPI
-            dataMetrics={dataKpiMetrics}
-            dataSource={dataSource}
-            loading={loadingKpi}
-          /> : <center><Spin /></center>}
-        <div>
-          <Text strong>Challenge yourself :</Text>
-          <TextArea
-            id="challenge-input"
-            placeholder="Challenge yourself"
-            label="Challenge yourself"
-            value={challengeYour}
-            disabled
-          />
-        </div>
-        <div style={{
-          marginTop: 20,
-          paddingBottom: 10,
-          paddingTop: 10,
-          backgroundColor: 'rgb(250, 247, 187)',
-          overflow: 'hidden'
-        }}
-        >
-          <Text strong>General Feedback :</Text>
-          <Paragraph>{generalFeedback.comment}</Paragraph>
-        </div>
-        <center>
-          {currentStep === 'Emp Goal Setting' &&
-            <Button
-              id="save-draft"
-              // eslint-disable-next-line react/jsx-no-bind
-              onClick={() => stepChange(1, true)}
-              style={{ margin: 10 }}
+          <div>
+            <TableReviewKPI
+              dataMetrics={dataKpiMetrics}
+              dataSource={dataSource}
+              loading={loadingKpi}
+            />
+            <div>
+              <Text strong>Challenge yourself :</Text>
+              <TextArea
+                id="challenge-input"
+                placeholder="Challenge yourself"
+                label="Challenge yourself"
+                value={challengeYour}
+                disabled
+              />
+            </div>
+            <div style={{
+              marginTop: 20,
+              paddingBottom: 10,
+              paddingTop: 10,
+              backgroundColor: 'rgb(250, 247, 187)',
+              overflow: 'hidden'
+            }}
             >
-              Edit My KPI
-            </Button>}
-        </center>
+              <Text strong>General Feedback :</Text>
+              <Paragraph>{generalFeedback.comment}</Paragraph>
+            </div>
+            <center>
+              {currentStep === ('Emp Goal Setting' || 'Manager Goal Review') ?
+                <Button
+                  id="save-draft"
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onClick={() => stepChange(1, true)}
+                  type="primary"
+                  style={{ margin: 10 }}
+                >
+                  Edit My KPI
+                </Button> :
+                <Button
+                  id="save-draft"
+                  style={{ margin: 10 }}
+                  disabled
+                >
+                  Your KPI Approved
+                </Button>}
+            </center>
+          </div> : <center><Spin /></center>}
       </div>
     );
   }

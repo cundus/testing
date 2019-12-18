@@ -57,13 +57,14 @@ class TableEditMyKPI extends Component {
   render() {
     const { dataSource } = this.props;
     const { columns } = this.state;
-    const { handleChange } = this.props;
+    const { handleChange, form } = this.props;
     const isLoading = (dataSource.length > 0 ) ? false: true;
     return (
       <div>
         {/* <Layout> */}
         <DataTable
           columns={columns}
+          form={form}
           datasource={dataSource}
           handlechange={handleChange}
           loading={isLoading}

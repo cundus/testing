@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Spin, Divider, Typography } from 'antd';
+import { Spin, Divider, Typography, Form } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TablePlanning from './table-plan';
@@ -31,7 +31,7 @@ class Planning extends Component {
 
   render() {
     const { myteam } = this.props;
-    const { dataSource } = this.state;
+    const { dataSource, form } = this.state;
     return(
       <div>
         {
@@ -45,7 +45,7 @@ class Planning extends Component {
                 </Text>
                 <Divider />
               </div>
-              <TablePlanning team={dataSource} />
+              <TablePlanning form={form} team={dataSource} />
             </div>:
             <center>
               <Spin />
@@ -67,4 +67,4 @@ const mapStateToProps = (state) => ({
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Planning);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));

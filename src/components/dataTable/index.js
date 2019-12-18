@@ -3,133 +3,145 @@ import {
   Table,
   Input,
   Form,
-  Switch
+  Select,
+  Typography
 } from 'antd';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import {
+  metricValidator, validator, weightValidator
+} from '../../utils/validator';
 
+const { Option } = Select;
 const { TextArea } = Input;
+const { Text } = Typography;
 
 const EditableContext = React.createContext();
 
-const EditableRow = ({ form, ...props }) => (
-  <EditableContext.Provider value={form}>
-    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <tr {...props} />
-  </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-
-EditableRow.propTypes = {
-  form: PropTypes.instanceOf(Object)
-};
-
 class EditableCell extends React.Component {
-  change = (e) => {
-    const { record, handlechange, handleerror } = this.props;
-    setTimeout(() => {
-      this.form.validateFields((error, values) => {
-        handlechange({ ...record, ...error, ...values });
-        if (error) {
-          handleerror(true);
-        } else {
-          handleerror(false);
-        }
+  change = (index, field) => {
+    const { record, handlechange, form } = this.props;
+    setTimeout(() => form.validateFields(field, (errors, values) => {
+      const item = values.dataKpi[index];
+      handlechange({
+        ...record,
+        ...item
       });
-    }, 100);
+    }), 100);
   };
 
-  changeSwitch = (checked) => {
+  changeSwitch = (value) => {
     const { record, handlechange } = this.props;
     handlechange({
       ...record,
-      achievementType: checked ? 1 : 0,
+      achievementType: value === 'Qualitative' ? 0 : 1,
       L1: '',
       L2: '',
       L3: ''
     });
   };
 
-  renderCell = (form) => {
-    this.form = form;
+  renderCell = () => {
     const {
       editable,
       dataindex,
       record,
       placeholder,
-      type,
-      title
+      indexarr,
+      title,
+      form
     } = this.props;
     const index = dataindex;
-    if (index === 'kpi') {
+    const { cascadeType } = record;
+    let type = '';
+    if (cascadeType === 1) {
+      type = 'dataManagerKpi';
+    } else {
+      type = 'dataKpi';
+    }
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
+    const data = {
+      index,
+      title,
+      type,
+      indexarr,
+      form
+    };
+    if (index === 'kpi') { // kpi contain type of metrics
       return (
         <div>
           <Form.Item style={{ margin: 0 }}>
-            {form.getFieldDecorator(index, {
-              rules: [
-                {
-                  required: true
-                }
-              ],
+            {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+              rules: validator(data),
               initialValue: record[index]
             })(
               <TextArea
                 id={`${title}-${index}`}
                 placeholder={placeholder}
+                // eslint-disable-next-line react/jsx-no-bind
+                onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
                 autoSize={{ minRows: 2, maxRows: 4 }}
-                onChange={this.change}
                 disabled={!editable}
               />
           )}
           </Form.Item>
-          <div style={{ flexDirection: 'row' }}>
-            <Switch
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
               size="small"
-              checked={record.achievementType !== 0}
-              checkedChildren="Quantitative"
-              style={{ width: '100%' }}
+              defaultValue={valueType}
+              placeholder="Select type"
               onChange={this.changeSwitch}
-              unCheckedChildren="Qualitative"
-            />
+              style={{ width: '80%' }}
+            >
+              <Option key="Qualitative">Qualitative</Option>
+              <Option key="Quantitative">Quantitative</Option>
+            </Select>
           </div>
         </div>
       );
-    } else {
+    } else if (record.achievementType === 1) { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
-          { type === 'number' ? form.getFieldDecorator(index, {
-            rules: [
-              {
-                required: true,
-                pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)%?$'),
-                message: `${title} is wrong`
-              }
-            ],
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidator(data),
             initialValue: record[index]
           })(
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
-              onChange={this.change}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(index, {
-          rules: [
-            {
-              required: index !== 'feedback'
-            }
-          ],
-          initialValue: record[index]
-        })(
-          <TextArea
-            id={`${title}-${index}`}
-            placeholder={placeholder}
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.change}
-            disabled={!editable}
-          />
+        )}
+        </Form.Item>
+      );
+    } else {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: index === 'weight' ? weightValidator(data) : validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+            // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
         )}
         </Form.Item>
       );
@@ -143,20 +155,30 @@ class EditableCell extends React.Component {
       children
     } = this.props;
     const index = dataindex;
-    if (index === 'description') {
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
+    if (index === 'kpi') {
       return (
         <div>
           <div className="editable-cell-value-wrap">
             {record[index]}
           </div>
-          <div>
-            <Switch
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
               size="small"
-              checked={record.achievementType !== 0}
-              style={{ width: '100%' }}
-              checkedChildren="Quantitative"
-              unCheckedChildren="Qualitative"
-            />
+              defaultValue={valueType}
+              placeholder="Select type"
+              style={{ width: '80%' }}
+              disabled
+            >
+              <Option key="Qualitative">Qualitative</Option>
+              <Option key="Quantitative">Quantitative</Option>
+            </Select>
           </div>
         </div>
       );
@@ -194,6 +216,7 @@ class EditableCell extends React.Component {
 }
 
 EditableCell.propTypes = {
+  indexarr: PropTypes.number,
   color: PropTypes.string,
   editable: PropTypes.bool,
   dataindex: PropTypes.string,
@@ -201,48 +224,50 @@ EditableCell.propTypes = {
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
   handlechange: PropTypes.func,
-  handleerror: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  children: PropTypes.instanceOf(Object)
+  children: PropTypes.instanceOf(Object),
+  form: PropTypes.instanceOf(Object)
 };
 
 const DataTable = (props) => {
   const {
-    datasource,
-    handlechange,
-    columns,
-    handleerror,
-    loading
-  } = props;
+      datasource,
+      handlechange,
+      columns,
+      loading,
+      form
+    } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-
   const components = {
     body: {
-      row: EditableFormRow,
       cell: EditableCell
     }
   };
   const columnList = columns.map((col) => {
     return {
       ...col,
-      onCell: (record) => ({
+      onCell: (record, index) => ({
         record,
+        form,
+        datasource,
+        indexarr: index,
         editable: col.editable,
         dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
         color: col.color,
-        handlechange,
-        handleerror
+        handlechange
       })
     };
   });
+
   return (
     <div>
       <Table
+        form={form}
         loading={loading}
         components={components}
         rowClassName="editable-row"
@@ -262,7 +287,7 @@ export default DataTable;
 DataTable.propTypes = {
   datasource: PropTypes.instanceOf(Array),
   handlechange: PropTypes.func,
-  handleerror: PropTypes.func,
   loading: PropTypes.bool,
-  columns: PropTypes.instanceOf(Array)
+  columns: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object)
 };
