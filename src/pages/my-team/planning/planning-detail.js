@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import {
  Spin, Input, Button, Divider, Typography, Modal, message, Form 
 } from 'antd';
-import { GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi } from '../../../redux/actions/user';
+import  { GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI } from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 
@@ -115,10 +115,24 @@ class PlanningDetail extends Component {
   }
 
   handleApprove = () => {
+    const { approveKpi, match, myteamdetail } = this.props;
+    const userId = match.params.id;
+    const { kpiList } = myteamdetail;
+    this.state.dataSource.map((item)=>{
+      kpiList.find(d => d.id === item.key).othersRatingComments.comment = item.feedback;
+    });
+    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
     confirm({
       title: 'Are you sure to Approve ?',
-      async onOk() {
-        // history.push('/planning/kpi/draft-planning');
+      onOk: async () => {
+        await approveKpi(userId, myteamdetail);
+        if (this.props.feedback.error === true) {
+          message.error(this.props.feedback.message);
+        }
+        if (this.props.feedback.success === true) {
+          this.props.history.push('/my-team/planning');
+        }
+
       },
       onCancel() {}
     });
@@ -196,7 +210,8 @@ const mapDispatchtoProps = (dispatch) => ({
   getTeamDetailKPI: (idUser) => dispatch(GetMyTeamKPIDetail(idUser)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   getUserDetail: (idUser) => dispatch(GetUserDetail(idUser)),
-  giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data))
+  giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data)),
+  approveKpi: (idUser, data) => dispatch(ApproveKPI(idUser, data))
 });
 
 const mapStateToProps = (state) => ({
