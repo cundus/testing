@@ -9,7 +9,7 @@ import {
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import {
-  metricValidator, validator
+  metricValidator, validator, weightValidator
 } from '../../utils/validator';
 
 const { Option } = Select;
@@ -131,7 +131,7 @@ class EditableCell extends React.Component {
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: validator(data),
+            rules: index === 'weight' ? weightValidator(data) : validator(data),
             initialValue: record[index]
           })(
             <TextArea

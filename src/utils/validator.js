@@ -33,25 +33,20 @@ export const metricValidator = (data) => [
   }
 ];
 
-export const validator = (data) => {
-  switch (data.index) {
-    case 'weight':
-      return [
-        {
-          required: true,
-          message: 'Weight is required'
-        },
-        {
-          pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)?$'),
-          message: 'Weight\'s value must between 1 to 100'
-        }
-      ];
-    default:
-      return [
-        {
-          required: true,
-          message: `${data.title} is required`
-        }
-      ];
+export const validator = (data) => [
+  {
+    required: true,
+    message: `${data.title} is required`
   }
-};
+];
+
+export const weightValidator = (data) => [
+  {
+    required: true,
+    message: 'Weight is required'
+  },
+  {
+    pattern: new RegExp('^[0]*?(?<Percentage>[1-9][0-9]?|100)?$'),
+    message: 'Weight\'s value must between 1 to 100'
+  }
+];
