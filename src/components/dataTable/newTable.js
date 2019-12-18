@@ -3,12 +3,15 @@ import {
   Table,
   Input,
   Form,
-  Switch
+  Select,
+  Typography
 } from 'antd';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
+const { Option } = Select;
 const { TextArea } = Input;
+const { Text } = Typography;
 
 const EditableContext = React.createContext();
 
@@ -24,11 +27,11 @@ class EditableCell extends React.Component {
     }), 100);
   };
 
-  changeSwitch = (checked) => {
+  changeSwitch = (value) => {
     const { record, handlechange } = this.props;
     handlechange({
       ...record,
-      achievementType: checked ? 1 : 0,
+      achievementType: value === 'Qualitative' ? 0 : 1,
       L1: '',
       L2: '',
       L3: ''
@@ -53,6 +56,12 @@ class EditableCell extends React.Component {
     } else {
       type = 'dataKpi';
     }
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
     if (index === 'kpi') {
       return (
         <div>
@@ -76,15 +85,18 @@ class EditableCell extends React.Component {
               />
           )}
           </Form.Item>
-          <div>
-            <Switch
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
               size="small"
-              checked={record.achievementType !== 0}
-              style={{ width: '100%' }}
+              defaultValue={valueType}
+              placeholder="Select type"
               onChange={this.changeSwitch}
-              checkedChildren="Quantitative"
-              unCheckedChildren="Qualitative"
-            />
+              style={{ width: '80%' }}
+            >
+              <Option key="Qualitative">Qualitative</Option>
+              <Option key="Quantitative">Quantitative</Option>
+            </Select>
           </div>
         </div>
       );
@@ -259,20 +271,30 @@ class EditableCell extends React.Component {
       children
     } = this.props;
     const index = dataindex;
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
     if (index === 'kpi') {
       return (
         <div>
           <div className="editable-cell-value-wrap">
             {record[index]}
           </div>
-          <div>
-            <Switch
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
               size="small"
-              checked={record.achievementType !== 0}
-              style={{ width: '100%' }}
-              checkedChildren="Quantitative"
-              unCheckedChildren="Qualitative"
-            />
+              defaultValue={valueType}
+              placeholder="Select type"
+              style={{ width: '80%' }}
+              disabled
+            >
+              <Option key="Qualitative">Qualitative</Option>
+              <Option key="Quantitative">Quantitative</Option>
+            </Select>
           </div>
         </div>
       );

@@ -332,7 +332,7 @@ class DraftKPI extends Component {
               handleDelete={handleDelete}
             /> : <center><Spin /></center>}
           <div>
-            <Text>Challenge yourself :</Text>
+            <Text strong>Challenge yourself :</Text>
             <TextArea
               id="challenge-input"
               placeholder="Challenge yourself"
