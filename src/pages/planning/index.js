@@ -83,7 +83,7 @@ class Planning extends Component {
           step: target
         });
       } else {
-        message.warning('Sorry, You cannot be able to go');
+        message.warning('Sorry, You can\'t go to next step');
       }
     } else if (step === 3) {
       if (target === 1 && access) {
@@ -91,13 +91,13 @@ class Planning extends Component {
           step: target
         });
       } else {
-        message.warning('Sorry, You cannot be able to back');
+        message.warning('Sorry, You can\'t go back to previous step');
       }
     } else if (step === 2) {
       if (target === 3) {
-        message.warning('Sorry, You cannot be able to go');
+        message.warning('Sorry, You can\'t go to next step');
       } else {
-        message.warning('Sorry, You cannot be able to back');
+        message.warning('Sorry, You can\'t go back to previous step');
       }
     }
   };
