@@ -124,7 +124,7 @@ class SubmitedKPI extends Component {
             loading={loadingKpi}
           /> : <center><Spin /></center>}
         <div>
-          <Text>Challenge yourself :</Text>
+          <Text strong>Challenge yourself :</Text>
           <TextArea
             id="challenge-input"
             placeholder="Challenge yourself"
