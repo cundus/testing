@@ -106,6 +106,7 @@ class TablePlan extends Component {
       <div>
         {/* <Layout> */}
         <DataTable
+          form={this.props.form}
           columns={columns}
           datasource={dataSource}
         />
