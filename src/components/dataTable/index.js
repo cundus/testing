@@ -18,7 +18,7 @@ const EditableContext = React.createContext();
 class EditableCell extends React.Component {
   change = (index, field) => {
     const { record, handlechange, form } = this.props;
-    setTimeout(() => form.validateFields([field], (errors, values) => {
+    setTimeout(() => form.validateFields(field, (errors, values) => {
       const item = values.dataKpi[index];
       handlechange({
         ...record,
@@ -79,7 +79,7 @@ class EditableCell extends React.Component {
                 id={`${title}-${index}`}
                 placeholder={placeholder}
                 // eslint-disable-next-line react/jsx-no-bind
-                onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+                onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
                 autoSize={{ minRows: 2, maxRows: 4 }}
                 disabled={!editable}
               />
@@ -125,7 +125,11 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
@@ -160,7 +164,11 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
@@ -192,7 +200,11 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
@@ -219,7 +231,7 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
@@ -236,7 +248,7 @@ class EditableCell extends React.Component {
             id={`${title}-${index}`}
             placeholder={placeholder}
             // eslint-disable-next-line react/jsx-no-bind
-            onChange={() => this.change(indexarr, `${type}[${indexarr}].${index}`)}
+            onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
             autoSize={{ minRows: 3, maxRows: 5 }}
             disabled={!editable}
           />

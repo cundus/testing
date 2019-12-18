@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
- Spin, Input, Button, Divider, Typography, Modal, message, Form 
+ Spin, Input, Button, Divider, Typography, Modal, message, Form
 } from 'antd';
-import  { GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI } from '../../../redux/actions/user';
+import {
+  GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
+} from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 
