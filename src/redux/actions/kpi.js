@@ -68,7 +68,7 @@ export const doGetLatestGoalKpi = () => async (dispatch) => {
         type: GET_LATEST_GOAL_KPI_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
@@ -114,7 +114,7 @@ export const doSaveKpi = (data, id) => async (dispatch) => {
         type: SAVE_KPI_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
@@ -173,7 +173,7 @@ export const doGetKpiList = (id) => async (dispatch) => {
         type: GET_KPI_LIST_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
@@ -222,7 +222,7 @@ export const doGetKpiManagerList = (id) => async (dispatch) => {
         type: GET_KPI_MANAGER_LIST_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
@@ -270,7 +270,7 @@ export const doGetMetrics = () => async (dispatch) => {
         type: GET_METRICS_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
@@ -317,7 +317,7 @@ export const doSubmitNext = (id) => async (dispatch) => {
         type: SUBMIT_NEXT_FAILED,
         loading: false,
         status: null,
-        message: 'Something went wrong',
+        message: 'Something wrong',
         error
       });
     }
