@@ -320,8 +320,8 @@ class DraftKPI extends Component {
           </Text>
           <Divider />
         </div>
-        <div>
-          {!loadingKpi ?
+        {!loadingKpi ?
+          <div>
             <TableDrafKPI
               form={form}
               dataMetrics={dataKpiMetrics}
@@ -330,54 +330,54 @@ class DraftKPI extends Component {
               handleError={handleError}
               handleChange={handleChange}
               handleDelete={handleDelete}
-            /> : <center><Spin /></center>}
-          <div>
-            <Text strong>Challenge yourself :</Text>
-            <TextArea
-              id="challenge-input"
-              placeholder="Challenge yourself"
-              label="Challenge yourself"
-              value={challengeYour}
-              onChange={changeChallenge}
             />
-          </div>
-          {isFeedback &&
-            <div style={{
-              marginTop: 20,
-              paddingBottom: 10,
-              paddingTop: 10,
-              backgroundColor: 'rgb(250, 247, 187)',
-              overflow: 'hidden'
-            }}
-            >
-              <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback.comment}</Paragraph>
-            </div>}
-          <div style={{ textAlign: 'center' }}>
-            <Button
-              id="add-kpi"
+            <div>
+              <Text strong>Challenge yourself :</Text>
+              <TextArea
+                id="challenge-input"
+                placeholder="Challenge yourself"
+                label="Challenge yourself"
+                value={challengeYour}
+                onChange={changeChallenge}
+              />
+            </div>
+            {isFeedback &&
+              <div style={{
+                marginTop: 20,
+                paddingBottom: 10,
+                paddingTop: 10,
+                backgroundColor: 'rgb(250, 247, 187)',
+                overflow: 'hidden'
+              }}
+              >
+                <Text strong>General Feedback :</Text>
+                <Paragraph>{generalFeedback.comment}</Paragraph>
+              </div>}
+            <div style={{ textAlign: 'center' }}>
+              <Button
+                id="add-kpi"
               // eslint-disable-next-line react/jsx-no-bind
-              onClick={() => stepChange(0) /* go back add */}
-              style={{ margin: 10 }}
-            >
+                onClick={() => stepChange(0) /* go back add */}
+                style={{ margin: 10 }}
+              >
               Add KPI
-            </Button>
-            <Button
-              id="save-draft"
-              onClick={handleSaveDraft}
-              style={{ margin: 10 }}
-            >
+              </Button>
+              <Button
+                id="save-draft"
+                onClick={handleSaveDraft}
+                style={{ margin: 10 }}
+              >
               Save as Draft
-            </Button>
-            <Button
-              id="submit-superior"
-              onClick={handleSubmit}
-              type="primary" style={{ margin: 10 }}
-            >
+              </Button>
+              <Button
+                id="submit-superior"
+                onClick={handleSubmit}
+                type="primary" style={{ margin: 10 }}
+              >
               Submit To Superior
-            </Button>
-          </div>
-        </div>
+              </Button>
+            </div>
+          </div> : <center><Spin /></center>}
       </div>
     );
   }
