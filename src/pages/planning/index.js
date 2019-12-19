@@ -12,16 +12,13 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: null,
       loading: true
     };
     this.getKpi();
   }
 
   getKpi = async () => {
-    const {
-      step
-    } = this.state;
     const {
       userReducers,
       history
@@ -35,7 +32,7 @@ class Planning extends Component {
     } = kpiReducers;
     if (status === 0) {
       let feedback = false;
-      if (dataKpi.length !== 0 && step === 0) {
+      if (dataKpi.length !== 0) {
         if (currentStep === 'Manager Goal Review') {
           this.stepChange(2, true);
         } else if (currentStep === 'Emp Goal Setting') {
@@ -53,10 +50,12 @@ class Planning extends Component {
         } else {
           this.stepChange(3, true);
         }
+      } else {
+        this.stepChange(0);
       }
     } else {
       message.warning(`Sorry, ${errMessage}`);
-      history.goBack();
+      history.push('/500');
     }
     this.setState({
       loading: false
