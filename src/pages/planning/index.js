@@ -12,13 +12,14 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: null,
+      step: 0,
       loading: true
     };
     this.getKpi();
   }
 
   getKpi = async () => {
+    const { step } = this.state;
     const {
       userReducers,
       history
@@ -32,7 +33,7 @@ class Planning extends Component {
     } = kpiReducers;
     if (status === 0) {
       let feedback = false;
-      if (dataKpi.length !== 0) {
+      if (dataKpi.length !== 0 && step === 0) {
         if (currentStep === 'Manager Goal Review') {
           this.stepChange(2, true);
         } else if (currentStep === 'Emp Goal Setting') {
@@ -47,13 +48,12 @@ class Planning extends Component {
           if (feedback === false) {
             this.stepChange(1);
           }
-        } else {
-          this.stepChange(3, true);
         }
       } else {
         this.stepChange(0);
       }
     } else {
+      this.stepChange(null);
       message.warning(`Sorry, ${errMessage}`);
       history.push('/500');
     }
@@ -64,39 +64,41 @@ class Planning extends Component {
 
   stepChange = (target, access) => {
     const { step } = this.state;
-    if (step === 0 || step === 1) {
-      if (target === 0) {
-        this.setState({
-          step: target
-        });
-      } else if (target === 1) {
-        this.setState({
-          step: target
-        });
-      } else if (target === 2 && access) {
-        this.setState({
-          step: target
-        });
-      } else if (target === 3 && access) {
-        this.setState({
-          step: target
-        });
-      } else {
-        message.warning('Sorry, You can\'t go to next step');
-      }
-    } else if (step === 3) {
-      if (target === 1 && access) {
-        this.setState({
-          step: target
-        });
-      } else {
-        message.warning('Sorry, You can\'t go back to previous step');
-      }
-    } else if (step === 2) {
-      if (target === 3) {
-        message.warning('Sorry, You can\'t go to next step');
-      } else {
-        message.warning('Sorry, You can\'t go back to previous step');
+    if (target !== null) {
+      if (step === 0 || step === 1) {
+        if (target === 0) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 1) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 2 && access) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 3 && access) {
+          this.setState({
+            step: target
+          });
+        } else {
+          message.warning('Sorry, You can\'t go to next step');
+        }
+      } else if (step === 3) {
+        if (target === 1 && access) {
+          this.setState({
+            step: target
+          });
+        } else {
+          message.warning('Sorry, You can\'t go back to previous step');
+        }
+      } else if (step === 2) {
+        if (target === 3) {
+          message.warning('Sorry, You can\'t go to next step');
+        } else {
+          message.warning('Sorry, You can\'t go back to previous step');
+        }
       }
     }
   };
