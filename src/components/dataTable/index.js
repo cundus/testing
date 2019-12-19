@@ -105,7 +105,51 @@ class EditableCell extends React.Component {
           </div>
         </div>
       );
-    } else if (record.achievementType === 1 && index === ('L1' || 'L2' || 'L3')) { // Quantitative
+    } else if (record.achievementType === 1 && index === 'L1') { // Quantitative
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    }  else if (record.achievementType === 1 && index === 'L2') { // Quantitative
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    } else if (record.achievementType === 1 && index === 'L3') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
