@@ -105,7 +105,7 @@ class EditableCell extends React.Component {
           </div>
         </div>
       );
-    } else if (record.achievementType === 1) { // Quantitative
+    } else if (record.achievementType === 1 && index === ('L1' || 'L2' || 'L3')) { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -127,39 +127,33 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (index === 'weight') {
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: weightValidator(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-            // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: validator(data),
+          { index === 'weight' ? form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: weightValidator(),
             initialValue: record[index]
           })(
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
-            // eslint-disable-next-line react/jsx-no-bind
+              // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
+        ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+          rules: validator(data),
+          initialValue: record[index]
+        })(
+          <TextArea
+            id={`${title}-${index}`}
+            placeholder={placeholder}
+            // eslint-disable-next-line react/jsx-no-bind
+            onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+            autoSize={{ minRows: 3, maxRows: 5 }}
+            disabled={!editable}
+          />
         )}
         </Form.Item>
       );
