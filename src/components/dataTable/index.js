@@ -127,7 +127,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    }  else if (record.achievementType === 1 && index === 'L2') { // Quantitative
+    } else if (record.achievementType === 1 && index === 'L2') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
