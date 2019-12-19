@@ -40,6 +40,7 @@ class CreateKPI extends Component {
           L3: ''
         }
       ],
+      tab:'1',
       dataOwnId: 2,
       dataManagerKpi: [],
       dataSelectedCascade: [],
@@ -139,7 +140,7 @@ class CreateKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
-        id: null,
+        id: 0,
         cascadeType: 1,
         cascadeName: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
         kpi: itemKpi.name,
@@ -163,7 +164,7 @@ class CreateKPI extends Component {
       }, {});
       const data = {
         key: itemKpi.id,
-        id: null,
+        id: 0,
         typeKpi: `${dataSecondManager.firstName} ${dataSecondManager.lastName}`,
         description: itemKpi.name,
         baseline: itemKpi.metric,
@@ -191,6 +192,7 @@ class CreateKPI extends Component {
     const { challenge } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
+      tab,
       dataOwn,
       dataSelectedCascade
     } = this.state;
@@ -228,7 +230,7 @@ class CreateKPI extends Component {
       kpiList: newDataKpi
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
+      if (!err || tab === '2') {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -303,13 +305,18 @@ class CreateKPI extends Component {
     this.setState({ dataOwn: newData });
   };
 
+  changeTab = (activeKey) => {
+    this.setState({ tab: activeKey });
+  };
+
   render() {
     const {
       dataOwn,
       dataSelectedCascade,
       dataManagerKpi,
       loadingOwn,
-      loadingManager
+      loadingManager,
+      tab
     } = this.state;
     const {
       handleAddRow,
@@ -341,7 +348,7 @@ class CreateKPI extends Component {
               <Title level={4}>{`Performance Management - ${name}`}</Title>
             </Skeleton>
           </center>
-          <Tabs defaultActiveKey="1" type="card">
+          <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
             <TabPane tab="Create Own KPI" key="1">
               {!loadingOwn ?
                 <CreateOwn
