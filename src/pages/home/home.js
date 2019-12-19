@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Result } from 'antd';
 import './home-styles.scss';
 import _ from 'lodash';
 import { GetInfoUser } from '../../redux/actions/user';
@@ -22,7 +22,8 @@ class Home extends Component {
     if (!isManager) {
       size = 8;
     }
-    return (
+    if (this.props.user.result !== null ) {
+      return (
       <div style={{textAlign: 'center'}}>
             <Row style={{ paddingTop: 50 }}>
               <Col xl={size} lg={size} md={size} xs={24} className='grid'>
@@ -56,7 +57,16 @@ class Home extends Component {
               </Col>
             </Row>
       </div>
-    );
+     );
+    } else {
+      return (
+        <Result
+        status='500'
+        title='500'
+        subTitle='User not found.'
+      />
+      );
+    }
   }
 }
 const mapDispatchtoProps = (dispatch) => ({
