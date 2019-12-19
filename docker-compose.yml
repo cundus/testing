@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  pmgm_frontend:
+    container_name: PMGM_FRONTEND
+    build: .
+    ports:
+      - '8080:80'
