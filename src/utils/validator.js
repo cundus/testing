@@ -40,7 +40,7 @@ export const validator = (data) => [
   }
 ];
 
-export const weightValidator = (data) => [
+export const weightValidator = () => [
   {
     required: true,
     message: 'Weight is required'
