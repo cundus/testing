@@ -11,19 +11,19 @@ export const metricValidator = (data) => [
       switch (data.title) {
         case 'L1':
           if (parseFloat(L1) >= parseFloat(L2)) {
-            callback('Value must lower than L2');
+            callback('Value must last than L2');
           }
           break;
         case 'L2':
           if (parseFloat(L2) >= parseFloat(L3)) {
-            callback('Value must lower than L3');
+            callback('Value must last than L3');
           } else if (parseFloat(L2) <= parseFloat(L1)) {
-            callback('Value must higher than L1');
+            callback('Value must bigger than L1');
           }
           break;
         case 'L3':
           if (parseFloat(L3) <= parseFloat(L2)) {
-            callback('Value must higher than L2');
+            callback('Value must bigger than L2');
           }
           break;
         default:
