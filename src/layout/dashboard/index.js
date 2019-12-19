@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
-import { Layout, Spin } from "antd";
+import { Layout, Spin, message } from "antd";
 import { GetInfoUser } from "../../redux/actions/user";
 import { doGetMetrics } from '../../redux/actions/kpi';
 
@@ -62,7 +62,14 @@ class Dashboard extends React.Component {
 
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
-    localStorage.setItem("sfToken", this.props.user.result.accessToken);
+    if (this.props.user.result !== null) {
+      localStorage.setItem("sfToken", this.props.user.result.accessToken);
+     } else {
+      const header = document.querySelector('.headerContainer');
+      header.style.display = 'none';
+      message.error("user not found");
+
+     }
     // await this.props.getMetrics();
   }
 
