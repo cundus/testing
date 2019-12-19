@@ -127,11 +127,29 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
+    } else if (index === 'weight') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: weightValidator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+            // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: index === 'weight' ? weightValidator(data) : validator(data),
+            rules: validator(data),
             initialValue: record[index]
           })(
             <TextArea
