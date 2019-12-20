@@ -12,10 +12,10 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
-      loading: true
+      step: 3,
+      loading: false
     };
-    this.getKpi();
+    // this.getKpi();
   }
 
   getKpi = async () => {
@@ -38,7 +38,7 @@ class Planning extends Component {
           this.stepChange(2, true);
         } else {
           await dataKpi.map((itemKpi) => {
-            if (itemKpi.othersRatingComments.id) {
+            if (itemKpi.othersRatingComments.id || currentStep !== 'Emp Goal Setting') {
               if (feedback === false) {
                 this.stepChange(3, true);
                 feedback = true;
