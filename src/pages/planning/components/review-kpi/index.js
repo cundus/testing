@@ -4,7 +4,8 @@ import {
   Divider,
   Input,
   Spin,
-  Button
+  Button,
+  Icon
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -140,10 +141,10 @@ class ReviewKPI extends Component {
             }}
             >
               <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback.comment}</Paragraph>
+              <Paragraph>{generalFeedback && generalFeedback.comment}</Paragraph>
             </div>
             <center>
-              {currentStep === ('Emp Goal Setting' || 'Manager Goal Review') ?
+              {currentStep === 'Emp Goal Setting' &&
                 <Button
                   id="save-draft"
                   // eslint-disable-next-line react/jsx-no-bind
@@ -152,14 +153,14 @@ class ReviewKPI extends Component {
                   style={{ margin: 10 }}
                 >
                   Edit My KPI
-                </Button> :
-                <Button
-                  id="save-draft"
-                  style={{ margin: 10 }}
-                  disabled
-                >
-                  Your KPI Approved
-                </Button>}
+                </Button> }
+              {currentStep !== ('Emp Goal Setting' || 'Manager Goal Review') &&
+              <Button
+                style={{ margin: 10, borderColor: '#52c41a' }}
+              >
+                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+                <Text strong>Your KPI Approved</Text>
+              </Button>}
             </center>
           </div> : <center><Spin /></center>}
       </div>
