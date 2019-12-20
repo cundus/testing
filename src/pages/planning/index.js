@@ -36,7 +36,7 @@ class Planning extends Component {
       if (dataKpi.length !== 0 && step === 0) {
         if (currentStep === 'Manager Goal Review') {
           this.stepChange(2, true);
-        } else if (currentStep === 'Emp Goal Setting') {
+        } else {
           await dataKpi.map((itemKpi) => {
             if (itemKpi.othersRatingComments.id) {
               if (feedback === false) {

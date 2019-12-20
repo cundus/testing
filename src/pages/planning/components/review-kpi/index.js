@@ -143,7 +143,7 @@ class ReviewKPI extends Component {
               <Paragraph>{generalFeedback.comment}</Paragraph>
             </div>
             <center>
-              {currentStep === ('Emp Goal Setting' || 'Manager Goal Review') ?
+              {currentStep === 'Emp Goal Setting' ?
                 <Button
                   id="save-draft"
                   // eslint-disable-next-line react/jsx-no-bind
@@ -152,7 +152,7 @@ class ReviewKPI extends Component {
                   style={{ margin: 10 }}
                 >
                   Edit My KPI
-                </Button> :
+                </Button> : currentStep !== 'Manager Goal Review' &&
                 <Button
                   id="save-draft"
                   style={{ margin: 10 }}
