@@ -144,7 +144,7 @@ class CreateKPI extends Component {
         cascadeType: 1,
         cascadeName: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
         kpi: itemKpi.name,
-        baseline: itemKpi.metric,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
         ...dataMetrics
@@ -168,7 +168,7 @@ class CreateKPI extends Component {
         cascadeType: 1,
         cascadeName: `${dataSecondManager.manager.firstName} ${dataSecondManager.manager.lastName}`,
         kpi: itemKpi.name,
-        baseline: itemKpi.metric,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
         ...dataMetrics
