@@ -13,7 +13,7 @@ class Planning extends Component {
     super(props);
     this.state = {
       step: 0,
-      loading: false
+      loading: true
     };
     this.getKpi();
   }
