@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { message, Spin } from 'antd';
+import {
+ message, Spin, Result, Button
+} from 'antd';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -13,7 +15,8 @@ class Planning extends Component {
     super(props);
     this.state = {
       step: 0,
-      loading: true
+      loading: true,
+      error: false
     };
     this.getKpi();
   }
@@ -21,8 +24,7 @@ class Planning extends Component {
   getKpi = async () => {
     const { step } = this.state;
     const {
-      userReducers,
-      history
+      userReducers
     } = this.props;
     const { user } = userReducers.result;
     const { getKpiList } = this.props;
@@ -37,6 +39,7 @@ class Planning extends Component {
         if (currentStep === 'Manager Goal Review') {
           this.stepChange(2, true);
         } else {
+          // eslint-disable-next-line array-callback-return
           await dataKpi.map((itemKpi) => {
             if (itemKpi.othersRatingComments.id || currentStep !== 'Emp Goal Setting') {
               if (feedback === false) {
@@ -55,7 +58,9 @@ class Planning extends Component {
     } else {
       this.stepChange(null);
       message.warning(`Sorry, ${errMessage}`);
-      history.push('/500');
+      this.setState({
+        error: true
+      });
     }
     this.setState({
       loading: false
@@ -104,16 +109,33 @@ class Planning extends Component {
   };
 
   render() {
-    const { step, loading } = this.state;
+    const {
+      step, loading, error
+    } = this.state;
     const { stepChange } = this;
-    return (
-      <div>
-        {loading ? <center><Spin /></center> :
+    const { kpiReducers, history } = this.props;
+    const {
+      errMessage, status
+    } = kpiReducers;
+    if (error) {
+      return (
+        <Result
+          status={status}
+          title={status}
+          subTitle={`Sorry, ${errMessage}`}
+          // eslint-disable-next-line react/jsx-no-bind
+          extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
+        />
+      );
+    } else {
+      return (
         <div>
-          <Step step={step} stepChange={stepChange} />
-          {/* eslint-disable-next-line no-nested-ternary */}
-          {step === 0 ?
-            <CreateKpi stepChange={stepChange} /> :
+          {loading ? <center><Spin /></center> :
+          <div>
+            <Step step={step} stepChange={stepChange} />
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {step === 0 ?
+              <CreateKpi stepChange={stepChange} /> :
           // eslint-disable-next-line no-nested-ternary
           step === 1 ?
             <DraftKpi stepChange={stepChange} /> :
@@ -121,9 +143,10 @@ class Planning extends Component {
               <SubmitKpi stepChange={stepChange} /> :
               step === 3 &&
               <ReviewKpi stepChange={stepChange} />}
-        </div>}
-      </div>
-    );
+          </div>}
+        </div>
+      );
+    }
   }
 }
 

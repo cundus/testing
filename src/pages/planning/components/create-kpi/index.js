@@ -40,7 +40,7 @@ class CreateKPI extends Component {
           L3: ''
         }
       ],
-      tab:'1',
+      tab: '1',
       dataOwnId: 2,
       dataManagerKpi: [],
       dataSelectedCascade: [],
@@ -165,8 +165,9 @@ class CreateKPI extends Component {
       const data = {
         key: itemKpi.id,
         id: 0,
-        typeKpi: `${dataSecondManager.firstName} ${dataSecondManager.lastName}`,
-        description: itemKpi.name,
+        cascadeType: 1,
+        cascadeName: `${dataSecondManager.manager.firstName} ${dataSecondManager.manager.lastName}`,
+        kpi: itemKpi.name,
         baseline: itemKpi.metric,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
