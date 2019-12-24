@@ -25,7 +25,7 @@ class Home extends Component {
     if (this.props.user.result !== null ) {
       return (
       <div style={{textAlign: 'center'}}>
-            <Row style={{ paddingTop: 50 }}>
+            <Row style={{ paddingTop: 50, paddingBottom: 50 }}>
               <Col xl={size} lg={size} md={size} xs={24} className='grid'>
                 <br/><br/>
                 <img alt={'plannning'} src={FileIcon} className='purple' style={{width:120, height: 120}}/>
