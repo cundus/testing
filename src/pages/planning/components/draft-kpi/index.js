@@ -276,10 +276,10 @@ class DraftKPI extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(data, user.userId);
-            this.getAllData();
             const { kpiReducers } = this.props;
             if (kpiReducers.statusSaveKPI === Success) {
               message.success('Your KPI has been saved');
+              this.getAllData();
             } else {
               message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
             }
