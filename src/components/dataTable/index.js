@@ -9,7 +9,7 @@ import {
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import {
-  metricValidator, validator, weightValidator
+  metricValidator, validator, weightValidator, metricValidatorText
 } from '../../utils/validator';
 
 const { Option } = Select;
@@ -171,6 +171,72 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
+    } else if (record.achievementType === 0 && index === 'L1') { // Quantitative
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidatorText(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+               // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    } else if (record.achievementType === 0 && index === 'L2') { // Quantitative
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidatorText(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
+    } else if (record.achievementType === 0 && index === 'L3') { // Quantitative
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: metricValidatorText(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [
+                `${type}[${indexarr}].L1`,
+                `${type}[${indexarr}].L2`,
+                `${type}[${indexarr}].L3`
+              ])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+        )}
+        </Form.Item>
+      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
@@ -186,19 +252,19 @@ class EditableCell extends React.Component {
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
-        ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-          rules: validator(data),
-          initialValue: record[index]
-        })(
-          <TextArea
-            id={`${title}-${index}`}
-            placeholder={placeholder}
-            // eslint-disable-next-line react/jsx-no-bind
-            onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            disabled={!editable}
-          />
-        )}
+          ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
         </Form.Item>
       );
     }

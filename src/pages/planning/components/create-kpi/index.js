@@ -75,7 +75,8 @@ class CreateKPI extends Component {
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+          metric.achievementText : metric.achievementNumeric}",
+          "id${metric.label}":"${metric.id}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -132,7 +133,8 @@ class CreateKPI extends Component {
     dataFirstManager && dataFirstManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+          metric.achievementText : metric.achievementNumeric}",
+          "id${metric.label}":"${metric.id}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -156,7 +158,8 @@ class CreateKPI extends Component {
     dataSecondManager && dataSecondManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+          metric.achievementText : metric.achievementNumeric}",
+          "id${metric.label}":"${metric.id}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -206,22 +209,27 @@ class CreateKPI extends Component {
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
         weight: itemKpi.weight,
+        cascadeType: itemKpi.cascadeType,
+        cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
         metricLookup: [
           {
+            id: parseFloat(itemKpi.idL1) || 0,
             label: 'L1',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
             achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
+            id: parseFloat(itemKpi.idL2) || 0,
             label: 'L2',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
             achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
+            id: parseFloat(itemKpi.idL3) || 0,
             label: 'L3',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L3 : '')
           }]
       };
       newDataKpi.push(data);
@@ -273,14 +281,18 @@ class CreateKPI extends Component {
     const newData = {
       key: dataOwnId,
       id: 0,
-      typeKpi: 'Self KPI',
+      cascadeType: 0,
+      cascadeName: null,
       achievementType: 0,
       name: '',
       baseline: '',
       weight: '',
       L1: '',
+      idL1: 0,
       L2: '',
-      L3: ''
+      idL2: 0,
+      L3: '',
+      idL3: 0
     };
     this.setState({
       dataOwn: [...dataOwn, newData],

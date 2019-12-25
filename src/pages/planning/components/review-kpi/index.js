@@ -43,7 +43,8 @@ class ReviewKPI extends Component {
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+          metric.achievementText : metric.achievementNumeric}",
+          "id${metric.label}":"${metric.id}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -53,6 +54,7 @@ class ReviewKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         cascadeType: itemKpi.cascadeType,
+        cascadeName: itemKpi.cascadeName,
         typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
