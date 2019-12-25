@@ -253,22 +253,27 @@ class DraftKPI extends Component {
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
         weight: itemKpi.weight,
+        cascadeType: itemKpi.cascadeType,
+        cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
         metricLookup: [
           {
+            id: parseFloat(itemKpi.idL1) || 0,
             label: 'L1',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
             achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
           },
           {
+            id: parseFloat(itemKpi.idL2) || 0,
             label: 'L2',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
             achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
           },
           {
+            id: parseFloat(itemKpi.idL3) || 0,
             label: 'L3',
             achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L3 : '')
           }]
       };
       newDataKpi.push(data);
