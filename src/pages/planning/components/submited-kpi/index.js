@@ -45,7 +45,8 @@ class SubmitedKPI extends Component {
       }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+          metric.achievementText : metric.achievementNumeric}",
+          "id${metric.label}":"${metric.id}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -55,9 +56,10 @@ class SubmitedKPI extends Component {
         key: itemKpi.id,
         id: itemKpi.id,
         cascadeType: itemKpi.cascadeType,
+        cascadeName: itemKpi.cascadeName,
         typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
-        baseline: itemKpi.metric,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
         ...dataMetrics,
