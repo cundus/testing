@@ -3,7 +3,9 @@ import {
   Typography,
   Divider,
   Input,
-  Spin
+  Spin,
+  Button,
+  Icon
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -104,7 +106,9 @@ class SubmitedKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
     const { kpiReducers } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
+    const {
+      loadingKpi, dataKpiMetrics, generalFeedback, currentStep
+    } = kpiReducers;
     return (
       <div>
         <div>
@@ -121,7 +125,6 @@ class SubmitedKPI extends Component {
         {!loadingKpi ?
           <div>
             <TableSubmitedKPI
-              isFeedback={isFeedback}
               dataMetrics={dataKpiMetrics}
               dataSource={dataSource}
               loading={loadingKpi}
@@ -136,7 +139,6 @@ class SubmitedKPI extends Component {
                 disabled
               />
             </div>
-            {isFeedback &&
             <div style={{
               marginTop: 20,
               paddingBottom: 10,
@@ -145,9 +147,28 @@ class SubmitedKPI extends Component {
               overflow: 'hidden'
             }}
             >
-              <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback.comment}</Paragraph>
-            </div>}
+              {isFeedback &&
+                <div style={{
+                  marginTop: 20,
+                  paddingBottom: 10,
+                  paddingTop: 10,
+                  backgroundColor: 'rgb(250, 247, 187)',
+                  overflow: 'hidden'
+                }}
+                >
+                  <Text strong>General Feedback :</Text>
+                  <Paragraph>{generalFeedback.comment}</Paragraph>
+                </div>}
+            </div>
+            <center>
+              {currentStep !== ('Emp Goal Setting' || 'Manager Goal Review') &&
+              <Button
+                style={{ margin: 10, borderColor: '#52c41a' }}
+              >
+                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+                <Text strong>Your KPI Approved</Text>
+              </Button>}
+            </center>
           </div> : <center><Spin /></center>}
       </div>
     );

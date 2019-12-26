@@ -34,23 +34,11 @@ class Planning extends Component {
       errMessage, dataKpi, status, currentStep
     } = kpiReducers;
     if (status === 0) {
-      let feedback = false;
       if (dataKpi.length !== 0 && step === 0) {
         if (currentStep === 'Manager Goal Review') {
           this.stepChange(2, true);
         } else {
-          // eslint-disable-next-line array-callback-return
-          await dataKpi.map((itemKpi) => {
-            if (itemKpi.othersRatingComments.id || currentStep !== 'Emp Goal Setting') {
-              if (feedback === false) {
-                this.stepChange(3, true);
-                feedback = true;
-              }
-            }
-          });
-          if (feedback === false) {
-            this.stepChange(1);
-          }
+          this.stepChange(1);
         }
       } else {
         this.stepChange(0);
