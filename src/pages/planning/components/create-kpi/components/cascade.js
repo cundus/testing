@@ -46,6 +46,7 @@ class Cascade extends Component {
         placeholder: 'Enter KPI Weight',
         align: 'center',
         type: 'number',
+        width: 90,
         editable: false
       }
     ];
