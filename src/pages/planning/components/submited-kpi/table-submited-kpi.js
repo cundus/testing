@@ -12,9 +12,13 @@ class TableDrafKPI extends Component {
 
   componentDidMount() {
     setTimeout(() => this.getColumns(), 10);
+    // the settimeout would leaking memory (showing warn)
+    // but i have to make it for getting a newest feedback props
   }
 
   getColumns = async () => {
+     // the async await on this function would leaking memory (showing warn)
+     // but i have to async await for making it table
     const { dataMetrics, isFeedback } = this.props;
     const newColumns = [
       {
