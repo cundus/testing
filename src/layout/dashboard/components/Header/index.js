@@ -50,7 +50,7 @@ const Header = (props) => {
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
                 return (
-                  <Menu.Item key={`${menu.path}`}>
+                  <Menu.Item key={`${menu.path}`} disabled={menu.disabled|| false} >
                     <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
                 );
@@ -66,7 +66,7 @@ const Header = (props) => {
                   >
                     {childsRoutes.map((menuChild) => {
                       return (
-                        <Menu.Item key={`${menuChild.path}`}>
+                        <Menu.Item key={`${menuChild.path}`} disabled={menuChild.disabled|| false}>
                           <Link to={menuChild.path}>
                             <Icon
                               type={`${menuChild.icon}`}
