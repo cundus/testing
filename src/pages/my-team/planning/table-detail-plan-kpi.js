@@ -22,9 +22,9 @@ class TableEditMyKPI extends Component {
         placeholder: 'Enter 2020 baseline'
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline'
+        placeholder: 'Enter baseline'
       },
       {
         title: 'Weight (100%)',

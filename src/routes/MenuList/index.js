@@ -37,7 +37,8 @@ const MenuList = [
     menuLevel: 1,
     title: 'Monitoring',
     parent: 'none',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 7,
@@ -45,7 +46,8 @@ const MenuList = [
     menuLevel: 1,
     title: 'Appraisal',
     parent: 'none',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 8,
@@ -70,7 +72,8 @@ const MenuList = [
     title: 'Monitoring',
     parent: 'My Team',
     icon: 'bar-chart',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 11,
@@ -79,7 +82,8 @@ const MenuList = [
     title: 'Appraisal',
     parent: 'My Team',
     icon: 'check-square',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   }
 ];
 
