@@ -59,7 +59,7 @@ class SubmitedKPI extends Component {
         id: itemKpi.id,
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
-        typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
+        // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
@@ -128,6 +128,7 @@ class SubmitedKPI extends Component {
               dataMetrics={dataKpiMetrics}
               dataSource={dataSource}
               loading={loadingKpi}
+              isFeedback={isFeedback}
             />
             <div>
               <Text strong>Challenge yourself :</Text>
@@ -161,7 +162,7 @@ class SubmitedKPI extends Component {
                 </div>}
             </div>
             <center>
-              {currentStep !== ('Emp Goal Setting' || 'Manager Goal Review') &&
+              {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
               <Button
                 style={{ margin: 10, borderColor: '#52c41a' }}
               >

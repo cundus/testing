@@ -25,14 +25,6 @@ class TableDrafKPI extends Component {
     const { dataMetrics, isFeedback } = this.props;
     const newColumns = [
       {
-        title: 'Cascading / Self KPI',
-        dataIndex: 'typeKpi',
-        align: 'center',
-        width: 200,
-        placeholder: 'Cascading/Self KPI',
-        editable: false
-      },
-      {
         title: 'KPI Subject',
         dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
@@ -54,6 +46,7 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter KPI Weight',
         align: 'center',
         type: 'number',
+        width: 90,
         editable: true
       }
     ];
