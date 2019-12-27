@@ -75,6 +75,19 @@ class EditableCell extends React.Component {
     if (index === 'kpi') { // kpi contain type of metrics
       return (
         <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
+              size="small"
+              defaultValue={valueType}
+              placeholder="Select type"
+              onChange={this.changeSwitch}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
+            >
+              <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+            </Select>
+          </div>
           <Form.Item style={{ margin: 0 }}>
             {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
               rules: validator(data),
@@ -90,19 +103,6 @@ class EditableCell extends React.Component {
               />
           )}
           </Form.Item>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Text style={{ width: '20%' }}>Type:</Text>
-            <Select
-              size="small"
-              defaultValue={valueType}
-              placeholder="Select type"
-              onChange={this.changeSwitch}
-              style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
-            >
-              <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
-              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
-            </Select>
-          </div>
         </div>
       );
     } else if (record.achievementType === 1 && index === 'L1') { // Quantitative
@@ -304,9 +304,6 @@ class EditableCell extends React.Component {
     if (index === 'kpi') {
       return (
         <div>
-          <div className="editable-cell-value-wrap">
-            {record[index]}
-          </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text style={{ width: '20%' }}>Type:</Text>
             <Select
@@ -317,8 +314,11 @@ class EditableCell extends React.Component {
               disabled
             >
               <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative">Quantitative</Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
             </Select>
+          </div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
           </div>
         </div>
       );
