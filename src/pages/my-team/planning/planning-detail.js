@@ -51,8 +51,8 @@ class PlanningDetail extends Component {
         }
         const data = {
           key: itemKpi.id,
-          description: itemKpi.name,
-          baseline: itemKpi.metric,
+          kpi: itemKpi.name,
+          baseline: itemKpi.baseline,
           weight: itemKpi.weight,
           achievementType: itemKpi.achievementType,
           ...dataMetrics,

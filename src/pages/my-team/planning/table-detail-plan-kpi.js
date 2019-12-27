@@ -17,14 +17,14 @@ class TableEditMyKPI extends Component {
     const newColumns = [
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
+        dataIndex: 'kpi',
         align: 'center',
-        placeholder: 'Enter 2020 baseline'
+        placeholder: 'Enter KPI Subject'
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline'
+        placeholder: 'Enter baseline'
       },
       {
         title: 'Weight (100%)',
