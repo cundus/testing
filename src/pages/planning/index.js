@@ -35,7 +35,7 @@ class Planning extends Component {
     } = kpiReducers;
     if (status === 0) {
       if (dataKpi.length !== 0 && step === 0) {
-        if (currentStep === 'Manager Goal Review') {
+        if (currentStep !== 'Emp Goal Setting') {
           this.stepChange(2, true);
         } else {
           this.stepChange(1);
