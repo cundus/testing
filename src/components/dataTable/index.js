@@ -97,10 +97,10 @@ class EditableCell extends React.Component {
               defaultValue={valueType}
               placeholder="Select type"
               onChange={this.changeSwitch}
-              style={{ width: '80%' }}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
             >
-              <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative">Quantitative</Option>
+              <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
             </Select>
           </div>
         </div>
@@ -237,7 +237,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (index === 'feedback') { // Quantitative
+    } else if (index === 'feedback') { // Feedback
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -313,7 +313,7 @@ class EditableCell extends React.Component {
               size="small"
               defaultValue={valueType}
               placeholder="Select type"
-              style={{ width: '80%' }}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#9ced74' : '#' }}
               disabled
             >
               <Option key="Qualitative">Qualitative</Option>
