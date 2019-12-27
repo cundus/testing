@@ -65,7 +65,7 @@ class DraftKPI extends Component {
         id: itemKpi.id,
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
-        typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
+        // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,

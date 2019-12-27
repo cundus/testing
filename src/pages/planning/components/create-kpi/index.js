@@ -362,7 +362,21 @@ class CreateKPI extends Component {
             </Skeleton>
           </center>
           <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
-            <TabPane tab="Create Own KPI" key="1">
+            <TabPane
+              tab="Cascade From Superior"
+              key="1"
+            >
+              {!loadingManager ?
+                <Cascade
+                  dataSource={dataManagerKpi}
+                  dataMetrics={dataKpiManagerMetrics}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                /> : <center><Spin /></center>}
+            </TabPane>
+            <TabPane tab="Create Own KPI" key="2">
               {!loadingOwn ?
                 <CreateOwn
                   form={form}
@@ -373,20 +387,6 @@ class CreateKPI extends Component {
                   handleError={handleError}
                   handleChangeField={handleChangeField}
                   handleDelete={handleDeleteRow}
-                /> : <center><Spin /></center>}
-            </TabPane>
-            <TabPane
-              tab="Cascade From Superior"
-              key="2"
-            >
-              {!loadingManager ?
-                <Cascade
-                  dataSource={dataManagerKpi}
-                  dataMetrics={dataKpiManagerMetrics}
-                  dataSelectedCascade={dataSelectedCascade}
-                  handleError={handleError}
-                  handleSaveDraft={handleSaveDraft}
-                  handleSelectData={handleSelectData}
                 /> : <center><Spin /></center>}
             </TabPane>
           </Tabs>

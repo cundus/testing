@@ -43,7 +43,7 @@ export const getMetrics = () => customAxios({
 });
 
 export const submitNext = (id) => customAxios({
-  url: `/kpi/submitNext/${id}?comment=already repaired`,
+  url: `/kpi/submitNext/${id}?comment=kpi was submitted`,
   method: 'GET',
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`

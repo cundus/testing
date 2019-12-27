@@ -10,7 +10,7 @@ const { Step } = Steps;
 
 const StepWizzard = (props) => {
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-  const { step, stepChange} = props;
+  const { step, /*stepChange*/ } = props;
   return (
     <div>
       <Steps
@@ -18,7 +18,7 @@ const StepWizzard = (props) => {
         current={step}
         style={{ display: 'flex' }}
         // eslint-disable-next-line react/jsx-no-bind
-        onChange={stepChange}
+        // onChange={stepChange}
       >
         <Step
           title={isDesktopOrLaptop && 'Fill KPI Form'}
@@ -29,13 +29,13 @@ const StepWizzard = (props) => {
           icon={<Icon type="file-done" style={{ fontSize: 32 }} />}
         />
         <Step
-          title={isDesktopOrLaptop && 'Submit'}
+          title={isDesktopOrLaptop && 'Submitted'}
           icon={<Icon type="check" style={{ fontSize: 32 }} />}
         />
-        <Step
+        {/* <Step
           title={isDesktopOrLaptop && 'Review'}
           icon={<Icon type="form" style={{ fontSize: 32 }} />}
-        />
+        /> */}
       </Steps>
     </div>
   );

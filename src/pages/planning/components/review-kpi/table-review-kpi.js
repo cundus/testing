@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { DataTable } from '../../../../components';
 
-class TableDrafKPI extends Component {
+class TableReviewKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,6 +12,8 @@ class TableDrafKPI extends Component {
   }
 
   getColumns = async () => {
+     // the async await on this function would leaking memory (showing warn)
+     // but i have to async await for making it table
     const { dataMetrics } = this.props;
     const newColumns = [
       {
@@ -47,7 +49,6 @@ class TableDrafKPI extends Component {
         editable: false
       }
     ];
-    // eslint-disable-next-line array-callback-return
     await dataMetrics.map((itemMetric) => {
       const data = {
         title: itemMetric.label,
@@ -58,6 +59,7 @@ class TableDrafKPI extends Component {
         editable: false
       };
       newColumns.push(data);
+      return null;
     });
     const Feedback = {
       title: 'Feedback',
@@ -91,9 +93,9 @@ class TableDrafKPI extends Component {
   }
 }
 
-export default TableDrafKPI;
+export default TableReviewKPI;
 
-TableDrafKPI.propTypes = {
+TableReviewKPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool
