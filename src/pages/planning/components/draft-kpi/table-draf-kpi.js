@@ -30,6 +30,7 @@ class TableDrafKPI extends Component {
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
+        className: 'td-top',
         editable: true
       },
       {
@@ -37,6 +38,7 @@ class TableDrafKPI extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -45,6 +47,7 @@ class TableDrafKPI extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
+        className: 'td-top',
         type: 'number',
         width: 90,
         editable: true
@@ -57,6 +60,7 @@ class TableDrafKPI extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
+        className: 'td-top',
         width: 150,
         editable: true
       };

@@ -27,6 +27,7 @@ class CreateOwn extends Component {
         dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -35,6 +36,7 @@ class CreateOwn extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -43,6 +45,7 @@ class CreateOwn extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
+        className: 'td-top',
         type: 'number',
         width: 90,
         editable: true
@@ -55,6 +58,7 @@ class CreateOwn extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       };

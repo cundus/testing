@@ -353,7 +353,7 @@ class DraftKPI extends Component {
                 onChange={changeChallenge}
               />
             </div>
-            {isFeedback &&
+            {generalFeedback.comment &&
               <div style={{
                 marginTop: 20,
                 paddingBottom: 10,

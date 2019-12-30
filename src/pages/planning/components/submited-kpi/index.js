@@ -140,27 +140,18 @@ class SubmitedKPI extends Component {
                 disabled
               />
             </div>
-            <div style={{
-              marginTop: 20,
-              paddingBottom: 10,
-              paddingTop: 10,
-              backgroundColor: 'rgb(250, 247, 187)',
-              overflow: 'hidden'
-            }}
-            >
-              {isFeedback &&
-                <div style={{
-                  marginTop: 20,
-                  paddingBottom: 10,
-                  paddingTop: 10,
-                  backgroundColor: 'rgb(250, 247, 187)',
-                  overflow: 'hidden'
-                }}
-                >
-                  <Text strong>General Feedback :</Text>
-                  <Paragraph>{generalFeedback.comment}</Paragraph>
-                </div>}
-            </div>
+            {generalFeedback.comment &&
+              <div style={{
+                marginTop: 20,
+                paddingBottom: 10,
+                paddingTop: 10,
+                backgroundColor: 'rgb(250, 247, 187)',
+                overflow: 'hidden'
+              }}
+              >
+                <Text strong>General Feedback :</Text>
+                <Paragraph>{generalFeedback.comment}</Paragraph>
+              </div>}
             <center>
               {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
               <Button
