@@ -17,13 +17,13 @@ export const metricValidator = (data) => [
           } else if (!regexNumber.test(L1)) {
             callback('Value must be a number');
           } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2) < parseFloat(L3)) {
-              if (parseFloat(L1) >= parseFloat(L2)) {
-                callback('Value must last than L2');
+            if (parseFloat(L1) < parseFloat(L2)) {
+              if (!(parseFloat(L2) < parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2) > parseFloat(L3)) {
-              if (parseFloat(L1) <= parseFloat(L2)) {
-                callback('Value must last than L2');
+            } else if (parseFloat(L1) > parseFloat(L2)) {
+              if (!(parseFloat(L2) > parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
             } else {
               callback('L1-L3 Must be Ascending/Descending');
@@ -36,17 +36,13 @@ export const metricValidator = (data) => [
           } else if (!regexNumber.test(L2)) {
             callback('Value must be a number');
           } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2) < parseFloat(L3)) {
-              if (parseFloat(L2) >= parseFloat(L3)) {
-                callback('Value must last than L3');
-              } else if (parseFloat(L2) <= parseFloat(L1)) {
-                callback('Value must bigger than L1');
+            if (parseFloat(L1) < parseFloat(L2)) {
+              if (!(parseFloat(L2) < parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2) > parseFloat(L3)) {
-              if (parseFloat(L2) <= parseFloat(L3)) {
-                callback('Value must bigger than L3');
-              } else if (parseFloat(L2) >= parseFloat(L1)) {
-                callback('Value must last than L1');
+            } else if (parseFloat(L1) > parseFloat(L2)) {
+              if (!(parseFloat(L2) > parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
             } else {
               callback('L1-L3 Must be Ascending/Descending');
@@ -54,18 +50,18 @@ export const metricValidator = (data) => [
           }
           break;
         case 'L3':
-          if (regexZero.test(L1)) {
+          if (regexZero.test(L3)) {
             callback('Value must be not a zero');
-          } else if (!regexNumber.test(L1)) {
+          } else if (!regexNumber.test(L3)) {
             callback('Value must be a number');
           } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2) < parseFloat(L3)) {
-              if (parseFloat(L3) <= parseFloat(L2)) {
-                callback('Value must bigger than L2');
+            if (parseFloat(L1) < parseFloat(L2)) {
+              if (!(parseFloat(L2) < parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2) > parseFloat(L3)) {
-              if (parseFloat(L3) >= parseFloat(L2)) {
-                callback('Value must last than L2');
+            } else if (parseFloat(L1) > parseFloat(L2)) {
+              if (!(parseFloat(L2) > parseFloat(L3))) {
+                callback('L1-L3 Must be Ascending/Descending');
               }
             } else {
               callback('L1-L3 Must be Ascending/Descending');

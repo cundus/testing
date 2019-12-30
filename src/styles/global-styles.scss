@@ -67,7 +67,7 @@
   }
 }
 .ant-table-th-yellow{
-  background: rgb(250, 247, 187);
+  background: rgb(250, 247, 187) !important;
 }
 
 .ant-switch {
@@ -75,4 +75,17 @@
 }
 .ant-switch-checked {
   background: #1890ff;
+}
+
+.has-error {
+  .ant-form-explain {
+      font-size: 12px;
+  } 
+}
+
+.td-top {
+  vertical-align: top;
+}
+th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
+  vertical-align: middle;
 }

@@ -346,7 +346,7 @@ class EditableCell extends React.Component {
             <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
-            <div>
+            <div style={{ verticalAlign: 'top' }}>
               <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
             </div>
           )}
