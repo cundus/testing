@@ -14,6 +14,8 @@ class Cascade extends Component {
   }
 
   getColumns = async () => {
+    // the async await on this function would leaking memory (showing warn)
+    // but i have to async await for making it table
     const { dataMetrics } = this.props;
     const newColumns = [
       {
@@ -46,6 +48,7 @@ class Cascade extends Component {
         placeholder: 'Enter KPI Weight',
         align: 'center',
         type: 'number',
+        width: 90,
         editable: false
       }
     ];
@@ -111,6 +114,7 @@ class Cascade extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
+          // it (lowercase) handle vdom warn, but another vdom valid function err show
         />
         <div style={{ textAlign: 'center' }}>
           <Button

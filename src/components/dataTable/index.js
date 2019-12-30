@@ -75,6 +75,19 @@ class EditableCell extends React.Component {
     if (index === 'kpi') { // kpi contain type of metrics
       return (
         <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
+              size="small"
+              defaultValue={valueType}
+              placeholder="Select type"
+              onChange={this.changeSwitch}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
+            >
+              <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+            </Select>
+          </div>
           <Form.Item style={{ margin: 0 }}>
             {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
               rules: validator(data),
@@ -90,19 +103,6 @@ class EditableCell extends React.Component {
               />
           )}
           </Form.Item>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Text style={{ width: '20%' }}>Type:</Text>
-            <Select
-              size="small"
-              defaultValue={valueType}
-              placeholder="Select type"
-              onChange={this.changeSwitch}
-              style={{ width: '80%' }}
-            >
-              <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative">Quantitative</Option>
-            </Select>
-          </div>
         </div>
       );
     } else if (record.achievementType === 1 && index === 'L1') { // Quantitative
@@ -237,6 +237,24 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
+    } else if (index === 'feedback') { // Feedback
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            // rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
@@ -286,21 +304,21 @@ class EditableCell extends React.Component {
     if (index === 'kpi') {
       return (
         <div>
-          <div className="editable-cell-value-wrap">
-            {record[index]}
-          </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Text style={{ width: '20%' }}>Type:</Text>
             <Select
               size="small"
               defaultValue={valueType}
               placeholder="Select type"
-              style={{ width: '80%' }}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#9ced74' : '#' }}
               disabled
             >
               <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative">Quantitative</Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
             </Select>
+          </div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
           </div>
         </div>
       );
@@ -328,7 +346,7 @@ class EditableCell extends React.Component {
             <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
-            <div>
+            <div style={{ verticalAlign: 'top' }}>
               <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
             </div>
           )}

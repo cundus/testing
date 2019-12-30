@@ -3,7 +3,9 @@ import {
   Typography,
   Divider,
   Input,
-  Spin
+  Spin,
+  Button,
+  Icon
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -57,7 +59,7 @@ class SubmitedKPI extends Component {
         id: itemKpi.id,
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
-        typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
+        // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
@@ -104,7 +106,9 @@ class SubmitedKPI extends Component {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
     const { kpiReducers } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
+    const {
+      loadingKpi, dataKpiMetrics, generalFeedback, currentStep
+    } = kpiReducers;
     return (
       <div>
         <div>
@@ -121,10 +125,10 @@ class SubmitedKPI extends Component {
         {!loadingKpi ?
           <div>
             <TableSubmitedKPI
-              isFeedback={isFeedback}
               dataMetrics={dataKpiMetrics}
               dataSource={dataSource}
               loading={loadingKpi}
+              isFeedback={isFeedback}
             />
             <div>
               <Text strong>Challenge yourself :</Text>
@@ -136,18 +140,27 @@ class SubmitedKPI extends Component {
                 disabled
               />
             </div>
-            {isFeedback &&
-            <div style={{
-              marginTop: 20,
-              paddingBottom: 10,
-              paddingTop: 10,
-              backgroundColor: 'rgb(250, 247, 187)',
-              overflow: 'hidden'
-            }}
-            >
-              <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback.comment}</Paragraph>
-            </div>}
+            {generalFeedback.comment &&
+              <div style={{
+                marginTop: 20,
+                paddingBottom: 10,
+                paddingTop: 10,
+                backgroundColor: 'rgb(250, 247, 187)',
+                overflow: 'hidden'
+              }}
+              >
+                <Text strong>General Feedback :</Text>
+                <Paragraph>{generalFeedback.comment}</Paragraph>
+              </div>}
+            <center>
+              {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
+              <Button
+                style={{ margin: 10, borderColor: '#52c41a' }}
+              >
+                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+                <Text strong>Your KPI Approved</Text>
+              </Button>}
+            </center>
           </div> : <center><Spin /></center>}
       </div>
     );

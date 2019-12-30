@@ -18,6 +18,8 @@ class CreateOwn extends Component {
   }
 
   getColumns = async () => {
+     // the async await on this function would leaking memory (showing warn)
+     // but i have to async await for making it table
     const { dataMetrics } = this.props;
     const newColumns = [
       {
@@ -25,6 +27,7 @@ class CreateOwn extends Component {
         dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -33,6 +36,7 @@ class CreateOwn extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -41,7 +45,9 @@ class CreateOwn extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
+        className: 'td-top',
         type: 'number',
+        width: 90,
         editable: true
       }
     ];
@@ -52,6 +58,7 @@ class CreateOwn extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       };
@@ -107,6 +114,7 @@ class CreateOwn extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
+          // it (lowercase) handle vdom warn, but another vdom valid function err show
           handlechange={handleChangeField}
         />
         <div style={{ textAlign: 'center' }}>

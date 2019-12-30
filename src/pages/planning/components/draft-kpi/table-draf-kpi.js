@@ -15,25 +15,22 @@ class TableDrafKPI extends Component {
 
   componentDidMount() {
     setTimeout(() => this.getColumns(), 10);
+    // the settimeout would leaking memory (showing warn)
+    // but i have to make it for getting a newest feedback props
   }
 
   getColumns = async () => {
+     // the async await on this function would leaking memory (showing warn)
+     // but i have to async await for making it table
     const { dataMetrics, isFeedback } = this.props;
     const newColumns = [
-      {
-        title: 'Cascading / Self KPI',
-        dataIndex: 'typeKpi',
-        align: 'center',
-        width: 200,
-        placeholder: 'Cascading/Self KPI',
-        editable: false
-      },
       {
         title: 'KPI Subject',
         dataIndex: 'kpi',
         placeholder: 'Enter KPI Subject',
         align: 'center',
         width: 200,
+        className: 'td-top',
         editable: true
       },
       {
@@ -41,6 +38,7 @@ class TableDrafKPI extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
+        className: 'td-top',
         width: 200,
         editable: true
       },
@@ -49,7 +47,9 @@ class TableDrafKPI extends Component {
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
         align: 'center',
+        className: 'td-top',
         type: 'number',
+        width: 90,
         editable: true
       }
     ];
@@ -60,6 +60,7 @@ class TableDrafKPI extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
+        className: 'td-top',
         width: 150,
         editable: true
       };
@@ -124,6 +125,7 @@ class TableDrafKPI extends Component {
           loading={loading}
           datasource={dataSource}
           handleerror={handleError}
+          // it (lowercase) handle vdom warn, but another vdom valid function err show
           handlechange={handleChange}
         />
       </div>
