@@ -51,7 +51,7 @@ class TablePlan extends Component {
         render: (text) => {
           let status;
           let color;
-          if (text === 0) {
+          if (text === (0 || 3)) {
             status = 'On Progress';
             color = '#ffb822';
           } else if (text === 1) {
@@ -60,13 +60,14 @@ class TablePlan extends Component {
           } else if (text === 2) {
             status = 'Completed';
             color = '#1dc9b7';
-          } else if (text === 3) {
-            status = 'Review';
-            color = 'blue';
           } else {
             status = 'N/A';
             color = '#ccc';
           }
+          // else if (text === 3) {
+          //   status = 'Review';
+          //   color = 'blue';
+          // }
           return (<Tag color={color}>{status}</Tag>);
         }
       },
