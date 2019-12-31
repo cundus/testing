@@ -19,6 +19,7 @@ class TableEditMyKPI extends Component {
         title: 'KPI Subject',
         dataIndex: 'kpi',
         align: 'center',
+        width: 200,
         placeholder: 'Enter KPI Subject'
       },
       {
