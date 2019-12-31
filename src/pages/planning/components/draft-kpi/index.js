@@ -141,29 +141,29 @@ class DraftKPI extends Component {
         achievementType: itemKpi.achievementType,
         metricLookup: [
           {
-            id: parseFloat(itemKpi.idL1) || 0,
-            label: 'L1',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+            id: parseFloat(itemKpi.idBelow) || 0,
+            label: 'Below',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Below : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Below : '')
           },
           {
-            id: parseFloat(itemKpi.idL2) || 0,
-            label: 'L2',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
+            id: parseFloat(itemKpi.idMeet) || 0,
+            label: 'Meet',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Meet : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Meet : '')
           },
           {
-            id: parseFloat(itemKpi.idL3) || 0,
-            label: 'L3',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L3 : '')
+            id: parseFloat(itemKpi.idExceed) || 0,
+            label: 'Exceed',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Exceed : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Exceed : '')
           }]
       };
       newDataKpi.push(data);
     });
     const data = {
-      challangeYourSelf: challengeYour,
-      kpiList: newDataKpi
+      kpiList: newDataKpi,
+      challangeYourSelf: challengeYour
     };
     if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
@@ -258,29 +258,29 @@ class DraftKPI extends Component {
         achievementType: itemKpi.achievementType,
         metricLookup: [
           {
-            id: parseFloat(itemKpi.idL1) || 0,
-            label: 'L1',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+            id: parseFloat(itemKpi.idBelow) || 0,
+            label: 'Below',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Below : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Below : '')
           },
           {
-            id: parseFloat(itemKpi.idL2) || 0,
-            label: 'L2',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
+            id: parseFloat(itemKpi.idMeet) || 0,
+            label: 'Meet',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Meet : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Meet : '')
           },
           {
-            id: parseFloat(itemKpi.idL3) || 0,
-            label: 'L3',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L3 : '')
+            id: parseFloat(itemKpi.idExceed) || 0,
+            label: 'Exceed',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Exceed : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Exceed : '')
           }]
       };
       newDataKpi.push(data);
     });
     const data = {
-      challangeYourSelf: challengeYour,
-      kpiList: newDataKpi
+      kpiList: newDataKpi,
+      challangeYourSelf: challengeYour
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {

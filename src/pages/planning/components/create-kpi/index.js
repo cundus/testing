@@ -35,9 +35,9 @@ class CreateKPI extends Component {
           name: '',
           baseline: '',
           weight: '',
-          L1: '',
-          L2: '',
-          L3: ''
+          Below: '',
+          Meet: '',
+          Exceed: ''
         }
       ],
       tab: '1',
@@ -214,29 +214,29 @@ class CreateKPI extends Component {
         achievementType: itemKpi.achievementType,
         metricLookup: [
           {
-            id: parseFloat(itemKpi.idL1) || 0,
-            label: 'L1',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L1 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L1 : '')
+            id: parseFloat(itemKpi.idBelow) || 0,
+            label: 'Below',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Below : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Below : '')
           },
           {
-            id: parseFloat(itemKpi.idL2) || 0,
-            label: 'L2',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L2 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L2 : '')
+            id: parseFloat(itemKpi.idMeet) || 0,
+            label: 'Meet',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Meet : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Meet : '')
           },
           {
-            id: parseFloat(itemKpi.idL3) || 0,
-            label: 'L3',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.L3 : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.L3 : '')
+            id: parseFloat(itemKpi.idExceed) || 0,
+            label: 'Exceed',
+            achievementText: itemKpi.achievementType === 0 ? itemKpi.Exceed : '',
+            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Exceed : '')
           }]
       };
       newDataKpi.push(data);
     });
     const data = {
-      challangeYourSelf: challenge,
-      kpiList: newDataKpi
+      kpiList: newDataKpi,
+      challangeYourSelf: challenge
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err || tab === '2') {
@@ -287,12 +287,12 @@ class CreateKPI extends Component {
       name: '',
       baseline: '',
       weight: '',
-      L1: '',
-      idL1: 0,
-      L2: '',
-      idL2: 0,
-      L3: '',
-      idL3: 0
+      Below: '',
+      idBelow: 0,
+      Meet: '',
+      idMeet: 0,
+      Exceed: '',
+      idExceed: 0
     };
     this.setState({
       dataOwn: [...dataOwn, newData],

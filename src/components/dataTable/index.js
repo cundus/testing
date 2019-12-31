@@ -35,9 +35,9 @@ class EditableCell extends React.Component {
     handlechange({
       ...record,
       achievementType: value === 'Qualitative' ? 0 : 1,
-      L1: '',
-      L2: '',
-      L3: ''
+      Below: '',
+      Meet: '',
+      Exceed: ''
     });
   };
 
@@ -105,7 +105,7 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (record.achievementType === 1 && index === 'L1') { // Quantitative
+    } else if (record.achievementType === 1 && index === 'Below') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -117,9 +117,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
@@ -127,7 +127,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (record.achievementType === 1 && index === 'L2') { // Quantitative
+    } else if (record.achievementType === 1 && index === 'Meet') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -139,9 +139,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
@@ -149,7 +149,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (record.achievementType === 1 && index === 'L3') { // Quantitative
+    } else if (record.achievementType === 1 && index === 'Exceed') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -161,9 +161,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
@@ -171,7 +171,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (record.achievementType === 0 && index === 'L1') { // Quantitative
+    } else if (record.achievementType === 0 && index === 'Below') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -183,9 +183,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
                // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
@@ -193,7 +193,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (record.achievementType === 0 && index === 'L2') { // Quantitative
+    } else if (record.achievementType === 0 && index === 'Meet') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -205,9 +205,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
@@ -215,7 +215,7 @@ class EditableCell extends React.Component {
         )}
         </Form.Item>
       );
-    } else if (record.achievementType === 0 && index === 'L3') { // Quantitative
+    } else if (record.achievementType === 0 && index === 'Exceed') { // Quantitative
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
@@ -227,9 +227,9 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].L1`,
-                `${type}[${indexarr}].L2`,
-                `${type}[${indexarr}].L3`
+                `${type}[${indexarr}].Below`,
+                `${type}[${indexarr}].Meet`,
+                `${type}[${indexarr}].Exceed`
               ])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
