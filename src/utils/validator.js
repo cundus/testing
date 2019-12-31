@@ -10,65 +10,22 @@ export const metricValidator = (data) => [
       const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
       const regexNumber = new RegExp('^[0-9]*$');
       const regexZero = new RegExp('^[0-0]*$');
-      switch (data.title) {
-        case 'Below':
-          if (regexZero.test(Below)) {
-            callback('Value must be not a zero');
-          } else if (!regexNumber.test(Below)) {
-            callback('Value must be a number');
-          } else if (Below && Meet && Exceed) {
-            if (parseFloat(Below) < parseFloat(Meet)) {
-              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else if (parseFloat(Below) > parseFloat(Meet)) {
-              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else {
-              callback('Target Must be Ascending/Descending');
-            }
+      if (regexZero.test(Below)) {
+        callback('Value must be not a zero');
+      } else if (!regexNumber.test(Below)) {
+        callback('Value must be a number');
+      } else if (Below && Meet && Exceed) {
+        if (parseFloat(Below) < parseFloat(Meet)) {
+          if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+            callback('Target Must be Ascending/Descending');
           }
-          break;
-        case 'Meet':
-          if (regexZero.test(Meet)) {
-            callback('Value must be not a zero');
-          } else if (!regexNumber.test(Meet)) {
-            callback('Value must be a number');
-          } else if (Below && Meet && Exceed) {
-            if (parseFloat(Below) < parseFloat(Meet)) {
-              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else if (parseFloat(Below) > parseFloat(Meet)) {
-              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else {
-              callback('Target Must be Ascending/Descending');
-            }
+        } else if (parseFloat(Below) > parseFloat(Meet)) {
+          if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+            callback('Target Must be Ascending/Descending');
           }
-          break;
-        case 'Exceed':
-          if (regexZero.test(Exceed)) {
-            callback('Value must be not a zero');
-          } else if (!regexNumber.test(Exceed)) {
-            callback('Value must be a number');
-          } else if (Below && Meet && Exceed) {
-            if (parseFloat(Below) < parseFloat(Meet)) {
-              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else if (parseFloat(Below) > parseFloat(Meet)) {
-              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
-                callback('Target Must be Ascending/Descending');
-              }
-            } else {
-              callback('Target Must be Ascending/Descending');
-            }
-          }
-          break;
-        default:
+        } else {
+          callback('Target Must be Ascending/Descending');
+        }
       }
     }
   }
