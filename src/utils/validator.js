@@ -5,66 +5,66 @@ export const metricValidator = (data) => [
   },
   {
     validator: async (rule, value, callback, source) => {
-      const L1 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L1`);
-      const L2 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L2`);
-      const L3 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L3`);
+      const Below = data.form.getFieldValue(`${data.type}[${data.indexarr}].Below`);
+      const Meet = data.form.getFieldValue(`${data.type}[${data.indexarr}].Meet`);
+      const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
       const regexNumber = new RegExp('^[0-9]*$');
       const regexZero = new RegExp('^[0-0]*$');
       switch (data.title) {
-        case 'L1':
-          if (regexZero.test(L1)) {
+        case 'Below':
+          if (regexZero.test(Below)) {
             callback('Value must be not a zero');
-          } else if (!regexNumber.test(L1)) {
+          } else if (!regexNumber.test(Below)) {
             callback('Value must be a number');
-          } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2)) {
-              if (!(parseFloat(L2) < parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+          } else if (Below && Meet && Exceed) {
+            if (parseFloat(Below) < parseFloat(Meet)) {
+              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2)) {
-              if (!(parseFloat(L2) > parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+            } else if (parseFloat(Below) > parseFloat(Meet)) {
+              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
             } else {
-              callback('L1-L3 Must be Ascending/Descending');
+              callback('Target Must be Ascending/Descending');
             }
           }
           break;
-        case 'L2':
-          if (regexZero.test(L2)) {
+        case 'Meet':
+          if (regexZero.test(Meet)) {
             callback('Value must be not a zero');
-          } else if (!regexNumber.test(L2)) {
+          } else if (!regexNumber.test(Meet)) {
             callback('Value must be a number');
-          } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2)) {
-              if (!(parseFloat(L2) < parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+          } else if (Below && Meet && Exceed) {
+            if (parseFloat(Below) < parseFloat(Meet)) {
+              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2)) {
-              if (!(parseFloat(L2) > parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+            } else if (parseFloat(Below) > parseFloat(Meet)) {
+              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
             } else {
-              callback('L1-L3 Must be Ascending/Descending');
+              callback('Target Must be Ascending/Descending');
             }
           }
           break;
-        case 'L3':
-          if (regexZero.test(L3)) {
+        case 'Exceed':
+          if (regexZero.test(Exceed)) {
             callback('Value must be not a zero');
-          } else if (!regexNumber.test(L3)) {
+          } else if (!regexNumber.test(Exceed)) {
             callback('Value must be a number');
-          } else if (L1 && L2 && L3) {
-            if (parseFloat(L1) < parseFloat(L2)) {
-              if (!(parseFloat(L2) < parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+          } else if (Below && Meet && Exceed) {
+            if (parseFloat(Below) < parseFloat(Meet)) {
+              if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
-            } else if (parseFloat(L1) > parseFloat(L2)) {
-              if (!(parseFloat(L2) > parseFloat(L3))) {
-                callback('L1-L3 Must be Ascending/Descending');
+            } else if (parseFloat(Below) > parseFloat(Meet)) {
+              if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                callback('Target Must be Ascending/Descending');
               }
             } else {
-              callback('L1-L3 Must be Ascending/Descending');
+              callback('Target Must be Ascending/Descending');
             }
           }
           break;
@@ -99,30 +99,30 @@ export const metricValidatorText = (data) => [
   },
   {
     validator: async (rule, value, callback, source) => {
-      const L1 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L1`);
-      const L2 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L2`);
-      const L3 = data.form.getFieldValue(`${data.type}[${data.indexarr}].L3`);
-      if (L1 && L2 && L3) {
+      const Below = data.form.getFieldValue(`${data.type}[${data.indexarr}].Below`);
+      const Meet = data.form.getFieldValue(`${data.type}[${data.indexarr}].Meet`);
+      const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
+      if (Below && Meet && Exceed) {
         switch (data.title) {
-          case 'L1':
-            if (L1 === L2) {
-              callback('Value must different with L2');
-            } else if (L1 === L2) {
-              callback('Value must different with L3');
+          case 'Below':
+            if (Below === Meet) {
+              callback('Value must different with Meet');
+            } else if (Below === Meet) {
+              callback('Value must different with Exceed');
             }
             break;
-          case 'L2':
-            if (L2 === L1) {
-              callback('Value must different with L1');
-            } else if (L2 === L3) {
-              callback('Value must different with L3');
+          case 'Meet':
+            if (Meet === Below) {
+              callback('Value must different with Below');
+            } else if (Meet === Exceed) {
+              callback('Value must different with Exceed');
             }
             break;
-          case 'L3':
-            if (L3 === L2) {
-              callback('Value must different with L2');
-            } else if (L3 === L1) {
-              callback('Value must different with L1');
+          case 'Exceed':
+            if (Exceed === Meet) {
+              callback('Value must different with Meet');
+            } else if (Exceed === Below) {
+              callback('Value must different with Below');
             }
             break;
           default:
