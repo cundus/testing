@@ -206,8 +206,8 @@ class CreateKPI extends Component {
     dataSaving.map((itemKpi) => {
       const data = {
         id: itemKpi.id,
-        baseline: itemKpi.baseline,
         name: itemKpi.kpi,
+        baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
