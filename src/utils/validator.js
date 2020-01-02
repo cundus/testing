@@ -112,7 +112,7 @@ export const metricValidatorText = (data) => [
       const Meet = data.form.getFieldValue(`${data.type}[${data.indexarr}].Meet`);
       const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
       const regexNumber = new RegExp('^[0-9]*$');
-      const regexZero = new RegExp('^[0-0]*$');
+      // const regexZero = new RegExp('^[0-0]*$');
       switch (data.title) {
         case 'Below':
           if (Below) {
