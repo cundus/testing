@@ -10,21 +10,67 @@ export const metricValidator = (data) => [
       const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
       const regexNumber = new RegExp('^[0-9]*$');
       const regexZero = new RegExp('^[0-0]*$');
-      if (regexZero.test(Below)) {
-        callback('Value must be not a zero');
-      } else if (!regexNumber.test(Below)) {
-        callback('Value must be a number');
-      } else if (Below && Meet && Exceed) {
-        if (parseFloat(Below) < parseFloat(Meet)) {
-          if (!(parseFloat(Meet) < parseFloat(Exceed))) {
-            callback('Target Must be Ascending/Descending');
-          }
-        } else if (parseFloat(Below) > parseFloat(Meet)) {
-          if (!(parseFloat(Meet) > parseFloat(Exceed))) {
-            callback('Target Must be Ascending/Descending');
-          }
-        } else {
-          callback('Target Must be Ascending/Descending');
+      if (Below && Meet && Exceed) {
+        switch (data.title) {
+          case 'Below':
+            if (regexZero.test(Below)) {
+              callback('Value must be not a zero');
+            } else if (!regexNumber.test(Below)) {
+              callback('Value must be a number');
+            } else if (Below && Meet && Exceed) {
+              if (parseFloat(Below) < parseFloat(Meet)) {
+                if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else if (parseFloat(Below) > parseFloat(Meet)) {
+                if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else {
+                callback('Target Must be Ascending/Descending');
+              }
+            }
+            break;
+          case 'Meet':
+            if (regexZero.test(Meet)) {
+              callback('Value must be not a zero');
+            } else if (!regexNumber.test(Meet)) {
+              callback('Value must be a number');
+            } else if (Below && Meet && Exceed) {
+              if (parseFloat(Below) < parseFloat(Meet)) {
+                if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else if (parseFloat(Below) > parseFloat(Meet)) {
+                if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else {
+                callback('Target Must be Ascending/Descending');
+              }
+            }
+            break;
+          case 'Exceed':
+            if (regexZero.test(Exceed)) {
+              callback('Value must be not a zero');
+            } else if (!regexNumber.test(Exceed)) {
+              callback('Value must be a number');
+            } else if (Below && Meet && Exceed) {
+              if (parseFloat(Below) < parseFloat(Meet)) {
+                if (!(parseFloat(Meet) < parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else if (parseFloat(Below) > parseFloat(Meet)) {
+                if (!(parseFloat(Meet) > parseFloat(Exceed))) {
+                  callback('Target Must be Ascending/Descending');
+                }
+              } else {
+                callback('Target Must be Ascending/Descending');
+              }
+            }
+            break;
+          default:
+                // code block
         }
       }
     }
@@ -59,32 +105,50 @@ export const metricValidatorText = (data) => [
       const Below = data.form.getFieldValue(`${data.type}[${data.indexarr}].Below`);
       const Meet = data.form.getFieldValue(`${data.type}[${data.indexarr}].Meet`);
       const Exceed = data.form.getFieldValue(`${data.type}[${data.indexarr}].Exceed`);
-      if (Below && Meet && Exceed) {
-        switch (data.title) {
-          case 'Below':
+      const regexNumber = new RegExp('^[0-9]*$');
+      const regexZero = new RegExp('^[0-0]*$');
+      switch (data.title) {
+        case 'Below':
+          if (regexZero.test(Below)) {
+            callback('Value must be not a zero');
+          } else if (regexNumber.test(Below)) {
+            callback('Value must not a number');
+          } else if (Below && Meet && Exceed) {
             if (Below === Meet) {
               callback('Value must different with Meet');
             } else if (Below === Meet) {
               callback('Value must different with Exceed');
             }
-            break;
-          case 'Meet':
+          }
+          break;
+        case 'Meet':
+          if (regexZero.test(Meet)) {
+            callback('Value must be not a zero');
+          } else if (regexNumber.test(Meet)) {
+            callback('Value must not a number');
+          } else if (Below && Meet && Exceed) {
             if (Meet === Below) {
               callback('Value must different with Below');
             } else if (Meet === Exceed) {
               callback('Value must different with Exceed');
             }
-            break;
-          case 'Exceed':
+          }
+          break;
+        case 'Exceed':
+          if (regexZero.test(Exceed)) {
+            callback('Value must be not a zero');
+          } else if (regexNumber.test(Exceed)) {
+            callback('Value must not a number');
+          } else if (Below && Meet && Exceed) {
             if (Exceed === Meet) {
               callback('Value must different with Meet');
             } else if (Exceed === Below) {
               callback('Value must different with Below');
             }
-            break;
-          default:
-                // code block
-        }
+          }
+          break;
+        default:
+              // code block
       }
     }
   }
