@@ -358,7 +358,7 @@ class CreateKPI extends Component {
         <div>
           <center>
             <Skeleton active loading={loadingGoal} paragraph={false} title={{ width: 500 }}>
-              <Title level={4}>{`Performance Management - ${name}`}</Title>
+              <Title level={4}>{name}</Title>
             </Skeleton>
           </center>
           <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
