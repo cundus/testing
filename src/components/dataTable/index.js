@@ -52,8 +52,11 @@ class EditableCell extends React.Component {
       form
     } = this.props;
     const index = dataindex;
-    const { cascadeType } = record;
-    const isMetric = record.metrics.filter((metric) => metric.label === index);
+    const { cascadeType, metrics } = record;
+    let isMetric;
+    if (metrics) {
+      isMetric = metrics.filter((metric) => metric.label === index);
+    }
     let type = '';
     if (cascadeType === 1) {
       type = 'dataManagerKpi';
