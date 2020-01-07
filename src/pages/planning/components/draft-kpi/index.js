@@ -53,8 +53,7 @@ class DraftKPI extends Component {
       }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}",
-          "id${metric.label}":"${metric.id}"}`;
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -70,12 +69,12 @@ class DraftKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
+        metrics: itemKpi.metricLookup,
         ...dataMetrics,
         feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });
-
     form.getFieldValue({
       dataKpi: newData
     });
@@ -256,6 +255,7 @@ class DraftKPI extends Component {
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
+        below: itemKpi.below,
         metricLookup: [
           {
             id: parseFloat(itemKpi.idBelow) || 0,
