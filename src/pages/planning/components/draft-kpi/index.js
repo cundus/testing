@@ -14,7 +14,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
 import { doSaveKpi, doGetKpiList, doSubmitNext } from '../../../../redux/actions/kpi';
-import { Success } from '../../../../redux/status-code-type';
+import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 
 const { confirm } = Modal;
 const { Text, Paragraph } = Typography;
@@ -178,12 +178,16 @@ class DraftKPI extends Component {
             onOk: async () => {
               await doSavingKpi(data, user.userId);
               // eslint-disable-next-line react/destructuring-assignment
-              if (this.props.kpiReducers.statusSaveKPI === Success) {
+              if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
                 await submitNext(user.userId);
                 message.success('Your KPI has been submitted to supervisor');
                 stepChange(2, true); // go to submit page
+                // eslint-disable-next-line react/destructuring-assignment
+                if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+                }
               } else {
-                message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+                message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
               }
             },
             onCancel() {}
@@ -294,11 +298,15 @@ class DraftKPI extends Component {
           onOk: async () => {
             await doSavingKpi(data, user.userId);
             // eslint-disable-next-line react/destructuring-assignment
-            if (this.props.kpiReducers.statusSaveKPI === Success) {
+            if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
               this.getAllData();
+              // eslint-disable-next-line react/destructuring-assignment
+              if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+              }
             } else {
-              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+              message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
             }
           },
           onCancel() {}

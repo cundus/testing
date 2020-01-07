@@ -17,7 +17,7 @@ import {
 } from '../../../../redux/actions/kpi';
 import CreateOwn from './components/create-own';
 import Cascade from './components/cascade';
-import { Success } from '../../../../redux/status-code-type';
+import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -246,8 +246,9 @@ class CreateKPI extends Component {
           onOk: async () => {
             await doSavingKpi(data, user.userId);
             const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success) {
+            if (kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
+              this.getAllData();
               stepChange(1); // go to draft
             } else {
               message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
