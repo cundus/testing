@@ -67,7 +67,7 @@ class CreateKPI extends Component {
     const { getKpiList, form } = this.props;
     await getKpiList(id);
     const { kpiReducers } = this.props;
-    const { dataKpi } = kpiReducers;
+    const { dataKpi, dataKpiMetrics } = kpiReducers;
     const newData = [];
     const newSelectedData = [];
     // for fetching data metrics API
@@ -75,8 +75,7 @@ class CreateKPI extends Component {
     dataKpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}",
-          "id${metric.label}":"${metric.id}"}`;
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -92,6 +91,7 @@ class CreateKPI extends Component {
           baseline: itemKpi.baseline,
           weight: itemKpi.weight,
           achievementType: itemKpi.achievementType,
+          metrics: dataKpiMetrics,
           ...dataMetrics
         };
         newData.push(data);
@@ -125,7 +125,7 @@ class CreateKPI extends Component {
     await getKpiManagerList(id);
     const { kpiReducers } = this.props;
     const {
-      dataFirstManager, dataSecondManager
+      dataFirstManager, dataSecondManager, dataKpiMetrics
     } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -133,8 +133,7 @@ class CreateKPI extends Component {
     dataFirstManager && dataFirstManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}",
-          "id${metric.label}":"${metric.id}"}`;
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -149,6 +148,7 @@ class CreateKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
+        metrics: dataKpiMetrics,
         ...dataMetrics
       };
       newData.push(data);
@@ -158,8 +158,7 @@ class CreateKPI extends Component {
     dataSecondManager && dataSecondManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}",
-          "id${metric.label}":"${metric.id}"}`;
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -174,6 +173,7 @@ class CreateKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
+        metrics: dataKpiMetrics,
         ...dataMetrics
       };
       newData.push(data);
@@ -193,7 +193,7 @@ class CreateKPI extends Component {
       doSavingKpi, userReducers, stepChange, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
-    const { challenge } = this.props.kpiReducers;
+    const { challenge, dataKpi } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
       tab,
@@ -203,34 +203,35 @@ class CreateKPI extends Component {
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
-    dataSaving.map((itemKpi) => {
+    dataSaving.map((itemKpi, iii) => {
+      const newMetricValue = [];
+      const datass = Object.keys(itemKpi);
+      // eslint-disable-next-line array-callback-return
+      datass.map((m, index) => {
+        // eslint-disable-next-line array-callback-return
+        dataKpi[iii].metricLookup.map((metric) => {
+        // if (metric.label === datass[index]) {
+          if (metric.label === datass[index]) {
+            const mData = {
+              id: metric.id,
+              label: metric.label,
+              achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
+              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+            };
+            newMetricValue.push(mData);
+          }
+        });
+        // }
+      });
       const data = {
         id: itemKpi.id,
-        name: itemKpi.kpi,
         baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
         weight: itemKpi.weight,
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
-        metricLookup: [
-          {
-            id: parseFloat(itemKpi.idBelow) || 0,
-            label: 'Below',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Below : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Below : '')
-          },
-          {
-            id: parseFloat(itemKpi.idMeet) || 0,
-            label: 'Meet',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Meet : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Meet : '')
-          },
-          {
-            id: parseFloat(itemKpi.idExceed) || 0,
-            label: 'Exceed',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Exceed : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Exceed : '')
-          }]
+        metricLookup: newMetricValue
       };
       newDataKpi.push(data);
     });

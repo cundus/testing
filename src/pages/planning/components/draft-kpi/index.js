@@ -118,8 +118,9 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSavingKpi, userReducers, stepChange, form, submitNext
+      doSavingKpi, userReducers, form, kpiReducers, submitNext, stepChange
     } = this.props;
+    const { dataKpi } = kpiReducers;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -129,7 +130,26 @@ class DraftKPI extends Component {
     } = this.state;
     const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
-    dataSource.map((itemKpi) => {
+    dataSource.map((itemKpi, iii) => {
+      const newMetricValue = [];
+      const datass = Object.keys(itemKpi);
+      // eslint-disable-next-line array-callback-return
+      datass.map((m, index) => {
+        // eslint-disable-next-line array-callback-return
+        dataKpi[iii].metricLookup.map((metric) => {
+        // if (metric.label === datass[index]) {
+          if (metric.label === datass[index]) {
+            const mData = {
+              id: metric.id,
+              label: metric.label,
+              achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
+              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+            };
+            newMetricValue.push(mData);
+          }
+        });
+        // }
+      });
       const data = {
         id: itemKpi.id,
         baseline: itemKpi.baseline,
@@ -138,25 +158,7 @@ class DraftKPI extends Component {
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
-        metricLookup: [
-          {
-            id: parseFloat(itemKpi.idBelow) || 0,
-            label: 'Below',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Below : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Below : '')
-          },
-          {
-            id: parseFloat(itemKpi.idMeet) || 0,
-            label: 'Meet',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Meet : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Meet : '')
-          },
-          {
-            id: parseFloat(itemKpi.idExceed) || 0,
-            label: 'Exceed',
-            achievementText: itemKpi.achievementType === 0 ? itemKpi.Exceed : '',
-            achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi.Exceed : '')
-          }]
+        metricLookup: newMetricValue
       };
       newDataKpi.push(data);
     });
@@ -175,8 +177,8 @@ class DraftKPI extends Component {
             title: 'Are you sure?',
             onOk: async () => {
               await doSavingKpi(data, user.userId);
-              const { kpiReducers } = this.props;
-              if (kpiReducers.statusSaveKPI === Success) {
+              // eslint-disable-next-line react/destructuring-assignment
+              if (this.props.kpiReducers.statusSaveKPI === Success) {
                 await submitNext(user.userId);
                 message.success('Your KPI has been submitted to supervisor');
                 stepChange(2, true); // go to submit page
@@ -252,7 +254,9 @@ class DraftKPI extends Component {
     dataSource.map((itemKpi, iii) => {
       const newMetricValue = [];
       const datass = Object.keys(itemKpi);
+      // eslint-disable-next-line array-callback-return
       datass.map((m, index) => {
+        // eslint-disable-next-line array-callback-return
         dataKpi[iii].metricLookup.map((metric) => {
         // if (metric.label === datass[index]) {
           if (metric.label === datass[index]) {
@@ -279,7 +283,6 @@ class DraftKPI extends Component {
       };
       newDataKpi.push(data);
     });
-    console.log(newDataKpi);
     const data = {
       kpiList: newDataKpi,
       challangeYourSelf: challengeYour
@@ -290,8 +293,8 @@ class DraftKPI extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(data, user.userId);
-            const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success) {
+            // eslint-disable-next-line react/destructuring-assignment
+            if (this.props.kpiReducers.statusSaveKPI === Success) {
               message.success('Your KPI has been saved');
               this.getAllData();
             } else {
