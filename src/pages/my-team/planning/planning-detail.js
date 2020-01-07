@@ -55,6 +55,7 @@ class PlanningDetail extends Component {
           baseline: itemKpi.baseline,
           weight: itemKpi.weight,
           achievementType: itemKpi.achievementType,
+          metrics: this.props.myteamdetail.labelList,
           ...dataMetrics,
           feedback: itemKpi.othersRatingComments.comment
         };

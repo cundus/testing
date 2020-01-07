@@ -36,7 +36,7 @@ class SubmitedKPI extends Component {
     const { user } = userReducers.result;
     await getKpiList(user.userId);
     const { kpiReducers } = this.props;
-    const { dataKpi, challenge } = kpiReducers;
+    const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];
 
     // for fetching data metrics API
@@ -47,8 +47,7 @@ class SubmitedKPI extends Component {
       }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}",
-          "id${metric.label}":"${metric.id}"}`;
+          metric.achievementText : metric.achievementNumeric}"}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
@@ -64,6 +63,7 @@ class SubmitedKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
+        metrics: dataKpiMetrics,
         ...dataMetrics,
         feedback: itemKpi.othersRatingComments.comment
       };

@@ -52,7 +52,11 @@ class EditableCell extends React.Component {
       form
     } = this.props;
     const index = dataindex;
-    const { cascadeType } = record;
+    const { cascadeType, metrics } = record;
+    let isMetric;
+    if (metrics) {
+      isMetric = metrics.filter((metric) => metric.label === index);
+    }
     let type = '';
     if (cascadeType === 1) {
       type = 'dataManagerKpi';
@@ -70,7 +74,8 @@ class EditableCell extends React.Component {
       title,
       type,
       indexarr,
-      form
+      form,
+      record
     };
     if (index === 'kpi') { // kpi contain type of metrics
       return (
@@ -105,138 +110,6 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (record.achievementType === 1 && index === 'Below') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidator(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 1 && index === 'Meet') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidator(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 1 && index === 'Exceed') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidator(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 0 && index === 'Below') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidatorText(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-               // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 0 && index === 'Meet') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidatorText(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
-    } else if (record.achievementType === 0 && index === 'Exceed') { // Quantitative
-      return (
-        <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
-            rules: metricValidatorText(data),
-            initialValue: record[index]
-          })(
-            <TextArea
-              id={`${title}-${index}`}
-              placeholder={placeholder}
-              // eslint-disable-next-line react/jsx-no-bind
-              onChange={() => this.change(indexarr, [
-                `${type}[${indexarr}].Below`,
-                `${type}[${indexarr}].Meet`,
-                `${type}[${indexarr}].Exceed`
-              ])}
-              autoSize={{ minRows: 3, maxRows: 5 }}
-              disabled={!editable}
-            />
-        )}
-        </Form.Item>
-      );
     } else if (index === 'feedback') { // Feedback
       return (
         <Form.Item style={{ margin: 0 }}>
@@ -255,10 +128,10 @@ class EditableCell extends React.Component {
           )}
         </Form.Item>
       );
-    } else {
+    } else if (index === 'weight') {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { index === 'weight' ? form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             rules: weightValidator(),
             initialValue: record[index]
           })(
@@ -270,7 +143,35 @@ class EditableCell extends React.Component {
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
-          ) : form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+          )}
+        </Form.Item>
+      );
+    } else if (isMetric.length !== 0) {
+      const field = [];
+      record.metrics.map((metricLabel) => {
+        field.push(`${type}[${indexarr}].${metricLabel.label}`);
+      });
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: record.achievementType === 1 ? metricValidator(data) : metricValidatorText(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, field)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
             rules: validator(data),
             initialValue: record[index]
           })(
