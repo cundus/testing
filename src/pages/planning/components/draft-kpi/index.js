@@ -180,7 +180,7 @@ class DraftKPI extends Component {
               // eslint-disable-next-line react/destructuring-assignment
               if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
                 await submitNext(user.userId);
-                message.success('Your KPI has been submitted to supervisor');
+                message.success('Your KPI has been submitted to your superior');
                 stepChange(2, true); // go to submit page
                 // eslint-disable-next-line react/destructuring-assignment
                 if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
