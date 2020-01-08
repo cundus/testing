@@ -9,7 +9,7 @@ import {
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import {
-  metricValidator, validator, weightValidator, metricValidatorText
+  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator
 } from '../../utils/validator';
 
 const { Option } = Select;
@@ -48,6 +48,7 @@ class EditableCell extends React.Component {
       record,
       placeholder,
       indexarr,
+      indexlength,
       title,
       form
     } = this.props;
@@ -73,11 +74,17 @@ class EditableCell extends React.Component {
       index,
       title,
       type,
+      indexlength,
       indexarr,
       form,
       record
     };
     if (index === 'kpi') { // kpi contain type of metrics
+      const field = [];
+      for (let a = 0; a < data.indexlength; a++) {
+        const datas = `${data.type}[${a}].${data.index}`;
+        field.push(datas);
+      }
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -95,14 +102,14 @@ class EditableCell extends React.Component {
           </div>
           <Form.Item style={{ margin: 0 }}>
             {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-              rules: validator(data),
+              rules: kpiValidator(data),
               initialValue: record[index]
             })(
               <TextArea
                 id={`${title}-${index}`}
                 placeholder={placeholder}
                 // eslint-disable-next-line react/jsx-no-bind
-                onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+                onChange={() => this.change(indexarr, field)}
                 autoSize={{ minRows: 2, maxRows: 4 }}
                 disabled={!editable}
               />
@@ -258,6 +265,7 @@ class EditableCell extends React.Component {
 
 EditableCell.propTypes = {
   indexarr: PropTypes.number,
+  indexlength: PropTypes.number,
   color: PropTypes.string,
   editable: PropTypes.bool,
   dataindex: PropTypes.string,
@@ -293,6 +301,7 @@ const DataTable = (props) => {
         record,
         form,
         datasource,
+        indexlength: datasource.length,
         indexarr: index,
         editable: col.editable,
         dataindex: col.dataIndex,
