@@ -53,7 +53,7 @@ class EditableCell extends React.Component {
     } = this.props;
     const index = dataindex;
     const { cascadeType, metrics } = record;
-    let isMetric;
+    let isMetric = [];
     if (metrics) {
       isMetric = metrics.filter((metric) => metric.label === index);
     }
@@ -171,7 +171,7 @@ class EditableCell extends React.Component {
     } else {
       return (
         <Form.Item style={{ margin: 0 }}>
-          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             rules: validator(data),
             initialValue: record[index]
           })(
