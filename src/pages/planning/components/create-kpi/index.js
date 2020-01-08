@@ -105,6 +105,7 @@ class CreateKPI extends Component {
           baseline: itemKpi.baseline,
           weight: itemKpi.weight,
           achievementType: itemKpi.achievementType,
+          metrics: dataKpiMetrics,
           ...dataMetrics
         };
         newSelectedData.push(data);
@@ -125,7 +126,7 @@ class CreateKPI extends Component {
     await getKpiManagerList(id);
     const { kpiReducers } = this.props;
     const {
-      dataFirstManager, dataSecondManager, dataKpiMetrics
+      dataFirstManager, dataSecondManager, dataKpiManagerMetrics
     } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -148,7 +149,7 @@ class CreateKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
-        metrics: dataKpiMetrics,
+        metrics: dataKpiManagerMetrics,
         ...dataMetrics
       };
       newData.push(data);
@@ -173,7 +174,7 @@ class CreateKPI extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         achievementType: itemKpi.achievementType,
-        metrics: dataKpiMetrics,
+        metrics: dataKpiManagerMetrics,
         ...dataMetrics
       };
       newData.push(data);
@@ -193,7 +194,7 @@ class CreateKPI extends Component {
       doSavingKpi, userReducers, stepChange, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
-    const { challenge, dataKpi } = this.props.kpiReducers;
+    const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
       tab,
@@ -209,19 +210,33 @@ class CreateKPI extends Component {
       // eslint-disable-next-line array-callback-return
       datass.map((m, index) => {
         // eslint-disable-next-line array-callback-return
-        dataKpi[iii].metricLookup.map((metric) => {
-        // if (metric.label === datass[index]) {
-          if (metric.label === datass[index]) {
-            const mData = {
-              id: metric.id,
-              label: metric.label,
-              achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
-              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
-            };
-            newMetricValue.push(mData);
-          }
-        });
-        // }
+        if (dataKpi[iii]) {
+          dataKpi[iii].metricLookup.map((metric) => {
+          // if (metric.label === datass[index]) {
+            if (metric.label === datass[index]) {
+              const mData = {
+                id: metric.id,
+                label: metric.label,
+                achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
+                achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+              };
+              newMetricValue.push(mData);
+            }
+          });
+        } else {
+          dataKpiMetrics.map((metric) => {
+          // if (metric.label === datass[index]) {
+            if (metric.label === datass[index]) {
+              const mData = {
+                id: parseFloat(0),
+                label: metric.label,
+                achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
+                achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+              };
+              newMetricValue.push(mData);
+            }
+          });
+        }
       });
       const data = {
         id: itemKpi.id,
@@ -248,7 +263,6 @@ class CreateKPI extends Component {
             const { kpiReducers } = this.props;
             if (kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
-              this.getAllData();
               stepChange(1); // go to draft
             } else {
               message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
@@ -279,22 +293,27 @@ class CreateKPI extends Component {
   };
 
   handleAddRow = () => {
+    const { kpiReducers } = this.props;
+    const { dataKpiMetrics } = kpiReducers;
     const { dataOwnId, dataOwn } = this.state;
+    let dataMetrics = dataKpiMetrics.map((metric) => {
+      return `{"${metric.label}":""}`;
+    });
+    dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+    dataMetrics = dataMetrics.reduce((result, current) => {
+      return Object.assign(result, current);
+    }, {});
     const newData = {
       key: dataOwnId,
       id: 0,
+      kpi: '',
+      baseline: '',
+      weight: '',
       cascadeType: 0,
       cascadeName: null,
       achievementType: 0,
-      name: '',
-      baseline: '',
-      weight: '',
-      Below: '',
-      idBelow: 0,
-      Meet: '',
-      idMeet: 0,
-      Exceed: '',
-      idExceed: 0
+      metrics: dataKpiMetrics,
+      ...dataMetrics
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
