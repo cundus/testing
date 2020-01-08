@@ -68,6 +68,31 @@ export const validator = (data) => [
   }
 ];
 
+export const kpiValidator = (data) => [
+  {
+    required: true,
+    message: `${data.title} is required`
+  },
+  {
+    validator: async (rule, value, callback, source) => {
+      const dataKpis = [];
+      for (let a = 0; a < data.indexlength; a++) {
+        const datas = `${data.form.getFieldValue(
+          `${data.type}[${a}].${data.index}`
+          )}`;
+        dataKpis.push(datas);
+      }
+      dataKpis.map((kpi, index) => {
+        if (index !== data.indexarr) {
+          if (dataKpis[data.indexarr] === kpi) {
+            callback('KPI Subject should not be duplicate');
+          }
+        }
+      });
+    }
+  }
+];
+
 export const weightValidator = () => [
   {
     required: true,
