@@ -81,12 +81,12 @@ class Dashboard extends React.Component {
 
   render() {
     const { collapsed } = this.state;
-    const { child, user, kpi } = this.props;
+    const { child, user, kpi, logout } = this.props;
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />
         <Layout style={{ opacity: !collapsed ? "0.3" : "1" }}>
-          <Header collapsed={collapsed} toggle={this.toggle} />
+          <Header collapsed={collapsed} toggle={this.toggle} logout={logout}/>
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
               {Object.keys(user).length ? (
