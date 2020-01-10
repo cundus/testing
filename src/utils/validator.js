@@ -51,9 +51,9 @@ export const metricValidator = (data) => [
                 break;
               }
             }
-          }
-          if (!isSortedAsc && !isSortedDesc) {
-            callback('Target Must be Ascending/Descending');
+            if (!isSortedAsc && !isSortedDesc) {
+              callback('Target Must be Ascending/Descending');
+            }
           }
         }
       }
@@ -82,6 +82,7 @@ export const kpiValidator = (data) => [
           )}`;
         dataKpis.push(datas);
       }
+      // eslint-disable-next-line array-callback-return
       dataKpis.map((kpi, index) => {
         if (index !== data.indexarr) {
           if (dataKpis[data.indexarr] === kpi) {
