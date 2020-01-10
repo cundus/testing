@@ -28,21 +28,21 @@ class TablePlan extends Component {
         dataIndex: 'title',
         placeholder: 'KPI Title'
       },
-      {
-        title: 'KPI Score',
-        dataIndex: 'score',
-        placeholder: 'Score'
-      },
-      {
-        title: 'KPI Rating',
-        dataIndex: 'ratting',
-        placeholder: 'Rating'
-      },
-      {
-        title: 'Non-KPI Result',
-        dataIndex: 'result',
-        placeholder: 'Non-KPI Result'
-      },
+      // {
+      //   title: 'KPI Score',
+      //   dataIndex: 'score',
+      //   placeholder: 'Score'
+      // },
+      // {
+      //   title: 'KPI Rating',
+      //   dataIndex: 'ratting',
+      //   placeholder: 'Rating'
+      // },
+      // {
+      //   title: 'Non-KPI Result',
+      //   dataIndex: 'result',
+      //   placeholder: 'Non-KPI Result'
+      // },
       {
         title: 'Status',
         dataIndex: 'status',
