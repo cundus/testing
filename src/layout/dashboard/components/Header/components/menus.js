@@ -1,10 +1,11 @@
 import React from 'react';
 import { Menu } from 'antd';
 
-export const accountMenu = (
+export const accountMenu = (logout) => (
   <Menu>
     <Menu.Item>
         {/* Message */}
+        <a href='#' onClick={()=> logout()} >Logout</a>
     </Menu.Item>
   </Menu>
   );
