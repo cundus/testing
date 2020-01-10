@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 // Stores Redux
 // import Stores from '../../redux/store/index';
 
-const RenderedRoute = (Component, child) => (props) => {
+const RenderedRoute = (Component, child, title, logout) => (props) => {
   // const store = Stores.getState();
   // if (store.authReducer.accessToken === null) {
   //   (async () => {
@@ -31,7 +31,7 @@ const RenderedRoute = (Component, child) => (props) => {
   // } else if (token !== null && pathname === '/login') {
   //   return (<Redirect to="/dashboard/home" />);
   // }
-  return (<Component {...props} child={child} />);
+  return (<Component {...props} child={child} logout={logout} />);
 };
 
 export const MainRouter = ({
@@ -39,13 +39,13 @@ export const MainRouter = ({
   component,
   title,
   exact = false,
-  child = []
+  child = [],
+  logout
 }) => (
-  // console.log(auth)
   <Route
     exact={exact}
     path={path}
-    render={RenderedRoute(component, child, title)}
+    render={RenderedRoute(component, child, title, logout)}
   />
 );
 
@@ -54,7 +54,7 @@ export const MappedRouter = (props) => {
   return (
     <>
       {routes.map((route, i) => (
-        <MainRouter key={i} {...route} auth={props.auth} />
+        <MainRouter key={i} {...route} auth={props.auth} logout={props.logout}/>
       ))}
     </>
   );

@@ -98,7 +98,8 @@ const Header = (props) => {
             <Dropdown overlay={langMenu} placement="bottomRight">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
-            <Dropdown overlay={accountMenu} placement="bottomRight" trigger={['click']}>
+            <a>
+            <Dropdown overlay={()=>accountMenu(props.logout)} placement="bottomRight">
               <div className="accountWrapper">
                 {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
                 <Avatar
@@ -110,6 +111,7 @@ const Header = (props) => {
                 />
               </div>
             </Dropdown>
+            </a>
           </Row>
           {/* </Menu> */}
         </Col>
