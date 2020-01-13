@@ -7,6 +7,8 @@ import myTeamDetailReducers from './myTeamDetail';
 import userDetailReducers from './userDetail';
 import feedbackReducers from './feedback';
 import userKpiStateReducers from './kpiState';
+import ActivityReducers from './activity';
+import ActivityStatusReducers from './statusActivity';
 export default combineReducers({
   authReducer,
   userReducers,
@@ -15,5 +17,7 @@ export default combineReducers({
   myTeamDetailReducers,
   userDetailReducers,
   feedbackReducers,
-  userKpiStateReducers
+  userKpiStateReducers,
+  ActivityReducers,
+  ActivityStatusReducers
 });

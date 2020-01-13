@@ -4,7 +4,7 @@ import {
  Button, Popconfirm, Tooltip, Icon
 } from 'antd';
 import { DataTable } from '../../components';
-
+import { Link } from  'react-router-dom';
 class TableMonitorKPI extends Component {
   constructor(props) {
     super(props);
@@ -77,7 +77,11 @@ class TableMonitorKPI extends Component {
         return (
           dataSource.length >= 1 ? (
             <div style={{flexDirection: 'row'}}>
-              <Button>Activity</Button>
+              <Button>
+                <Link to={`/Activity/${record.key}`}>
+                  Activity
+                </Link>
+              </Button>
               <Button>Achievement</Button>
               <Popconfirm
                 title="Sure to delete?"
