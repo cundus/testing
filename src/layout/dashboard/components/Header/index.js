@@ -12,6 +12,10 @@ import myAvatar from '../../../../assets/users/300_23.jpg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
 
+import { GetUserKpiState } from '../../../../redux/actions/user';
+import { object } from 'prop-types';
+
+
 const { Text } = Typography;
 const { REACT_APP_API_URL } = process.env;
 
@@ -120,10 +124,14 @@ const Header = (props) => {
   );
 };
 
+const mapDispatchtoProps = (dispatch) => ({
+  GetMyKpiState: () => dispatch(GetUserKpiState())
+});
 
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
-  user: state.userReducers
+  user: state.userReducers,
+  step: state.userKpiStateReducers
 });
 const connectToComponent = connect(mapStateToProps)(Header);
 
