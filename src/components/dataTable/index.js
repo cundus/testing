@@ -4,6 +4,7 @@ import {
   Input,
   Form,
   Select,
+  Empty,
   Typography
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -285,7 +286,8 @@ const DataTable = (props) => {
       handlechange,
       columns,
       loading,
-      form
+      form,
+      emptytext
     } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -320,6 +322,12 @@ const DataTable = (props) => {
         form={form}
         loading={loading}
         components={components}
+        locale={{
+          emptyText: <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={emptytext || 'No Data'}
+          />
+        }}
         rowClassName="editable-row"
         bordered
         dataSource={datasource}
@@ -335,6 +343,7 @@ const DataTable = (props) => {
 export default DataTable;
 
 DataTable.propTypes = {
+  emptytext: PropTypes.string,
   datasource: PropTypes.instanceOf(Array),
   handlechange: PropTypes.func,
   loading: PropTypes.bool,
