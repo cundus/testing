@@ -5,7 +5,8 @@ import {
   getMyTeamDetailKPI as getMyTeamDetailKPIAction,
   getUserDetail as getUserDetailAction,
   feedbackUserKpi as feedbackUserKpiAction,
-  approveUserKpi as approveUserKpiAction
+  approveUserKpi as approveUserKpiAction,
+  getKPIstate as getKPIstateAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -24,6 +25,8 @@ import {
   startUserDetail,
   successFeedback,
   errSubmitFeedback,
+  getUserKpiState,
+  errGetUserKpiState
 } from '../action.type';
 import _ from  'lodash';
 
@@ -193,6 +196,34 @@ export const GetUserDetail = (idUser) => {
     } catch (error) {
       dispatch({
         type: errUserDetail,
+        data: {
+          error: true,
+          errorCode: error.response.status
+        }
+      });
+    }
+  };
+};
+
+export const GetUserKpiState = () => {
+  return async (dispatch) => {
+    try {
+      const resp = await getKPIstateAction();
+      if (resp.data.status_code !== Success) {
+        dispatch({
+          type: errGetUserKpiState,
+          data: {
+            error: true
+          }
+        });
+      }
+      dispatch({
+        type: getUserKpiState,
+        data: resp.data.result
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetUserKpiState,
         data: {
           error: true,
           errorCode: error.response.status

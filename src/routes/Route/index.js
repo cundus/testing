@@ -20,6 +20,7 @@ const AppraisalPage = React.lazy(() => import('../../pages/Appraisal/index'));
 const MonitoringTeamPage = React.lazy(() => import('../../pages/my-team/monitoring/monitoring'));
 const AppraisalTeamPage = React.lazy(() => import('../../pages/my-team/appraisal/appraisal'));
 const Error500Page = React.lazy(() => import('../../pages/error/page500'));
+const AddKpiMonitoring = React.lazy(() => import('../../pages/monitoring/addkpi/addkpi'));
 export const routes = [
   {
     path: '/',
@@ -74,6 +75,12 @@ export const routes = [
         component: Lazyload(MonitoringPage),
         exact: true,
         title: 'Monitoring'
+      },
+      {
+        path: '/monitoring/add',
+        component: Lazyload(AddKpiMonitoring),
+        exact: true,
+        title: 'ADD KPI Monitoring'
       },
       {
         path: '/appraisal',

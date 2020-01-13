@@ -23,6 +23,16 @@ export const getUserDetail = (idUser) => customAxios({
   }
 });
 
+export const getKPIstate = () => customAxios({
+  url: '/kpi/current-step',
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+})
+
 export const getMyTeam = (idUser) => customAxios({
   url: `/user/team/${idUser}`,
   method: 'GET',
