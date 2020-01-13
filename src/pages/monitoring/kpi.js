@@ -67,7 +67,7 @@ class TableMonitorKPI extends Component {
       newColumns.push(data);
     });
     const action = {
-      title: 'Action',
+      title: 'Progress Tracking',
       align: 'center',
       editable: false,
       width: 100,
@@ -76,34 +76,26 @@ class TableMonitorKPI extends Component {
         const { dataSource, handleDelete } = this.props;
         return (
           dataSource.length >= 1 ? (
-            <Popconfirm
-              title="Sure to delete?"
-              // eslint-disable-next-line react/jsx-no-bind
-              onConfirm={() => handleDelete(record.key)}
-            >
-              <Tooltip placement="bottomRight" title="delete">
-                <Button type="danger" ghost>
-                  <Icon type="delete" />
-                </Button>
-              </Tooltip>
-            </Popconfirm>
+            <div style={{flexDirection: 'row'}}>
+              <Button>Activity</Button>
+              <Button>Achievement</Button>
+              <Popconfirm
+                title="Sure to delete?"
+                // eslint-disable-next-line react/jsx-no-bind
+                onConfirm={() => handleDelete(record.key)}
+              >
+                <Tooltip placement="bottomRight" title="delete">
+                  <Button type="danger" ghost>
+                    <Icon type="delete" />
+                  </Button>
+                </Tooltip>
+              </Popconfirm>
+            </div>
           ) : null
         );
       }
     };
     await newColumns.push(action);
-    const Feedback = {
-      title: 'Feedback',
-      dataIndex: 'feedback',
-      placeholder: 'Enter KPI Feedback',
-      align: 'center',
-      width: 100,
-      className: 'ant-table-th-yellow',
-      editable: false
-    };
-    if (isFeedback) {
-      // await newColumns.push(Feedback);
-    }
     this.setState({
       columns: newColumns
     });
