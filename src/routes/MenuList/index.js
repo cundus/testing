@@ -38,7 +38,7 @@ const MenuList = [
     title: 'Monitoring',
     parent: 'none',
     theme: 'outlined',
-    disabled: true
+    disabled: false
   },
   {
     id: 7,

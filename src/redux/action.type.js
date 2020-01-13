@@ -43,3 +43,6 @@ export const startGetMyTeamDetail = 'START_GET_MY_TEAM_DETAIL';
 export const SUBMIT_NEXT = 'SUBMIT_NEXT';
 export const SUBMIT_NEXT_SUCCESS = 'SUBMIT_NEXT_SUCCESS';
 export const SUBMIT_NEXT_FAILED = 'SUBMIT_NEXT_FAILED';
+
+export const getUserKpiState = 'GET_USER_KPI_STATE';
+export const errGetUserKpiState = 'ERR_GET_USER_KPI_STATE';
