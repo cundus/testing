@@ -18,7 +18,7 @@ import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code
 
 
 const { confirm } = Modal;
-const { Text, Paragraph, Title } = Typography;
+const { Text, Title } = Typography;
 const { TextArea } = Input;
 
 class MonitorKPI extends Component {

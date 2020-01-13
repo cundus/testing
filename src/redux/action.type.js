@@ -46,3 +46,12 @@ export const SUBMIT_NEXT_FAILED = 'SUBMIT_NEXT_FAILED';
 
 export const getUserKpiState = 'GET_USER_KPI_STATE';
 export const errGetUserKpiState = 'ERR_GET_USER_KPI_STATE';
+
+export const getActivity = 'GET_ACTIVITY';
+export const successGetActivity = 'SUCCESS_GET_ACTIVITY';
+export const errGetActivity = 'ERR_GET_ACTIVITY';
+
+
+export const getStatusActivity = 'GET_STATUS_ACTIVITY';
+export const successGetStatusActivity = 'SUCCESS_GET_STATUS_ACTIVITY';
+export const errGetStatusActivity = 'ERR_GET_STATUS_ACTIVITY';
