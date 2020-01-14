@@ -1,7 +1,8 @@
 import {
   getActivityThread as getActivityThreadAction,
   getActivityStatus as getActivityStatusAction,
-  getActivityThreadChat as getActivityThreadChatAction
+  getActivityThreadChat as getActivityThreadChatAction,
+  createActivitychat as createActivitychatAction
 } from '../../service/monitoring/activity';
 
 import {
@@ -13,7 +14,10 @@ import {
   successGetStatusActivity,
   getActivityChat,
   successGetActivityChat,
-  errGetActivityChat
+  errGetActivityChat,
+  doFeedbackComment,
+  successFeedbackComment,
+  errFeedbackComment
 } from '../action.type';
 
 import { Success } from '../status-code-type';
@@ -95,12 +99,50 @@ export const getActivityStatus = () => {
 };
 
 
+export const createChat = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: doFeedbackComment,
+      data: {
+        loadingActivity: true
+      }
+    });
+    try {
+      const resp = await createActivitychatAction(data);
+      if (resp.data.status_code !== Success) {
+        dispatch({
+          type: errFeedbackComment,
+          data: {
+            error: true,
+            loadingActivity: false
+          }
+        });
+      }
+      dispatch({
+        type: successFeedbackComment,
+        data: Object.assign(resp.data.result, {
+          loadingActivity: false
+        })
+      });
+    } catch (error) {
+      dispatch({
+        type: errFeedbackComment,
+        data: {
+          error: true,
+          errorCode: error.status_code,
+          loadingActivity: false
+        }
+      });
+    }
+  };
+};
+
 export const getActivityThreadChat = (idActivity, chatId) => {
   return async (dispatch) => {
     dispatch({
       type: getActivityChat,
       data: {
-        loadingActivity: true
+        loadingActivityChat: true
       }
     });
     try {
@@ -110,14 +152,14 @@ export const getActivityThreadChat = (idActivity, chatId) => {
           type: errGetActivityChat,
           data: {
             error: true,
-            loadingActivity: false
+            loadingActivityChat: false
           }
         });
       }
       dispatch({
         type: successGetActivityChat,
         data: Object.assign(resp.data.result, {
-          loadingActivity: false
+          loadingActivityChat: false
         })
       });
     } catch (error) {
@@ -126,7 +168,7 @@ export const getActivityThreadChat = (idActivity, chatId) => {
         data: {
           error: true,
           errorCode: error.status_code,
-          loadingActivity: false
+          loadingActivityChat: false
         }
       });
     }

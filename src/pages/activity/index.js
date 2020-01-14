@@ -160,7 +160,8 @@ class Activity extends Component {
               statusActivity={this.state.activityStatus}
             />
             <center>
-              <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>
+              <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>&nbsp;
+              <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
               <FormSend
                 form={this.props.form}
                 handleModalSubmit={this.handleModalSubmit}

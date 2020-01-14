@@ -23,6 +23,17 @@ export const getActivityThreadChat = (activityID, chatId) => customAxios({
   }
 });
 
+export const createActivitychat = (data) => customAxios({
+  url: '/activity/feedback',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
+
 
 export const getActivityStatus = () => customAxios({
   url: '/activity/statuses',
