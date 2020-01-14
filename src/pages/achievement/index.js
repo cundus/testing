@@ -12,7 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { getListActivity, getActivityStatus } from '../../redux/actions/activity';
+import { getListAchivement } from '../../redux/actions/achievement';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 
@@ -20,7 +20,7 @@ const { confirm } = Modal;
 const { Text, Title } = Typography;
 const { TextArea } = Input;
 
-class Activity extends Component {
+class Achievement extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,24 +38,22 @@ class Activity extends Component {
 
   getAllData = async () => {
     const {
-      GetThreadActivity,
-      GetActivityStatus,
+      GetThreadAchievement,
       match
     } = this.props;
     const { params } = match;
-    const { idActivity } = params;
-    await GetActivityStatus();
-    await GetThreadActivity(idActivity);
+    const { idAchievement } = params;
+    await GetThreadAchievement(idAchievement);
     const activities = this.props.activityThread.activities;
     let dataSource = [];
-    if (activities.length > 0 && idActivity ) {
+    if (activities && idAchievement ) {
       dataSource = activities.map((d => {
         return {
           ...d,
           lastMessage: (d.lastReply !== null)? d.lastReply.feedback: '',
           actions: {
             threadId: d.id,
-            idActivity
+            idAchievement
           }
         }
       }));
@@ -83,9 +81,9 @@ class Activity extends Component {
       <div>
         <div>
           <Divider />
-          <Text strong> Activity</Text>
+          <Text strong> Achievement</Text>
           <Text>
-            This is an Online activity feedback session with your supperior.
+            This is an Online Achievement feedback session with your supperior.
           </Text>
           <Divider />
           <center>
@@ -113,18 +111,18 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadActivity: (activityID)=> dispatch(getListActivity(activityID)),
-  GetActivityStatus: ()=> dispatch(getActivityStatus())
+  GetThreadAchievement: (Idachievement)=> dispatch(getListAchivement(Idachievement)),
+  // GetActivityStatus: ()=> dispatch(getActivityStatus())
 });
 
 const connectToComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Activity);
+)(Achievement);
 
 export default Form.create({})(withRouter(connectToComponent));
 
-Activity.propTypes = {
+Achievement.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

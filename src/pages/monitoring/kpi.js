@@ -82,7 +82,11 @@ class TableMonitorKPI extends Component {
                   Activity
                 </Link>
               </Button>
-              <Button>Achievement</Button>
+              <Button>
+                <Link to={`/Achievement/${record.key}`}>
+                  Achievement
+                </Link>
+              </Button>
               <Popconfirm
                 title="Sure to delete?"
                 // eslint-disable-next-line react/jsx-no-bind

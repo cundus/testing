@@ -24,6 +24,7 @@ const Error500Page = React.lazy(() => import('../../pages/error/page500'));
 const AddKpiMonitoring = React.lazy(() => import('../../pages/monitoring/addkpi/addkpi'));
 const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
 const ChatActivityPage = React.lazy(()=> import('../../pages/activity/chat'));
+const AchievementPage = React.lazy(() => import('../../pages/achievement/index'));
 
 export const routes = [
   {
@@ -85,6 +86,12 @@ export const routes = [
         component: LazyLoad(ActivityPage),
         exact: true,
         title: 'Activity'
+      },
+      {
+        path: '/Achievement/:idAchievement/',
+        component: LazyLoad(AchievementPage),
+        exact: true,
+        title: 'Achievement'
       },
       {
         path: '/Activity/Chat/:idActivity/:idThread',
