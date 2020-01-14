@@ -1,38 +1,61 @@
-import React, { Component } from "react";
-import { Modal, Button, Form, Select, Input } from 'antd';
+import React, { Component } from 'react';
+import {
+  Modal, Button, Form, Select, Input
+} from 'antd';
+
 const { Option } = Select;
 
 
 class form extends Component {
-  constructor(props){
-    super(props)
+
+  componentDidMount() {
+    //
   }
+
+  change = (field) => {
+    const { dataModal, handleModalChangeForm, form } = this.props;
+    setTimeout(() => form.validateFields(field, (errors, values) => {
+      handleModalChangeForm({
+        ...dataModal,
+        ...values
+      });
+    }), 100);
+  };
 
   render() {
-    const { statusActivity } = this.props;
-    if(statusActivity !== undefined) {
-      return (
-        <Modal
+    const {
+      statusActivity, form, dataModal, handleModalChangeForm
+    } = this.props;
+    return (
+      <Modal
         title={this.props.titleForm}
-          visible={this.props.visible}
-          //  onOk={this.handleOk}
-          onCancel={() => this.props.hide()}
-        >
+        visible={this.props.visible}
+        onOk={this.props.handleModalSubmit}
+        onCancel={this.props.hideModalForm}
+      >
         <Form>
-        <Form.Item label="Status">
-        <Select>
-          {statusActivity.map((value, index) => {
-            return <Option value={value.id}>{value.name}</Option>
-          })}
-        </Select>
-        </Form.Item>
+          <Form.Item label="Activity Name">
+            {form.getFieldDecorator('name', {
+              rules: [{ required: true }],
+              initialValue: dataModal.name
+            })(<Input size="large" onChange={() => this.change(['name'])} />)}
+          </Form.Item>
+          <Form.Item label="Status">
+            {form.getFieldDecorator('status', {
+              rules: [{ required: true }],
+              initialValue: dataModal.status
+            })(
+              <Select onChange={() => this.change(['status'])}>
+                {statusActivity && statusActivity.map((value, index) => {
+                  return <Option value={value.id}>{value.name}</Option>;
+                })}
+              </Select>
+            )}
+          </Form.Item>
         </Form>
-        </Modal>
-      )
-    } else {
-      return(<div></div>)
-    }
+      </Modal>
+    );
   }
-};
+}
 
-export default form
+export default form;
