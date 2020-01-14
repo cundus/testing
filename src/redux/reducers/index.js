@@ -9,6 +9,8 @@ import feedbackReducers from './feedback';
 import userKpiStateReducers from './kpiState';
 import ActivityReducers from './activity';
 import ActivityStatusReducers from './statusActivity';
+import ActivityChatReducers from './activityChat';
+
 export default combineReducers({
   authReducer,
   userReducers,
@@ -19,5 +21,6 @@ export default combineReducers({
   feedbackReducers,
   userKpiStateReducers,
   ActivityReducers,
-  ActivityStatusReducers
+  ActivityStatusReducers,
+  ActivityChatReducers
 });

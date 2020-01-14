@@ -14,7 +14,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { getListActivity, getActivityStatus } from '../../redux/actions/activity';
 import TableActivity from './tableActivity';
-
+import FormSend from './component/form';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -24,7 +24,10 @@ class Activity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      visible: false,
+      titleForm: '',
+      activityStatus: []
     };
   }
 
@@ -40,28 +43,40 @@ class Activity extends Component {
     } = this.props;
     const { params } = match;
     const { idActivity } = params;
-    await GetThreadActivity(idActivity);
     await GetActivityStatus();
+    await GetThreadActivity(idActivity);
     const activities = this.props.activityThread.activities;
     let dataSource = [];
-    if (activities.length > 0 ) {
+    if (activities.length > 0 && idActivity ) {
       dataSource = activities.map((d => {
         return {
           ...d,
           lastMessage: (d.lastReply !== null)? d.lastReply.feedback: '',
-          actions: 'test'
+          actions: {
+            threadId: d.id,
+            idActivity
+          }
         }
       }));
     }
-    this.setState({dataSource});
+    const statusList = Object.values(this.props.activityStatus);
+    this.setState({dataSource, activityStatus: statusList});
   };
 
+  showModalForm = () => {
+    this.setState({ visible: true, titleForm: 'Add Activity'});
+  };
+
+  hideModalForm = e => {
+    this.setState({
+      visible: false,
+    });
+  };
 
   render() {
     const { activityThread } = this.props;
     const { loadingActivity } = activityThread;
     const { kpiName } = activityThread;
-    console.log('mine ', this.state.dataSource)
     return (
       <div>
         <div>
@@ -76,9 +91,13 @@ class Activity extends Component {
             <br />
           </center>
         </div>
-        {!loadingActivity?
+        {kpiName?
           <div>
-            <TableActivity dataSource={this.state.dataSource} loading={!(this.state.dataSource.length > 0)} />
+            <TableActivity dataSource={this.state.dataSource} loading={false}  statusActivity={this.state.activityStatus}/>
+             <center>
+              <Button type="primary" onClick={this.showModalForm.bind(this)}>Add Activity</Button>
+              <FormSend visible={this.state.visible} titleForm={this.state.titleForm} hide={this.hideModalForm} statusActivity={this.state.activityStatus}/>
+            </center>
           </div> : <center><Spin /></center>}
       </div>
     );
@@ -87,6 +106,7 @@ class Activity extends Component {
 
 const mapStateToProps = (state) => ({
   activityThread: state.ActivityReducers,
+  activityStatus: state.ActivityStatusReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({

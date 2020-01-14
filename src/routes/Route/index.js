@@ -23,6 +23,8 @@ const AppraisalTeamPage = React.lazy(() => import('../../pages/my-team/appraisal
 const Error500Page = React.lazy(() => import('../../pages/error/page500'));
 const AddKpiMonitoring = React.lazy(() => import('../../pages/monitoring/addkpi/addkpi'));
 const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
+const ChatActivityPage = React.lazy(()=> import('../../pages/activity/chat'));
+
 export const routes = [
   {
     path: '/',
@@ -79,10 +81,16 @@ export const routes = [
         title: 'Monitoring'
       },
       {
-        path: '/Activity/:idActivity',
+        path: '/Activity/:idActivity/',
         component: LazyLoad(ActivityPage),
         exact: true,
-        title: 'Activit'
+        title: 'Activity'
+      },
+      {
+        path: '/Activity/Chat/:idActivity/:idThread',
+        exact: true,
+        component: LazyLoad(ChatActivityPage),
+        title: 'Activity Chat'
       },
       {
         path: '/monitoring/add',
