@@ -40,8 +40,6 @@ class TableActivity extends Component {
         title: 'Action',
         dataIndex: 'actions',
         render: (text, record) => {
-          console.log('aaa', this.props);
-          
           return (
             <div>
               <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}`}>
