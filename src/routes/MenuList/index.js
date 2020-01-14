@@ -37,8 +37,7 @@ const MenuList = [
     menuLevel: 1,
     title: 'Monitoring',
     parent: 'none',
-    theme: 'outlined',
-    disabled: false
+    theme: 'outlined'
   },
   {
     id: 7,
@@ -46,8 +45,7 @@ const MenuList = [
     menuLevel: 1,
     title: 'Appraisal',
     parent: 'none',
-    theme: 'outlined',
-    disabled: true
+    theme: 'outlined'
   },
   {
     id: 8,
