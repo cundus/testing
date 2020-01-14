@@ -3,18 +3,32 @@ import { connect } from 'react-redux';
 
 import { DataTable } from '../../components';
 import { Button } from  'antd';
+import FormSend from './component/form';
+import  { Link } from  'react-router-dom';
 
 class TableActivity extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: []
+      columns: [],
+      visible: false,
+      titleForm: '',
     };
   }
 
   componentDidMount(){
     this.getColumns();
   }
+
+  showModalForm = () => {
+    this.setState({ visible: true, titleForm: 'Edit Activity'});
+  };
+
+  hideModalForm = e => {
+    this.setState({
+      visible: false,
+    });
+  };
 
   getColumns = async () => {
     const newColumns = [
@@ -34,11 +48,11 @@ class TableActivity extends Component {
       },
       {
         title: 'Action',
-        dataIndex: 'id',
+        dataIndex: 'actions',
         render: (text) => (
           <div>
-            <Button icon='eye' ></Button>
-            <Button icon='edit'></Button>
+            <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}`}><Button icon='eye'></Button></Link>
+            <Button icon='edit' onClick={this.showModalForm.bind(this)}></Button>
           </div>
         )
       }
@@ -57,6 +71,7 @@ class TableActivity extends Component {
           datasource={dataSource}
           loading={loading}
         />
+        <FormSend visible={this.state.visible} hide={this.hideModalForm} titleForm={this.state.titleForm} statusActivity={this.props.statusActivity}/>
         {/* </Layout> */}
       </div>
     );
