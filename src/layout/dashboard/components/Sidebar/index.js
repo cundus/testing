@@ -50,7 +50,7 @@ const Sidebar = (props) => {
           );
           if (childsRoutes.length === 0) {
             return (
-              <Menu.Item key={`${menu.path}`}>
+              <Menu.Item key={`${menu.path}`} disabled={(menu.title === 'Monitoring' || menu.title === 'Appraisal') && props.isAllowToMonitor}>
                 <Link to={menu.path} onClick={toggle}>
                   {menu.title}
                 </Link>
@@ -66,7 +66,7 @@ const Sidebar = (props) => {
               >
                 {childsRoutes.map((menuChild) => {
                   return (
-                    <Menu.Item key={`${menuChild.path}`}>
+                    <Menu.Item key={`${menuChild.path}`} disabled={(menuChild.title === 'Monitoring' || menuChild.title === 'Appraisal') && props.isAllowToMonitor}>
                       <Link to={menuChild.path} onClick={toggle}>
                         <Icon
                           type={`${menuChild.icon}`}

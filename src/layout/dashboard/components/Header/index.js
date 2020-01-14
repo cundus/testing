@@ -12,9 +12,6 @@ import myAvatar from '../../../../assets/users/300_23.jpg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
 
-import { GetUserKpiState } from '../../../../redux/actions/user';
-import { object } from 'prop-types';
-
 
 const { Text } = Typography;
 const { REACT_APP_API_URL } = process.env;
@@ -54,7 +51,7 @@ const Header = (props) => {
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
                 return (
-                  <Menu.Item key={`${menu.path}`} disabled={menu.disabled|| false} >
+                  <Menu.Item key={`${menu.path}`} disabled={(menu.title === 'Monitoring' || menu.title === 'Appraisal') && props.isAllowToMonitor}>
                     <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
                 );
@@ -70,7 +67,7 @@ const Header = (props) => {
                   >
                     {childsRoutes.map((menuChild) => {
                       return (
-                        <Menu.Item key={`${menuChild.path}`} disabled={menuChild.disabled|| false}>
+                        <Menu.Item key={`${menuChild.path}`} disabled={(menuChild.title === 'Monitoring' || menuChild.title === 'Appraisal') && props.isAllowToMonitor}>
                           <Link to={menuChild.path}>
                             <Icon
                               type={`${menuChild.icon}`}
@@ -103,18 +100,18 @@ const Header = (props) => {
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
             <a>
-            <Dropdown overlay={()=>accountMenu(props.logout)} placement="bottomRight">
-              <div className="accountWrapper">
-                {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
-                <Avatar
-                  shape="square"
-                  size={isDesktopOrLaptop ? 'large' : 'default'}
-                  src={url}
-                  icon="user"
-                  className="avatar"
-                />
-              </div>
-            </Dropdown>
+              <Dropdown overlay={()=>accountMenu(props.logout)} placement="bottomRight">
+                <div className="accountWrapper">
+                  {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
+                  <Avatar
+                    shape="square"
+                    size={isDesktopOrLaptop ? 'large' : 'default'}
+                    src={url}
+                    icon="user"
+                    className="avatar"
+                  />
+                </div>
+              </Dropdown>
             </a>
           </Row>
           {/* </Menu> */}
@@ -124,9 +121,6 @@ const Header = (props) => {
   );
 };
 
-const mapDispatchtoProps = (dispatch) => ({
-  GetMyKpiState: () => dispatch(GetUserKpiState())
-});
 
 const mapStateToProps = (state) => ({
   auth: state.authReducer,

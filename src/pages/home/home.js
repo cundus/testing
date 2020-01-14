@@ -14,7 +14,7 @@ import UsersIcon from '../../assets/icons/users.svg';
 
 class Home extends Component {
   async componentDidMount() {
-    await this.props.GetMyKpiState();
+    // await this.props.GetMyKpiState();
   }
 
   render() {
