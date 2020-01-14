@@ -95,7 +95,8 @@ class Activity extends Component {
           <div>
             <TableActivity dataSource={this.state.dataSource} loading={false}  statusActivity={this.state.activityStatus}/>
              <center>
-              <Button type="primary" onClick={this.showModalForm.bind(this)}>Add Activity</Button>
+              <Button type="primary" onClick={this.showModalForm.bind(this)}>Add Activity</Button>&nbsp;
+              <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
               <FormSend visible={this.state.visible} titleForm={this.state.titleForm} hide={this.hideModalForm} statusActivity={this.state.activityStatus}/>
             </center>
           </div> : <center><Spin /></center>}
