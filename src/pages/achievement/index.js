@@ -23,12 +23,22 @@ const { TextArea } = Input;
 class Achievement extends Component {
   constructor(props) {
     super(props);
+    const {
+      match
+    } = this.props;
+    const { params } = match;
+    const { idActivity } = params;
     this.state = {
       dataSource: [],
       visible: false,
       titleForm: '',
       activityStatus: [],
       loading: true,
+      dataModal: {
+        name: '',
+        status: '',
+        kpiId: idActivity
+      }
     };
   }
 
@@ -38,19 +48,20 @@ class Achievement extends Component {
 
   getAllData = async () => {
     const {
-      GetThreadAchievement,
+      GetListAchivement,
       match
     } = this.props;
     const { params } = match;
     const { idAchievement } = params;
-    await GetThreadAchievement(idAchievement);
-    const activities = this.props.activityThread.activities;
+    await GetListAchivement(idAchievement);
+    const activities = this.props.achievementThread.achievements;
     let dataSource = [];
-    if (activities && idAchievement ) {
+    console.log('cie ', activities)
+    if (activities.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
+          key: d.id,
           ...d,
-          lastMessage: (d.lastReply !== null)? d.lastReply.feedback: '',
           actions: {
             threadId: d.id,
             idAchievement
@@ -58,46 +69,115 @@ class Achievement extends Component {
         }
       }));
     }
-    const statusList = Object.values(this.props.activityStatus);
-    this.setState({dataSource, activityStatus: statusList, loading: false });
+    this.setState({dataSource, loading: false });
   };
 
-  showModalForm = () => {
+  showModalForm = (key) => {
+    const {
+      GetThreadActivity,
+      GetActivityStatus,
+      match
+    } = this.props;
+    const { params } = match;
+    const { idAchievement } = params;
+    const { dataSource } = this.state;
+    const data = [...dataSource];
+    if (key) { // edit activity
+      const newData = data.filter((item) => item.key === key);
+      this.setState({
+        dataModal: {
+          activityId: newData[0].id,
+          name: newData[0].name,
+          status: newData[0].status,
+          kpiId: idAchievement
+        }
+      });
+    } else { // add activity
+      this.setState({
+        dataModal: {
+          achievementName: '',
+          achievementDate: '',
+          kpiId: idAchievement
+        }
+      });
+    }
     this.setState({ visible: true, titleForm: 'Add Activity'});
   };
 
   hideModalForm = e => {
+    this.props.form.resetFields();
     this.setState({
-      visible: false,
+      visible: false
     });
   };
 
+  handleModalChangeForm = (data) => {
+    this.setState({
+      dataModal: data
+    });
+  }
+
+  handleModalSubmit = () => {
+    const { form, CreateActivity, UpdateActivity } = this.props;
+    const { dataModal } = this.state;
+    form.validateFieldsAndScroll(async (err, values) => {
+      if (!err) {
+        this.setState({ loading: true });
+        if (dataModal.achievementId) {
+          console.log('update', dataModal);
+          // await UpdateActivity(dataModal);
+        } else {
+          console.log('create', dataModal);
+          // await CreateActivity(dataModal);
+        }
+        // this.hideModalForm();
+        // this.getAllData();
+      }
+    });
+  }
+
   render() {
-    const { activityThread } = this.props;
-    const { loadingActivity } = activityThread;
+    const { achievementThread } = this.props;
+    const { loadingActivity } = achievementThread;
     const {loading } = this.state;
-    const { kpiName } = activityThread;
+    const { kpiName } = achievementThread;
+    console.log('src', this.state.dataSource);
     return (
       <div>
         <div>
           <Divider />
           <Text strong> Achievement</Text>
           <Text>
-            This is an Online Achievement feedback session with your supperior.
+            This is an Online achievement feedback session with your supperior.
           </Text>
           <Divider />
           <center>
-            <Title level={4}>{`KPI : ${ kpiName|| ''}`}</Title>
+            <Title level={4}>{`KPI : ${kpiName || ''}`}</Title>
             <br />
           </center>
         </div>
         {loading === false ?
           <div>
-            <TableActivity dataSource={this.state.dataSource} loading={false}  statusActivity={this.state.activityStatus}/>
-             <center>
-              <Button type="primary" onClick={this.showModalForm.bind(this)}>Add Activity</Button>&nbsp;
+            <TableActivity
+              dataSource={this.state.dataSource}
+              loading={false}
+              showModalForm={this.showModalForm}
+              statusActivity={this.state.activityStatus}
+            />
+            <center>
+              <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>&nbsp;
               <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
-              <FormSend visible={this.state.visible} titleForm={this.state.titleForm} hide={this.hideModalForm} statusActivity={this.state.activityStatus}/>
+              <FormSend
+                form={this.props.form}
+                handleModalSubmit={this.handleModalSubmit}
+                handleModalChangeForm={this.handleModalChangeForm}
+                visible={this.state.visible}
+                dataModal={this.state.dataModal}
+                titleForm={this.state.titleForm}
+                hideModalForm={this.hideModalForm}
+                statusActivity={this.state.activityStatus}
+                confirmLoading={this.state.loading}
+              />
             </center>
           </div> : <center><Spin /></center>}
       </div>
@@ -106,13 +186,11 @@ class Achievement extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers
+  achievementThread: state.AchievementReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadAchievement: (Idachievement)=> dispatch(getListAchivement(Idachievement)),
-  // GetActivityStatus: ()=> dispatch(getActivityStatus())
+  GetListAchivement: (idAchievement) => dispatch(getListAchivement(idAchievement))
 });
 
 const connectToComponent = connect(

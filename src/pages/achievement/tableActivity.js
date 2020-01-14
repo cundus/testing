@@ -20,41 +20,36 @@ class TableActivity extends Component {
     this.getColumns();
   }
 
-  showModalForm = () => {
-    this.setState({ visible: true, titleForm: 'Edit Activity'});
-  };
-
-  hideModalForm = e => {
-    this.setState({
-      visible: false,
-    });
-  };
-
   getColumns = async () => {
     const newColumns = [
       {
-        title: 'Created at',
-        dataIndex: 'creationDate',
+        title: 'Created At',
+        dataIndex: 'createdAt',
         align: 'center'
       },
       {
-        title: 'Thread',
-        dataIndex: 'name',
+        title: 'Achievement Name',
+        dataIndex: 'achievementName',
         placeholder: 'Enter baseline'
       },
       {
-        title: 'Last Reply',
-        dataIndex: 'lastMessage'
+        title: 'Achievement Date',
+        dataIndex: 'achievementDate'
       },
       {
         title: 'Action',
         dataIndex: 'actions',
-        render: (text) => (
-          <div>
-            <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}`}><Button icon='eye'></Button></Link>
-            <Button icon='edit' onClick={this.showModalForm.bind(this)}></Button>
-          </div>
-        )
+        render: (text, record) => {
+          return (
+            <div>
+              <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}`}>
+                <Button icon="eye" />
+              </Link>
+              {/* eslint-disable-next-line react/jsx-no-bind */}
+              <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />
+            </div>
+          );
+        }
       }
     ];
     this.setState({columns: newColumns});
@@ -71,8 +66,6 @@ class TableActivity extends Component {
           datasource={dataSource}
           loading={loading}
         />
-        <FormSend visible={this.state.visible} hide={this.hideModalForm} titleForm={this.state.titleForm} statusActivity={this.props.statusActivity}/>
-        {/* </Layout> */}
       </div>
     );
   }

@@ -12,7 +12,7 @@ import {
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { getListActivity, getActivityStatus, createActivity } from '../../redux/actions/activity';
+import { getListActivity, getActivityStatus, createActivity, updateActivity } from '../../redux/actions/activity';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 
@@ -58,7 +58,7 @@ class Activity extends Component {
     await GetThreadActivity(idActivity);
     const activities = this.props.activityThread.activities;
     let dataSource = [];
-    if (activities.length > 0 && idActivity) {
+    if (activities && idActivity) {
       dataSource = activities.map((d => {
         return {
           key: d.id,
@@ -86,7 +86,7 @@ class Activity extends Component {
     const { dataSource } = this.state;
     const data = [...dataSource];
     if (key) { // edit activity
-      const newData = data.filter((item) => item.key !== key);
+      const newData = data.filter((item) => item.key === key);
       this.setState({
         dataModal: {
           activityId: newData[0].id,
@@ -121,13 +121,13 @@ class Activity extends Component {
   }
 
   handleModalSubmit = () => {
-    const { form, CreateActivity } = this.props;
+    const { form, CreateActivity, UpdateActivity } = this.props;
     const { dataModal } = this.state;
     form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         this.setState({ loading: true });
         if (dataModal.activityId) {
-          // await CreateActivity(dataModal);
+          await UpdateActivity(dataModal);
         } else {
           await CreateActivity(dataModal);
         }
@@ -193,7 +193,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   GetThreadActivity: (activityID) => dispatch(getListActivity(activityID)),
   GetActivityStatus: () => dispatch(getActivityStatus()),
-  CreateActivity: (data) => dispatch(createActivity(data))
+  CreateActivity: (data) => dispatch(createActivity(data)),
+  UpdateActivity: (data) => dispatch(updateActivity(data))
 });
 
 const connectToComponent = connect(
