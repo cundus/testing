@@ -2,7 +2,9 @@ import {
   getActivityThread as getActivityThreadAction,
   getActivityStatus as getActivityStatusAction,
   getActivityThreadChat as getActivityThreadChatAction,
-  createActivitychat as createActivitychatAction
+  createActivitychat as createActivitychatAction,
+  createActivity as createActivityAction,
+  updateActivity as updateActivityAction
 } from '../../service/monitoring/activity';
 
 import {
@@ -21,6 +23,84 @@ import {
 } from '../action.type';
 
 import { Success } from '../status-code-type';
+
+
+export const createActivity = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: getActivity,
+      data: {
+        loadingActivity: true
+      }
+    });
+    try {
+      const resp = await createActivityAction(data);
+      if (resp.data.status_code !== Success) {
+        dispatch({
+          type: errGetActivity,
+          data: {
+            error: true,
+            loadingActivity: false
+          }
+        });
+      }
+      dispatch({
+        type: successGetActivity,
+        data: Object.assign(resp.data.result, {
+          loadingActivity: false
+        })
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetActivity,
+        data: {
+          error: true,
+          errorCode: error.status_code,
+          loadingActivity: false
+        }
+      });
+    }
+  };
+};
+
+export const updateActivity = (data) => {
+  return async (dispatch) => {
+    dispatch({
+      type: getActivity,
+      data: {
+        loadingActivity: true
+      }
+    });
+    try {
+      const resp = await updateActivityAction(data);
+      if (resp.data.status_code !== Success) {
+        dispatch({
+          type: errGetActivity,
+          data: {
+            error: true,
+            loadingActivity: false
+          }
+        });
+      }
+      dispatch({
+        type: successGetActivity,
+        data: Object.assign(resp.data.result, {
+          loadingActivity: false
+        })
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetActivity,
+        data: {
+          error: true,
+          errorCode: error.status_code,
+          loadingActivity: false
+        }
+      });
+    }
+  };
+};
+
 
 export const getListActivity = (idActivity) => {
   return async (dispatch) => {

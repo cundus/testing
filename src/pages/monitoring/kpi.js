@@ -70,14 +70,14 @@ class TableMonitorKPI extends Component {
       title: 'Progress Tracking',
       align: 'center',
       editable: false,
-      width: 100,
+      width: 250,
       dataIndex: 'action',
       render: (text, record) => {
         const { dataSource, handleDelete } = this.props;
         return (
           dataSource.length >= 1 ? (
-            <div style={{flexDirection: 'row'}}>
-              <Button>
+            <div>
+              <Button style={{ marginRight: 5 }}>
                 <Link to={`/Activity/${record.key}`}>
                   Activity
                 </Link>
