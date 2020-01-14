@@ -81,7 +81,6 @@ class Chat extends Component {
     const { loadingActivityChat } = chat;
     const { kpiName } = activityThread;
     const { name: chatName, fullName, feedbacks, userId } = chat;
-    console.log('load', load)
     return (
       <div>
         <div>
@@ -145,6 +144,9 @@ class Chat extends Component {
           </Form.Item>
           <Button type="primary" htmlType="submit" className="login-form-button">Send</Button>
           </Form>
+          <center>
+          <Button type="primary" onClick={()=> this.props.history.goBack()} >Back</Button>
+          </center>
       </div>
     );
   }
