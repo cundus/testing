@@ -2,9 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
 import { Layout, Spin, message } from "antd";
-import { GetInfoUser } from "../../redux/actions/user";
+import { GetInfoUser, GetUserKpiState } from "../../redux/actions/user";
 import { doGetMetrics } from '../../redux/actions/kpi';
-
+import _ from 'lodash';
 import { Footer, Header, Sidebar } from "./components";
 import { MappedRouter } from "../../routes/RouteGenerator";
 import { authProvider } from "../../service/auth/auth";
@@ -63,7 +63,8 @@ class Dashboard extends React.Component {
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
     if (this.props.user.result !== null) {
-      localStorage.setItem("sfToken", this.props.user.result.accessToken);
+      await localStorage.setItem("sfToken", this.props.user.result.accessToken);
+      this.props.GetMyKpiState();
      } else {
       const header = document.querySelector('.headerContainer');
       header.style.display = 'none';
@@ -80,13 +81,15 @@ class Dashboard extends React.Component {
   };
 
   render() {
+    const step = _.get(this, 'props.step.currentStep', 'Emp Goal Setting');
+    const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
     const { collapsed } = this.state;
     const { child, user, kpi, logout } = this.props;
     return (
       <Layout style={{ minHeight: "100vh" }}>
-        <Sidebar collapsed={collapsed} toggle={this.toggle} />
+        <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
         <Layout style={{ opacity: !collapsed ? "0.3" : "1" }}>
-          <Header collapsed={collapsed} toggle={this.toggle} logout={logout}/>
+          <Header collapsed={collapsed} toggle={this.toggle} logout={logout} isAllowToMonitor={isAllowToMonitor} />
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
               {Object.keys(user).length ? (
@@ -102,14 +105,15 @@ class Dashboard extends React.Component {
     );
   }
 }
-
 const mapDispatchtoProps = dispatch => ({
   GetInfoUser: token => dispatch(GetInfoUser(token)),
-  getMetrics: () => (dispatch(doGetMetrics()))
+  getMetrics: () => (dispatch(doGetMetrics())),
+  GetMyKpiState: () => dispatch(GetUserKpiState())
 });
 const mapStateToProps = state => ({
   auth: state.authReducer,
   user: state.userReducers,
-  kpi: state.kpiReducers
+  kpi: state.kpiReducers,
+  step: state.userKpiStateReducers
 });
 export default connect(mapStateToProps, mapDispatchtoProps)(Dashboard);
