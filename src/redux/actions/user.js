@@ -43,7 +43,7 @@ export const GetInfoUser = (token) => {
         type: errGetUserInfo,
         data: {
           error: true,
-          errorCode: error.response.status
+          errorCode: error.status_code
         }
       });
     }

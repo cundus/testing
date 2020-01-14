@@ -1,6 +1,7 @@
 import {
   getActivityThread as getActivityThreadAction,
-  getACtivityStatus as getACtivityStatusACtion
+  getActivityStatus as getActivityStatusAction,
+  getActivityThreadChat as getActivityThreadChatAction
 } from '../../service/monitoring/activity';
 
 import {
@@ -9,7 +10,10 @@ import {
   successGetActivity,
   getStatusActivity,
   errGetStatusActivity,
-  successGetStatusActivity
+  successGetStatusActivity,
+  getActivityChat,
+  successGetActivityChat,
+  errGetActivityChat
 } from '../action.type';
 
 import { Success } from '../status-code-type';
@@ -61,7 +65,7 @@ export const getActivityStatus = () => {
       }
     });
     try {
-      const resp = await getACtivityStatusACtion();
+      const resp = await getActivityStatusAction();
       if (resp.data.status_code !== Success) {
         dispatch({
           type: errGetStatusActivity,
@@ -84,6 +88,45 @@ export const getActivityStatus = () => {
           error: true,
           errorCode: error.status_code,
           loadingStatusActivity: false
+        }
+      });
+    }
+  };
+};
+
+
+export const getActivityThreadChat = (idActivity, chatId) => {
+  return async (dispatch) => {
+    dispatch({
+      type: getActivityChat,
+      data: {
+        loadingActivity: true
+      }
+    });
+    try {
+      const resp = await getActivityThreadChatAction(idActivity, chatId);
+      if (resp.data.status_code !== Success) {
+        dispatch({
+          type: errGetActivityChat,
+          data: {
+            error: true,
+            loadingActivity: false
+          }
+        });
+      }
+      dispatch({
+        type: successGetActivityChat,
+        data: Object.assign(resp.data.result, {
+          loadingActivity: false
+        })
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetActivityChat,
+        data: {
+          error: true,
+          errorCode: error.status_code,
+          loadingActivity: false
         }
       });
     }
