@@ -5,6 +5,7 @@ import Lazyload from '../../components/lazyLoad';
 
 // Shared layouts
 import { Dashboard as DashboardLayout } from '../../layout';
+import { LazyLoad } from '../../components';
 // import PlanningPage from '../../pages/planning';
 // import Clear from '../../layout/clear';
 
@@ -21,6 +22,7 @@ const MonitoringTeamPage = React.lazy(() => import('../../pages/my-team/monitori
 const AppraisalTeamPage = React.lazy(() => import('../../pages/my-team/appraisal/appraisal'));
 const Error500Page = React.lazy(() => import('../../pages/error/page500'));
 const AddKpiMonitoring = React.lazy(() => import('../../pages/monitoring/addkpi/addkpi'));
+const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
 export const routes = [
   {
     path: '/',
@@ -75,6 +77,12 @@ export const routes = [
         component: Lazyload(MonitoringPage),
         exact: true,
         title: 'Monitoring'
+      },
+      {
+        path: '/Activity/:idActivity',
+        component: LazyLoad(ActivityPage),
+        exact: true,
+        title: 'Activit'
       },
       {
         path: '/monitoring/add',

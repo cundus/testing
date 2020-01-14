@@ -1,15 +1,15 @@
 import { getUserKpiState, errGetUserKpiState } from '../action.type';
 
-const initUsers = {};
+const KpiState = {};
 
-export default (state = initUsers, action) => {
+export default (state = KpiState, action) => {
   switch(action.type) {
     case getUserKpiState:
       return action.data;
     case errGetUserKpiState:
       return action.data;
     default:
-      // return initUsers;
+      // return KpiState;
       return { ...state };
   }
 };
