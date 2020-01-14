@@ -59,3 +59,8 @@ export const errGetStatusActivity = 'ERR_GET_STATUS_ACTIVITY';
 export const getActivityChat = 'GET_ACTIVITY_CHAT';
 export const successGetActivityChat = 'SUCCESS_GET_ACTIVITY_CHAT';
 export const errGetActivityChat = 'ERR_GET_ACTIVITY_CHAT';
+
+
+export const doFeedbackComment = 'DO_FEEDBACK_COMMENT';
+export const successFeedbackComment = 'SUCCESS_FEEDBACK_COMMENT';
+export const errFeedbackComment = 'ERR_FEEDBACK_COMMENT';
