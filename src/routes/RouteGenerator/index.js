@@ -7,7 +7,7 @@ import { Redirect } from 'react-router-dom';
 // Stores Redux
 // import Stores from '../../redux/store/index';
 
-const RenderedRoute = (Component, child, title, auth) => (props) => {
+const RenderedRoute = (Component, child, title, logout) => (props) => {
   // const store = Stores.getState();
   // if (store.authReducer.accessToken === null) {
   //   (async () => {
@@ -19,10 +19,11 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   // const { isLogin } = state.auth;
   const { location } = props;
   const { pathname } = location;
-  const token = localStorage.getItem('token');
-  if (pathname === '/' && token !== null) {
-    return (<Redirect to="/home" />);
-  }
+  // const token = localStorage.getItem('token');
+  // const token = localStorage.getItem('token');
+  // if (pathname === '' || pathname === '/') {
+  //   return (<Redirect to="/home" />);
+  // }
   // if (token === null && !isLogin && pathname !== '/login') {
   //   return (<Redirect to="/login" />);
   // } else if (token !== null && isLogin && pathname !== '/dashboard/home' && child.length <= 0) {
@@ -30,7 +31,7 @@ const RenderedRoute = (Component, child, title, auth) => (props) => {
   // } else if (token !== null && pathname === '/login') {
   //   return (<Redirect to="/dashboard/home" />);
   // }
-  return (<Component {...props} child={child} />);
+  return (<Component {...props} child={child} logout={logout} />);
 };
 
 export const MainRouter = ({
@@ -39,24 +40,23 @@ export const MainRouter = ({
   title,
   exact = false,
   child = [],
-  auth
+  logout
 }) => (
-  // console.log(auth)
   <Route
     exact={exact}
     path={path}
-    render={RenderedRoute(component, child, title, auth)}
+    render={RenderedRoute(component, child, title, logout)}
   />
 );
 
 export const MappedRouter = (props) => {
   const { routes } = props;
   return (
-    <React.Fragment>
+    <>
       {routes.map((route, i) => (
-        <MainRouter key={i} {...route} auth={props.auth} />
+        <MainRouter key={i} {...route} auth={props.auth} logout={props.logout}/>
       ))}
-    </React.Fragment>
+    </>
   );
 };
 

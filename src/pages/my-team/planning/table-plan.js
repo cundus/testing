@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import DataTable from '../../../components/dataTable/index';
-import {Avatar, Tag, Button} from 'antd';
+import React, { Component } from 'react';
+import {Avatar, Tag, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import DataTable from '../../../components/dataTable/index';
 const {
   REACT_APP_API_URL
 } = process.env;
@@ -11,46 +11,47 @@ class TablePlan extends Component {
     super(props);
     this.columns = [
       {
-        title: "Profile Pic",
-        dataIndex: "userId",
-        placeholder: "Profile",
+        title: 'Profile Pic',
+        dataIndex: 'userId',
+        align: 'center',
+        placeholder: 'Profile',
         action: true,
         render:(text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
       },
       {
-        title: "Name",
-        dataIndex: "firstName",
-        placeholder: "name"
+        title: 'Name',
+        dataIndex: 'firstName',
+        placeholder: 'name'
       },
       {
-        title: "KPI Title",
-        dataIndex: "title",
-        placeholder: "KPI Title"
+        title: 'KPI Title',
+        dataIndex: 'title',
+        placeholder: 'KPI Title'
       },
+      // {
+      //   title: 'KPI Score',
+      //   dataIndex: 'score',
+      //   placeholder: 'Score'
+      // },
+      // {
+      //   title: 'KPI Rating',
+      //   dataIndex: 'ratting',
+      //   placeholder: 'Rating'
+      // },
+      // {
+      //   title: 'Non-KPI Result',
+      //   dataIndex: 'result',
+      //   placeholder: 'Non-KPI Result'
+      // },
       {
-        title: "KPI Score",
-        dataIndex: "score",
-        placeholder: "Score",
-      },
-      {
-        title: "KPI Rating",
-        dataIndex: "ratting",
-        placeholder: "Rating",
-      },
-      {
-        title: "Non-KPI Result",
-        dataIndex: "result",
-        placeholder: "Non-KPI Result",
-      },
-      {
-        title: "Status",
-        dataIndex: "status",
-        placeholder: "Status",
+        title: 'Status',
+        dataIndex: 'status',
+        placeholder: 'Status',
         action: true,
         render: (text) => {
           let status;
           let color;
-          if (text === 0) {
+          if (text === (0 || 3)) {
             status = 'On Progress';
             color = '#ffb822';
           } else if (text === 1) {
@@ -59,16 +60,28 @@ class TablePlan extends Component {
           } else if (text === 2) {
             status = 'Completed';
             color = '#1dc9b7';
+          } else {
+            status = 'N/A';
+            color = '#ccc';
           }
+          // else if (text === 3) {
+          //   status = 'Review';
+          //   color = 'blue';
+          // }
           return (<Tag color={color}>{status}</Tag>);
         }
       },
       {
-        title: "Action",
-        dataIndex: "userId",
-        placeholder: "action",
+        title: 'Action',
+        dataIndex: 'costumAction',
+        placeholder: 'action',
         action: true,
-        render: (text) => (<Button type={'primary'}><Link to={`/my-team/planning/${text}`}>View</Link></Button>)
+        render: (text) => (
+          <Button type={'primary'} disabled={isNaN(text.status) || text.status !== 1}>
+            <Link to={`/my-team/planning/${text.idUser}`}>
+              View
+            </Link>
+          </Button>)
       }
     ];
 
@@ -82,23 +95,24 @@ class TablePlan extends Component {
   }
 
   getAllData = () => {
+    const { team } = this.props;
     this.setState(
       {
-        dataSource: this.props.team.result,
+        dataSource: team,
       }
     );
   }
 
   render() {
     const { dataSource } = this.state;
-    console.log('ds', dataSource)
     const { columns } = this;
     return (
       <div>
         {/* <Layout> */}
         <DataTable
+          form={this.props.form}
           columns={columns}
-          dataSource={dataSource}
+          datasource={dataSource}
         />
         {/* </Layout> */}
       </div>

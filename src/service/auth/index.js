@@ -19,7 +19,7 @@ export const getUserDetail = (idUser) => customAxios({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
 
@@ -29,7 +29,7 @@ export const getMyTeam = (idUser) => customAxios({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
 
@@ -39,7 +39,7 @@ export const getMyTeamDetailKPI = (idUser) => customAxios({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
 
@@ -49,6 +49,28 @@ export const getMyKPI = (idUser) => customAxios({
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    Authorization: `Bearer ${token}`
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
+});
+
+export const feedbackUserKpi = (idUser, data) => customAxios({
+  url: `/user/team/send-feedback/${idUser}`,
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
+
+export const approveUserKpi = (idUser, data) => customAxios({
+  url: `/user/team/approve/${idUser}`,
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
 });

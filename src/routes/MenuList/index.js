@@ -15,29 +15,30 @@ const MenuList = [
   },
   {
     id: 3,
-    path: '/planning/kpi/create-planning',
+    path: '/planning/kpi',
     menuLevel: 2,
     title: 'Create KPI',
     parent: 'Planning',
     icon: 'plus-circle',
     theme: 'filled'
   },
-  {
-    id: 4,
-    path: '/planning/kpi-planning',
-    menuLevel: 2,
-    title: 'View My KPI',
-    parent: 'Planning',
-    icon: 'search',
-    theme: 'outlined'
-  },
+  // {
+  //   id: 4,
+  //   path: '/planning/kpi-planning',
+  //   menuLevel: 2,
+  //   title: 'View My KPI',
+  //   parent: 'Planning',
+  //   icon: 'search',
+  //   theme: 'outlined'
+  // },
   {
     id: 5,
     path: '/monitoring',
     menuLevel: 1,
     title: 'Monitoring',
     parent: 'none',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 7,
@@ -45,7 +46,8 @@ const MenuList = [
     menuLevel: 1,
     title: 'Appraisal',
     parent: 'none',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 8,
@@ -70,7 +72,8 @@ const MenuList = [
     title: 'Monitoring',
     parent: 'My Team',
     icon: 'bar-chart',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   },
   {
     id: 11,
@@ -79,7 +82,8 @@ const MenuList = [
     title: 'Appraisal',
     parent: 'My Team',
     icon: 'check-square',
-    theme: 'outlined'
+    theme: 'outlined',
+    disabled: true
   }
 ];
 

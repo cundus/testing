@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
-import { Layout, Spin } from "antd";
+import { Layout, Spin, message } from "antd";
 import { GetInfoUser } from "../../redux/actions/user";
+import { doGetMetrics } from '../../redux/actions/kpi';
 
 import { Footer, Header, Sidebar } from "./components";
 import { MappedRouter } from "../../routes/RouteGenerator";
@@ -27,7 +28,7 @@ class Dashboard extends React.Component {
       const now = new Date().getTime();
       const last = this.props.auth.accessToken.expiresOn.getTime();
       const refresh = last - now;
-      setTimeout(async () => {
+      setInterval(async () => {
         await this.callAndStore();
       }, refresh);
     }
@@ -61,7 +62,15 @@ class Dashboard extends React.Component {
 
   async getDetailUser(token) {
     await this.props.GetInfoUser(token);
-    localStorage.setItem("sfToken", this.props.user.result.accessToken);
+    if (this.props.user.result !== null) {
+      localStorage.setItem("sfToken", this.props.user.result.accessToken);
+     } else {
+      const header = document.querySelector('.headerContainer');
+      header.style.display = 'none';
+      message.error("user not found");
+
+     }
+    // await this.props.getMetrics();
   }
 
   toggle = () => {
@@ -72,13 +81,12 @@ class Dashboard extends React.Component {
 
   render() {
     const { collapsed } = this.state;
-    const { child, user } = this.props;
-
+    const { child, user, kpi, logout } = this.props;
     return (
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} />
         <Layout style={{ opacity: !collapsed ? "0.3" : "1" }}>
-          <Header collapsed={collapsed} toggle={this.toggle} />
+          <Header collapsed={collapsed} toggle={this.toggle} logout={logout}/>
           <Content style={{ margin: "100px 16px 0", overflow: "initial" }}>
             <div style={{ padding: 24, background: "#fff", borderRadius: 5 }}>
               {Object.keys(user).length ? (
@@ -96,10 +104,12 @@ class Dashboard extends React.Component {
 }
 
 const mapDispatchtoProps = dispatch => ({
-  GetInfoUser: token => dispatch(GetInfoUser(token))
+  GetInfoUser: token => dispatch(GetInfoUser(token)),
+  getMetrics: () => (dispatch(doGetMetrics()))
 });
 const mapStateToProps = state => ({
   auth: state.authReducer,
-  user: state.userReducers
+  user: state.userReducers,
+  kpi: state.kpiReducers
 });
 export default connect(mapStateToProps, mapDispatchtoProps)(Dashboard);

@@ -17,6 +17,8 @@ RUN npm run build
 # production environment
 FROM nginx:1.15.9-alpine
 COPY --from=builder /usr/src/app/nginx/default.conf /etc/nginx/conf.d
+COPY --from=builder /usr/src/app/nginx/nginx-selfsigned.key /etc/nginx/nginx-selfsigned.key
+COPY --from=builder /usr/src/app/nginx/nginx-selfsigned.crt /etc/nginx/nginx-selfsigned.crt
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 EXPOSE 80
 EXPOSE 443

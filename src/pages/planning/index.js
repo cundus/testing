@@ -1,25 +1,140 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import StepWizzard from './components/steps';
-import { MappedRouter } from '../../routes/RouteGenerator';
-import { doGetLatestGoalKpi, doGetKpiList } from '../../redux/actions/kpi';
+import {
+ message, Spin, Result, Button
+} from 'antd';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import {
+  Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
+} from './components';
+import { doGetKpiList } from '../../redux/actions/kpi';
 
 class Planning extends Component {
-  componentDidMount() {
-    this.getKPIData();
+  constructor(props) {
+    super(props);
+    this.state = {
+      step: 0,
+      loading: true,
+      error: false
+    };
+    this.getKpi();
   }
 
-  getKPIData = async (e) => {}
+  getKpi = async () => {
+    const { step } = this.state;
+    const {
+      userReducers
+    } = this.props;
+    const { user } = userReducers.result;
+    const { getKpiList } = this.props;
+    await getKpiList(user.userId);
+    const { kpiReducers } = this.props;
+    const {
+      errMessage, dataKpi, status, currentStep
+    } = kpiReducers;
+    if (status === 0) {
+      if (dataKpi.length !== 0 && step === 0) {
+        if (currentStep !== 'Emp Goal Setting') {
+          this.stepChange(2, true);
+        } else {
+          this.stepChange(1);
+        }
+      } else {
+        this.stepChange(0);
+      }
+    } else {
+      this.stepChange(null);
+      message.warning(`Sorry, ${errMessage}`);
+      this.setState({
+        error: true
+      });
+    }
+    this.setState({
+      loading: false
+    });
+  }
+
+  stepChange = (target, access) => {
+    const { step } = this.state;
+    if (target !== null) {
+      if (step === 0 || step === 1) {
+        if (target === 0) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 1) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 2 && access) {
+          this.setState({
+            step: target
+          });
+        } else if (target === 3 && access) {
+          this.setState({
+            step: target
+          });
+        } else {
+          message.warning('Sorry, You can\'t go to next step');
+        }
+      } else if (step === 3) {
+        if (target === 1 && access) {
+          this.setState({
+            step: target
+          });
+        } else {
+          message.warning('Sorry, You can\'t go back to previous step');
+        }
+      } else if (step === 2) {
+        if (target === 3) {
+          message.warning('Sorry, You can\'t go to next step');
+        } else {
+          message.warning('Sorry, You can\'t go back to previous step');
+        }
+      }
+    }
+  };
 
   render() {
-    const { child, history } = this.props;
-    return (
-      <div>
-        <StepWizzard history={history} />
-        <MappedRouter routes={child} />
-      </div>
-    );
+    const {
+      step, loading, error
+    } = this.state;
+    const { stepChange } = this;
+    const { kpiReducers, history } = this.props;
+    const {
+      errMessage, status
+    } = kpiReducers;
+    if (error) {
+      return (
+        <Result
+          status={status}
+          title={status}
+          subTitle={`Sorry, ${errMessage}`}
+          // eslint-disable-next-line react/jsx-no-bind
+          extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
+        />
+      );
+    } else {
+      return (
+        <div>
+          {loading ? <center><Spin /></center> :
+          <div>
+            <Step step={step} stepChange={stepChange} />
+            {/* eslint-disable-next-line no-nested-ternary */}
+            {step === 0 ?
+              <CreateKpi stepChange={stepChange} /> :
+          // eslint-disable-next-line no-nested-ternary
+          step === 1 ?
+            <DraftKpi stepChange={stepChange} /> :
+            step === 2 ?
+              <SubmitKpi stepChange={stepChange} /> :
+              step === 3 &&
+              <ReviewKpi stepChange={stepChange} />}
+          </div>}
+        </div>
+      );
+    }
   }
 }
 
@@ -29,7 +144,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   getKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
@@ -38,9 +152,11 @@ const connectToComponent = connect(
   mapDispatchToProps
 )(Planning);
 
-export default connectToComponent;
+export default withRouter(connectToComponent);
 
 Planning.propTypes = {
-  history: PropTypes.instanceOf(Object).isRequired,
-  child: PropTypes.instanceOf(Object).isRequired
+  kpiReducers: PropTypes.instanceOf(Object),
+  userReducers: PropTypes.instanceOf(Object),
+  history: PropTypes.instanceOf(Object),
+  getKpiList: PropTypes.func
 };

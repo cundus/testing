@@ -2,173 +2,327 @@ import React from 'react';
 import {
   Table,
   Input,
-  InputNumber,
-  Form
+  Form,
+  Select,
+  Typography
 } from 'antd';
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import {
+  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator
+} from '../../utils/validator';
 
+const { Option } = Select;
 const { TextArea } = Input;
+const { Text } = Typography;
 
 const EditableContext = React.createContext();
 
-const EditableRow = ({ form, ...props }) => (
-  <EditableContext.Provider value={form}>
-    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <tr {...props} />
-  </EditableContext.Provider>
-);
-
-const EditableFormRow = Form.create()(EditableRow);
-
-EditableRow.propTypes = {
-  form: PropTypes.instanceOf(Object)
-};
-
 class EditableCell extends React.Component {
-  change = (e) => {
-    const { record, handleChange, handleError } = this.props;
-    setTimeout(() => {
-      this.form.validateFields((error, values) => {
-        handleChange({ ...record, ...error, ...values });
-        if (error) {
-          handleError(true);
-        } else {
-          handleError(false);
-        }
+  change = (index, field) => {
+    const { record, handlechange, form } = this.props;
+    setTimeout(() => form.validateFields(field, (errors, values) => {
+      const item = values.dataKpi[index];
+      handlechange({
+        ...record,
+        ...item
       });
-    }, 100);
+    }), 100);
   };
 
-  renderCell = (form) => {
-    this.form = form;
+  changeSwitch = (value) => {
+    const { record, handlechange } = this.props;
+    handlechange({
+      ...record,
+      achievementType: value === 'Qualitative' ? 0 : 1,
+      Below: '',
+      Meet: '',
+      Exceed: ''
+    });
+  };
+
+  renderCell = () => {
     const {
       editable,
-      dataIndex,
+      dataindex,
       record,
       placeholder,
-      type,
-      title
+      indexarr,
+      indexlength,
+      title,
+      form
     } = this.props;
+    const index = dataindex;
+    const { cascadeType, metrics } = record;
+    let isMetric = [];
+    if (metrics) {
+      isMetric = metrics.filter((metric) => metric.label === index);
+    }
+    let type = '';
+    if (cascadeType === 1) {
+      type = 'dataManagerKpi';
+    } else {
+      type = 'dataKpi';
+    }
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
+    const data = {
+      index,
+      title,
+      type,
+      indexlength,
+      indexarr,
+      form,
+      record
+    };
+    if (index === 'kpi') { // kpi contain type of metrics
+      const field = [];
+      for (let a = 0; a < data.indexlength; a++) {
+        const datas = `${data.type}[${a}].${data.index}`;
+        field.push(datas);
+      }
+      return (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
+              size="small"
+              defaultValue={valueType}
+              placeholder="Select type"
+              onChange={this.changeSwitch}
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
+            >
+              <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+            </Select>
+          </div>
+          <Form.Item style={{ margin: 0 }}>
+            {form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+              rules: kpiValidator(data),
+              initialValue: record[index]
+            })(
+              <TextArea
+                id={`${title}-${index}`}
+                placeholder={placeholder}
+                // eslint-disable-next-line react/jsx-no-bind
+                onChange={() => this.change(indexarr, field)}
+                autoSize={{ minRows: 2, maxRows: 4 }}
+                disabled={!editable}
+              />
+          )}
+          </Form.Item>
+        </div>
+      );
+    } else if (index === 'feedback') { // Feedback
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            // rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (index === 'weight') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: weightValidator(),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (isMetric.length !== 0) {
+      const field = [];
+      record.metrics.map((metricLabel) => {
+        field.push(`${type}[${indexarr}].${metricLabel.label}`);
+      });
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
+            rules: record.achievementType === 1 ? metricValidator(data) : metricValidatorText(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, field)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    }
+  };
 
-    return (
-      <Form.Item style={{ margin: 0 }}>
-        { type === 'number' ? form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              min: 1,
-              max: 100,
-              type: 'number',
-              required: true
-            }
-          ],
-          initialValue: record[dataIndex]
-        })(
-          <InputNumber
-            id={title}
-            placeholder={placeholder}
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.change}
-            disabled={!editable}
-          />
-        ) : form.getFieldDecorator(dataIndex, {
-          rules: [
-            {
-              required: true
-            }
-          ],
-          initialValue: record[dataIndex]
-        })(
-          <TextArea
-            id={title}
-            placeholder={placeholder}
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            onChange={this.change}
-            disabled={!editable}
-          />
-        )}
-      </Form.Item>
-    );
+  disableCell = () => {
+    const {
+      dataindex,
+      record,
+      children
+    } = this.props;
+    const index = dataindex;
+    let valueType = 'Select type"';
+    if (record.achievementType === 0) {
+      valueType = 'Qualitative';
+    } else if (record.achievementType === 1) {
+      valueType = 'Quantitative';
+    }
+    if (index === 'kpi') {
+      return (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Text style={{ width: '20%' }}>Type:</Text>
+            <Select
+              size="small"
+              defaultValue={valueType}
+              placeholder="Select type"
+              style={{ width: '80%', color: valueType === 'Quantitative' ? '#9ced74' : '#' }}
+              disabled
+            >
+              <Option key="Qualitative">Qualitative</Option>
+              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+            </Select>
+          </div>
+          <div className="editable-cell-value-wrap">
+            {record[index]}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <div className="editable-cell-value-wrap">
+            {children}
+          </div>
+        </div>
+      );
+    }
   };
 
   render() {
     const {
-      children,
       editable,
       ...restProps
     } = this.props;
-
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <td {...restProps}>
         {!editable ? (
-          <div
-            className="editable-cell-value-wrap"
-            style={{ paddingRight: 24 }}
-          >
-            {children}
+          <div>
+            <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
-        ) : (
-          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-        )}
+          ) : (
+            <div style={{ verticalAlign: 'top' }}>
+              <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
+            </div>
+          )}
       </td>
     );
   }
 }
 
 EditableCell.propTypes = {
+  indexarr: PropTypes.number,
+  indexlength: PropTypes.number,
+  color: PropTypes.string,
   editable: PropTypes.bool,
-  dataIndex: PropTypes.string,
+  dataindex: PropTypes.string,
   title: PropTypes.string,
   record: PropTypes.instanceOf(Object),
   index: PropTypes.string,
-  handleChange: PropTypes.func,
-  handleError: PropTypes.func,
+  handlechange: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
   children: PropTypes.instanceOf(Object),
-  action: PropTypes.bool
+  form: PropTypes.instanceOf(Object)
 };
 
 const DataTable = (props) => {
   const {
-    dataSource,
-    handleChange,
-    columns,
-    handleError
-  } = props;
+      datasource,
+      handlechange,
+      columns,
+      loading,
+      form
+    } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-
   const components = {
     body: {
-      row: EditableFormRow,
       cell: EditableCell
     }
   };
   const columnList = columns.map((col) => {
     return {
       ...col,
-      onCell: (record) => ({
+      onCell: (record, index) => ({
         record,
+        form,
+        datasource,
+        indexlength: datasource.length,
+        indexarr: index,
         editable: col.editable,
-        dataIndex: col.dataIndex,
+        dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
-        action: col.action,
         placeholder: col.placeholder,
-        handleChange,
-        handleError
+        color: col.color,
+        handlechange
       })
     };
   });
+
   return (
     <div>
       <Table
+        form={form}
+        loading={loading}
         components={components}
         rowClassName="editable-row"
         bordered
-        dataSource={dataSource}
+        dataSource={datasource}
         columns={columnList}
         scroll={isDesktopOrLaptop ? { x: false } : { x: true }}
         pagination={false}
@@ -181,8 +335,9 @@ const DataTable = (props) => {
 export default DataTable;
 
 DataTable.propTypes = {
-  dataSource: PropTypes.instanceOf(Array),
-  handleChange: PropTypes.func,
-  handleError: PropTypes.func,
-  columns: PropTypes.instanceOf(Array)
+  datasource: PropTypes.instanceOf(Array),
+  handlechange: PropTypes.func,
+  loading: PropTypes.bool,
+  columns: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object)
 };

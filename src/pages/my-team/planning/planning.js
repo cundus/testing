@@ -1,35 +1,54 @@
-import React, { Component } from "react";
-import  { connect } from  'react-redux';
-import  { GetMyTeamKPI } from  '../../../redux/actions/user';
-import TablePlanning from './table-plan';
-import  { Spin, Divider, Typography } from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Spin, Divider, Typography, Form } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-const {Text} = Typography;
+import TablePlanning from './table-plan';
+import { GetMyTeamKPI } from '../../../redux/actions/user';
+
+const { Text } = Typography;
 
 class Planning extends Component {
-  componentDidMount() {
-    this.props.getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: []
+    };
+  }
+
+  async componentDidMount() {
+    const { getMyTeamKPI } = this.props;
+    await getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    const newData = this.props.myteam.result.map( d => {
+      d.costumAction = {
+        idUser: d.userId,
+        status: d.status
+      };
+      return d;
+    });
+    this.setState({ dataSource: newData });
   }
 
   render() {
+    const { myteam } = this.props;
+    const { dataSource, form } = this.state;
     return(
       <div>
         {
-          (Object.keys(this.props.myteam).length)?
+          (Object.keys(dataSource).length > 0 )?
             <div>
-               <div>
+              <div>
                 <Divider />
                 <Text strong>View My Team KPI & Non-KPI Status </Text>
                 <Text>
-                  {`View your team KPI and Non-KPI status`}
+                  View your team KPI and Non-KPI status
                 </Text>
                 <Divider />
               </div>
-             <TablePlanning team={this.props.myteam} />
+              <TablePlanning form={form} team={dataSource} />
             </div>:
             <center>
-              <Spin/>
+              <Spin />
             </center>
         }
       </div>
@@ -37,15 +56,15 @@ class Planning extends Component {
   }
 }
 
-const mapDispatchtoProps = dispatch => ({
+const mapDispatchtoProps = (dispatch) => ({
   getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
 });
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   auth: state.authReducer,
   user: state.userReducers,
   myteam: state.myteamReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Planning);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));

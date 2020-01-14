@@ -3,6 +3,7 @@ export const INVALID_LOGIN_TOKEN = 1001;
 export const ODATA_RESPONSE_ERROR = 1003;
 export const FAILED_SAVE_OR_UPDATE_KPIS = 2001;
 export const FAILED_DELETE_KPIS = 2002;
+export const FAILED_SAVE_CHALLENGE_YOURSELF = 2003;
 export const REQUEST_NOT_RECOGNIZED = 9001;
 export const NOT_AUTHORIZED = 9003;
 export const TOKEN_ERROR = 0;

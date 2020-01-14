@@ -3,7 +3,9 @@ import {
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
   getMyTeamDetailKPI as getMyTeamDetailKPIAction,
-  getUserDetail as getUserDetailAction
+  getUserDetail as getUserDetailAction,
+  feedbackUserKpi as feedbackUserKpiAction,
+  approveUserKpi as approveUserKpiAction
 } from '../../service/auth/index';
 
 import { Success } from '../status-code-type';
@@ -19,7 +21,9 @@ import {
   startGetMyTeamDetail,
   getUserDetail,
   errUserDetail,
-  startUserDetail
+  startUserDetail,
+  successFeedback,
+  errSubmitFeedback,
 } from '../action.type';
 import _ from  'lodash';
 
@@ -98,7 +102,7 @@ export const GetMyTeamKPIDetail = (idUser) => {
     });
     try {
       const resp = await getMyTeamDetailKPIAction(idUser);
-      if (resp.status_code !== Success || resp.data.result.length <= 0) {
+      if (resp.status.status_code !== Success || resp.data.kpiList.result.length <= 0) {
         dispatch({
           type: errGetMyTeamDetail,
           data: [{
@@ -106,7 +110,7 @@ export const GetMyTeamKPIDetail = (idUser) => {
           }]
         });
       }
-      if (resp.data.result.length > 0) {
+      if (resp.data.result.kpiList.length > 0) {
         dispatch({
           type: getMyTeamDetail,
           data: resp.data.result
@@ -124,6 +128,48 @@ export const GetMyTeamKPIDetail = (idUser) => {
   };
 };
 
+export const GiveFeedbackKpi = (idUser, data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await feedbackUserKpiAction(idUser, data);
+      dispatch({
+        type: successFeedback,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errSubmitFeedback,
+        data: {
+          error: true,
+          message: 'Sorry error to submit feedback',
+          errorCode: error.response.status
+        }
+      });
+    }
+  };
+};
+
+export const ApproveKPI = (idUser, data) => {
+  return async (dispatch) => {
+    try {
+      const resp = await approveUserKpiAction(idUser, data);
+      dispatch({
+        type: successFeedback,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errSubmitFeedback,
+        data: {
+          error: true,
+          message: 'Sorry error to approve kpi',
+          errorCode: error.response.status
+        }
+      });
+    }
+  };
+};
+
 export const GetUserDetail = (idUser) => {
   return async (dispatch) => {
     dispatch({
@@ -132,7 +178,7 @@ export const GetUserDetail = (idUser) => {
     });
     try {
       const resp = await getUserDetailAction(idUser);
-      if (resp.status_code !== Success) {
+      if (resp.data.status_code !== Success) {
         dispatch({
           type: errUserDetail,
           data: {
