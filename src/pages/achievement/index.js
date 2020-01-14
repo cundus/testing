@@ -35,8 +35,8 @@ class Achievement extends Component {
       activityStatus: [],
       loading: true,
       dataModal: {
-        name: '',
-        status: '',
+        achievementName: '',
+        achievementDate: '',
         kpiId: idActivity
       }
     };
@@ -87,8 +87,8 @@ class Achievement extends Component {
       this.setState({
         dataModal: {
           activityId: newData[0].id,
-          name: newData[0].name,
-          status: newData[0].status,
+          achievementName: newData[0].achievementName,
+          achievementDate: newData[0].achievementDate,
           kpiId: idAchievement
         }
       });

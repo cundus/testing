@@ -15,7 +15,8 @@ class form extends Component {
     setTimeout(() => form.validateFields(field, (errors, values) => {
       handleModalChangeForm({
         ...dataModal,
-        ...values
+        ...values,
+        achievementDate: values['achievementDate'].format('YYYY-MM-DD')
       });
     }), 100);
   };
@@ -34,17 +35,17 @@ class form extends Component {
       >
         <Form>
           <Form.Item label="Activity Name">
-            {form.getFieldDecorator('Achievement name', {
-              rules: [{ required: true }],
+            {form.getFieldDecorator('achievementName', {
+              rules: [{ required: true, message: 'achievement name required!' }],
               initialValue: dataModal.achievementName
-            })(<Input size="large" onChange={() => this.change(['achievementName'])} />)}
+            })(<Input size="large" onChange={() => this.change(['achievementName', 'achievementDate'])} />)}
           </Form.Item>
           <Form.Item label="Status">
-            {form.getFieldDecorator('Achievement Date', {
+            {form.getFieldDecorator('achievementDate', {
               rules: [{ required: true }],
               initialValue: dataModal.achievementDate
             })(
-              <DatePicker onChange={() => this.change(['achievementDate'])}>
+              <DatePicker onChange={() => this.change(['achievementName', 'achievementDate'])}>
               </DatePicker>
             )}
           </Form.Item>

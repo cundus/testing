@@ -39,12 +39,10 @@ class TableActivity extends Component {
       {
         title: 'Action',
         dataIndex: 'actions',
+        align: 'center',
         render: (text, record) => {
           return (
             <div>
-              <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}`}>
-                <Button icon="eye" />
-              </Link>
               {/* eslint-disable-next-line react/jsx-no-bind */}
               <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />
             </div>
