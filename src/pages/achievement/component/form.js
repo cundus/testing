@@ -33,13 +33,13 @@ class form extends Component {
         confirmLoading={this.props.confirmLoading}
       >
         <Form>
-          <Form.Item label="Activity Name">
+          <Form.Item label="Achievement Name">
             {form.getFieldDecorator('achievementName', {
               rules: [{ required: true, message: 'achievement name required!' }],
               initialValue: dataModal.achievementName
             })(<Input size="large" onChange={() => this.change(['achievementName', 'achievementDate'])} />)}
           </Form.Item>
-          <Form.Item label="Status">
+          <Form.Item label="Achievement Date">
             {form.getFieldDecorator('achievementDate', {
               rules: [{ required: true }],
               initialValue: dataModal.achievementDate
