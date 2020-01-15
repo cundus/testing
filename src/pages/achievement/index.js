@@ -99,7 +99,8 @@ class Achievement extends Component {
           achievementName: newData[0].achievementName,
           achievementDate: moment(newData[0].achievementDate, 'YYYY-MM-DD'),
           kpiId: idAchievement
-        }
+        },
+        titleForm: 'Edit Achievement'
       });
 
     } else { // add
@@ -107,12 +108,13 @@ class Achievement extends Component {
         dataModal: {
           achievementName: '',
           achievementDate: '',
-          kpiId: idAchievement
-        }
+          kpiId: idAchievement,
+        },
+        titleForm: 'Add Achievement'
       });
     }
 
-    this.setState({ visible: true, titleForm: 'Add Activity'});
+    this.setState({ visible: true});
   };
 
   hideModalForm = e => {
