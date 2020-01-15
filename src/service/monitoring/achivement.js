@@ -23,8 +23,8 @@ export const updateAchivement = (data) => customAxios({
 });
 
 
-export const getAchivementThread = (achivementID) => customAxios({
-  url: `/achievement/${achivementID}`,
+export const getAchivementThread = (achivementID, userId) => customAxios({
+  url: `/achievement/${achivementID}/${userId}`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

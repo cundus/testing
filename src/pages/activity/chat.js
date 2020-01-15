@@ -48,8 +48,8 @@ class Chat extends Component {
       match
     } = this.props;
     const { params } = match;
-    const { idActivity, idThread } = params;
-    await GetThreadActivity(idActivity);
+    const { idActivity, idThread, userId } = params;
+    await GetThreadActivity(idActivity, userId);
     await GetActivityThreadChat(idActivity, idThread);
     if ( this.props.chat.feedbacks !== undefined) {
       this.setState({ load: false });
@@ -159,7 +159,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadActivity: (activityID)=> dispatch(getListActivity(activityID)),
+  GetThreadActivity: (activityID, userId)=> dispatch(getListActivity(activityID, userId)),
   GetActivityStatus: ()=> dispatch(getActivityStatus()),
   GetActivityThreadChat: (idActivity, idChat) => dispatch(getActivityThreadChat(idActivity, idChat)),
   doFeedback: (data) => dispatch(createChat(data))

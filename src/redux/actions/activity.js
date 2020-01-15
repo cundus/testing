@@ -102,7 +102,7 @@ export const updateActivity = (data) => {
 };
 
 
-export const getListActivity = (idActivity) => {
+export const getListActivity = (idActivity, userId) => {
   return async (dispatch) => {
     dispatch({
       type: getActivity,
@@ -111,7 +111,7 @@ export const getListActivity = (idActivity) => {
       }
     });
     try {
-      const resp = await getActivityThreadAction(idActivity);
+      const resp = await getActivityThreadAction(idActivity, userId);
       if (resp.data.status_code !== Success) {
         dispatch({
           type: errGetActivity,

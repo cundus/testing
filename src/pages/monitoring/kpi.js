@@ -22,7 +22,7 @@ class TableMonitorKPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics, isFeedback } = this.props;
+    const { dataMetrics, isFeedback, userId, isSuperior, stafid } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -31,7 +31,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         width: 200,
         className: 'td-top',
-        editable: true
+        editable: (!isSuperior)
       },
       {
         title: 'Baseline',
@@ -40,7 +40,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 200,
-        editable: true
+        editable: (!isSuperior)
       },
       {
         title: 'Weight (%)',
@@ -50,7 +50,7 @@ class TableMonitorKPI extends Component {
         className: 'td-top',
         type: 'number',
         width: 90,
-        editable: true
+        editable: (!isSuperior)
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -62,7 +62,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 150,
-        editable: true
+        editable: (!isSuperior)
       };
       newColumns.push(data);
     });
@@ -78,16 +78,18 @@ class TableMonitorKPI extends Component {
           dataSource.length >= 1 ? (
             <div>
               <Button style={{ marginRight: 5 }}>
-                <Link to={`/Activity/${record.key}`}>
+                <Link to={`/Activity/${record.key}/${!isSuperior ? userId : stafid}`}>
                   Activity
                 </Link>
               </Button>
               <Button>
-                <Link to={`/Achievement/${record.key}`}>
+                <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
                   Achievement
                 </Link>
               </Button>
-              <Popconfirm
+              {
+                !isSuperior ?
+                <Popconfirm
                 title="Sure to delete?"
                 // eslint-disable-next-line react/jsx-no-bind
                 onConfirm={() => handleDelete(record.key)}
@@ -97,7 +99,8 @@ class TableMonitorKPI extends Component {
                     <Icon type="delete" />
                   </Button>
                 </Tooltip>
-              </Popconfirm>
+              </Popconfirm>: <div></div>
+              }
             </div>
           ) : null
         );

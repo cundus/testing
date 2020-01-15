@@ -35,21 +35,23 @@ class TableActivity extends Component {
       {
         title: 'Achievement Date',
         dataIndex: 'achievementDate'
-      },
-      {
-        title: 'Action',
-        dataIndex: 'actions',
-        align: 'center',
-        render: (text, record) => {
-          return (
-            <div>
-              {/* eslint-disable-next-line react/jsx-no-bind */}
-              <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />
-            </div>
-          );
-        }
       }
     ];
+    if (this.props.isSuperior === false) {
+        newColumns.push({
+          title: 'Action',
+          dataIndex: 'actions',
+          align: 'center',
+          render: (text, record) => {
+            return (
+              <div>
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />
+              </div>
+            );
+          }
+        })
+    }
     this.setState({columns: newColumns});
   }
 

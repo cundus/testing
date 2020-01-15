@@ -2,8 +2,8 @@ import { customAxios } from '../axios';
 const token = localStorage.getItem('sfToken');
 
 
-export const getActivityThread = (activityID) => customAxios({
-  url: `/activity/${activityID}`,
+export const getActivityThread = (activityID, userID) => customAxios({
+  url: `/activity/${activityID}/${userID}`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

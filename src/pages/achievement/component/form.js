@@ -7,7 +7,6 @@ import {
 class form extends Component {
 
   componentDidMount() {
-    //
   }
 
   change = (field) => {

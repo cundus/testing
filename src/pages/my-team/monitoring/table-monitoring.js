@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Avatar, Button } from 'antd';
 import DataTable from '../../../components/dataTable/index';
+import  { Link } from 'react-router-dom';
 
 const {
   REACT_APP_API_URL
@@ -27,27 +28,33 @@ class TableMonitoring extends Component {
         dataIndex: 'title',
         placeholder: 'KPI Title'
       },
-      {
-        title: 'KPI Score',
-        dataIndex: 'score',
-        placeholder: 'Score',
-      },
-      {
-        title: 'KPI Rating',
-        dataIndex: 'ratting',
-        placeholder: 'Rating',
-      },
-      {
-        title: 'Non-KPI Result',
-        dataIndex: 'result',
-        placeholder: 'Non-KPI Result',
-      },
+      // {
+      //   title: 'KPI Score',
+      //   dataIndex: 'score',
+      //   placeholder: 'Score',
+      // },
+      // {
+      //   title: 'KPI Rating',
+      //   dataIndex: 'ratting',
+      //   placeholder: 'Rating',
+      // },
+      // {
+      //   title: 'Non-KPI Result',
+      //   dataIndex: 'result',
+      //   placeholder: 'Non-KPI Result',
+      // },
       {
         title: 'Action',
         dataIndex: 'userId',
         placeholder: 'action',
         action: true,
-        render: (text) => (<Button type={'primary'}>View Monitoring</Button>)
+        render: (text) => (
+          <Button type={'primary'}>
+            <Link to={`/my-team/monitoring/${text}`}>
+            View Monitoring
+            </Link>
+          </Button>
+        )
       }
     ];
 

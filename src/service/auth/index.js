@@ -43,6 +43,17 @@ export const getMyTeam = (idUser) => customAxios({
   }
 });
 
+export const getMyTeamMonitoring = (idUser) => customAxios({
+  url: `/user/team/monitoring/${idUser}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+
 export const getMyTeamDetailKPI = (idUser) => customAxios({
   url: `/user/team/kpi/detail/${idUser}`,
   method: 'GET',

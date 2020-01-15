@@ -70,6 +70,12 @@ export const routes = [
         title: 'Monitoring'
       },
       {
+        path: '/my-team/monitoring/:userId',
+        component: Lazyload(MonitoringPage),
+        exact: true,
+        title: 'Monitoring'
+      },
+      {
         path: '/my-team/appraisal',
         component: Lazyload(AppraisalTeamPage),
         exact: true,
@@ -82,19 +88,19 @@ export const routes = [
         title: 'Monitoring'
       },
       {
-        path: '/Activity/:idActivity/',
+        path: '/Activity/:idActivity/:userId',
         component: LazyLoad(ActivityPage),
         exact: true,
         title: 'Activity'
       },
       {
-        path: '/Achievement/:idAchievement/',
+        path: '/Achievement/:idAchievement/:userId',
         component: LazyLoad(AchievementPage),
         exact: true,
         title: 'Achievement'
       },
       {
-        path: '/Activity/Chat/:idActivity/:idThread',
+        path: '/Activity/Chat/:idActivity/:idThread/:userId',
         exact: true,
         component: LazyLoad(ChatActivityPage),
         title: 'Activity Chat'

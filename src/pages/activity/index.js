@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { getListActivity, getActivityStatus, createActivity, updateActivity } from '../../redux/actions/activity';
+import { doGetKpiList } from '../../redux/actions/kpi';
+
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 
@@ -34,6 +36,7 @@ class Activity extends Component {
       titleForm: '',
       activityStatus: [],
       loading: true,
+      isSuperior: false,
       dataModal: {
         name: '',
         status: '',
@@ -50,12 +53,18 @@ class Activity extends Component {
     const {
       GetThreadActivity,
       GetActivityStatus,
+      userReducers,
+      doGetKpiList,
       match
     } = this.props;
     const { params } = match;
-    const { idActivity } = params;
+    const { idActivity, userId } = params;
     await GetActivityStatus();
-    await GetThreadActivity(idActivity);
+    await GetThreadActivity(idActivity, userId);
+    const isSuperior = (userId !== userReducers.result.user.userId)
+    if (isSuperior) {
+       await doGetKpiList(userId);
+    }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
     if (activities && idActivity) {
@@ -72,7 +81,7 @@ class Activity extends Component {
       }));
     }
     const statusList = Object.values(this.props.activityStatus);
-    this.setState({dataSource, activityStatus: statusList, loading: false });
+    this.setState({dataSource, activityStatus: statusList, loading: false, isSuperior });
   };
 
   showModalForm = (key) => {
@@ -138,21 +147,27 @@ class Activity extends Component {
   }
 
   render() {
-    const { activityThread } = this.props;
+    const { activityThread, match, kpiReducers } = this.props;
     const { loadingActivity } = activityThread;
     const {loading } = this.state;
     const { kpiName } = activityThread;
+    const { params } =  match;
+    const { userId } = params;
+    let stafname = '';
+    if (this.state.isSuperior === true) {
+      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
+    }
     return (
       <div>
         <div>
           <Divider />
-          <Text strong> Activity</Text>
+          <Text strong> Activity </Text>
           <Text>
             This is an Online activity feedback session with your supperior.
           </Text>
           <Divider />
           <center>
-            <Title level={4}>{`KPI : ${kpiName || ''}`}</Title>
+    <Title level={4}>{`KPI : ${kpiName || ''}`} {this.state.isSuperior === true ? `- ${stafname}` : ''}</Title>
             <br />
           </center>
         </div>
@@ -163,9 +178,16 @@ class Activity extends Component {
               loading={false}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
+              userId={userId}
+              isSuperior={this.state.isSuperior}
             />
             <center>
-              <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>&nbsp;
+              {
+                this.state.isSuperior === false ?
+                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button> :
+                <div></div>
+              }
+              &nbsp;
               <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
               <FormSend
                 form={this.props.form}
@@ -187,14 +209,17 @@ class Activity extends Component {
 
 const mapStateToProps = (state) => ({
   activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers
+  activityStatus: state.ActivityStatusReducers,
+  userReducers: state.userReducers,
+  kpiReducers: state.kpiReducers,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadActivity: (activityID) => dispatch(getListActivity(activityID)),
+  GetThreadActivity: (activityID, userId) => dispatch(getListActivity(activityID, userId)),
   GetActivityStatus: () => dispatch(getActivityStatus()),
   CreateActivity: (data) => dispatch(createActivity(data)),
-  UpdateActivity: (data) => dispatch(updateActivity(data))
+  UpdateActivity: (data) => dispatch(updateActivity(data)),
+  doGetKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(
