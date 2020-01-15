@@ -102,7 +102,8 @@ class Activity extends Component {
           name: newData[0].name,
           status: newData[0].status,
           kpiId: idActivity
-        }
+        },
+        titleForm: 'Edit Activity'
       });
     } else { // add activity
       this.setState({
@@ -110,10 +111,11 @@ class Activity extends Component {
           name: '',
           status: '',
           kpiId: idActivity
-        }
+        },
+        titleForm: 'Add Activity'
       });
     }
-    this.setState({ visible: true, titleForm: 'Add Activity'});
+    this.setState({ visible: true});
   };
 
   hideModalForm = e => {
