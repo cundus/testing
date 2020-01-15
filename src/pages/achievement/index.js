@@ -184,7 +184,7 @@ class Achievement extends Component {
             <center>
               {
                 this.state.isSuperior === false?
-                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>:<div></div>
+                <Button type="primary" onClick={() => this.showModalForm()}>Add Achievement</Button>:<div></div>
               }
               &nbsp;
               <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
