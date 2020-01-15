@@ -9,20 +9,21 @@ import {
   Spin,
   Form
 } from 'antd';
+import moment from 'moment';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import { getListActivity, getActivityStatus, createActivity, updateActivity } from '../../redux/actions/activity';
-import { doGetKpiList } from '../../redux/actions/kpi';
-
+import { getListAchivement, createAchievement, updateAchievement } from '../../redux/actions/achievement';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
+import { doGetKpiList } from '../../redux/actions/kpi';
+
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
 const { TextArea } = Input;
 
-class Activity extends Component {
+class Achievement extends Component {
   constructor(props) {
     super(props);
     const {
@@ -38,8 +39,8 @@ class Activity extends Component {
       loading: true,
       isSuperior: false,
       dataModal: {
-        name: '',
-        status: '',
+        achievementName: '',
+        achievementDate: '',
         kpiId: idActivity
       }
     };
@@ -51,37 +52,33 @@ class Activity extends Component {
 
   getAllData = async () => {
     const {
-      GetThreadActivity,
-      GetActivityStatus,
-      userReducers,
+      GetListAchivement,
+      match,
       doGetKpiList,
-      match
+      userReducers
     } = this.props;
     const { params } = match;
-    const { idActivity, userId } = params;
-    await GetActivityStatus();
-    await GetThreadActivity(idActivity, userId);
+    const { idAchievement, userId } = params;
+    await GetListAchivement(idAchievement, userId);
+    const activities = this.props.achievementThread.achievements;
+    let dataSource = [];
     const isSuperior = (userId !== userReducers.result.user.userId)
-    if (isSuperior) {
+    if(isSuperior) {
        await doGetKpiList(userId);
     }
-    const activities = this.props.activityThread.activities;
-    let dataSource = [];
-    if (activities && idActivity) {
+    if (activities.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
           key: d.id,
           ...d,
-          lastMessage: (d.lastReply !== null) ? d.lastReply.feedback : '',
           actions: {
             threadId: d.id,
-            idActivity
+            idAchievement
           }
         }
       }));
     }
-    const statusList = Object.values(this.props.activityStatus);
-    this.setState({dataSource, activityStatus: statusList, loading: false, isSuperior });
+    this.setState({dataSource, loading: false, isSuperior });
   };
 
   showModalForm = (key) => {
@@ -91,28 +88,30 @@ class Activity extends Component {
       match
     } = this.props;
     const { params } = match;
-    const { idActivity } = params;
+    const { idAchievement } = params;
     const { dataSource } = this.state;
     const data = [...dataSource];
     if (key) { // edit activity
       const newData = data.filter((item) => item.key === key);
       this.setState({
         dataModal: {
-          activityId: newData[0].id,
-          name: newData[0].name,
-          status: newData[0].status,
-          kpiId: idActivity
+          achievementId: newData[0].id,
+          achievementName: newData[0].achievementName,
+          achievementDate: moment(newData[0].achievementDate, 'YYYY-MM-DD'),
+          kpiId: idAchievement
         }
       });
-    } else { // add activity
+
+    } else { // add
       this.setState({
         dataModal: {
-          name: '',
-          status: '',
-          kpiId: idActivity
+          achievementName: '',
+          achievementDate: '',
+          kpiId: idAchievement
         }
       });
     }
+
     this.setState({ visible: true, titleForm: 'Add Activity'});
   };
 
@@ -130,15 +129,18 @@ class Activity extends Component {
   }
 
   handleModalSubmit = () => {
-    const { form, CreateActivity, UpdateActivity } = this.props;
+    const { form, CreateAchievement, UpdateAchievement} = this.props;
     const { dataModal } = this.state;
     form.validateFieldsAndScroll(async (err, values) => {
       if (!err) {
         this.setState({ loading: true });
-        if (dataModal.activityId) {
-          await UpdateActivity(dataModal);
+        if (dataModal.achievementId) {
+          if (typeof dataModal.achievementDate !== 'string') {
+            dataModal.achievementDate = moment(dataModal.achievementDate).format('YYYY-MM-DD');
+          }
+          await UpdateAchievement(dataModal);
         } else {
-          await CreateActivity(dataModal);
+          await CreateAchievement(dataModal);
         }
         this.hideModalForm();
         this.getAllData();
@@ -147,27 +149,26 @@ class Activity extends Component {
   }
 
   render() {
-    const { activityThread, match, kpiReducers } = this.props;
-    const { loadingActivity } = activityThread;
+    const { achievementThread, kpiReducers } = this.props;
+    const { loadingActivity } = achievementThread;
     const {loading } = this.state;
-    const { kpiName } = activityThread;
-    const { params } =  match;
-    const { userId } = params;
+    const { kpiName } = achievementThread;
     let stafname = '';
     if (this.state.isSuperior === true) {
-      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
+      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`;
     }
+
     return (
       <div>
         <div>
           <Divider />
-          <Text strong> Activity </Text>
+          <Text strong> Achievement</Text>
           <Text>
-            This is an Online activity feedback session with your supperior.
+            This is an Online achievement feedback session with your supperior.
           </Text>
           <Divider />
           <center>
-    <Title level={4}>{`KPI : ${kpiName || ''}`} {this.state.isSuperior === true ? `- ${stafname}` : ''}</Title>
+          <Title level={4}>{`KPI : ${kpiName || ''}`} {this.state.isSuperior === true ? `- ${stafname}` : ''}</Title>
             <br />
           </center>
         </div>
@@ -178,14 +179,12 @@ class Activity extends Component {
               loading={false}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
-              userId={userId}
               isSuperior={this.state.isSuperior}
             />
             <center>
               {
-                this.state.isSuperior === false ?
-                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button> :
-                <div></div>
+                this.state.isSuperior === false?
+                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>:<div></div>
               }
               &nbsp;
               <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
@@ -208,28 +207,26 @@ class Activity extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers,
+  achievementThread: state.AchievementReducers,
   userReducers: state.userReducers,
   kpiReducers: state.kpiReducers,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadActivity: (activityID, userId) => dispatch(getListActivity(activityID, userId)),
-  GetActivityStatus: () => dispatch(getActivityStatus()),
-  CreateActivity: (data) => dispatch(createActivity(data)),
-  UpdateActivity: (data) => dispatch(updateActivity(data)),
+  GetListAchivement: (idAchievement, userId) => dispatch(getListAchivement(idAchievement, userId)),
+  CreateAchievement: (data) => dispatch(createAchievement(data)),
+  UpdateAchievement: (data) => dispatch(updateAchievement(data)),
   doGetKpiList: (id) => dispatch(doGetKpiList(id))
 });
 
 const connectToComponent = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Activity);
+)(Achievement);
 
 export default Form.create({})(withRouter(connectToComponent));
 
-Activity.propTypes = {
+Achievement.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

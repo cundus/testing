@@ -23,39 +23,35 @@ class TableActivity extends Component {
   getColumns = async () => {
     const newColumns = [
       {
-        title: 'Created at',
-        dataIndex: 'creationDate',
+        title: 'Created At',
+        dataIndex: 'createdAt',
         align: 'center'
       },
       {
-        title: 'Thread',
-        dataIndex: 'name',
+        title: 'Achievement Name',
+        dataIndex: 'achievementName',
         placeholder: 'Enter baseline'
       },
       {
-        title: 'Last Reply',
-        dataIndex: 'lastMessage'
-      },
-      {
-        title: 'Action',
-        dataIndex: 'actions',
-        align: 'center',
-        render: (text, record) => {
-          return (
-            <div>
-              <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}/${this.props.userId}`}>
-                <Button icon="eye" />
-              </Link>
-              {/* eslint-disable-next-line react/jsx-no-bind */}
-              {
-                !this.props.isSuperior?
-                <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />: <div></div>
-              }
-            </div>
-          );
-        }
+        title: 'Achievement Date',
+        dataIndex: 'achievementDate'
       }
     ];
+    if (this.props.isSuperior === false) {
+        newColumns.push({
+          title: 'Action',
+          dataIndex: 'actions',
+          align: 'center',
+          render: (text, record) => {
+            return (
+              <div>
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />
+              </div>
+            );
+          }
+        })
+    }
     this.setState({columns: newColumns});
   }
 

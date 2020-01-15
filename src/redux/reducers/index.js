@@ -10,6 +10,7 @@ import userKpiStateReducers from './kpiState';
 import ActivityReducers from './activity';
 import ActivityStatusReducers from './statusActivity';
 import ActivityChatReducers from './activityChat';
+import AchievementReducers from './achivement';
 
 export default combineReducers({
   authReducer,
@@ -22,5 +23,6 @@ export default combineReducers({
   userKpiStateReducers,
   ActivityReducers,
   ActivityStatusReducers,
-  ActivityChatReducers
+  ActivityChatReducers,
+  AchievementReducers
 });

@@ -64,3 +64,7 @@ export const errGetActivityChat = 'ERR_GET_ACTIVITY_CHAT';
 export const doFeedbackComment = 'DO_FEEDBACK_COMMENT';
 export const successFeedbackComment = 'SUCCESS_FEEDBACK_COMMENT';
 export const errFeedbackComment = 'ERR_FEEDBACK_COMMENT';
+
+export const getAchievementThread = 'GET_ACHIEVEMENT_THREAD';
+export const errAchievementThread = 'ERR_ACHIEVEMENT_THREAD';
+export const successAchievementThread = 'SUCCESS_ACHIEVEMENT_THREAD';
