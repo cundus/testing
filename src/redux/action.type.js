@@ -43,3 +43,28 @@ export const startGetMyTeamDetail = 'START_GET_MY_TEAM_DETAIL';
 export const SUBMIT_NEXT = 'SUBMIT_NEXT';
 export const SUBMIT_NEXT_SUCCESS = 'SUBMIT_NEXT_SUCCESS';
 export const SUBMIT_NEXT_FAILED = 'SUBMIT_NEXT_FAILED';
+
+export const getUserKpiState = 'GET_USER_KPI_STATE';
+export const errGetUserKpiState = 'ERR_GET_USER_KPI_STATE';
+
+export const getActivity = 'GET_ACTIVITY';
+export const successGetActivity = 'SUCCESS_GET_ACTIVITY';
+export const errGetActivity = 'ERR_GET_ACTIVITY';
+
+
+export const getStatusActivity = 'GET_STATUS_ACTIVITY';
+export const successGetStatusActivity = 'SUCCESS_GET_STATUS_ACTIVITY';
+export const errGetStatusActivity = 'ERR_GET_STATUS_ACTIVITY';
+
+export const getActivityChat = 'GET_ACTIVITY_CHAT';
+export const successGetActivityChat = 'SUCCESS_GET_ACTIVITY_CHAT';
+export const errGetActivityChat = 'ERR_GET_ACTIVITY_CHAT';
+
+
+export const doFeedbackComment = 'DO_FEEDBACK_COMMENT';
+export const successFeedbackComment = 'SUCCESS_FEEDBACK_COMMENT';
+export const errFeedbackComment = 'ERR_FEEDBACK_COMMENT';
+
+export const getAchievementThread = 'GET_ACHIEVEMENT_THREAD';
+export const errAchievementThread = 'ERR_ACHIEVEMENT_THREAD';
+export const successAchievementThread = 'SUCCESS_ACHIEVEMENT_THREAD';
