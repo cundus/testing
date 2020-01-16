@@ -267,6 +267,10 @@ class MonitorKPI extends Component {
       dataSource,
       challengeYour
     } = this.state;
+    if (this.state.weightTotal !== 100) {
+      return message.warning('Total KPI Weight must 100%');
+
+    }
     const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi, iii) => {
