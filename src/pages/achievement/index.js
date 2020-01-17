@@ -164,7 +164,7 @@ class Achievement extends Component {
       <div>
         <div>
           <Divider />
-          <Text strong> Achievement</Text>
+          <Text strong> Achievement </Text>
           <Text>
             This is an Online achievement feedback session with your supperior.
           </Text>
