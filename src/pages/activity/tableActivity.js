@@ -44,7 +44,7 @@ class TableActivity extends Component {
           return (
             <div>
               <Link to={`/Activity/Chat/${text.idActivity}/${text.threadId}/${this.props.userId}`}>
-                <Button icon="eye" />
+                <Button icon="wechat" />
               </Link>
               {/* eslint-disable-next-line react/jsx-no-bind */}
               {
