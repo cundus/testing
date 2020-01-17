@@ -85,7 +85,7 @@ class Chat extends Component {
       <div>
         <div>
           <Divider />
-          <Text strong> Activity</Text>
+          <Text strong> Activity </Text>
           <Text>
             This is an Online activity feedback session with your supperior.
           </Text>
