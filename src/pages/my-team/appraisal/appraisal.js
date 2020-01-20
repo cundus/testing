@@ -1,16 +1,18 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import  { connect } from 'react-redux';
 import  { Spin, Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import { GetMyTeamKPI } from '../../../redux/actions/user';
-import TableAppraisal from './table-appraisal';
+import { GetMyTeamKPIApraisal } from '../../../redux/actions/user';
+import TableMonitoring from './table-appraisal';
+import TableAppraisal from "./table-appraisal";
+
 const { Text } = Typography;
 
 class Appraisal extends Component {
   componentDidMount() {
-    const { getMyTeamKPI } = this.props;
-    getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    const { getMyTeamKPIApraisal } = this.props;
+    getMyTeamKPIApraisal(_.get(this, 'props.user.result.user.userId', []));
   }
 
   render() {
@@ -22,9 +24,9 @@ class Appraisal extends Component {
             <div>
                <div>
                 <Divider />
-                <Text strong>Final Appraisal for My Team's KPI & Non-KPI Status</Text>
+                <Text strong>Appraisal My Team KPI & Non-KPI Status </Text>
                 <Text>
-                  {`Give final Score and Rating for your team KPI and Non-KPI`}
+                  {`Appraisal your team KPI and Non-KPI`}
                 </Text>
                 <Divider />
               </div>
@@ -40,7 +42,7 @@ class Appraisal extends Component {
 }
 
 const mapDispatchtoProps = (dispatch) => ({
-  getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
+  getMyTeamKPIApraisal: (idUser) => dispatch(GetMyTeamKPIApraisal(idUser))
 });
 
 const mapStateToProps = (state) => ({

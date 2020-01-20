@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar, Button } from 'antd';
+import  { Link } from 'react-router-dom';
 import DataTable from '../../../components/dataTable/index';
 
 const {
@@ -15,9 +16,7 @@ class TableAppraisal extends Component {
         dataIndex: 'userId',
         placeholder: 'Profile',
         action: true,
-        render: (text) => {
-          return (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />);
-        }
+        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
       },
       {
         title: 'Name',
@@ -49,7 +48,13 @@ class TableAppraisal extends Component {
         dataIndex: 'userId',
         placeholder: 'action',
         action: true,
-        render: (text) => (<Button type={'primary'}>Appraisal</Button>)
+        render: (text) => (
+          <Button type={'primary'}>
+            <Link to={`/my-team/appraisal/${text}`}>
+            View
+            </Link>
+          </Button>
+        )
       }
     ];
 
@@ -63,7 +68,7 @@ class TableAppraisal extends Component {
   }
 
   getAllData = () => {
-    const team = this.props;
+    const { team } = this.props;
     const { result } = team;
     this.setState(
       {
