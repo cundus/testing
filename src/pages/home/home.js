@@ -18,8 +18,8 @@ class Home extends Component {
   }
 
   render() {
-    const step = _.get(this, 'props.step.currentStep', false);
-    const isAllowToMonitor = (step === 'Performance Review Employee');
+    const step = _.get(this, 'props.step.currentStep', 'Emp Goal Setting');
+    const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
     const isManager = _.get(this, 'props.user.result.user.manager', false);
     let size = 6;
     if (!isManager) {
@@ -41,14 +41,14 @@ class Home extends Component {
                 <img alt={"monitoring"} src={UsersIcon} className='pink' style={{width:120, height: 120}}/>
                 <h1>Monitoring</h1>
                 <p className='qoute-text'>Feedbask session with Superior</p>
-                <Link to={'/monitoring'}><Button shape='round' className='homeBtn  pinkBtn' disabled={(!isAllowToMonitor)}>View Feedback Session</Button></Link>
+                <Link to={'/monitoring'}><Button shape='round' className='homeBtn  pinkBtn' disabled={(isAllowToMonitor)}>View Feedback Session</Button></Link>
               </Col>
               <Col xl={6} lg={6} md={6} xs={24} className='grid'>
                 <br/><br/>
                 <img alt={"appraisal"} src={CustomerIcon} className='yellow' style={{width:120, height: 120}}/>
                 <h1>Appraisal</h1>
                 <p className='qoute-text'>View your final performance rating</p>
-                <Link to={'/Appraisal'}><Button  shape='round' className='homeBtn  yellowBtn' disabled={(!isAllowToMonitor)}>View My Final Performance</Button>
+                <Link to={'/Appraisal'}><Button  shape='round' className='homeBtn  yellowBtn' disabled={(isAllowToMonitor)}>View My Final Performance</Button>
                 </Link>
               </Col>
               <Col xl={size} lg={size} md={size} xs={24} className='grid' style={{display: (isManager) ? '': 'none'}}>

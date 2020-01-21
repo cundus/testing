@@ -16,7 +16,10 @@ import {
   GET_METRICS_FAILED,
   SUBMIT_NEXT,
   SUBMIT_NEXT_SUCCESS,
-  SUBMIT_NEXT_FAILED
+  SUBMIT_NEXT_FAILED,
+  DO_ASSESSMENT,
+  DO_ASSESSMENT_SUCCESS,
+  DO_ASSESSMENT_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -168,6 +171,25 @@ const kpiReducers = (state = initialState, action) => {
         loadingSaveKPI: action.loading,
         statusSaveKPI: action.status,
         messageSaveKPI: action.message
+      };
+    case DO_ASSESSMENT:
+      return {
+        ...state,
+        loadingAssess: action.loading
+      };
+    case DO_ASSESSMENT_SUCCESS:
+      return {
+        ...state,
+        loadingAssess: action.loading,
+        statusAssess: action.status,
+        messageAssess: action.message
+      };
+    case DO_ASSESSMENT_FAILED:
+      return {
+        ...state,
+        loadingAssess: action.loading,
+        statusAssess: action.status,
+        messageAssess: action.message
       };
     default:
       return { ...state };

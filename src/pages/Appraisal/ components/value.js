@@ -1,50 +1,34 @@
 import React, { Component } from 'react';
-import DataTable from '../../components/dataTable';
+import DataTable from '../../../components/dataTable';
 
-class KPI extends Component {
+class Value extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: 'KPI Subject',
+        title: 'Section',
         dataIndex: 'description',
         placeholder: 'Enter 2019 baseline'
       },
       {
-        title: '2019 Baseline',
+        title: 'Ratings',
         dataIndex: 'baseline',
         placeholder: 'Enter 2019 baseline'
       },
       {
-        title: 'Weight (%)',
-        dataIndex: 'weight',
-        placeholder: 'Enter KPI Weight',
-        type: 'number'
+        title: 'Remarks',
+        dataIndex: 'Upload',
+        placeholder: 'Enter KPI Weight'
       },
       {
-        title: 'L1',
+        title: 'Upload',
         dataIndex: 'L1',
         placeholder: 'Enter Level 1'
       },
       {
-        title: 'L2',
+        title: 'Feedbacks',
         dataIndex: 'L2',
         placeholder: 'Enter Level 2'
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        placeholder: 'Enter Level 3'
-      },
-      {
-        title: 'Result',
-        dataIndex: 'result',
-        placeholder: 'result'
-      },
-      {
-        title: 'Final Score',
-        dataIndex: 'finalScore',
-        placeholder: 'Final Score'
       }
     ];
   }
@@ -66,4 +50,4 @@ class KPI extends Component {
     );
   }
 }
-export default KPI;
+export default Value;
