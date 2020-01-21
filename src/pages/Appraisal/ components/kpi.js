@@ -100,7 +100,8 @@ class KPI extends Component {
     const {
       dataSource,
       loading,
-      form
+      form,
+      goToMonitoring
     } = this.props;
     return (
       <div>
@@ -113,6 +114,7 @@ class KPI extends Component {
         <div style={{ textAlign: 'center' }}>
           <Button
             id="go-monitoring"
+            onClick={() => goToMonitoring()}
             style={{ margin: 10 }}
           >
             Go To Monitoring
