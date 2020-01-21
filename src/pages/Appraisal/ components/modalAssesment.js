@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  Modal, Form, Select, InputNumber
+  Modal, Form, Select, InputNumber, Typography
 } from 'antd';
 
 const { Option } = Select;
+const { Text } = Typography;
 
 
 class modalAssessment extends Component {
@@ -28,27 +29,31 @@ class modalAssessment extends Component {
     } = this.props;
     return (
       <Modal
-        title={'Assesment'}
+        title="Result"
         visible={isModalShow}
         confirmLoading={loadingAssess}
         onOk={() => handleSaveAssessment(modalRecord)}
         onCancel={() => showHideModal(false)}
       >
+        <Text strong>KPI Subject</Text>
+        <br />
+        <Text>{modalRecord.kpi}</Text>
+        <br />
+        <br />
         <Form>
           {modalRecord.achievementType === 1 ?
-          <Form.Item label="Assessment">
+          <Form.Item label="Value">
             {form.getFieldDecorator('assessment', {
-              rules: [{
-                required: true, message: 'required',
-                type: 'number', message: 'number',
-                min: 1, message: 'dont zero'
-              }],
+              rules: [
+                { required: true, message: 'Value is required' },
+                { type: 'number', message: 'Value must be a number' }
+              ],
               initialValue: assessment
             })(<InputNumber size="large" style={{ width: '100%' }} onChange={() => this.change(['assessment'])} />)}
           </Form.Item> :
-          <Form.Item label="Status">
+          <Form.Item label="Value">
             {form.getFieldDecorator('assessment', {
-              rules: [{ required: true }],
+              rules: [{ required: true, message: 'Value is required' }],
               initialValue: assessment
             })(
               <Select onChange={() => this.change(['assessment'])}>

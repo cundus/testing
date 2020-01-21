@@ -212,7 +212,7 @@ class Appraisal extends Component {
                     dataMetrics={dataKpiMetrics}
                   /> : <center><Spin /></center>}
               </TabPane>
-              <TabPane tab="VALUE" key="2">
+              <TabPane tab="Values" key="2">
                 <TableValue
                   dataOwn={[]}
                 />
