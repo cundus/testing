@@ -156,6 +156,11 @@ class Appraisal extends Component {
     });
   };
 
+  goToMonitoring = () => {
+    const { history } = this.props;
+    history.push('/monitoring');
+  }
+
   render() {
     const {
       loadingKpis,
@@ -200,13 +205,14 @@ class Appraisal extends Component {
                 {!loadingKpis ?
                   <TableKPI
                     form={form}
+                    goToMonitoring={this.goToMonitoring}
                     loadingResult={loadingResult}
                     showHideModal={this.showHideModal}
                     dataSource={dataKpis}
                     dataMetrics={dataKpiMetrics}
                   /> : <center><Spin /></center>}
               </TabPane>
-              <TabPane tab="VALUE" key="2">
+              <TabPane tab="Values" key="2">
                 <TableValue
                   dataOwn={[]}
                 />
