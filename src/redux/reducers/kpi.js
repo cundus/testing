@@ -102,7 +102,8 @@ const kpiReducers = (state = initialState, action) => {
         generalFeedback: action.data.challengeOthersRatingComments,
         challenge: action.data.challangeYourSelf,
         currentStep: action.data.currentStep,
-        holderUserId: action.data.holderUserId
+        holderUserId: action.data.holderUserId,
+        user: action.data.user
       };
     case GET_KPI_LIST_FAILED:
       return {

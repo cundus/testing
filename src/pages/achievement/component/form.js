@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Modal, Button, Form, Select, Input
+  Modal, Button, Form, DatePicker, Input
 } from 'antd';
-
-const { Option } = Select;
 
 
 class form extends Component {
 
   componentDidMount() {
-    //
   }
 
   change = (field) => {
@@ -17,7 +14,8 @@ class form extends Component {
     setTimeout(() => form.validateFields(field, (errors, values) => {
       handleModalChangeForm({
         ...dataModal,
-        ...values
+        ...values,
+        achievementDate: values['achievementDate'].format('YYYY-MM-DD')
       });
     }), 100);
   };
@@ -35,22 +33,19 @@ class form extends Component {
         confirmLoading={this.props.confirmLoading}
       >
         <Form>
-          <Form.Item label="Activity Name">
-            {form.getFieldDecorator('name', {
-              rules: [{ required: true }],
-              initialValue: dataModal.name
-            })(<Input size="large" onChange={() => this.change(['name'])} />)}
+          <Form.Item label="Achievement Name">
+            {form.getFieldDecorator('achievementName', {
+              rules: [{ required: true, message: 'achievement name required!' }],
+              initialValue: dataModal.achievementName
+            })(<Input size="large" onChange={() => this.change(['achievementName', 'achievementDate'])} />)}
           </Form.Item>
-          <Form.Item label="Status">
-            {form.getFieldDecorator('status', {
+          <Form.Item label="Achievement Date">
+            {form.getFieldDecorator('achievementDate', {
               rules: [{ required: true }],
-              initialValue: dataModal.status
+              initialValue: dataModal.achievementDate
             })(
-              <Select onChange={() => this.change(['status'])}>
-                {statusActivity && statusActivity.map((value, index) => {
-                  return <Option value={value.id}>{value.name}</Option>;
-                })}
-              </Select>
+              <DatePicker onChange={() => this.change(['achievementName', 'achievementDate'])}>
+              </DatePicker>
             )}
           </Form.Item>
         </Form>

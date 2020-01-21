@@ -30,7 +30,9 @@ class MonitorKPI extends Component {
       weightTotalErr: false,
       challengeYour: '',
       kpiErr: false,
-      isFeedback: false
+      isFeedback: false,
+      userId: '',
+      isSuperior: false,
     };
   }
 
@@ -39,10 +41,18 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, form, getLatestGoalKpi } = this.props;
+    const { userReducers, getKpiList, form, getLatestGoalKpi, match } = this.props;
+    const { params } = match;
+    const { userId } = params;
     const { user } = userReducers.result;
+    let isSuperior  = this.state.isSuperior;
     await getLatestGoalKpi();
-    await getKpiList(user.userId);
+    if (userId) {
+      await getKpiList(userId);
+      isSuperior = true;
+    } else {
+      await getKpiList(user.userId);
+    }
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];
@@ -82,7 +92,9 @@ class MonitorKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge
+      userId: user.userId,
+      challengeYour: challenge,
+      isSuperior
     });
     this.liveCount(newData);
   };
@@ -255,6 +267,10 @@ class MonitorKPI extends Component {
       dataSource,
       challengeYour
     } = this.state;
+    if (this.state.weightTotal !== 100) {
+      return message.warning('Total KPI Weight must 100%');
+
+    }
     const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi, iii) => {
@@ -319,7 +335,7 @@ class MonitorKPI extends Component {
 
   render() {
     const {
-      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
+      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback, userId, isSuperior
     } = this.state;
     const {
       handleChange,
@@ -330,13 +346,15 @@ class MonitorKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback, dataGoal, currentStep } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, generalFeedback, dataGoal, currentStep, user, holderUserId } = kpiReducers;
     const { name  } = dataGoal;
+    const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
+    const stafid = holderUserId;
     return (
       <div>
         <div>
           <Divider />
-          <Text strong> Monitoring KPI</Text>
+          <Text strong> Monitoring KPI - {stafname} </Text>
           <Text>
             {` Monitoring your KPI.`}
           </Text>
@@ -360,40 +378,55 @@ class MonitorKPI extends Component {
               handleError={handleError}
               handleChange={handleChange}
               handleDelete={handleDelete}
+              userId={userId}
+              isSuperior={isSuperior}
+              stafid={stafid}
             />
             <div>
               <Text strong>Challenge Myself :</Text>
-              <TextArea
-                id="challenge-input"
-                placeholder="Challenge yourself"
-                label="Challenge yourself"
-                value={challengeYour}
-                onChange={changeChallenge}
-              />
+              {
+                isSuperior ?
+                  <Text><br/> {challengeYour} </Text> :
+                  <TextArea
+                    id="challenge-input"
+                    placeholder="Challenge yourself"
+                    label="Challenge yourself"
+                    value={challengeYour}
+                    onChange={changeChallenge}
+                  />
+              }
             </div>
             <div style={{ textAlign: 'center' }}>
-              <Button
-                id="add-kpi"
-              // eslint-disable-next-line react/jsx-no-bind
-                onClick={() =>  this.props.history.push('/monitoring/add')}
-                style={{ margin: 10 }}
-              >
-              Add KPI
-              </Button>
-              <Button
-                id="save-draft"
-                onClick={handleSaveDraft}
-                style={{ margin: 10 }}
-              >
-              Save
-              </Button>
-              <Button
-                id="submit-superior"
-                onClick={()=> this.props.history.push('/appraisal')}
-                type="primary" style={{ margin: 10 }}
-              >
-              Go To Appraisal
-              </Button>
+              {
+                isSuperior ?
+                <div>
+                  <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
+                </div>:
+                <div>
+                  <Button
+                    id="add-kpi"
+                  // eslint-disable-next-line react/jsx-no-bind
+                    onClick={() =>  this.props.history.push('/monitoring/add')}
+                    style={{ margin: 10 }}
+                  >
+                  Add KPI
+                  </Button>
+                  <Button
+                    id="save-draft"
+                    onClick={handleSaveDraft}
+                    style={{ margin: 10 }}
+                  >
+                  Save
+                  </Button>
+                  <Button
+                    id="submit-superior"
+                    onClick={()=> this.props.history.push('/appraisal')}
+                    type="primary" style={{ margin: 10 }}
+                  >
+                  Go To Appraisal
+                  </Button>
+                </div>
+              }
             </div>
           </div> : <center><Spin /></center>}
       </div>

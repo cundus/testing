@@ -3,15 +3,15 @@ import  { connect } from 'react-redux';
 import  { Spin, Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import { GetMyTeamKPI } from '../../../redux/actions/user';
+import { GetMyTeamKPIMonitoring } from '../../../redux/actions/user';
 import TableMonitoring from './table-monitoring';
 
 const { Text } = Typography;
 
 class Monitoring extends Component {
   componentDidMount() {
-    const { getMyTeamKPI } = this.props;
-    getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
+    const { getMyTeamKPIMonitoring } = this.props;
+    getMyTeamKPIMonitoring(_.get(this, 'props.user.result.user.userId', []));
   }
 
   render() {
@@ -41,7 +41,7 @@ class Monitoring extends Component {
 }
 
 const mapDispatchtoProps = (dispatch) => ({
-  getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
+  getMyTeamKPIMonitoring: (idUser) => dispatch(GetMyTeamKPIMonitoring(idUser))
 });
 
 const mapStateToProps = (state) => ({

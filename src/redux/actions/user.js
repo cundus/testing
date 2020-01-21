@@ -3,6 +3,8 @@ import {
   getMyTeam as getMyTeamAction,
   getMyKPI as getMyKPIAction,
   getMyTeamDetailKPI as getMyTeamDetailKPIAction,
+  getMyTeamMonitoring as getMyTeamMonitoringAction,
+  getMyTeamApraisal as getMyTeamApraisalAction,
   getUserDetail as getUserDetailAction,
   feedbackUserKpi as feedbackUserKpiAction,
   approveUserKpi as approveUserKpiAction,
@@ -90,6 +92,98 @@ export const GetMyTeamKPI = (idUser) => {
         data: [{
           error: true,
           errorCode: error.response.status
+        }]
+      });
+    }
+  };
+};
+
+
+export const GetMyTeamKPIMonitoring = (idUser) => {
+  return async (dispatch) => {
+    dispatch({
+      type: startGetMyTeam,
+      data: []
+    });
+    try {
+      const resp = await getMyTeamMonitoringAction(idUser);
+      if (resp.status_code !== Success) {
+        dispatch({
+          type: errGetMyTeam,
+          data: []
+        });
+      }
+      let arayTeam = resp.data.result;
+      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
+        const Team = myT;
+        let Kpi = await getMyKPIAction(myT.userId);
+        Kpi = Kpi.data.result;
+        Team.title = _.get(Kpi, 'kpiTitle', 'none');
+        Team.score = _.get(Kpi, 'kpiScore', '-');
+        Team.ratting = _.get(Kpi, 'kpiRating', '-');
+        Team.status = _.get(Kpi, 'userStatus', '-');
+        Team.result = _.get(Kpi, 'nonKpiresult', '-');
+        Team.Key = _.get(Kpi, 'userId', '-');
+        return Team;
+      }));
+
+      resp.data.result = arayTeam;
+      dispatch({
+        type: getMyTeam,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetMyTeam,
+        data: [{
+          error: true,
+          errorCode: error.status_code
+        }]
+      });
+    }
+  };
+};
+
+
+export const GetMyTeamKPIApraisal = (idUser) => {
+  return async (dispatch) => {
+    dispatch({
+      type: startGetMyTeam,
+      data: []
+    });
+    try {
+      const resp = await getMyTeamApraisalAction(idUser);
+      if (resp.status_code !== Success) {
+        dispatch({
+          type: errGetMyTeam,
+          data: []
+        });
+      }
+      let arayTeam = resp.data.result;
+      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
+        const Team = myT;
+        let Kpi = await getMyKPIAction(myT.userId);
+        Kpi = Kpi.data.result;
+        Team.title = _.get(Kpi, 'kpiTitle', 'none');
+        Team.score = _.get(Kpi, 'kpiScore', '-');
+        Team.ratting = _.get(Kpi, 'kpiRating', '-');
+        Team.status = _.get(Kpi, 'userStatus', '-');
+        Team.result = _.get(Kpi, 'nonKpiresult', '-');
+        Team.Key = _.get(Kpi, 'userId', '-');
+        return Team;
+      }));
+
+      resp.data.result = arayTeam;
+      dispatch({
+        type: getMyTeam,
+        data: resp.data
+      });
+    } catch (error) {
+      dispatch({
+        type: errGetMyTeam,
+        data: [{
+          error: true,
+          errorCode: error.status_code
         }]
       });
     }

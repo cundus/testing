@@ -48,8 +48,8 @@ class Chat extends Component {
       match
     } = this.props;
     const { params } = match;
-    const { idActivity, idThread, userId } = params;
-    await GetThreadActivity(idActivity, userId);
+    const { idActivity, idThread } = params;
+    await GetThreadActivity(idActivity);
     await GetActivityThreadChat(idActivity, idThread);
     if ( this.props.chat.feedbacks !== undefined) {
       this.setState({ load: false });
@@ -85,7 +85,7 @@ class Chat extends Component {
       <div>
         <div>
           <Divider />
-          <Text strong> Activity </Text>
+          <Text strong> Activity</Text>
           <Text>
             This is an Online activity feedback session with your supperior.
           </Text>
@@ -159,7 +159,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  GetThreadActivity: (activityID, userId)=> dispatch(getListActivity(activityID, userId)),
+  GetThreadActivity: (activityID)=> dispatch(getListActivity(activityID)),
   GetActivityStatus: ()=> dispatch(getActivityStatus()),
   GetActivityThreadChat: (idActivity, idChat) => dispatch(getActivityThreadChat(idActivity, idChat)),
   doFeedback: (data) => dispatch(createChat(data))
