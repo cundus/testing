@@ -262,6 +262,7 @@ class Appraisal extends Component {
           },
           onCancel() {}
         });
+        form.resetFields(['assessment']);
       }
     });
   };
