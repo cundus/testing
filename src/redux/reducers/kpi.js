@@ -19,7 +19,16 @@ import {
   SUBMIT_NEXT_FAILED,
   DO_ASSESSMENT,
   DO_ASSESSMENT_SUCCESS,
-  DO_ASSESSMENT_FAILED
+  DO_ASSESSMENT_FAILED,
+  GET_VALUES,
+  GET_VALUES_SUCCESS,
+  GET_VALUES_FAILED,
+  GET_RATING,
+  GET_RATING_SUCCESS,
+  GET_RATING_FAILED,
+  SAVE_VALUES,
+  SAVE_VALUES_SUCCESS,
+  SAVE_VALUES_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -190,6 +199,67 @@ const kpiReducers = (state = initialState, action) => {
         loadingAssess: action.loading,
         statusAssess: action.status,
         messageAssess: action.message
+      };
+    case GET_VALUES:
+      return {
+        ...state,
+        loadingValues: action.loading
+      };
+    case GET_VALUES_SUCCESS:
+      return {
+        ...state,
+        loadingValues: action.loading,
+        statusValues: action.status,
+        messageValues: action.message,
+        dataValues: action.data.values
+      };
+    case GET_VALUES_FAILED:
+      return {
+        ...state,
+        loadingValues: action.loading,
+        statusValues: action.status,
+        messageValues: action.message
+      };
+    case SAVE_VALUES:
+      return {
+        ...state,
+        loadingSaveValues: action.loading
+      };
+    case SAVE_VALUES_SUCCESS:
+      return {
+        ...state,
+        loadingSaveValues: action.loading,
+        statusSaveValues: action.status,
+        messageSaveValues: action.message
+      };
+    case SAVE_VALUES_FAILED:
+      return {
+        ...state,
+        loadingSaveValues: action.loading,
+        statusSaveValues: action.status,
+        messageSaveValues: action.message
+      };
+    case GET_RATING:
+      return {
+        ...state,
+        loading: action.loading,
+        dataRating: []
+      };
+    case GET_RATING_SUCCESS:
+      return {
+        ...state,
+        loading: action.loading,
+        status: action.status,
+        message: action.message,
+        dataRating: action.data.ratings
+      };
+    case GET_RATING_FAILED:
+      return {
+        ...state,
+        loading: action.loading,
+        status: action.status,
+        message: action.message,
+        dataRating: []
       };
     default:
       return { ...state };

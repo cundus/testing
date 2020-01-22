@@ -19,7 +19,16 @@ import {
   SUBMIT_NEXT_FAILED,
   DO_ASSESSMENT,
   DO_ASSESSMENT_SUCCESS,
-  DO_ASSESSMENT_FAILED
+  DO_ASSESSMENT_FAILED,
+  GET_VALUES,
+  GET_VALUES_SUCCESS,
+  GET_VALUES_FAILED,
+  GET_RATING,
+  GET_RATING_SUCCESS,
+  GET_RATING_FAILED,
+  SAVE_VALUES,
+  SAVE_VALUES_SUCCESS,
+  SAVE_VALUES_FAILED
 } from '../action.type';
 
 import {
@@ -29,7 +38,7 @@ import {
 import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext
  } from '../../service/kpiPlanning';
-import { doAssess } from '../../service/appraisal';
+import { doAssess, getValues, getRating, saveValues } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
   dispatch({
@@ -366,6 +375,150 @@ export const doAssessment = (data) => async (dispatch) => {
     } else {
       dispatch({
         type: DO_ASSESSMENT_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const getValueList = (id) => async (dispatch) => {
+  dispatch({
+    type: GET_VALUES,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await getValues(id);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_VALUES_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_VALUES_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_VALUES_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_VALUES_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const getRatings = () => async (dispatch) => {
+  dispatch({
+    type: GET_RATING,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await getRating();
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_RATING_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_RATING_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_RATING_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_RATING_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const saveValueList = (id, data) => async (dispatch) => {
+  dispatch({
+    type: SAVE_VALUES,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await saveValues(id, data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: SAVE_VALUES_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: SAVE_VALUES_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: SAVE_VALUES_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: SAVE_VALUES_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',
