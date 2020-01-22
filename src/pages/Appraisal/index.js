@@ -305,7 +305,7 @@ class Appraisal extends Component {
           </center>
           <br />
           <div>
-            <Tabs defaultActiveKey="2" type="card">
+            <Tabs defaultActiveKey="1" type="card">
               <TabPane tab="KPI" key="1">
                 {!loadingKpis ?
                   <TableKPI
