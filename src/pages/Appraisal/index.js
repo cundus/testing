@@ -8,7 +8,8 @@ import {
   Col,
   Row,
   Spin,
-  message
+  message,
+  Modal
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -16,13 +17,14 @@ import TableKPI from './ components/kpi';
 import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
-  doGetKpiList, doAssessment
+  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList
 } from '../../redux/actions/kpi';
 import ModalAssessment from './ components/modalAssesment';
 import { Success } from '../../redux/status-code-type';
 
 const { Text } = Typography;
 const { TabPane } = Tabs;
+const { confirm } = Modal;
 
 class Appraisal extends Component {
   constructor(props) {
@@ -34,20 +36,24 @@ class Appraisal extends Component {
       assessment: '',
       modalRecord: {},
       loadingResult: '',
-      qualitativeOption: []
+      qualitativeOption: [],
+      dataValueList: [],
+      optionRating: [],
+      loadingMyValue: false
     };
   }
 
   componentDidMount() {
-    this.getKPIData();
+    this.getData();
   }
 
-  getKPIData = async (e) => {
+  getData = async (e) => {
     const {
       userReducers
     } = this.props;
     const { user } = userReducers.result;
     this.getOwnKpiList(user.userId);
+    this.getOwnValues(user.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -85,10 +91,52 @@ class Appraisal extends Component {
       };
       newData.push(data);
     });
+    const dataOrdered = await newData.sort((a, b) => {
+      return a.id - b.id;
+    });
     this.setState({
-      dataKpis: newData,
+      dataKpis: dataOrdered,
       loadingKpis: false,
       loadingResult: ''
+    });
+  }
+
+  getOwnValues = async (id) => {
+    this.setState({
+      loadingMyValue: true
+    });
+    const { getValues, getRatingList, form } = this.props;
+    await getValues(id);
+    await getRatingList();
+    const { kpiReducers } = this.props;
+    const { dataValues, dataRating } = kpiReducers;
+    const newData = [];
+    // for fetching data metrics API
+    // eslint-disable-next-line array-callback-return
+    await dataValues.map((itemValues, index) => {
+      const ratingCheck = dataRating.filter((itemRating) => itemRating.id === itemValues.valuesRatingDTO.rating);
+      const data = {
+        key: itemValues.id,
+        valueId: itemValues.id,
+        index,
+        orderId: itemValues.orderId,
+        name: itemValues.name,
+        rating: ratingCheck.length < 1 ? '' : itemValues.valuesRatingDTO.rating,
+        comment: itemValues.valuesRatingDTO.rating.comment
+      };
+      newData.push(data);
+    });
+    const dataOrdered = await newData.sort((a, b) => {
+      return a.orderId - b.orderId;
+    });
+
+    form.getFieldValue({
+      dataKpi: dataOrdered
+    });
+    this.setState({
+      loadingMyValue: false,
+      optionRating: dataRating,
+      dataValueList: dataOrdered
     });
   }
 
@@ -105,7 +153,7 @@ class Appraisal extends Component {
       actualAchievement: parseFloat(row.achievementType === 1 ? assessment : ''),
       id: row.id
     };
-    form.validateFieldsAndScroll(async (err, values) => {
+    form.validateFieldsAndScroll(['assessment'], async (err, values) => {
       if (!err) {
         await doAssess(data);
         const { kpiReducers } = this.props;
@@ -114,7 +162,7 @@ class Appraisal extends Component {
           if (statusAssess === Success) {
             this.showHideModal(false);
             this.setState({ loadingResult: row.id });
-            this.getKPIData();
+            this.getData();
             message.success('Success Self Assesment');
           } else {
             message.warning(`Sorry, ${messageAssess}`);
@@ -149,7 +197,7 @@ class Appraisal extends Component {
         modalRecord: record
       });
     } else {
-      form.resetFields();
+      form.resetFields(['assessment']);
     }
     this.setState({
       isModalShow: isShow
@@ -161,6 +209,63 @@ class Appraisal extends Component {
     history.push('/monitoring');
   }
 
+  handleChange = (row) => {
+    const { form } = this.props;
+    const { dataValueList } = this.state;
+    const newData = [...dataValueList];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    form.getFieldValue({
+      dataKpi: newData
+    });
+    this.setState({ dataValueList: newData });
+  };
+
+
+  handleSave = () => {
+    const {
+      doSaveValues, userReducers, form
+    } = this.props;
+    const { user } = userReducers.result;
+    const {
+      dataValueList
+    } = this.state;
+    const newData = [];
+    dataValueList.map((item, index) => {
+      const data = {
+        comment: item.comment,
+        rating: item.rating,
+        valueId: item.valueId
+      };
+      newData.push(data);
+    });
+    const data = {
+      ratings: newData
+    };
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err || err.assessment) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSaveValues(user.userId, data);
+            // eslint-disable-next-line react/destructuring-assignment
+            if (this.props.kpiReducers.statusSaveValues === Success) {
+              message.success('Your Values has been saved');
+              this.getOwnValues(user.userId);
+            } else {
+              message.warning(`Sorry, ${this.props.kpiReducers.messageSaveValues}`);
+            }
+          },
+          onCancel() {}
+        });
+      }
+    });
+  };
+
   render() {
     const {
       loadingKpis,
@@ -169,7 +274,10 @@ class Appraisal extends Component {
       assessment,
       modalRecord,
       loadingResult,
-      qualitativeOption
+      qualitativeOption,
+      dataValueList,
+      optionRating,
+      loadingMyValue
     } = this.state;
     const {
       form,
@@ -190,17 +298,14 @@ class Appraisal extends Component {
           <Divider />
           <center>
             <Row>
-              <Col xl={12} md={12} xs={12} style={{ paddingRight: 10 }}>
-                <CardRating boxRateColor="#57EA91" title="Your Score" rate="2.2" desc="Your final KPI Score" />
-              </Col>
-              <Col xl={12} md={12} xs={12} style={{ paddingLeft: 10 }}>
-                <CardRating boxRateColor="#F666B5" title="Your Rating" rate="2.2" desc="Your final Rating" />
+              <Col xl={24} md={24} xs={24}>
+                <CardRating boxRateColor="#F666B5" title="Your Rating" rate="2.2" desc="Your final Rating based on Score" />
               </Col>
             </Row>
           </center>
           <br />
           <div>
-            <Tabs defaultActiveKey="1" type="card">
+            <Tabs defaultActiveKey="2" type="card">
               <TabPane tab="KPI" key="1">
                 {!loadingKpis ?
                   <TableKPI
@@ -213,9 +318,15 @@ class Appraisal extends Component {
                   /> : <center><Spin /></center>}
               </TabPane>
               <TabPane tab="Values" key="2">
-                <TableValue
-                  dataOwn={[]}
-                />
+                {!loadingMyValue?<TableValue
+                  form={form}
+                  loading={loadingMyValue}
+                  dataSource={dataValueList}
+                  handleChangeField={this.handleChange}
+                  goToMonitoring={this.goToMonitoring}
+                  handleSave={this.handleSave}
+                  optionRating={optionRating}
+                /> : <center><Spin /></center>}
               </TabPane>
             </Tabs>
             <ModalAssessment
@@ -243,7 +354,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
-  doAssess: (data) => dispatch(doAssessment(data))
+  doAssess: (data) => dispatch(doAssessment(data)),
+  getValues: (id) => dispatch(getValueList(id)),
+  getRatingList: () => dispatch(getRatings()),
+  doSaveValues: (id, data) => dispatch(saveValueList(id, data))
 });
 
 const connectToComponent = connect(

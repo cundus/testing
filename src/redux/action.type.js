@@ -23,6 +23,18 @@ export const GET_METRICS = 'GET_METRICS';
 export const GET_METRICS_SUCCESS = 'GET_METRICS_SUCCESS';
 export const GET_METRICS_FAILED = 'GET_METRICS_FAILED';
 
+export const GET_VALUES = 'GET_VALUES';
+export const GET_VALUES_SUCCESS = 'GET_VALUES_SUCCESS';
+export const GET_VALUES_FAILED = 'GET_VALUES_FAILED';
+
+export const SAVE_VALUES = 'SAVE_VALUES';
+export const SAVE_VALUES_SUCCESS = 'SAVE_VALUES_SUCCESS';
+export const SAVE_VALUES_FAILED = 'SAVE_VALUES_FAILED';
+
+export const GET_RATING = 'GET_RATING';
+export const GET_RATING_SUCCESS = 'GET_RATING_SUCCESS';
+export const GET_RATING_FAILED = 'GET_RATING_FAILED';
+
 // AUTH AND USER
 export const getUserInfo = 'GET_USER_INFO';
 export const errGetUserInfo = 'ERR_GET_USER_INFO';

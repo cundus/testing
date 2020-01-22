@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { Select, Button, Form } from 'antd';
 import DataTable from '../../../components/dataTable';
+
+const { Option } = Select;
 
 class Value extends Component {
   constructor(props) {
@@ -7,45 +10,110 @@ class Value extends Component {
     this.columns = [
       {
         title: 'Section',
-        dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline'
+        dataIndex: 'name'
+        // align: 'center'
       },
       {
         title: 'Ratings',
-        dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline'
+        dataIndex: 'rating',
+        align: 'center',
+        render: (text, record) => {
+          const { optionRating, form } = this.props;
+          return (
+            <Form>
+              <Form.Item style={{ width: '100%' }}>
+                {form.getFieldDecorator(`dataKpi[${record.index}].rating`, {
+                  rules: [{ required: true, message: 'Rating is required' }],
+                  initialValue: record.rating
+                })(
+                  <Select placeholder="Choose Value" onChange={() => this.change(record, [`dataKpi[${record.index}].rating`])}>
+                    {optionRating && optionRating.map((value, index) => {
+                      return <Option key={index} value={value.id}>{value.rating}</Option>;
+                    })}
+                  </Select>
+                )}
+              </Form.Item>
+            </Form>
+          );
+        }
       },
       {
-        title: 'Remarks',
-        dataIndex: 'Upload',
-        placeholder: 'Enter KPI Weight'
+        title: 'Remarks/Evidence',
+        dataIndex: 'comment',
+        align: 'center',
+        placeholder: 'Enter your Remarks here',
+        editable: true
       },
       {
         title: 'Upload',
-        dataIndex: 'L1',
-        placeholder: 'Enter Level 1'
+        dataIndex: 'upload',
+        align: 'center'
       },
       {
-        title: 'Feedbacks',
-        dataIndex: 'L2',
-        placeholder: 'Enter Level 2'
+        title: 'Feedback',
+        dataIndex: 'feedback',
+        placeholder: 'Enter Level 2',
+        align: 'center',
+        className: 'ant-table-th-yellow'
       }
     ];
   }
 
+  change = (record, field) => {
+    const { handleChangeField, form } = this.props;
+    setTimeout(() => form.validateFields(field, (errors, values) => {
+      const item = values.dataKpi[record.index];
+      handleChangeField({
+        ...record,
+        ...item
+      });
+    }), 100);
+  };
+
   render() {
     const { columns } = this;
     const {
-      dataOwn,
+      dataSource,
       handleChangeField,
+      form,
+      loading,
+      goToMonitoring,
+      handleSave
     } = this.props;
     return (
       <div>
-        <DataTable
-          columns={columns}
-          datasource={dataOwn}
-          handlechange={handleChangeField}
-        />
+        <div>
+          <DataTable
+            form={form}
+            columns={columns}
+            datasource={dataSource}
+            loading={loading}
+            handlechange={handleChangeField}
+          />
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <Button
+            id="go-monitoring"
+            onClick={() => goToMonitoring()}
+            style={{ margin: 10 }}
+          >
+            Go To Monitoring
+          </Button>
+          <Button
+            id="go-monitoring"
+            onClick={() => handleSave()}
+            style={{ margin: 10 }}
+          >
+            Save values
+          </Button>
+          <Button
+            id="send-manager"
+            type="primary"
+            style={{ margin: 10 }}
+           >
+            Send To Manager
+          </Button>
+        </div>
       </div>
     );
   }
