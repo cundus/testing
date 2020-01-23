@@ -91,29 +91,6 @@ class Value extends Component {
             handlechange={handleChangeField}
           />
         </div>
-        <div style={{ textAlign: 'center' }}>
-          <Button
-            id="go-monitoring"
-            onClick={() => goToMonitoring()}
-            style={{ margin: 10 }}
-          >
-            Go To Monitoring
-          </Button>
-          <Button
-            id="go-monitoring"
-            onClick={() => handleSave()}
-            style={{ margin: 10 }}
-          >
-            Save values
-          </Button>
-          <Button
-            id="send-manager"
-            type="primary"
-            style={{ margin: 10 }}
-           >
-            Send To Manager
-          </Button>
-        </div>
       </div>
     );
   }
