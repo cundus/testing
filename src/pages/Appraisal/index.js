@@ -134,7 +134,7 @@ class Appraisal extends Component {
         orderId: itemValues.orderId,
         name: itemValues.name,
         rating: ratingCheck.length < 1 ? '' : itemValues.valuesRatingDTO.rating,
-        comment: itemValues.valuesRatingDTO.rating.comment
+        comment: itemValues.valuesRatingDTO.comment
       };
       newData.push(data);
     });
@@ -149,7 +149,6 @@ class Appraisal extends Component {
   }
 
   handleChangeAssessment = (row) => {
-    const { form } = this.props;
     const { dataKpis } = this.state;
     const newData = [...dataKpis];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -178,8 +177,8 @@ class Appraisal extends Component {
       assesments: assessment,
       challengeYourself: challengeYour
     };
-    form.validateFieldsAndScroll(async (err, values) => {
-      if (!err || err.dataGeneral) {
+    form.validateFieldsAndScroll(['dataKpi'], async (err, values) => {
+      if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -203,7 +202,7 @@ class Appraisal extends Component {
           onCancel() {}
         });
       } else {
-        message.warning('Please fill out all assessment');
+        message.warning('Sorry, Please fill out all your assessment');
       }
     });
   };
@@ -252,8 +251,8 @@ class Appraisal extends Component {
     const data = {
       ratings: newData
     };
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err || err.dataKpi) {
+    form.validateFieldsAndScroll(['dataGeneral'], (err, values) => {
+      if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {

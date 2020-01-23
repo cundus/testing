@@ -95,14 +95,19 @@ class KPI extends Component {
         const {
           form,
           isModalShow,
-          // assessment,
           showHideModal,
-          // qualitativeOption,
           handleChangeField
         } = this.props;
+        let error = false;
+        const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
+        if (field.dataKpi[record.index].assessment) {
+          error = true;
+        } else {
+          error = false;
+        }
         return (
           <div>
-            <Button type="primary" ghost onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
+            <Button type={error ? 'danger' : 'primary'} ghost onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
             <ModalAssessment
               form={form}
               isModalShow={isModalShow === record.id}
@@ -111,7 +116,8 @@ class KPI extends Component {
               modalRecord={record}
               showHideModal={showHideModal}
               handleChangeAssessment={handleChangeField}
-            />
+            /> <br />
+            {error && <Text type="danger">is required</Text>}
           </div>
         );
       }
