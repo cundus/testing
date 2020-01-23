@@ -107,7 +107,8 @@ class KPI extends Component {
         }
         return (
           <div>
-            <Button type={error ? 'danger' : 'primary'} ghost onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <Button type={error ? 'danger' : 'primary'} ghost onClick={() => showHideModal(record.id)}>Assess</Button>
             <ModalAssessment
               form={form}
               isModalShow={isModalShow === record.id}
@@ -116,7 +117,8 @@ class KPI extends Component {
               modalRecord={record}
               showHideModal={showHideModal}
               handleChangeAssessment={handleChangeField}
-            /> <br />
+            />
+            <br />
             {error && <Text type="danger">is required</Text>}
           </div>
         );
@@ -134,8 +136,7 @@ class KPI extends Component {
     const {
       dataSource,
       loading,
-      form,
-      goToMonitoring
+      form
     } = this.props;
     return (
       <div>
@@ -154,11 +155,10 @@ export default KPI;
 
 KPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
-  handleAddRow: PropTypes.func,
   handleChangeField: PropTypes.func,
-  handleSaveDraft: PropTypes.func,
-  handleError: PropTypes.func,
-  handleDelete: PropTypes.func,
+  showHideModal: PropTypes.func,
+  loadingResult: PropTypes.bool,
+  isModalShow: PropTypes.bool,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
   form: PropTypes.instanceOf(Object)

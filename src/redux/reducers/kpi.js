@@ -28,7 +28,13 @@ import {
   GET_RATING_FAILED,
   SAVE_VALUES,
   SAVE_VALUES_SUCCESS,
-  SAVE_VALUES_FAILED
+  SAVE_VALUES_FAILED,
+  ATTACHMENT_FILE_SUCCESS,
+  ATTACHMENT_FILE,
+  ATTACHMENT_FILE_FAILED,
+  DELETE_FILE,
+  DELETE_FILE_SUCCESS,
+  DELETE_FILE_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -260,6 +266,44 @@ const kpiReducers = (state = initialState, action) => {
         status: action.status,
         message: action.message,
         dataRating: []
+      };
+    case ATTACHMENT_FILE:
+      return {
+        ...state,
+        loadingAttach: action.loading
+      };
+    case ATTACHMENT_FILE_SUCCESS:
+      return {
+        ...state,
+        loadingAttach: action.loading,
+        statusAttach: action.status,
+        messageAttach: action.message
+      };
+    case ATTACHMENT_FILE_FAILED:
+      return {
+        ...state,
+        loadingAttach: action.loading,
+        statusAttach: action.status,
+        messageAttach: action.message
+      };
+    case DELETE_FILE:
+      return {
+        ...state,
+        loadingDeleteFile: action.loading
+      };
+    case DELETE_FILE_SUCCESS:
+      return {
+        ...state,
+        loadingDeleteFile: action.loading,
+        statusDeleteFile: action.status,
+        messageDeleteFile: action.message
+      };
+    case DELETE_FILE_FAILED:
+      return {
+        ...state,
+        loadingDeleteFile: action.loading,
+        statusDeleteFile: action.status,
+        messageDeleteFile: action.message
       };
     default:
       return { ...state };

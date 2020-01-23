@@ -109,19 +109,37 @@ class Appraisal extends Component {
     });
   }
 
-  getOwnValues = async (id) => {
-    this.setState({
-      loadingMyValue: true
-    });
+  getOwnValues = async (id, noLoading) => {
+    if (!noLoading) {
+      this.setState({
+        loadingMyValue: true
+      });
+    }
     const { getValues, getRatingList } = this.props;
     await getValues(id);
-    await getRatingList();
+    if (!noLoading) {
+      await getRatingList();
+    }
     const { kpiReducers } = this.props;
     const { dataValues, dataRating } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     await dataValues.map((itemValues, index) => {
+      const newFiles = [];
+      // eslint-disable-next-line no-unused-expressions
+      itemValues.attachments && itemValues.attachments.map((files) => {
+        const data = {
+          uid: files.id,
+          id: files.id,
+          valueId: files.valueId,
+          name: files.fileName,
+          status: 'done',
+          url: files.fileContent
+        };
+        newFiles.push(data);
+        return data;
+      });
       const ratingCheck = dataRating.filter((itemRating) => itemRating.id === itemValues.valuesRatingDTO.rating);
       const data = {
         key: itemValues.id,
@@ -130,7 +148,8 @@ class Appraisal extends Component {
         orderId: itemValues.orderId,
         name: itemValues.name,
         rating: ratingCheck.length < 1 ? '' : itemValues.valuesRatingDTO.rating,
-        comment: itemValues.valuesRatingDTO.comment
+        comment: itemValues.valuesRatingDTO.comment,
+        attachments: newFiles
       };
       newData.push(data);
     });
@@ -369,6 +388,7 @@ class Appraisal extends Component {
                   form={form}
                   loading={loadingMyValue}
                   dataSource={dataValueList}
+                  getOwnValues={this.getOwnValues}
                   handleChangeField={this.handleChange}
                   goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
@@ -376,17 +396,6 @@ class Appraisal extends Component {
                 /> : <center><Spin /></center>}
               </TabPane>
             </Tabs>
-            {/* <ModalAssessment
-              form={form}
-              isModalShow={isModalShow}
-              assessment={assessment}
-              loadingAssess={loadingAssess}
-              qualitativeOption={qualitativeOption}
-              modalRecord={modalRecord}
-              showHideModal={this.showHideModal}
-              handleChangeAssessment={this.handleChangeAssessment}
-              handleSaveAssessment={this.handleSaveAssessment}
-            /> */}
           </div>
         </div>
       </div>

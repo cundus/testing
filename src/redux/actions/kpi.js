@@ -28,7 +28,13 @@ import {
   GET_RATING_FAILED,
   SAVE_VALUES,
   SAVE_VALUES_SUCCESS,
-  SAVE_VALUES_FAILED
+  SAVE_VALUES_FAILED,
+  ATTACHMENT_FILE,
+  ATTACHMENT_FILE_SUCCESS,
+  ATTACHMENT_FILE_FAILED,
+  DELETE_FILE,
+  DELETE_FILE_SUCCESS,
+  DELETE_FILE_FAILED
 } from '../action.type';
 
 import {
@@ -38,7 +44,9 @@ import {
 import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext
  } from '../../service/kpiPlanning';
-import { doAssess, getValues, getRating, saveValues } from '../../service/appraisal';
+import {
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile
+} from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
   dispatch({
@@ -519,6 +527,102 @@ export const saveValueList = (id, data) => async (dispatch) => {
     } else {
       dispatch({
         type: SAVE_VALUES_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doAttachFile = (data) => async (dispatch) => {
+  dispatch({
+    type: ATTACHMENT_FILE,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await attachFile(data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: ATTACHMENT_FILE_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doDeleteFiles = (id) => async (dispatch) => {
+  dispatch({
+    type: DELETE_FILE,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await deleteFile(id);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: DELETE_FILE_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: DELETE_FILE_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: DELETE_FILE_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: DELETE_FILE_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',
