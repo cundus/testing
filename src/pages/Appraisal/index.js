@@ -9,7 +9,9 @@ import {
   Row,
   Spin,
   message,
-  Modal
+  Modal,
+  Button,
+  Input
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -19,12 +21,13 @@ import CardRating from './ components/cardRating';
 import {
   doGetKpiList, doAssessment, getValueList, getRatings, saveValueList
 } from '../../redux/actions/kpi';
-import ModalAssessment from './ components/modalAssesment';
-import { Success } from '../../redux/status-code-type';
+// import ModalAssessment from './ components/modalAssesment';
+import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 
 const { Text } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
+const { TextArea } = Input;
 
 class Appraisal extends Component {
   constructor(props) {
@@ -39,13 +42,14 @@ class Appraisal extends Component {
       qualitativeOption: [],
       dataValueList: [],
       optionRating: [],
-      loadingMyValue: false
+      loadingMyValue: false,
+      challengeYour: ''
     };
   }
 
   componentDidMount() {
     this.getData();
-  }
+  }FAILED_SAVE_CHALLENGE_YOURSELF
 
   getData = async (e) => {
     const {
@@ -60,11 +64,11 @@ class Appraisal extends Component {
     const { getKpiList } = this.props;
     await getKpiList(id);
     const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics } = kpiReducers;
+    const { dataKpi, dataKpiMetrics, challenge } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
-    await dataKpi.map((itemKpi) => {
+    await dataKpi.map((itemKpi, index) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -73,6 +77,13 @@ class Appraisal extends Component {
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      const dataKeyMetric = Object.keys(dataMetrics);
+      const newOption = [];
+      dataKeyMetric.map((item) => {
+        const data = dataMetrics[item];
+        newOption.push(data);
+        return data;
+      });
       const data = {
         key: itemKpi.id,
         id: itemKpi.id,
@@ -82,11 +93,11 @@ class Appraisal extends Component {
         baseline: itemKpi.baseline,
         weight: itemKpi.weight,
         rating: itemKpi.rating,
+        index,
         achievementType: itemKpi.achievementType,
-        actualAchievement: itemKpi.actualAchievement,
-        actualAchievementText: itemKpi.actualAchievementText,
+        assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
+        qualitativeOption: newOption,
         metrics: dataKpiMetrics,
-        dataMetrics,
         ...dataMetrics
       };
       newData.push(data);
@@ -96,8 +107,9 @@ class Appraisal extends Component {
     });
     this.setState({
       dataKpis: dataOrdered,
+      challengeYour: challenge,
       loadingKpis: false,
-      loadingResult: ''
+      loadingResult: false
     });
   }
 
@@ -140,67 +152,70 @@ class Appraisal extends Component {
     });
   }
 
-  handleChangeAssessment = (data) => {
-    this.setState({ assessment: data.assessment });
+  handleChangeAssessment = (row) => {
+    const { form } = this.props;
+    const { dataKpis } = this.state;
+    const newData = [...dataKpis];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    form.getFieldValue({
+      dataKpi: newData
+    });
+    this.setState({ dataKpis: newData });
   };
 
-  handleSaveAssessment = async (row) => {
-    const { assessment } = this.state;
+  handleSaveAssessment = async () => {
+    const { dataKpis } = this.state;
     const { doAssess, form} = this.props;
+    const assessment = [];
+    dataKpis.map((item) => {
+      const data = {
+        achievementType: item.achievementType,
+        actualAchievementText: item.achievementType === 0 ? item.assessment : parseFloat(''),
+        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
+        id: item.id
+      };
+      assessment.push(data);
+    });
     const data = {
-      achievementType: row.achievementType,
-      actualAchievementText: row.achievementType === 0 ? assessment : '',
-      actualAchievement: parseFloat(row.achievementType === 1 ? assessment : ''),
-      id: row.id
+      assesments: assessment,
+      challengeYourself: 'test'
     };
-    form.validateFieldsAndScroll(['assessment'], async (err, values) => {
-      if (!err) {
-        await doAssess(data);
-        const { kpiReducers } = this.props;
-        const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
-        if (!loadingAssess) {
-          if (statusAssess === Success) {
-            this.showHideModal(false);
-            this.setState({ loadingResult: row.id });
-            this.getData();
-            message.success('Success Self Assesment');
-          } else {
-            message.warning(`Sorry, ${messageAssess}`);
-          }
-        }
+    form.validateFieldsAndScroll(async (err, values) => {
+      if (!err || err.dataValues) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doAssess(data);
+            const { kpiReducers, userReducers } = this.props;
+            const { user } = userReducers.result;
+            const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
+            if (!loadingAssess) {
+              if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                this.setState({ loadingResult: true });
+                this.getOwnKpiList(user.userId);
+                message.success('Your Assessment has been saved');
+                if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  message.warning(`Sorry, ${messageAssess}`);
+                }
+              } else {
+                message.warning(`Sorry, ${messageAssess}`);
+              }
+            }
+          },
+          onCancel() {}
+        });
       }
     });
   };
 
-  showHideModal = async (isShow, record) => {
-    const { form } = this.props;
-    if (isShow && record) {
-      if (record.achievementType === 0) {
-        const dataKeyMetric = Object.keys(record.dataMetrics);
-        const newData = [];
-        dataKeyMetric.map((item, index) => {
-          const data = record[item];
-          newData.push(data);
-          return data;
-        });
-        this.setState({
-          qualitativeOption: newData
-        });
-      }
-      const data = {
-        assessment: record.achievementType === 0 ?
-          record.actualAchievementText :
-          record.actualAchievement
-      };
-      this.handleChangeAssessment(data);
-      this.setState({
-        modalRecord: record
-      });
-    } else {
-      form.resetFields(['assessment']);
-    }
+  showHideModal = async (id) => {
     this.setState({
-      isModalShow: isShow
+      isModalShow: id
     });
   };
 
@@ -247,7 +262,7 @@ class Appraisal extends Component {
       ratings: newData
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err || err.assessment) {
+      if (!err || err.dataKpi) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -262,9 +277,12 @@ class Appraisal extends Component {
           },
           onCancel() {}
         });
-        form.resetFields(['assessment']);
       }
     });
+  };
+
+  changeChallenge = ({ target: { value } }) => {
+    this.setState({ challengeYour: value });
   };
 
   render() {
@@ -278,7 +296,8 @@ class Appraisal extends Component {
       qualitativeOption,
       dataValueList,
       optionRating,
-      loadingMyValue
+      loadingMyValue,
+      challengeYour
     } = this.state;
     const {
       form,
@@ -309,14 +328,51 @@ class Appraisal extends Component {
             <Tabs defaultActiveKey="1" type="card">
               <TabPane tab="KPI" key="1">
                 {!loadingKpis ?
-                  <TableKPI
+                  <div>
+                    <TableKPI
                     form={form}
+                    isModalShow={isModalShow}
                     goToMonitoring={this.goToMonitoring}
                     loadingResult={loadingResult}
                     showHideModal={this.showHideModal}
                     dataSource={dataKpis}
                     dataMetrics={dataKpiMetrics}
-                  /> : <center><Spin /></center>}
+                    handleChangeField={this.handleChangeAssessment}
+                  />
+                  <div>
+                    <Text strong>Challenge yourself :</Text>
+                    <TextArea
+                      id="challenge-input"
+                      placeholder="Challenge yourself"
+                      label="Challenge yourself"
+                      value={challengeYour}
+                      onChange={this.changeChallenge}
+                    />
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <Button
+                      id="go-monitoring"
+                      onClick={() => this.goToMonitoring()}
+                      style={{ margin: 10 }}
+                    >
+                      Go To Monitoring
+                    </Button>
+                    <Button
+                      id="save-assessment"
+                      onClick={() => this.handleSaveAssessment()}
+                      style={{ margin: 10 }}
+                    >
+                      Save Assessment
+                    </Button>
+                    <Button
+                      id="send-manager"
+                      type="primary"
+                      style={{ margin: 10 }}
+                    >
+                      Send To Manager
+                    </Button>
+                  </div>
+                  </div> : <center><Spin /></center>}
               </TabPane>
               <TabPane tab="Values" key="2">
                 {!loadingMyValue?<TableValue
@@ -330,7 +386,7 @@ class Appraisal extends Component {
                 /> : <center><Spin /></center>}
               </TabPane>
             </Tabs>
-            <ModalAssessment
+            {/* <ModalAssessment
               form={form}
               isModalShow={isModalShow}
               assessment={assessment}
@@ -340,7 +396,7 @@ class Appraisal extends Component {
               showHideModal={this.showHideModal}
               handleChangeAssessment={this.handleChangeAssessment}
               handleSaveAssessment={this.handleSaveAssessment}
-            />
+            /> */}
           </div>
         </div>
       </div>
