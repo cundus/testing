@@ -4,6 +4,7 @@ import {
  Button, Typography, Skeleton
 } from 'antd';
 import { DataTable } from '../../../components';
+import ModalAssessment from './modalAssesment';
 
 const { Text } = Typography;
 class KPI extends Component {
@@ -69,9 +70,17 @@ class KPI extends Component {
       dataIndex: 'result',
       render: (text, record) => {
         const { loadingResult } = this.props;
+        let colorring = 'default';
+        if (record.rating === 'Below') {
+          colorring = '#d1a145';
+        } else if (record.rating === 'Meet') {
+          colorring = '#4ebf37';
+        } else if (record.rating === 'Exceed') {
+          colorring = '#484ef0';
+        }
         return (
-          <Skeleton active loading={loadingResult === record.id} paragraph={false} title={{ width: 'auto' }}>
-            <Text>{record.rating}</Text>
+          <Skeleton active loading={loadingResult} paragraph={false} title={{ width: 'auto' }}>
+            <Text strong style={{ color: colorring }}>{record.rating}</Text>
           </Skeleton>
         );
       }
@@ -83,8 +92,27 @@ class KPI extends Component {
       width: 100,
       dataIndex: 'action',
       render: (text, record) => {
+        const {
+          form,
+          isModalShow,
+          // assessment,
+          showHideModal,
+          // qualitativeOption,
+          handleChangeField
+        } = this.props;
         return (
-          <Button onClick={() => this.props.showHideModal(true, record)}>Assess</Button>
+          <div>
+            <Button onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
+            <ModalAssessment
+              form={form}
+              isModalShow={isModalShow === record.id}
+              assessment={record.assessment}
+              qualitativeOption={record.qualitativeOption}
+              modalRecord={record}
+              showHideModal={showHideModal}
+              handleChangeAssessment={handleChangeField}
+            />
+          </div>
         );
       }
     };
@@ -111,22 +139,6 @@ class KPI extends Component {
           loading={loading}
           datasource={dataSource}
         />
-        <div style={{ textAlign: 'center' }}>
-          <Button
-            id="go-monitoring"
-            onClick={() => goToMonitoring()}
-            style={{ margin: 10 }}
-          >
-            Go To Monitoring
-          </Button>
-          <Button
-            id="send-manager"
-            type="primary"
-            style={{ margin: 10 }}
-          >
-            Send To Manager
-          </Button>
-        </div>
       </div>
     );
   }

@@ -62,8 +62,10 @@ class EditableCell extends React.Component {
     let type = '';
     if (cascadeType === 1) {
       type = 'dataManagerKpi';
-    } else {
+    } else if (cascadeType === 0) {
       type = 'dataKpi';
+    } else if (record.section) {
+      type = 'dataValues';
     }
     let valueType = 'Select type"';
     if (record.achievementType === 0) {

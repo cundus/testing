@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Modal, Form, Select, InputNumber, Typography
+  Modal, Form, Select, InputNumber, Typography, Button
 } from 'antd';
 
 const { Option } = Select;
@@ -10,15 +10,16 @@ const { Text } = Typography;
 class modalAssessment extends Component {
 
   componentDidMount() {
-    //
+    // this.setState({ assessment: modalRecord.assessment});
   }
 
   change = (field) => {
-    const { assesment, handleChangeAssessment, form } = this.props;
+    const { modalRecord, handleChangeAssessment, form } = this.props;
     setTimeout(() => form.validateFields(field, (errors, values) => {
+      const item = values.dataKpi[modalRecord.index];
       handleChangeAssessment({
-        ...assesment,
-        ...values
+        ...modalRecord,
+        ...item
       });
     }), 100);
   };
@@ -32,8 +33,14 @@ class modalAssessment extends Component {
         title="Result"
         visible={isModalShow}
         confirmLoading={loadingAssess}
-        onOk={() => handleSaveAssessment(modalRecord)}
-        onCancel={() => showHideModal(false)}
+        // onOk={() => showHideModal(0)}
+        // onCancel={() => showHideModal(0)}
+        closable={false}
+        footer={[
+          <Button key="submit" type="primary" onClick={() => showHideModal(0)}>
+            Save
+          </Button>
+        ]}
       >
         <Text strong>KPI Subject</Text>
         <br />
@@ -43,20 +50,20 @@ class modalAssessment extends Component {
         <Form>
           {modalRecord.achievementType === 1 ?
           <Form.Item label="Value">
-            {form.getFieldDecorator('assessment', {
+            {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
               rules: [
                 { required: true, message: 'Value is required' },
                 { type: 'number', message: 'Value must be a number' }
               ],
               initialValue: assessment
-            })(<InputNumber size="large" style={{ width: '100%' }} onChange={() => this.change(['assessment'])} />)}
+            })(<InputNumber size="large" style={{ width: '100%' }} onChange={() => this.change([`dataKpi[${modalRecord.index}].assessment`])} />)}
           </Form.Item> :
           <Form.Item label="Value">
-            {form.getFieldDecorator('assessment', {
+            {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
               rules: [{ required: true, message: 'Value is required' }],
               initialValue: assessment
             })(
-              <Select onChange={() => this.change(['assessment'])}>
+              <Select onChange={() => this.change([`dataKpi[${modalRecord.index}].assessment`])}>
                 {qualitativeOption.map((value, index) => {
                   return <Option key={index} value={value}>{value}</Option>;
                 })}
