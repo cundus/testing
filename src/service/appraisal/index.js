@@ -35,6 +35,14 @@ export const getRating = () => customAxios({
   }
 });
 
+export const getKpiRating = () => customAxios({
+  url: '/kpi/rating',
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
 export const attachFile = (data) => customAxios({
   url: 'attachment',
   method: 'POST',

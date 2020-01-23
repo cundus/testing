@@ -34,7 +34,10 @@ import {
   ATTACHMENT_FILE_FAILED,
   DELETE_FILE,
   DELETE_FILE_SUCCESS,
-  DELETE_FILE_FAILED
+  DELETE_FILE_FAILED,
+  GET_KPI_RATING,
+  GET_KPI_RATING_SUCCESS,
+  GET_KPI_RATING_FAILED
 } from '../action.type';
 
 import {
@@ -45,7 +48,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -623,6 +626,54 @@ export const doDeleteFiles = (id) => async (dispatch) => {
     } else {
       dispatch({
         type: DELETE_FILE_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doGetKpiRating = () => async (dispatch) => {
+  dispatch({
+    type: GET_KPI_RATING,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await getKpiRating();
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_KPI_RATING_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',

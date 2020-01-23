@@ -96,7 +96,8 @@ class KPI extends Component {
           form,
           isModalShow,
           showHideModal,
-          handleChangeField
+          handleChangeField,
+          myStep
         } = this.props;
         let error = false;
         const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
@@ -108,7 +109,7 @@ class KPI extends Component {
         return (
           <div>
             {/* eslint-disable-next-line react/jsx-no-bind */}
-            <Button type={error ? 'danger' : 'primary'} ghost onClick={() => showHideModal(record.id)}>Assess</Button>
+            <Button disabled={myStep} type={error ? 'danger' : 'primary'} ghost onClick={() => showHideModal(record.id)}>Assess</Button>
             <ModalAssessment
               form={form}
               isModalShow={isModalShow === record.id}
@@ -161,5 +162,6 @@ KPI.propTypes = {
   isModalShow: PropTypes.bool,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
+  myStep: PropTypes.bool,
   form: PropTypes.instanceOf(Object)
 };

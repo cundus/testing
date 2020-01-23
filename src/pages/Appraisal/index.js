@@ -19,11 +19,11 @@ import TableKPI from './ components/kpi';
 import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
-  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList
+  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext
 } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 const { TextArea } = Input;
@@ -39,7 +39,9 @@ class Appraisal extends Component {
       dataValueList: [],
       optionRating: [],
       loadingMyValue: false,
-      challengeYour: ''
+      challengeYour: '',
+      tab: '1',
+      myStep: ''
     };
   }
 
@@ -57,10 +59,11 @@ class Appraisal extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList } = this.props;
+    const { getKpiList, getKpiRating } = this.props;
     await getKpiList(id);
+    getKpiRating();
     const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics, challenge } = kpiReducers;
+    const { dataKpi, dataKpiMetrics, challenge, currentStep } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -102,6 +105,7 @@ class Appraisal extends Component {
       return a.id - b.id;
     });
     this.setState({
+      myStep: currentStep === "Performance Review Manager",
       dataKpis: dataOrdered,
       challengeYour: challenge,
       loadingKpis: false,
@@ -229,6 +233,10 @@ class Appraisal extends Component {
     });
   };
 
+  changeTab = (activeKey) => {
+    this.setState({ tab: activeKey });
+  };
+
   goToMonitoring = () => {
     const { history } = this.props;
     history.push('/monitoring');
@@ -273,18 +281,106 @@ class Appraisal extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            const { kpiReducers } = this.props;
             await doSaveValues(user.userId, data);
-            // eslint-disable-next-line react/destructuring-assignment
-            if (this.props.kpiReducers.statusSaveValues === Success) {
-              message.success('Your Values has been saved');
-              this.getOwnValues(user.userId);
-            } else {
-              message.warning(`Sorry, ${kpiReducers.messageSaveValues}`);
+            const { kpiReducers } = this.props;
+            if (!kpiReducers.loadingSaveValues) {
+              if (kpiReducers.statusSaveValues === Success) {
+                message.success('Your Values has been saved');
+                this.getOwnValues(user.userId);
+              } else {
+                message.warning(`Sorry, ${kpiReducers.messageSaveValues}`);
+              }
             }
           },
           onCancel() {}
         });
+      }
+    });
+  };
+
+
+  handleSubmit = () => {
+    const { dataKpis, challengeYour } = this.state;
+    const {
+      doSaveValues, userReducers, form, doAssess, submitNext
+    } = this.props;
+    const { user } = userReducers.result;
+    // assessment
+    const assessment = [];
+    dataKpis.map((item) => {
+      const data = {
+        achievementType: item.achievementType,
+        actualAchievementText: item.achievementType === 0 ? item.assessment : '',
+        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
+        id: item.id
+      };
+      assessment.push(data);
+      return data;
+    });
+    const dataAssessment = {
+      assesments: assessment,
+      challengeYourself: challengeYour
+    };
+    // values
+    const {
+      dataValueList
+    } = this.state;
+    const newData = [];
+    dataValueList.map((item) => {
+      const data = {
+        comment: item.comment,
+        rating: item.rating,
+        valueId: item.valueId
+      };
+      newData.push(data);
+      return data;
+    });
+    const dataValues = {
+      ratings: newData
+    };
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doAssess(dataAssessment);
+            await doSaveValues(user.userId, dataValues);
+            const { kpiReducers } = this.props;
+            const {
+              loadingAssess,
+              statusAssess,
+              messageAssess
+            } = kpiReducers;
+            const {
+              loadingSaveValues,
+              statusSaveValues,
+              messageSaveValues
+            } = kpiReducers;
+            if (!loadingAssess && !loadingSaveValues) {
+              if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                if (statusSaveValues === Success) {
+                  this.getData();
+                  submitNext(user.userId);
+                  message.success('Your Appraisal has been sent to your Manager');
+                  if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                    message.warning(`Sorry, ${messageAssess}`);
+                  }
+                } else {
+                  message.warning(`Sorry, ${messageSaveValues}`);
+                }
+              } else {
+                message.warning(`Sorry, ${messageAssess}`);
+              }
+            }
+          },
+          onCancel() {}
+        });
+      } else if (err.dataKpi) {
+        message.warning('Please fill out your Assessment');
+        this.changeTab('1');
+      } else if (err.dataGeneral) {
+        message.warning('You need to fill Values before submiting to the manager');
+        this.changeTab('2');
       }
     });
   };
@@ -302,7 +398,9 @@ class Appraisal extends Component {
       dataValueList,
       optionRating,
       loadingMyValue,
-      challengeYour
+      challengeYour,
+      tab,
+      myStep
     } = this.state;
     const {
       form,
@@ -326,7 +424,7 @@ class Appraisal extends Component {
                 <CardRating
                   boxRateColor="#F666B5"
                   title="Your Rating"
-                  rate="2.2"
+                  rate=""
                   desc="Your final Rating based on Score"
                 />
               </Col>
@@ -334,7 +432,7 @@ class Appraisal extends Component {
           </center>
           <br />
           <div>
-            <Tabs defaultActiveKey="1" type="card">
+            <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
                 {!loadingKpis ?
                   <div>
@@ -346,6 +444,7 @@ class Appraisal extends Component {
                       showHideModal={this.showHideModal}
                       dataSource={dataKpis}
                       dataMetrics={dataKpiMetrics}
+                      myStep={myStep}
                       handleChangeField={this.handleChangeAssessment}
                     />
                     <div>
@@ -355,32 +454,38 @@ class Appraisal extends Component {
                         placeholder="Challenge yourself"
                         label="Challenge yourself"
                         value={challengeYour}
+                        disabled={myStep}
                         onChange={this.changeChallenge}
                       />
                     </div>
-                    <div style={{ textAlign: 'center' }}>
-                      <Button
-                        id="go-monitoring"
-                        onClick={this.goToMonitoring}
-                        style={{ margin: 10 }}
-                      >
-                        Go To Monitoring
-                      </Button>
-                      <Button
-                        id="save-assessment"
-                        onClick={this.handleSaveAssessment}
-                        style={{ margin: 10 }}
-                      >
-                        Save Assessment
-                      </Button>
-                      <Button
-                        id="send-manager"
-                        type="primary"
-                        style={{ margin: 10 }}
-                      >
-                        Send To Manager
-                      </Button>
-                    </div>
+                    {myStep ?
+                      <div style={{ textAlign: 'center', margin: 40 }}>
+                        <Title level={4} type="warning" ghost strong>Your Appraisal has been sent to your Manager</Title>
+                      </div> :
+                      <div style={{ textAlign: 'center' }}>
+                        <Button
+                          id="go-monitoring"
+                          onClick={this.goToMonitoring}
+                          style={{ margin: 10 }}
+                        >
+                          Go To Monitoring
+                        </Button>
+                        <Button
+                          id="save-assessment"
+                          onClick={this.handleSaveAssessment}
+                          style={{ margin: 10 }}
+                        >
+                          Save Assessment
+                        </Button>
+                        <Button
+                          id="send-manager"
+                          type="primary"
+                          onClick={this.handleSubmit}
+                          style={{ margin: 10 }}
+                        >
+                          Send To Manager
+                        </Button>
+                      </div>}
                   </div> : <center><Spin /></center>}
               </TabPane>
               <TabPane tab="Values" key="2">
@@ -390,8 +495,10 @@ class Appraisal extends Component {
                   dataSource={dataValueList}
                   getOwnValues={this.getOwnValues}
                   handleChangeField={this.handleChange}
+                  handleSubmit={this.handleSubmit}
                   goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
+                  myStep={myStep}
                   optionRating={optionRating}
                 /> : <center><Spin /></center>}
               </TabPane>
@@ -413,7 +520,9 @@ const mapDispatchToProps = (dispatch) => ({
   doAssess: (data) => dispatch(doAssessment(data)),
   getValues: (id) => dispatch(getValueList(id)),
   getRatingList: () => dispatch(getRatings()),
-  doSaveValues: (id, data) => dispatch(saveValueList(id, data))
+  getKpiRating: () => dispatch(doGetKpiRating()),
+  doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
+  submitNext: (id) => dispatch(doSubmitNext(id))
 });
 
 const connectToComponent = connect(
@@ -430,6 +539,8 @@ Appraisal.propTypes = {
   getRatingList: PropTypes.func,
   getValues: PropTypes.func,
   getKpiList: PropTypes.func,
+  getKpiRating: PropTypes.func,
+  submitNext: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)

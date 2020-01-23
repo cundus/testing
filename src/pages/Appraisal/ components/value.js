@@ -11,7 +11,7 @@ import {
 import { Success } from '../../../redux/status-code-type';
 
 const { Option } = Select;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 class Value extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ class Value extends Component {
         dataIndex: 'rating',
         align: 'center',
         render: (text, record) => {
-          const { optionRating, form } = this.props;
+          const { optionRating, form, myStep } = this.props;
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
@@ -37,6 +37,7 @@ class Value extends Component {
                 })(
                   <Select
                     placeholder="Choose Value"
+                    disabled={myStep}
                     // eslint-disable-next-line react/jsx-no-bind
                     onChange={() => this.change(record, [`dataKpi[${record.index}].rating`])}
                   >
@@ -55,7 +56,8 @@ class Value extends Component {
         dataIndex: 'comment',
         align: 'center',
         placeholder: 'Enter your Remarks here',
-        editable: true
+        // eslint-disable-next-line react/destructuring-assignment
+        editable: !this.props.myStep
       },
       {
         title: 'Upload',
@@ -70,7 +72,9 @@ class Value extends Component {
             customRequest: this.uploadFile(record),
             onRemove: this.deleteFile,
             onPreview: this.download,
-            onDownload: this.download
+            onDownload: this.download,
+            // eslint-disable-next-line react/destructuring-assignment
+            disabled: this.props.myStep
           };
           return (
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -214,7 +218,11 @@ class Value extends Component {
       dataSource,
       handleChangeField,
       form,
-      loading
+      goToMonitoring,
+      handleSave,
+      loading,
+      handleSubmit,
+      myStep
     } = this.props;
     return (
       <div>
@@ -227,6 +235,34 @@ class Value extends Component {
             handlechange={handleChangeField}
           />
         </div>
+        {myStep ?
+          <div style={{ textAlign: 'center', margin: 40 }}>
+            <Title level={4} type="warning" ghost strong>Your Appraisal has been sent to your Manager</Title>
+          </div> :
+          <div style={{ textAlign: 'center' }}>
+            <Button
+              id="go-monitoring"
+              onClick={goToMonitoring}
+              style={{ margin: 10 }}
+            >
+              Go To Monitoring
+            </Button>
+            <Button
+              id="save-values"
+              onClick={handleSave}
+              style={{ margin: 10 }}
+            >
+              Save Values
+            </Button>
+            <Button
+              id="send-manager"
+              type="primary"
+              onClick={handleSubmit}
+              style={{ margin: 10 }}
+            >
+              Send To Manager
+            </Button>
+          </div>}
       </div>
     );
   }
@@ -255,9 +291,13 @@ Value.propTypes = {
   attachFile: PropTypes.func,
   deleteFiles: PropTypes.func,
   getOwnValues: PropTypes.func,
+  handleSave: PropTypes.func,
+  goToMonitoring: PropTypes.func,
+  handleSubmit: PropTypes.func,
   userR: PropTypes.instanceOf(Object),
   kpiR: PropTypes.instanceOf(Object),
   optionRating: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
+  myStep: PropTypes.bool,
   form: PropTypes.instanceOf(Object)
 };

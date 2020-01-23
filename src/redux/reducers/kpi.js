@@ -34,7 +34,10 @@ import {
   ATTACHMENT_FILE_FAILED,
   DELETE_FILE,
   DELETE_FILE_SUCCESS,
-  DELETE_FILE_FAILED
+  DELETE_FILE_FAILED,
+  GET_KPI_RATING,
+  GET_KPI_RATING_SUCCESS,
+  GET_KPI_RATING_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -304,6 +307,28 @@ const kpiReducers = (state = initialState, action) => {
         loadingDeleteFile: action.loading,
         statusDeleteFile: action.status,
         messageDeleteFile: action.message
+      };
+    case GET_KPI_RATING:
+      return {
+        ...state,
+        loadingKpiRating: action.loading,
+        dataKpiRating: {}
+      };
+    case GET_KPI_RATING_SUCCESS:
+      return {
+        ...state,
+        loadingKpiRating: action.loading,
+        statusKpiRating: action.status,
+        messageKpiRating: action.message,
+        dataKpiRating: action.data
+      };
+    case GET_KPI_RATING_FAILED:
+      return {
+        ...state,
+        loadingKpiRating: action.loading,
+        statusKpiRating: action.status,
+        messageKpiRating: action.message,
+        dataKpiRating: {}
       };
     default:
       return { ...state };
