@@ -261,7 +261,7 @@ class CreateKPI extends Component {
           onOk: async () => {
             await doSavingKpi(data, user.userId);
             const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
+            if (kpiReducers.statusSaveKPI === Success || kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
               stepChange(1); // go to draft
             } else {
