@@ -23,7 +23,14 @@ class EditableCell extends React.Component {
   change = (index, field) => {
     const { record, handlechange, form } = this.props;
     setTimeout(() => form.validateFields(field, (errors, values) => {
-      const item = values.dataKpi[index];
+      let item = {};
+      if (record.cascadeType === 1) {
+        item = values.dataManagerKpi[index];
+      } else if (record.cascadeType === 0) {
+        item = values.dataKpi[index];
+      } else {
+        item = values.dataGeneral[index];
+      }
       handlechange({
         ...record,
         ...item
@@ -64,8 +71,8 @@ class EditableCell extends React.Component {
       type = 'dataManagerKpi';
     } else if (cascadeType === 0) {
       type = 'dataKpi';
-    } else if (record.section) {
-      type = 'dataValues';
+    } else {
+      type = 'dataGeneral';
     }
     let valueType = 'Select type"';
     if (record.achievementType === 0) {

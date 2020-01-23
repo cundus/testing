@@ -23,7 +23,7 @@ class Monitoring extends Component {
             <div>
                <div>
                 <Divider />
-                <Text strong>Monitoring My Team KPI & Non-KPI Status</Text>
+                <Text strong>Monitoring My Team KPI & Non-KPI Status </Text>
                 <Text>
                   {`Monitoring your team KPI and Non-KPI`}
                 </Text>
