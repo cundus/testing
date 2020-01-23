@@ -34,3 +34,28 @@ export const getRating = () => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const getKpiRating = () => customAxios({
+  url: '/kpi/rating',
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+export const attachFile = (data) => customAxios({
+  url: 'attachment',
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
+
+export const deleteFile = (id) => customAxios({
+  url: `attachment/${id}`,
+  method: 'DELETE',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
