@@ -102,7 +102,7 @@ class KPI extends Component {
         } = this.props;
         return (
           <div>
-            <Button onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
+            <Button type="primary" ghost onClick={() => this.props.showHideModal(record.id)}>Assess</Button>
             <ModalAssessment
               form={form}
               isModalShow={isModalShow === record.id}

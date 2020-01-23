@@ -141,10 +141,6 @@ class Appraisal extends Component {
     const dataOrdered = await newData.sort((a, b) => {
       return a.orderId - b.orderId;
     });
-
-    form.getFieldValue({
-      dataKpi: dataOrdered
-    });
     this.setState({
       loadingMyValue: false,
       optionRating: dataRating,
@@ -162,20 +158,17 @@ class Appraisal extends Component {
       ...item,
       ...row
     });
-    form.getFieldValue({
-      dataKpi: newData
-    });
     this.setState({ dataKpis: newData });
   };
 
   handleSaveAssessment = async () => {
-    const { dataKpis } = this.state;
+    const { dataKpis, challengeYour } = this.state;
     const { doAssess, form} = this.props;
     const assessment = [];
     dataKpis.map((item) => {
       const data = {
         achievementType: item.achievementType,
-        actualAchievementText: item.achievementType === 0 ? item.assessment : parseFloat(''),
+        actualAchievementText: item.achievementType === 0 ? item.assessment : '',
         actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
         id: item.id
       };
@@ -183,10 +176,10 @@ class Appraisal extends Component {
     });
     const data = {
       assesments: assessment,
-      challengeYourself: 'test'
+      challengeYourself: challengeYour
     };
     form.validateFieldsAndScroll(async (err, values) => {
-      if (!err || err.dataValues) {
+      if (!err || err.dataGeneral) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -209,6 +202,8 @@ class Appraisal extends Component {
           },
           onCancel() {}
         });
+      } else {
+        message.warning('Please fill out all assessment');
       }
     });
   };
@@ -225,7 +220,6 @@ class Appraisal extends Component {
   }
 
   handleChange = (row) => {
-    const { form } = this.props;
     const { dataValueList } = this.state;
     const newData = [...dataValueList];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -233,9 +227,6 @@ class Appraisal extends Component {
     newData.splice(index, 1, {
       ...item,
       ...row
-    });
-    form.getFieldValue({
-      dataKpi: newData
     });
     this.setState({ dataValueList: newData });
   };
