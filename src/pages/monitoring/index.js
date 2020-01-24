@@ -380,7 +380,7 @@ class MonitorKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
               userId={userId}
-              isSuperior={isSuperior}
+              isSuperior={isSuperior || isHasSubmit}
               stafid={stafid}
             />
             <div>
