@@ -350,6 +350,7 @@ class MonitorKPI extends Component {
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
+    const isHasSubmit = (currentStep === 'Performance Review Manager')
     return (
       <div>
         <div>
@@ -364,7 +365,7 @@ class MonitorKPI extends Component {
             <br />
           </center>
         </div>
-        {!loadingKpi && currentStep === 'Performance Review Employee'?
+        {!loadingKpi && (currentStep === 'Performance Review Employee' || currentStep === 'Performance Review Manager') ?
           <div>
             <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
@@ -379,7 +380,7 @@ class MonitorKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
               userId={userId}
-              isSuperior={isSuperior}
+              isSuperior={isSuperior || isHasSubmit}
               stafid={stafid}
             />
             <div>
@@ -408,6 +409,7 @@ class MonitorKPI extends Component {
                   // eslint-disable-next-line react/jsx-no-bind
                     onClick={() =>  this.props.history.push('/monitoring/add')}
                     style={{ margin: 10 }}
+                    disabled={isHasSubmit}
                   >
                   Add KPI
                   </Button>
@@ -415,6 +417,7 @@ class MonitorKPI extends Component {
                     id="save-draft"
                     onClick={handleSaveDraft}
                     style={{ margin: 10 }}
+                    disabled={isHasSubmit}
                   >
                   Save
                   </Button>
