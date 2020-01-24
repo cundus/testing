@@ -147,8 +147,9 @@ class Value extends Component {
       if (kpiR.statusAttach === Success) {
         onSuccess(true, file);
         getOwnValues(user.userId, true);
+        message.success('Your file has been uploaded');
       } else {
-        message.warning('Sorry, failed when attaching files');
+        message.warning(`Sorry, ${kpiR.messageAttach}`);
         onError(false, file);
       }
     }
