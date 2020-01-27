@@ -567,20 +567,30 @@ export const doAttachFile = (data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
-      dispatch({
-        type: ATTACHMENT_FILE_FAILED,
-        loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
-        error
-      });
+    if (error.response) {
+      if (error.response.data) {
+        dispatch({
+          type: ATTACHMENT_FILE_FAILED,
+          loading: false,
+          status: error.response.data.status,
+          message: error.response.data.error,
+          error
+        });
+      } else {
+        dispatch({
+          type: ATTACHMENT_FILE_FAILED,
+          loading: false,
+          status: null,
+          message: 'Failed when attaching files',
+          error
+        });
+      }
     } else {
       dispatch({
         type: ATTACHMENT_FILE_FAILED,
         loading: false,
         status: null,
-        message: 'Something wrong',
+        message: 'Failed when attaching files',
         error
       });
     }

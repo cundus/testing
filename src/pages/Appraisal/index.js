@@ -63,7 +63,9 @@ class Appraisal extends Component {
     await getKpiList(id);
     getKpiRating();
     const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics, challenge, currentStep } = kpiReducers;
+    const {
+      dataKpi, dataKpiMetrics, challenge, currentStep
+    } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -105,7 +107,7 @@ class Appraisal extends Component {
       return a.id - b.id;
     });
     this.setState({
-      myStep: currentStep === "Performance Review Manager",
+      myStep: currentStep === 'Performance Review Manager',
       dataKpis: dataOrdered,
       challengeYour: challenge,
       loadingKpis: false,
@@ -359,8 +361,8 @@ class Appraisal extends Component {
             if (!loadingAssess && !loadingSaveValues) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                 if (statusSaveValues === Success) {
+                  await submitNext(user.userId);
                   this.getData();
-                  submitNext(user.userId);
                   message.success('Your Appraisal has been sent to your Manager');
                   if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                     message.warning(`Sorry, ${messageAssess}`);
@@ -460,7 +462,14 @@ class Appraisal extends Component {
                     </div>
                     {myStep ?
                       <div style={{ textAlign: 'center', margin: 40 }}>
-                        <Title level={4} type="warning" ghost strong>Your Appraisal has been sent to your Manager</Title>
+                        <Title
+                          level={4}
+                          type="warning"
+                          ghost
+                          strong
+                        >
+                          Your Appraisal has been sent to your Manager
+                        </Title>
                       </div> :
                       <div style={{ textAlign: 'center' }}>
                         <Button

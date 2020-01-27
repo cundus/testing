@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Form, Upload, Button, Icon, Typography, message
+  Select, Form, Upload, Button, Icon, Typography, message, Modal
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
   doAttachFile, doDeleteFiles
 } from '../../../redux/actions/kpi';
-import { Success } from '../../../redux/status-code-type';
+import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
 
 const { Option } = Select;
 const { Text, Title } = Typography;
+const { confirm } = Modal;
 
 class Value extends Component {
   constructor(props) {
@@ -102,16 +103,30 @@ class Value extends Component {
       deleteFiles, getOwnValues, userR
     } = this.props;
     const { user } = userR.result;
-    await deleteFiles(file.id);
-    const {
-      kpiR
-    } = this.props;
-    if (!kpiR.loadingAttach) {
-      if (!kpiR.statusAttach === Success) {
-        message.warning('Sorry, failed when deleting files');
-      }
-      getOwnValues(user.userId, true);
-    }
+    confirm({
+      title: 'Are you sure?',
+      content: `Do you really want to delete ${file.name} ?`,
+      okText: 'Delete',
+      cancelText: 'Cancel',
+      onOk: async () => {
+        await deleteFiles(file.id);
+        const {
+          kpiR
+        } = this.props;
+        if (!kpiR.loadingDeleteFile) {
+          if (kpiR.statusDeleteFile === Success) {
+            message.success(`${file.name} has been deleted`);
+            getOwnValues(user.userId, true);
+          } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
+              message.success(`${file.name} has been deleted`);
+              getOwnValues(user.userId, true);
+          } else {
+              message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
+          }
+        }
+      },
+      onCancel() {}
+    });
   }
 
   download = async (file) => {
@@ -147,8 +162,9 @@ class Value extends Component {
       if (kpiR.statusAttach === Success) {
         onSuccess(true, file);
         getOwnValues(user.userId, true);
+        message.success(`${file.name} has been uploaded`);
       } else {
-        message.warning('Sorry, failed when attaching files');
+        message.warning(`Sorry, ${kpiR.messageAttach}`);
         onError(false, file);
       }
     }
