@@ -13,34 +13,38 @@ class modalAssessment extends Component {
     // this.setState({ assessment: modalRecord.assessment});
   }
 
-  change = (field) => {
-    const { modalRecord, handleChangeAssessment, form } = this.props;
-    setTimeout(() => form.validateFields(field, (errors, values) => {
-      const item = values.dataKpi[modalRecord.index];
-      handleChangeAssessment({
-        ...modalRecord,
-        ...item
-      });
-    }), 100);
-  };
+  handleOk = () => {
+    const { modalRecord, handleChangeAssessment, form, showHideModal } = this.props;
+    form.validateFields([`dataKpi[${modalRecord.index}].assessment`], (errors, values) => {
+      if (!errors) {
+        const item = values.dataKpi[modalRecord.index];
+        handleChangeAssessment({
+          ...modalRecord,
+          ...item
+        });
+        showHideModal(0);
+      }
+    });
+  }
+
+  handleCancel = () => {
+    const { modalRecord, form, showHideModal } = this.props;
+    form.resetFields([`dataKpi[${modalRecord.index}].assessment`]);
+    showHideModal(0);
+  }
 
   render() {
     const {
-      assessment, form, isModalShow, handleSaveAssessment, showHideModal, modalRecord, qualitativeOption, loadingAssess
+      assessment, form, isModalShow, modalRecord, qualitativeOption, loadingAssess
     } = this.props;
     return (
       <Modal
         title="Result"
         visible={isModalShow}
         confirmLoading={loadingAssess}
-        // onOk={() => showHideModal(0)}
-        // onCancel={() => showHideModal(0)}
-        closable={false}
-        footer={[
-          <Button key="submit" type="primary" onClick={() => showHideModal(0)}>
-            Save
-          </Button>
-        ]}
+        onOk={this.handleOk}
+        onCancel={this.handleCancel}
+        afterClose={this.handleCancel}
       >
         <Text strong>KPI Subject</Text>
         <br />
@@ -54,16 +58,15 @@ class modalAssessment extends Component {
               rules: [
                 { required: true, message: 'Value is required' },
                 { type: 'number', message: 'Value must be a number' }
-              ],
-              initialValue: assessment
-            })(<InputNumber size="large" style={{ width: '100%' }} onChange={() => this.change([`dataKpi[${modalRecord.index}].assessment`])} />)}
+              ]
+            })(<InputNumber size="large" style={{ width: '100%' }} />)}
           </Form.Item> :
           <Form.Item label="Value">
             {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
               rules: [{ required: true, message: 'Value is required' }],
               initialValue: assessment
             })(
-              <Select onChange={() => this.change([`dataKpi[${modalRecord.index}].assessment`])}>
+              <Select>
                 {qualitativeOption.map((value, index) => {
                   return <Option key={index} value={value}>{value}</Option>;
                 })}
