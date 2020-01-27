@@ -361,8 +361,8 @@ class Appraisal extends Component {
             if (!loadingAssess && !loadingSaveValues) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                 if (statusSaveValues === Success) {
+                  await submitNext(user.userId);
                   this.getData();
-                  submitNext(user.userId);
                   message.success('Your Appraisal has been sent to your Manager');
                   if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                     message.warning(`Sorry, ${messageAssess}`);
