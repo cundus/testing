@@ -44,7 +44,7 @@ export const getKpiRating = () => customAxios({
 });
 
 export const attachFile = (data) => customAxios({
-  url: 'attachment',
+  url: '/attachment',
   method: 'POST',
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
@@ -53,7 +53,7 @@ export const attachFile = (data) => customAxios({
 });
 
 export const deleteFile = (id) => customAxios({
-  url: `attachment/${id}`,
+  url: `/attachment/${id}`,
   method: 'DELETE',
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`

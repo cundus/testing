@@ -75,7 +75,8 @@ class Value extends Component {
             onPreview: this.download,
             onDownload: this.download,
             // eslint-disable-next-line react/destructuring-assignment
-            disabled: this.props.myStep
+            disabled: this.props.myStep,
+            accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
           };
           return (
             // eslint-disable-next-line react/jsx-props-no-spreading
@@ -103,29 +104,37 @@ class Value extends Component {
       deleteFiles, getOwnValues, userR
     } = this.props;
     const { user } = userR.result;
-    confirm({
-      title: 'Are you sure?',
-      content: `Do you really want to delete ${file.name} ?`,
-      okText: 'Delete',
-      cancelText: 'Cancel',
-      onOk: async () => {
-        await deleteFiles(file.id);
-        const {
-          kpiR
-        } = this.props;
-        if (!kpiR.loadingDeleteFile) {
-          if (kpiR.statusDeleteFile === Success) {
-            message.success(`${file.name} has been deleted`);
+    return new Promise((resolve, reject) => {
+      if (file.status === 'done') {
+        confirm({
+          title: 'Are you sure?',
+          content: `Do you really want to delete "${file.name}" ?`,
+          okText: 'Delete',
+          cancelText: 'Cancel',
+          onOk: async () => {
+            await deleteFiles(file.id);
+            const {
+              kpiR
+            } = this.props;
+            if (!kpiR.loadingDeleteFile) {
+              if (kpiR.statusDeleteFile === Success) {
+                message.success(`"${file.name}" has been deleted`);
+                resolve(true);
+              } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
+                message.success(`"${file.name}" has been deleted`);
+                resolve(true);
+              } else {
+                message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
+              }
+            }
             getOwnValues(user.userId, true);
-          } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
-              message.success(`${file.name} has been deleted`);
-              getOwnValues(user.userId, true);
-          } else {
-              message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
-          }
-        }
-      },
-      onCancel() {}
+          },
+          onCancel() {}
+        });
+      } else {
+        resolve(true);
+        getOwnValues(user.userId, true);
+      }
     });
   }
 
@@ -154,18 +163,23 @@ class Value extends Component {
       fileName: file.name,
       fileContent
     };
-    await attachFile(data);
-    const {
-      kpiR
-    } = this.props;
-    if (!kpiR.loadingAttach) {
-      if (kpiR.statusAttach === Success) {
-        onSuccess(true, file);
-        getOwnValues(user.userId, true);
-        message.success(`${file.name} has been uploaded`);
-      } else {
-        message.warning(`Sorry, ${kpiR.messageAttach}`);
-        onError(false, file);
+    if (file.file.size > 5242880) {
+      message.warning('Sorry, Maximum file is 5MB');
+      onError(false, file);
+    } else {
+      await attachFile(data);
+      const {
+        kpiR
+      } = this.props;
+      if (!kpiR.loadingAttach) {
+        if (kpiR.statusAttach === Success) {
+          onSuccess(true, file);
+          getOwnValues(user.userId, true);
+          message.success(`"${file.name}" has been uploaded`);
+        } else {
+          message.warning(`Sorry, ${kpiR.messageAttach}`);
+          onError(false, file);
+        }
       }
     }
   };
