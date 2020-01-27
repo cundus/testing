@@ -8,6 +8,7 @@ import DataTable from '../../../components/dataTable';
 import {
   doAttachFile, doDeleteFiles
 } from '../../../redux/actions/kpi';
+import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
 
 const { Option } = Select;
@@ -119,27 +120,37 @@ class Value extends Component {
             if (!kpiR.loadingDeleteFile) {
               if (kpiR.statusDeleteFile === Success) {
                 message.success(`"${file.name}" has been deleted`);
+                getOwnValues(user.userId, true);
                 resolve(true);
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
                 message.success(`"${file.name}" has been deleted`);
+                getOwnValues(user.userId, true);
                 resolve(true);
               } else {
                 message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
               }
             }
-            getOwnValues(user.userId, true);
           },
           onCancel() {}
         });
       } else {
         resolve(true);
-        getOwnValues(user.userId, true);
       }
     });
   }
 
   download = async (file) => {
-    const linkSource = file.url;
+    const mimeProp = Object.keys(mimeType);
+    let mediaType = '';
+    mimeProp.map((item, index) => {
+      if (file.name.includes(item)) {
+        mediaType = mimeType[item];
+      } else {
+        // mediaType = '';
+      }
+      return mediaType;
+    });
+    const linkSource = `data:${mediaType};base64,${file.url}`;
     const downloadLink = document.createElement('a');
     const fileName = file.name;
 
@@ -157,11 +168,12 @@ class Value extends Component {
     } = this.props;
     const { user } = userR.result;
     const fileContent = await file.data;
+    const b64 = fileContent.replace(/^data:.+;base64,/, '');
     const data = {
       id: 0,
       valueId: record.valueId,
       fileName: file.name,
-      fileContent
+      fileContent: b64
     };
     if (file.file.size > 5242880) {
       message.warning('Sorry, Maximum file is 5MB');
