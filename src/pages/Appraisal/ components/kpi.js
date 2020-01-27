@@ -159,7 +159,7 @@ KPI.propTypes = {
   handleChangeField: PropTypes.func,
   showHideModal: PropTypes.func,
   loadingResult: PropTypes.bool,
-  isModalShow: PropTypes.bool,
+  isModalShow: PropTypes.number,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
   myStep: PropTypes.bool,
