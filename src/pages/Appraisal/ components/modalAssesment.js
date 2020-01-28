@@ -34,8 +34,18 @@ class modalAssessment extends Component {
   }
 
   handleCancel = () => {
-    const { modalRecord, form, showHideModal } = this.props;
-    form.resetFields([`dataKpi[${modalRecord.index}].assessment`]);
+    const { dataSource, form, showHideModal } = this.props;
+    const dataKpi = [];
+    dataSource.map((item) => {
+      const data = {
+        assessment: item.assessment
+      };
+      dataKpi.push(data);
+      return data;
+    });
+    form.setFieldsValue({
+      dataKpi
+    });
     showHideModal(0);
   }
 
@@ -93,7 +103,8 @@ modalAssessment.propTypes = {
   qualitativeOption: PropTypes.instanceOf(Array),
   showHideModal: PropTypes.func,
   handleChangeAssessment: PropTypes.func,
-  modalRecord: PropTypes.instanceOf(Array),
+  modalRecord: PropTypes.instanceOf(Object),
+  dataSource: PropTypes.instanceOf(Array),
   isModalShow: PropTypes.bool,
   // loadingAssess: PropTypes.bool,
   assessment: PropTypes.string || PropTypes.number,

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Form, Upload, Button, Icon, Typography, message, Modal
+  Select, Form, Upload, Button, Icon, Typography, message, Modal, Skeleton
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
@@ -33,7 +33,7 @@ class Value extends Component {
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
-                {form.getFieldDecorator(`dataKpi[${record.index}].rating`, {
+                {form.getFieldDecorator(`dataGeneral[${record.index}].rating`, {
                   rules: [{ required: true, message: 'Rating is required' }],
                   initialValue: record.rating
                 })(
@@ -41,7 +41,7 @@ class Value extends Component {
                     placeholder="Choose Value"
                     disabled={myStep}
                     // eslint-disable-next-line react/jsx-no-bind
-                    onChange={() => this.change(record, [`dataKpi[${record.index}].rating`])}
+                    onChange={() => this.change(record, [`dataGeneral[${record.index}].rating`])}
                   >
                     {optionRating && optionRating.map((value, index) => {
                       return <Option key={index} value={value.id}>{value.rating}</Option>;
@@ -246,7 +246,7 @@ class Value extends Component {
   change = (record, field) => {
     const { handleChangeField, form } = this.props;
     setTimeout(() => form.validateFields(field, (errors, values) => {
-      const item = values.dataKpi[record.index];
+      const item = values.dataGeneral[record.index];
       handleChangeField({
         ...record,
         ...item
@@ -272,39 +272,50 @@ class Value extends Component {
           <DataTable
             form={form}
             columns={columns}
-            datasource={dataSource}
             loading={loading}
             handlechange={handleChangeField}
+            datasource={dataSource}
           />
         </div>
-        {myStep ?
-          <div style={{ textAlign: 'center', margin: 40 }}>
-            <Title level={4} type="warning" ghost strong>Your Appraisal has been sent to your Manager</Title>
-          </div> :
-          <div style={{ textAlign: 'center' }}>
-            <Button
-              id="go-monitoring"
-              onClick={goToMonitoring}
-              style={{ margin: 10 }}
-            >
-              Go To Monitoring
-            </Button>
-            <Button
-              id="save-values"
-              onClick={handleSave}
-              style={{ margin: 10 }}
-            >
-              Save Values
-            </Button>
-            <Button
-              id="send-manager"
-              type="primary"
-              onClick={handleSubmit}
-              style={{ margin: 10 }}
-            >
-              Send To Manager
-            </Button>
-          </div>}
+        <center>
+          <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
+            {myStep ?
+              <div style={{ textAlign: 'center', margin: 40 }}>
+                <Title
+                  level={4}
+                  type="warning"
+                  ghost
+                  strong
+                >
+                  Your Appraisal has been sent to your Manager
+                </Title>
+              </div> :
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  id="go-monitoring"
+                  onClick={goToMonitoring}
+                  style={{ margin: 10 }}
+                >
+                  Go To Monitoring
+                </Button>
+                <Button
+                  id="save-assessment"
+                  onClick={handleSave}
+                  style={{ margin: 10 }}
+                >
+                  Save Values
+                </Button>
+                <Button
+                  id="send-manager"
+                  type="primary"
+                  onClick={handleSubmit}
+                  style={{ margin: 10 }}
+                >
+                  Send To Manager
+                </Button>
+              </div>}
+          </Skeleton>
+        </center>
       </div>
     );
   }

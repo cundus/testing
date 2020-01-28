@@ -7,11 +7,8 @@ import {
   Divider,
   Col,
   Row,
-  Spin,
   message,
-  Modal,
-  Button,
-  Input
+  Modal
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -23,10 +20,9 @@ import {
 } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
-const { TextArea } = Input;
 
 class Appraisal extends Component {
   constructor(props) {
@@ -34,14 +30,14 @@ class Appraisal extends Component {
     this.state = {
       dataKpis: [],
       loadingKpis: true,
-      isModalShow: false,
-      loadingResult: '',
+      isModalShow: 0,
+      loadingResult: false,
       dataValueList: [],
       optionRating: [],
       loadingMyValue: false,
       challengeYour: '',
       tab: '1',
-      myStep: ''
+      myStep: false
     };
   }
 
@@ -59,7 +55,7 @@ class Appraisal extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, getKpiRating } = this.props;
+    const { getKpiList, getKpiRating, form   } = this.props;
     await getKpiList(id);
     getKpiRating();
     const { kpiReducers } = this.props;
@@ -106,6 +102,17 @@ class Appraisal extends Component {
     const dataOrdered = await newData.sort((a, b) => {
       return a.id - b.id;
     });
+    const dataGen = dataOrdered.map((item, i) => {
+      return {
+        assesment: item.assesment
+      };
+    });
+    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+    if (dataKpiCheck) {
+      form.setFieldsValue({
+        dataKpi: dataGen
+      });
+    }
     this.setState({
       myStep: currentStep === 'Performance Review Manager',
       dataKpis: dataOrdered,
@@ -121,11 +128,11 @@ class Appraisal extends Component {
         loadingMyValue: true
       });
     }
-    const { getValues, getRatingList } = this.props;
-    await getValues(id);
+    const { getValues, getRatingList, form } = this.props;
     if (!noLoading) {
       await getRatingList();
     }
+    await getValues(id);
     const { kpiReducers } = this.props;
     const { dataValues, dataRating } = kpiReducers;
     const newData = [];
@@ -153,7 +160,7 @@ class Appraisal extends Component {
         index,
         orderId: itemValues.orderId,
         name: itemValues.name,
-        rating: ratingCheck.length < 1 ? '' : itemValues.valuesRatingDTO.rating,
+        rating: ratingCheck.length < 1 ? 'Choose Value' : itemValues.valuesRatingDTO.rating,
         comment: itemValues.valuesRatingDTO.comment,
         attachments: newFiles
       };
@@ -162,6 +169,18 @@ class Appraisal extends Component {
     const dataOrdered = await newData.sort((a, b) => {
       return a.orderId - b.orderId;
     });
+    const dataGen = dataOrdered.map((item, i) => {
+      return {
+        rating: item.rating,
+        comment: item.comment
+      };
+    });
+    const dataGeneral = form.getFieldsValue(['dataGeneral']);
+    if (dataGeneral) {
+      form.setFieldsValue({
+        dataGeneral: dataGen
+      });
+    }
     this.setState({
       loadingMyValue: false,
       optionRating: dataRating,
@@ -436,69 +455,27 @@ class Appraisal extends Component {
           <div>
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
-                {!loadingKpis ?
-                  <div>
-                    <TableKPI
-                      form={form}
-                      isModalShow={isModalShow}
-                      goToMonitoring={this.goToMonitoring}
-                      loadingResult={loadingResult}
-                      showHideModal={this.showHideModal}
-                      dataSource={dataKpis}
-                      dataMetrics={dataKpiMetrics}
-                      myStep={myStep}
-                      handleChangeField={this.handleChangeAssessment}
-                    />
-                    <div>
-                      <Text strong>Challenge yourself :</Text>
-                      <TextArea
-                        id="challenge-input"
-                        placeholder="Challenge yourself"
-                        label="Challenge yourself"
-                        value={challengeYour}
-                        disabled={myStep}
-                        onChange={this.changeChallenge}
-                      />
-                    </div>
-                    {myStep ?
-                      <div style={{ textAlign: 'center', margin: 40 }}>
-                        <Title
-                          level={4}
-                          type="warning"
-                          ghost
-                          strong
-                        >
-                          Your Appraisal has been sent to your Manager
-                        </Title>
-                      </div> :
-                      <div style={{ textAlign: 'center' }}>
-                        <Button
-                          id="go-monitoring"
-                          onClick={this.goToMonitoring}
-                          style={{ margin: 10 }}
-                        >
-                          Go To Monitoring
-                        </Button>
-                        <Button
-                          id="save-assessment"
-                          onClick={this.handleSaveAssessment}
-                          style={{ margin: 10 }}
-                        >
-                          Save Assessment
-                        </Button>
-                        <Button
-                          id="send-manager"
-                          type="primary"
-                          onClick={this.handleSubmit}
-                          style={{ margin: 10 }}
-                        >
-                          Send To Manager
-                        </Button>
-                      </div>}
-                  </div> : <center><Spin /></center>}
+                <div>
+                  <TableKPI
+                    form={form}
+                    loading={loadingKpis}
+                    isModalShow={isModalShow}
+                    goToMonitoring={this.goToMonitoring}
+                    handleSubmit={this.handleSubmit}
+                    changeChallenge={this.changeChallenge}
+                    challengeYour={challengeYour}
+                    loadingResult={loadingResult}
+                    showHideModal={this.showHideModal}
+                    dataSource={dataKpis}
+                    dataMetrics={dataKpiMetrics}
+                    myStep={myStep}
+                    handleChangeField={this.handleChangeAssessment}
+                    handleSaveAssessment={this.handleSaveAssessment}
+                  />
+                </div>
               </TabPane>
               <TabPane tab="Values" key="2">
-                {!loadingMyValue ? <TableValue
+                <TableValue
                   form={form}
                   loading={loadingMyValue}
                   dataSource={dataValueList}
@@ -509,7 +486,7 @@ class Appraisal extends Component {
                   handleSave={this.handleSave}
                   myStep={myStep}
                   optionRating={optionRating}
-                /> : <center><Spin /></center>}
+                />
               </TabPane>
             </Tabs>
           </div>

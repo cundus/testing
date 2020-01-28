@@ -1,22 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton
+ Button, Typography, Skeleton, Input, Spin
 } from 'antd';
 import { DataTable } from '../../../components';
 import ModalAssessment from './modalAssesment';
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
+const { TextArea } = Input;
+
 class KPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: []
+      columns: [],
+      metrics: []
     };
   }
 
-  componentDidMount() {
-    this.getColumns();
+  componentDidUpdate() {
+    const { metrics } = this.state;
+    const { dataMetrics } = this.props;
+    if (metrics !== dataMetrics) {
+      this.getColumns();
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        metrics: dataMetrics
+      });
+    }
   }
 
   getColumns = async () => {
@@ -97,7 +108,8 @@ class KPI extends Component {
           isModalShow,
           showHideModal,
           handleChangeField,
-          myStep
+          myStep,
+          dataSource
         } = this.props;
         let error = false;
         const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
@@ -108,10 +120,18 @@ class KPI extends Component {
         }
         return (
           <div>
-            {/* eslint-disable-next-line react/jsx-no-bind */}
-            <Button disabled={myStep} type={error ? 'danger' : 'primary'} ghost onClick={() => showHideModal(record.id)}>Assess</Button>
+            <Button
+              disabled={myStep}
+              type={error ? 'danger' : 'primary'}
+              ghost
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => showHideModal(record.id)}
+            >
+              Assess
+            </Button>
             <ModalAssessment
               form={form}
+              dataSource={dataSource}
               isModalShow={isModalShow === record.id}
               assessment={record.assessment}
               qualitativeOption={record.qualitativeOption}
@@ -137,16 +157,76 @@ class KPI extends Component {
     const {
       dataSource,
       loading,
-      form
+      form,
+      challengeYour,
+      myStep,
+      goToMonitoring,
+      handleSubmit,
+      changeChallenge,
+      handleSaveAssessment
     } = this.props;
     return (
       <div>
-        <DataTable
-          form={form}
-          columns={columns}
-          loading={loading}
-          datasource={dataSource}
-        />
+        <div>
+          <Spin
+            spinning={loading}
+          >
+            <DataTable
+              form={form}
+              columns={columns}
+              // loading={loading}
+              datasource={dataSource}
+            />
+            <Text strong>Challenge yourself :</Text>
+            <TextArea
+              id="challenge-input"
+              placeholder="Challenge yourself"
+              label="Challenge yourself"
+              value={challengeYour}
+              disabled={myStep}
+              onChange={changeChallenge}
+            />
+          </Spin>
+        </div>
+        <center>
+          <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
+            {myStep ?
+              <div style={{ textAlign: 'center', margin: 40 }}>
+                <Title
+                  level={4}
+                  type="warning"
+                  ghost
+                  strong
+                >
+                  Your Appraisal has been sent to your Manager
+                </Title>
+              </div> :
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  id="go-monitoring"
+                  onClick={goToMonitoring}
+                  style={{ margin: 10 }}
+                >
+                  Go To Monitoring
+                </Button>
+                <Button
+                  id="save-assessment"
+                  onClick={handleSaveAssessment}
+                  style={{ margin: 10 }}
+                >
+                  Save Assessment
+                </Button>
+                <Button
+                  id="send-manager"
+                  type="primary"
+                  onClick={handleSubmit}
+                  style={{ margin: 10 }}
+                >
+                  Send To Manager
+                </Button>
+              </div>}
+          </Skeleton>
+        </center>
       </div>
     );
   }
@@ -163,5 +243,10 @@ KPI.propTypes = {
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
   myStep: PropTypes.bool,
-  form: PropTypes.instanceOf(Object)
+  form: PropTypes.instanceOf(Object),
+  challengeYour: PropTypes.string,
+  goToMonitoring: PropTypes.func,
+  handleSubmit:  PropTypes.func,
+  changeChallenge: PropTypes.func,
+  handleSaveAssessment:  PropTypes.func
 };
