@@ -6,8 +6,6 @@ import {
   Col,
   Row
 } from 'antd';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 
 const { Title } = Typography;
@@ -18,7 +16,13 @@ const CardRating = (props) => {
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   return (
     <Card style={{
-      width: 'auto', height: 'auto', background: '#FFF7E4', border: 0, borderRadius: 5, paddingBottom: 30, paddingTop: 30
+      width: 'auto',
+      height: 'auto',
+      background: '#FFF7E4',
+      border: 0,
+      borderRadius: 5,
+      paddingBottom: 30,
+      paddingTop: 30
     }}
     >
       <Row>
@@ -41,16 +45,7 @@ const CardRating = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
-});
-
-
-const connectToComponent = connect(
-  mapStateToProps
-)(CardRating);
-
-export default withRouter(connectToComponent);
+export default CardRating;
 
 CardRating.propTypes = {
   boxRateColor: PropTypes.string,

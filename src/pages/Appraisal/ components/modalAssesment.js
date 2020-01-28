@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   Modal, Form, Select, InputNumber, Typography
 } from 'antd';
+import PropTypes from 'prop-types';
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -14,7 +15,12 @@ class modalAssessment extends Component {
   }
 
   handleOk = () => {
-    const { modalRecord, handleChangeAssessment, form, showHideModal } = this.props;
+    const {
+      modalRecord,
+      handleChangeAssessment,
+      form,
+      showHideModal
+    } = this.props;
     form.validateFields([`dataKpi[${modalRecord.index}].assessment`], (errors, values) => {
       if (!errors) {
         const item = values.dataKpi[modalRecord.index];
@@ -35,13 +41,13 @@ class modalAssessment extends Component {
 
   render() {
     const {
-      assessment, form, isModalShow, modalRecord, qualitativeOption, loadingAssess
+      assessment, form, isModalShow, modalRecord, qualitativeOption
     } = this.props;
     return (
       <Modal
         title="Result"
         visible={isModalShow}
-        confirmLoading={loadingAssess}
+        // confirmLoading={loadingAssess}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
         // afterClose={this.handleCancel}
@@ -81,3 +87,15 @@ class modalAssessment extends Component {
 }
 
 export default modalAssessment;
+
+
+modalAssessment.propTypes = {
+  qualitativeOption: PropTypes.instanceOf(Array),
+  showHideModal: PropTypes.func,
+  handleChangeAssessment: PropTypes.func,
+  modalRecord: PropTypes.instanceOf(Array),
+  isModalShow: PropTypes.bool,
+  // loadingAssess: PropTypes.bool,
+  assessment: PropTypes.string || PropTypes.number,
+  form: PropTypes.instanceOf(Object)
+};
