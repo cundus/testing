@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Modal, Form, Select, InputNumber, Typography, Button
+  Modal, Form, Select, InputNumber, Typography
 } from 'antd';
 
 const { Option } = Select;
@@ -44,7 +44,7 @@ class modalAssessment extends Component {
         confirmLoading={loadingAssess}
         onOk={this.handleOk}
         onCancel={this.handleCancel}
-        afterClose={this.handleCancel}
+        // afterClose={this.handleCancel}
       >
         <Text strong>KPI Subject</Text>
         <br />
@@ -53,26 +53,27 @@ class modalAssessment extends Component {
         <br />
         <Form>
           {modalRecord.achievementType === 1 ?
-          <Form.Item label="Value">
-            {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
-              rules: [
-                { required: true, message: 'Value is required' },
-                { type: 'number', message: 'Value must be a number' }
-              ]
-            })(<InputNumber size="large" style={{ width: '100%' }} />)}
-          </Form.Item> :
-          <Form.Item label="Value">
-            {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
-              rules: [{ required: true, message: 'Value is required' }],
-              initialValue: assessment
-            })(
-              <Select>
-                {qualitativeOption.map((value, index) => {
-                  return <Option key={index} value={value}>{value}</Option>;
-                })}
-              </Select>
-            )}
-          </Form.Item>}
+            <Form.Item label="Value">
+              {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
+                rules: [
+                  { required: true, message: 'Value is required' },
+                  { type: 'number', message: 'Value must be a number' }
+                ],
+                initialValue: assessment
+              })(<InputNumber size="large" style={{ width: '100%' }} />)}
+            </Form.Item> :
+            <Form.Item label="Value">
+              {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
+                rules: [{ required: true, message: 'Value is required' }],
+                initialValue: assessment
+              })(
+                <Select>
+                  {qualitativeOption.map((value, index) => {
+                    return <Option key={index} value={value}>{value}</Option>;
+                  })}
+                </Select>
+              )}
+            </Form.Item>}
         </Form>
       </Modal>
     );
