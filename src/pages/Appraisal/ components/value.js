@@ -102,9 +102,10 @@ class Value extends Component {
 
   deleteFile = async (file) => {
     const {
-      deleteFiles, getOwnValues, userR
+      deleteFiles
+      // getOwnValues, userR
     } = this.props;
-    const { user } = userR.result;
+    // const { user } = userR.result;
     return new Promise((resolve, reject) => {
       if (file.status === 'done') {
         confirm({
@@ -120,11 +121,11 @@ class Value extends Component {
             if (!kpiR.loadingDeleteFile) {
               if (kpiR.statusDeleteFile === Success) {
                 message.success(`"${file.name}" has been deleted`);
-                getOwnValues(user.userId, true);
+                // getOwnValues(user.userId, true);
                 resolve(true);
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
                 message.success(`"${file.name}" has been deleted`);
-                getOwnValues(user.userId, true);
+                // getOwnValues(user.userId, true);
                 resolve(true);
               } else {
                 message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
