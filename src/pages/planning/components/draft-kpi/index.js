@@ -370,13 +370,11 @@ class DraftKPI extends Component {
               </div> : <center><Spin /></center>}
           </div>
         </div>
-        <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
-          {generalFeedback.comment &&
-            <div>
-              <Text strong>General Feedback :</Text>
-              <Paragraph>{generalFeedback.comment}</Paragraph>
-            </div>}
-        </div>
+        {generalFeedback.comment &&
+          <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
+            <Text strong>General Feedback :</Text>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
+          </div>}
         <div style={{ ...globalStyle.contentContainer, textAlign: 'center', borderRadius: 0 }}>
           <Button
             id="add-kpi"
