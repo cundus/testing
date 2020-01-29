@@ -33,7 +33,7 @@ class KPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics } = this.props;
+    const { dataMetrics, isFeedback } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -147,6 +147,18 @@ class KPI extends Component {
     };
     await newColumns.push(result);
     await newColumns.push(action);
+    const Feedback = {
+      title: 'Feedback',
+      dataIndex: 'feedback',
+      placeholder: 'Enter KPI Feedback',
+      align: 'center',
+      width: 100,
+      className: 'ant-table-th-yellow',
+      editable: false
+    };
+    if (isFeedback) {
+      await newColumns.push(Feedback);
+    }
     this.setState({
       columns: newColumns
     });
@@ -242,6 +254,7 @@ KPI.propTypes = {
   isModalShow: PropTypes.number,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
+  isFeedback: PropTypes.bool,
   myStep: PropTypes.bool,
   form: PropTypes.instanceOf(Object),
   challengeYour: PropTypes.string,

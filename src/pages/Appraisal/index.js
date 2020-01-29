@@ -37,7 +37,8 @@ class Appraisal extends Component {
       loadingMyValue: false,
       challengeYour: '',
       tab: '1',
-      myStep: false
+      myStep: false,
+      isFeedback: false
     };
   }
 
@@ -55,7 +56,7 @@ class Appraisal extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, getKpiRating, form   } = this.props;
+    const { getKpiList, getKpiRating, form } = this.props;
     await getKpiList(id);
     getKpiRating();
     const { kpiReducers } = this.props;
@@ -66,6 +67,9 @@ class Appraisal extends Component {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     await dataKpi.map((itemKpi, index) => {
+      if (itemKpi.othersRatingComments.id) {
+        this.setState({ isFeedback: true });
+      }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -95,7 +99,8 @@ class Appraisal extends Component {
         assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
         qualitativeOption: newOption,
         metrics: dataKpiMetrics,
-        ...dataMetrics
+        ...dataMetrics,
+        feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
     });
@@ -166,8 +171,14 @@ class Appraisal extends Component {
       };
       newData.push(data);
     });
-    const dataOrdered = await newData.sort((a, b) => {
+    let dataOrdered = await newData.sort((a, b) => {
       return a.orderId - b.orderId;
+    });
+    dataOrdered = dataOrdered.map((item, index) => {
+      return {
+        ...item,
+        index
+      };
     });
     const dataGen = dataOrdered.map((item, i) => {
       return {
@@ -421,7 +432,8 @@ class Appraisal extends Component {
       loadingMyValue,
       challengeYour,
       tab,
-      myStep
+      myStep,
+      isFeedback
     } = this.state;
     const {
       form,
@@ -469,6 +481,7 @@ class Appraisal extends Component {
                     dataSource={dataKpis}
                     dataMetrics={dataKpiMetrics}
                     myStep={myStep}
+                    isFeedback={isFeedback}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
                   />

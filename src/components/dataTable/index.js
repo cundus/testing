@@ -313,7 +313,7 @@ const DataTable = (props) => {
         form,
         datasource,
         indexlength: datasource.length,
-        indexarr: record.index || index,
+        indexarr: index,
         editable: col.editable,
         dataindex: col.dataIndex,
         title: col.title,
