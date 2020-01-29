@@ -30,15 +30,19 @@ class EditableCell extends React.Component {
     }), 100);
   };
 
-  changeSwitch = (value) => {
-    const { record, handlechange } = this.props;
+  changeSwitch = (field, index) => async (value) => {
+    const {
+      record, handlechange, form
+    } = this.props;
     handlechange({
       ...record,
-      achievementType: value === 'Qualitative' ? 0 : 1,
-      Below: '',
-      Meet: '',
-      Exceed: ''
+      achievementType: value === 'Qualitative' ? 0 : 1
     });
+    const dataFieldKPI = form.getFieldsValue(['dataKpi']);
+    await form.setFieldsValue({
+      dataKpi: dataFieldKPI.dataKpi
+    });
+    form.validateFields(field);
   };
 
   renderCell = () => {
@@ -85,6 +89,10 @@ class EditableCell extends React.Component {
         const datas = `${data.type}[${a}].${data.index}`;
         field.push(datas);
       }
+      const metricField = [];
+      record.metrics.map((metricLabel) => {
+        metricField.push(`${type}[${indexarr}].${metricLabel.label}`);
+      });
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -93,7 +101,7 @@ class EditableCell extends React.Component {
               size="small"
               defaultValue={valueType}
               placeholder="Select type"
-              onChange={this.changeSwitch}
+              onChange={this.changeSwitch(metricField, indexarr)}
               style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
             >
               <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
@@ -275,6 +283,7 @@ EditableCell.propTypes = {
   handlechange: PropTypes.func,
   placeholder: PropTypes.string,
   type: PropTypes.string,
+  col: PropTypes.instanceOf(Array),
   children: PropTypes.instanceOf(Object),
   form: PropTypes.instanceOf(Object)
 };
@@ -308,6 +317,7 @@ const DataTable = (props) => {
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
+        col: columnList,
         color: col.color,
         handlechange
       })
