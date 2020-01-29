@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
 import { doSaveKpi, doGetKpiList, doSubmitNext } from '../../../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
+import globalStyle from '../../../../styles/globalStyles';
 
 const { confirm } = Modal;
 const { Text, Paragraph } = Typography;
@@ -331,78 +332,75 @@ class DraftKPI extends Component {
     const { loadingKpi, dataKpiMetrics, generalFeedback } = kpiReducers;
     return (
       <div>
-        <div>
-          <Divider />
-          <Text strong>KPI Save Draft </Text>
-          <Text>
-            This is a draft of your KPI. You can still edit these KPI(s) then
-            submit to your superior.
-          </Text>
-          <br />
-          <Text type={weightTotalErr ? 'danger' : ''}>
-            Total KPI Weight :
-            {` ${weightTotal}%`}
-          </Text>
-          <Divider />
-        </div>
-        {!loadingKpi ?
+        <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
           <div>
-            <TableDrafKPI
-              form={form}
-              dataMetrics={dataKpiMetrics}
-              isFeedback={isFeedback}
-              dataSource={dataSource}
-              handleError={handleError}
-              handleChange={handleChange}
-              handleDelete={handleDelete}
-            />
+            <Divider />
+            <Text strong>KPI Save Draft </Text>
+            <Text>
+              This is a draft of your KPI. You can still edit these KPI(s) then
+              submit to your superior.
+            </Text>
+            <br />
+            <Text type={weightTotalErr ? 'danger' : ''}>
+              Total KPI Weight :
+              {` ${weightTotal}%`}
+            </Text>
+            <Divider />
+          </div>
+          <div>
+            {!loadingKpi ?
+              <div>
+                <TableDrafKPI
+                  form={form}
+                  dataMetrics={dataKpiMetrics}
+                  isFeedback={isFeedback}
+                  dataSource={dataSource}
+                  handleError={handleError}
+                  handleChange={handleChange}
+                  handleDelete={handleDelete}
+                />
+                <Text strong>Challenge yourself :</Text>
+                <TextArea
+                  id="challenge-input"
+                  placeholder="Challenge yourself"
+                  label="Challenge yourself"
+                  value={challengeYour}
+                  onChange={changeChallenge}
+                />
+              </div> : <center><Spin /></center>}
+          </div>
+        </div>
+        <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
+          {generalFeedback.comment &&
             <div>
-              <Text strong>Challenge yourself :</Text>
-              <TextArea
-                id="challenge-input"
-                placeholder="Challenge yourself"
-                label="Challenge yourself"
-                value={challengeYour}
-                onChange={changeChallenge}
-              />
-            </div>
-            {generalFeedback.comment &&
-              <div style={{
-                marginTop: 20,
-                paddingBottom: 10,
-                paddingTop: 10,
-                backgroundColor: 'rgb(250, 247, 187)',
-                overflow: 'hidden'
-              }}
-              >
-                <Text strong>General Feedback :</Text>
-                <Paragraph>{generalFeedback.comment}</Paragraph>
-              </div>}
-            <div style={{ textAlign: 'center' }}>
-              <Button
-                id="add-kpi"
-              // eslint-disable-next-line react/jsx-no-bind
-                onClick={() => stepChange(0) /* go back add */}
-                style={{ margin: 10 }}
-              >
-              Add KPI
-              </Button>
-              <Button
-                id="save-draft"
-                onClick={handleSaveDraft}
-                style={{ margin: 10 }}
-              >
-              Save as Draft
-              </Button>
-              <Button
-                id="submit-superior"
-                onClick={handleSubmit}
-                type="primary" style={{ margin: 10 }}
-              >
-              Submit To Superior
-              </Button>
-            </div>
-          </div> : <center><Spin /></center>}
+              <Text strong>General Feedback :</Text>
+              <Paragraph>{generalFeedback.comment}</Paragraph>
+            </div>}
+        </div>
+        <div style={{ ...globalStyle.contentContainer, textAlign: 'center', borderRadius: 0 }}>
+          <Button
+            id="add-kpi"
+            // eslint-disable-next-line react/jsx-no-bind
+            onClick={() => stepChange(0) /* go back add */}
+            style={{ margin: 10 }}
+          >
+            Add KPI
+          </Button>
+          <Button
+            id="save-draft"
+            onClick={handleSaveDraft}
+            style={{ margin: 10 }}
+          >
+            Save as Draft
+          </Button>
+          <Button
+            id="submit-superior"
+            onClick={handleSubmit}
+            type="primary" style={{ margin: 10 }}
+          >
+            Submit To Superior
+          </Button>
+        </div>
       </div>
     );
   }

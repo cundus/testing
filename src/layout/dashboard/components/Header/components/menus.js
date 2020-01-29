@@ -1,11 +1,11 @@
 import React from 'react';
 import { Menu } from 'antd';
 
-export const accountMenu = (logout) => (
+export const accountMenu = (logout) => () => (
   <Menu>
     <Menu.Item>
-        {/* Message */}
-        <a href='#' onClick={()=> logout()} >Logout</a>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" onClick={logout}>Logout</a>
     </Menu.Item>
   </Menu>
   );
@@ -13,10 +13,10 @@ export const accountMenu = (logout) => (
 export const langMenu = (
   <Menu>
     <Menu.Item>
-        {/* Indonesia */}
+      {/* Indonesia */}
     </Menu.Item>
     <Menu.Item>
-        {/* English */}
+      {/* English */}
     </Menu.Item>
   </Menu>
  );
@@ -24,10 +24,10 @@ export const langMenu = (
 export const notifMenu = (
   <Menu>
     <Menu.Item>
-        {/* +1 chat */}
+      {/* +1 chat */}
     </Menu.Item>
     <Menu.Item>
-        {/* +2 else */}
+      {/* +2 else */}
     </Menu.Item>
   </Menu>
 );

@@ -6,24 +6,26 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
-import myAvatar from '../../../../assets/users/300_23.jpg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
+import styles from './Header.styles';
 
 
 const { Text } = Typography;
 const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
+  const {
+    collapsed, toggle, history, isAllowToMonitor, logout
+  } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
-  const pathlocation = props.history.location.pathname;
-  // eslint-disable-next-line react/prop-types
-  const { collapsed, toggle } = props;
+  const pathlocation = history.location.pathname;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}` : myAvatar;
+  const url = uId && `${REACT_APP_API_URL}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
@@ -50,8 +52,12 @@ const Header = (props) => {
               // check is has child
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
+                const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
                 return (
-                  <Menu.Item key={`${menu.path}`} disabled={(menu.title === 'Monitoring' || menu.title === 'Appraisal') && props.isAllowToMonitor}>
+                  <Menu.Item
+                    key={`${menu.path}`}
+                    disabled={isDisabled}
+                  >
                     <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
                 );
@@ -66,8 +72,13 @@ const Header = (props) => {
                     }
                   >
                     {childsRoutes.map((menuChild) => {
+                      const isDisabled = isAllowToMonitor &&
+                      (menu.title === 'Monitoring' || menu.title === 'Appraisal');
                       return (
-                        <Menu.Item key={`${menuChild.path}`} disabled={(menuChild.title === 'Monitoring' || menuChild.title === 'Appraisal') && props.isAllowToMonitor}>
+                        <Menu.Item
+                          key={`${menuChild.path}`}
+                          disabled={isDisabled}
+                        >
                           <Link to={menuChild.path}>
                             <Icon
                               type={`${menuChild.icon}`}
@@ -87,11 +98,14 @@ const Header = (props) => {
         </Col>
         <Col xs={10} sm={10} md={10} lg={8}>
           <Link to="/">
-            <img src={Logo} alt="logo" style={isDesktopOrLaptop ? {} : { width: 'auto', height: 40 }} />
+            <img
+              src={Logo}
+              alt="logo"
+              style={isDesktopOrLaptop ? {} : styles.logo}
+            />
           </Link>
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
-          {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
           <Row type="flex" justify="space-between" align="middle">
             <Dropdown overlay={notifMenu} placement="bottomRight">
               <Icon style={{ fontSize: 18 }} type="bell" />
@@ -99,10 +113,11 @@ const Header = (props) => {
             <Dropdown overlay={langMenu} placement="bottomRight">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a>
-              <Dropdown overlay={()=>accountMenu(props.logout)} placement="bottomRight">
+              <Dropdown overlay={accountMenu(logout)} placement="bottomRight">
                 <div className="accountWrapper">
-                  {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
+                  {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
                   <Avatar
                     shape="square"
                     size={isDesktopOrLaptop ? 'large' : 'default'}
@@ -114,7 +129,6 @@ const Header = (props) => {
               </Dropdown>
             </a>
           </Row>
-          {/* </Menu> */}
         </Col>
       </Row>
     </Layout.Header>
@@ -131,3 +145,12 @@ const connectToComponent = connect(mapStateToProps)(Header);
 
 
 export default withRouter(connectToComponent);
+
+
+Header.propTypes = {
+  history: PropTypes.instanceOf(Object),
+  collapsed: PropTypes.bool,
+  toggle: PropTypes.func,
+  isAllowToMonitor: PropTypes.bool,
+  logout: PropTypes.func
+};

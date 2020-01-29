@@ -5,14 +5,15 @@ import {
   Icon
 } from 'antd';
 import { useMediaQuery } from 'react-responsive';
+import globalStyle from '../../../../styles/globalStyles';
 
 const { Step } = Steps;
 
 const StepWizzard = (props) => {
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-  const { step, /*stepChange*/ } = props;
+  const { step /*stepChange*/ } = props;
   return (
-    <div>
+    <div style={{ ...globalStyle.contentContainer, paddingBottom: 0 }}>
       <Steps
         type="navigation"
         current={step}

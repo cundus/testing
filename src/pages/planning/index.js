@@ -9,6 +9,7 @@ import {
   Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
 } from './components';
 import { doGetKpiList } from '../../redux/actions/kpi';
+import globalStyle from '../../styles/globalStyles';
 
 class Planning extends Component {
   constructor(props) {
@@ -117,7 +118,7 @@ class Planning extends Component {
       );
     } else {
       return (
-        <div>
+        <div style={{ ...globalStyle.contentContainer, padding: 0, background: 'none' }}>
           {loading ? <center><Spin /></center> :
           <div>
             <Step step={step} stepChange={stepChange} />
