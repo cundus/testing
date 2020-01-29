@@ -8,7 +8,6 @@ import { useMediaQuery } from 'react-responsive';
 import _ from 'lodash';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
-import myAvatar from '../../../../assets/users/300_23.jpg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
 
@@ -22,7 +21,7 @@ const Header = (props) => {
   const { collapsed, toggle } = props;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = (uId !== '') ? `${REACT_APP_API_URL}/user/photo/${uId}` : myAvatar;
+  const url = (uId !== '') && `${REACT_APP_API_URL}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
