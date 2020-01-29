@@ -38,15 +38,19 @@ class EditableCell extends React.Component {
     }), 100);
   };
 
-  changeSwitch = (value) => {
-    const { record, handlechange } = this.props;
+  changeSwitch = (field, index) => async (value) => {
+    const {
+      record, handlechange, form
+    } = this.props;
     handlechange({
       ...record,
-      achievementType: value === 'Qualitative' ? 0 : 1,
-      Below: '',
-      Meet: '',
-      Exceed: ''
+      achievementType: value === 'Qualitative' ? 0 : 1
     });
+    const dataFieldKPI = form.getFieldsValue(['dataKpi']);
+    await form.setFieldsValue({
+      dataKpi: dataFieldKPI.dataKpi
+    });
+    form.validateFields(field);
   };
 
   renderCell = () => {
@@ -95,6 +99,10 @@ class EditableCell extends React.Component {
         const datas = `${data.type}[${a}].${data.index}`;
         field.push(datas);
       }
+      const metricField = [];
+      record.metrics.map((metricLabel) => {
+        return metricField.push(`${type}[${indexarr}].${metricLabel.label}`);
+      });
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -103,7 +111,7 @@ class EditableCell extends React.Component {
               size="small"
               defaultValue={valueType}
               placeholder="Select type"
-              onChange={this.changeSwitch}
+              onChange={this.changeSwitch(metricField, indexarr)}
               style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
             >
               <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
@@ -166,7 +174,7 @@ class EditableCell extends React.Component {
     } else if (isMetric.length !== 0) {
       const field = [];
       record.metrics.map((metricLabel) => {
-        field.push(`${type}[${indexarr}].${metricLabel.label}`);
+        return field.push(`${type}[${indexarr}].${metricLabel.label}`);
       });
       return (
         <Form.Item style={{ margin: 0 }}>
