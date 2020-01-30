@@ -147,7 +147,7 @@ const kpiReducers = (state = initialState, action) => {
         messageManagerKpi: action.message,
         dataFirstManager: action.data.firstManager,
         dataSecondManager: action.data.secondManager,
-        dataKpiManagerMetrics: action.data.labelList
+        dataKpiManagerMetrics: action.data.labelList || []
       };
     case GET_KPI_MANAGER_LIST_FAILED:
       return {

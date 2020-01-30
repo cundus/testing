@@ -17,6 +17,7 @@ export const metricValidator = (data) => [
         return Object.assign(result, current);
       }, {});
       let isFilled = true;
+      let isError = false;
       let isSortedAsc = false;
       let isSortedDesc = false;
       const datas = Object.keys(dataMetrics);
@@ -32,10 +33,15 @@ export const metricValidator = (data) => [
             if (!dataMetrics[datas[index]]) {
               isFilled = false;
               break;
+            } else if (regexZero.test(dataMetrics[datas[index]])) {
+              isError = true;
+              break;
+            } else if (!regexNumber.test(dataMetrics[datas[index]])) {
+              isError = true;
+              break;
             }
           }
-          if (isFilled) {
-            for (let index = 0; index < datas.length - 1; index++) {
+          if (isFilled && !isError) {            for (let index = 0; index < datas.length - 1; index++) {
               if (parseFloat(dataMetrics[datas[index]]) < parseFloat(dataMetrics[datas[index + 1]])) {
                 isSortedAsc = true;
               } else {
