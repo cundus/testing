@@ -324,9 +324,14 @@ class CreateKPI extends Component {
   };
 
   handleDeleteRow = (key) => {
+    const { form } = this.props;
     const { dataOwn } = this.state;
     const data = [...dataOwn];
-    this.setState({ dataOwn: data.filter((item) => item.key !== key) });
+    const dataFiltered = data.filter((item) => item.key !== key);
+    this.setState({ dataOwn: dataFiltered });
+    form.setFieldsValue({
+      dataKpi: dataFiltered
+    });
   };
 
   handleChangeField = (row) => {
