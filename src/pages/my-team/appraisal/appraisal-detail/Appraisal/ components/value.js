@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import {
   Select, Form, Upload, Button, Icon, Typography, message, Modal, Skeleton
 } from 'antd';
-import DataTable from '../../../components/dataTable';
+import DataTable from '../../../../../../components/dataTable';
 import {
   doAttachFile, doDeleteFiles
-} from '../../../redux/actions/kpi';
-import mimeType from '../../../utils/mimeType';
-import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
+} from '../../../../../../redux/actions/kpi';
+import mimeType from '../../../../../../utils/mimeType';
+import { Success, ATTACHMENT_NOT_FOUND } from '../../../../../../redux/status-code-type';
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -278,7 +278,7 @@ class Value extends Component {
             datasource={dataSource}
           />
         </div>
-        <center>
+        {/* <center>
           <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
             {myStep ?
               <div style={{ textAlign: 'center', margin: 40 }}>
@@ -316,7 +316,7 @@ class Value extends Component {
                 </Button>
               </div>}
           </Skeleton>
-        </center>
+        </center> */}
       </div>
     );
   }

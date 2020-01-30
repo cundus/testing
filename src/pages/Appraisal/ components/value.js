@@ -278,7 +278,7 @@ class Value extends Component {
             datasource={dataSource}
           />
         </div>
-        {/* <center>
+        <center>
           <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
             {myStep ?
               <div style={{ textAlign: 'center', margin: 40 }}>
@@ -316,7 +316,7 @@ class Value extends Component {
                 </Button>
               </div>}
           </Skeleton>
-        </center> */}
+        </center>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
  Button, Typography, Skeleton, Input, Spin
 } from 'antd';
-import { DataTable } from '../../../components';
+import { DataTable } from '../../../../../../components';
 import ModalAssessment from './modalAssesment';
 
 const { Text, Title } = Typography;

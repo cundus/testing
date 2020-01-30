@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -8,7 +9,12 @@ import {
   Col,
   Row,
   message,
-  Modal
+  Modal,
+  Input,
+  Skeleton,
+  Button,
+  Spin,
+  Icon
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -17,11 +23,12 @@ import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
   doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext
-} from '../../redux/actions/kpi';
-import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
-import globalStyle from '../../styles/globalStyles';
+} from '../../../../../redux/actions/kpi';
+import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../../redux/status-code-type';
+import globalStyle from '../../../../../styles/globalStyles';
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
+const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -39,7 +46,8 @@ class Appraisal extends Component {
       challengeYour: '',
       tab: '1',
       myStep: false,
-      isFeedback: false
+      isFeedback: false,
+      generalFeedbackState: ''
     };
   }
 
@@ -49,11 +57,13 @@ class Appraisal extends Component {
 
   getData = async (e) => {
     const {
-      userReducers
+      match
     } = this.props;
-    const { user } = userReducers.result;
-    this.getOwnKpiList(user.userId);
-    this.getOwnValues(user.userId);
+    const { params } = match;
+    console.log(match);
+    
+    this.getOwnKpiList(params.userId);
+    this.getOwnValues(params.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -62,7 +72,7 @@ class Appraisal extends Component {
     getKpiRating();
     const { kpiReducers } = this.props;
     const {
-      dataKpi, dataKpiMetrics, challenge, currentStep
+      dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback
     } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -123,6 +133,7 @@ class Appraisal extends Component {
       myStep: currentStep === 'Performance Review Manager',
       dataKpis: dataOrdered,
       challengeYour: challenge,
+      generalFeedbackState: generalFeedback.comment,
       loadingKpis: false,
       loadingResult: false
     });
@@ -200,226 +211,12 @@ class Appraisal extends Component {
     });
   }
 
-  handleChangeAssessment = (row) => {
-    const { dataKpis } = this.state;
-    const newData = [...dataKpis];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
-    this.setState({ dataKpis: newData });
-  };
-
-  handleSaveAssessment = async () => {
-    const { dataKpis, challengeYour } = this.state;
-    const { doAssess, form } = this.props;
-    const assessment = [];
-    dataKpis.map((item) => {
-      const data = {
-        achievementType: item.achievementType,
-        actualAchievementText: item.achievementType === 0 ? item.assessment : '',
-        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
-        id: item.id
-      };
-      assessment.push(data);
-      return data;
-    });
-    const data = {
-      assesments: assessment,
-      challengeYourself: challengeYour
-    };
-    form.validateFieldsAndScroll(['dataKpi'], async (err, values) => {
-      if (!err) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doAssess(data);
-            const { kpiReducers, userReducers } = this.props;
-            const { user } = userReducers.result;
-            const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
-            if (!loadingAssess) {
-              if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                this.setState({ loadingResult: true });
-                this.getOwnKpiList(user.userId);
-                message.success('Your Assessment has been saved');
-                if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  message.warning(`Sorry, ${messageAssess}`);
-                }
-              } else {
-                message.warning(`Sorry, ${messageAssess}`);
-              }
-            }
-          },
-          onCancel() {}
-        });
-      } else {
-        message.warning('Sorry, Please fill out all your assessment');
-      }
-    });
-  };
-
-  showHideModal = async (id) => {
-    this.setState({
-      isModalShow: id
-    });
+  changeGeneralFeedback = ({ target: { value } }) => {
+    this.setState({ generalFeedbackState: value });
   };
 
   changeTab = (activeKey) => {
     this.setState({ tab: activeKey });
-  };
-
-  goToMonitoring = () => {
-    const { history } = this.props;
-    history.push('/monitoring');
-  }
-
-  handleChange = (row) => {
-    const { dataValueList } = this.state;
-    const newData = [...dataValueList];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row
-    });
-    this.setState({ dataValueList: newData });
-  };
-
-
-  handleSave = () => {
-    const {
-      doSaveValues, userReducers, form
-    } = this.props;
-    const { user } = userReducers.result;
-    const {
-      dataValueList
-    } = this.state;
-    const newData = [];
-    dataValueList.map((item) => {
-      const data = {
-        comment: item.comment,
-        rating: item.rating,
-        valueId: item.valueId
-      };
-      newData.push(data);
-      return data;
-    });
-    const data = {
-      ratings: newData
-    };
-    form.validateFieldsAndScroll(['dataGeneral'], (err, values) => {
-      if (!err) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doSaveValues(user.userId, data);
-            const { kpiReducers } = this.props;
-            if (!kpiReducers.loadingSaveValues) {
-              if (kpiReducers.statusSaveValues === Success) {
-                message.success('Your Values has been saved');
-                this.getOwnValues(user.userId);
-              } else {
-                message.warning(`Sorry, ${kpiReducers.messageSaveValues}`);
-              }
-            }
-          },
-          onCancel() {}
-        });
-      }
-    });
-  };
-
-
-  handleSubmit = () => {
-    const { dataKpis, challengeYour } = this.state;
-    const {
-      doSaveValues, userReducers, form, doAssess, submitNext
-    } = this.props;
-    const { user } = userReducers.result;
-    // assessment
-    const assessment = [];
-    dataKpis.map((item) => {
-      const data = {
-        achievementType: item.achievementType,
-        actualAchievementText: item.achievementType === 0 ? item.assessment : '',
-        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
-        id: item.id
-      };
-      assessment.push(data);
-      return data;
-    });
-    const dataAssessment = {
-      assesments: assessment,
-      challengeYourself: challengeYour
-    };
-    // values
-    const {
-      dataValueList
-    } = this.state;
-    const newData = [];
-    dataValueList.map((item) => {
-      const data = {
-        comment: item.comment,
-        rating: item.rating,
-        valueId: item.valueId
-      };
-      newData.push(data);
-      return data;
-    });
-    const dataValues = {
-      ratings: newData
-    };
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doAssess(dataAssessment);
-            await doSaveValues(user.userId, dataValues);
-            const { kpiReducers } = this.props;
-            const {
-              loadingAssess,
-              statusAssess,
-              messageAssess
-            } = kpiReducers;
-            const {
-              loadingSaveValues,
-              statusSaveValues,
-              messageSaveValues
-            } = kpiReducers;
-            if (!loadingAssess && !loadingSaveValues) {
-              if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                if (statusSaveValues === Success) {
-                  await submitNext(user.userId);
-                  this.getData();
-                  message.success('Your Appraisal has been sent to your Manager');
-                  if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                    message.warning(`Sorry, ${messageAssess}`);
-                  }
-                } else {
-                  message.warning(`Sorry, ${messageSaveValues}`);
-                }
-              } else {
-                message.warning(`Sorry, ${messageAssess}`);
-              }
-            }
-          },
-          onCancel() {}
-        });
-      } else if (err.dataKpi) {
-        message.warning('Please fill out your Assessment');
-        this.changeTab('1');
-      } else if (err.dataGeneral) {
-        message.warning('You need to fill Values before submiting to the manager');
-        this.changeTab('2');
-      }
-    });
-  };
-
-  changeChallenge = ({ target: { value } }) => {
-    this.setState({ challengeYour: value });
   };
 
   render() {
@@ -434,7 +231,8 @@ class Appraisal extends Component {
       challengeYour,
       tab,
       myStep,
-      isFeedback
+      isFeedback,
+      generalFeedbackState
     } = this.state;
     const {
       form,
@@ -446,7 +244,14 @@ class Appraisal extends Component {
     } = kpiReducers;
     return (
       <div>
-        <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          borderTopRightRadius: 5,
+          borderTopLeftRadius: 5,
+          paddingBottom: 0
+        }}
+        >
           <Divider />
           <Text strong>Final Appraisal </Text>
           <Text>
@@ -506,11 +311,84 @@ class Appraisal extends Component {
             </Tabs>
           </div>
         </div>
-        {generalFeedback && generalFeedback.id &&
-          <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          paddingTop: 0,
+          paddingBottom: 0
+        }}
+        >
+          <center>
+            <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
+              <div style={{ textAlign: 'center' }}>
+                <Button
+                  id="go-monitoring"
+                  // onClick={goToMonitoring}
+                  style={{ margin: 10 }}
+                >
+                  Back
+                </Button>
+                <Button
+                  id="save-assessment"
+                  // onClick={handleSaveAssessment}
+                  style={{ margin: 10 }}
+                >
+                  Save & Send Feedback
+                </Button>
+                <Button
+                  id="send-manager"
+                  type="primary"
+                  // onClick={handleSubmit}
+                  style={{ margin: 10 }}
+                >
+                  Approve
+                </Button>
+              </div>
+            </Skeleton>
+          </center>
+        </div>
+        <Spin spinning={loadingKpis && loadingMyValue} indicator={<Icon type="" />}>
+          <div style={{
+            ...globalStyle.contentContainer,
+            borderRadius: 0,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
+            paddingTop: 0,
+            paddingBottom: 10
+          }}
+          >
+            <Text strong>Challenge yourself :</Text>
+            {/* <Paragraph>{generalFeedback.comment}</Paragraph> */}
+            <TextArea
+              id="challenge-input"
+              placeholder="Challenge yourself"
+              label="Challenge yourself"
+              value={challengeYour}
+              disabled
+              // onChange={changeChallenge}
+            />
+          </div>
+          <div style={{
+            ...globalStyle.contentContainer,
+            background: 'rgb(250, 247, 187)',
+            borderRadius: 0,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5
+          }}
+          >
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
-          </div>}
+            <TextArea
+              id="challenge-input"
+              placeholder="General Feedback"
+              label="Challenge yourself"
+              style={{ background: '#EDEAA6', border: 0 }}
+              value={generalFeedbackState}
+              // disabled
+              onChange={this.changeGeneralFeedback}
+            />
+            {/* <Paragraph>{generalFeedback.comment}</Paragraph> */}
+          </div>
+        </Spin>
       </div>
     );
   }
@@ -547,6 +425,7 @@ Appraisal.propTypes = {
   getKpiList: PropTypes.func,
   getKpiRating: PropTypes.func,
   submitNext: PropTypes.func,
+  match: PropTypes.instanceOf(Object),
   userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)

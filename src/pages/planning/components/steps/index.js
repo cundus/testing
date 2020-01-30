@@ -17,8 +17,8 @@ const StepWizzard = (props) => {
       ...globalStyle.contentContainer,
       paddingBottom: 0,
       borderRadius: 0,
-      borderTopLeftRadius: 20,
-      borderTopRightRadius: 20
+      borderTopLeftRadius: 5,
+      borderTopRightRadius: 5
     }}
     >
       <Steps

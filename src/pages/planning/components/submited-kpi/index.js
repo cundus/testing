@@ -154,8 +154,8 @@ class SubmitedKPI extends Component {
             ...globalStyle.contentContainer,
             textAlign: 'center',
             borderRadius: 0,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5
           }}
           >
             {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
