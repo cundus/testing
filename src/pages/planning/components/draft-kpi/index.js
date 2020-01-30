@@ -234,11 +234,16 @@ class DraftKPI extends Component {
   }
 
   handleDelete = (key) => {
+    const { form } = this.props;
     const { dataSource } = this.state;
     const data = [...dataSource];
     const newData = data.filter((item) => item.key !== key);
     this.setState({
       dataSource: newData
+    });
+    this.setState({ dataSource: newData });
+    form.setFieldsValue({
+      dataKpi: newData
     });
     this.liveCount(newData);
   };
