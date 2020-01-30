@@ -36,12 +36,12 @@ class Planning extends Component {
     if (status === 0) {
       if (dataKpi.length !== 0 && step === 0) {
         if (currentStep !== 'Emp Goal Setting') {
-          this.stepChange(1, true);
+          this.stepChange(2, true);
         } else {
           this.stepChange(1);
         }
       } else {
-        this.stepChange(1);
+        this.stepChange(0);
       }
     } else {
       this.stepChange(null);
