@@ -79,9 +79,9 @@ class TableAppraisal extends Component {
         align: 'center',
         render: (text, record) => {
           let color = '';
-          if (text === 3) {
+          if (text === 4) {
             color = '#ffb822';
-          } else if (text === 1) {
+          } else if (text === 3) {
             color = '#fd27eb';
           } else if (text === 2) {
             color = '#1dc9b7';
@@ -102,16 +102,28 @@ class TableAppraisal extends Component {
         width: 100,
         align: 'center',
         action: true,
-        render: (text, record) => (
-          <Button
-            type="primary"
-            disabled={record.statusNumber !== 3}
-            // eslint-disable-next-line react/jsx-no-bind
-            onClick={() => this.props.history.push(`/my-team/appraisal/${record.userId}`)}
-          >
-            View
-          </Button>
-        )
+        render: (text, record) => {
+          let access = true;
+          if (record.statusNumber === 4) {
+            access = false;
+          } else if (record.statusNumber === 3) {
+            access = false;
+          } else if (record.statusNumber === 2) {
+            access = true;
+          } else {
+            access = true;
+          }
+          return (
+            <Button
+              type="primary"
+              disabled={access}
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => this.props.history.push(`/my-team/appraisal/${record.userId}`)}
+            >
+              View
+            </Button>
+          );
+        }
       }
     ];
   }

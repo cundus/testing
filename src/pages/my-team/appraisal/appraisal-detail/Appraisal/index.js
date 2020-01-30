@@ -37,7 +37,7 @@ import {
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
@@ -48,9 +48,8 @@ class Appraisal extends Component {
     super(props);
     this.state = {
       dataKpis: [],
-      loadingKpis: true,
-      isModalShow: 0,
-      loadingResult: false,
+      loadingKpis: false,
+      teamName: '',
       dataValueList: [],
       optionRating: [],
       loadingMyValue: false,
@@ -81,10 +80,13 @@ class Appraisal extends Component {
 
   getOwnKpiList = async (id) => {
     const { getKpiList, form } = this.props;
+    this.setState({
+      loadingKpis: true
+    });
     await getKpiList(id);
     const { kpiReducers } = this.props;
     const {
-      dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback
+      dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback, user
     } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -147,7 +149,7 @@ class Appraisal extends Component {
       challengeYour: challenge,
       generalFeedbackState: generalFeedback.comment,
       loadingKpis: false,
-      loadingResult: false
+      teamName: user.firstName+' '+user.lastName
     });
   }
 
@@ -225,7 +227,7 @@ class Appraisal extends Component {
   }
 
   handleSendBack = () => {
-    const { form, sendBackAppraisal, match } = this.props;
+    const { teamName, sendBackAppraisal, match } = this.props;
     const { params } = match;
     const { dataKpis, dataValueList, generalFeedbackState } = this.state;
     const kpiFeedbacks = dataKpis.map((data, index) => {
@@ -261,7 +263,7 @@ class Appraisal extends Component {
         if (!loadingSendBackAppraisal) {
           if (statusSendBackAppraisal === Success) {
             history.push('/my-team/appraisal/');
-            message.success('Assessment & Values has given feedback');
+            message.success(`${teamName}'s Appraisal has given feedback`);
           } else {
             message.warning(`Sorry ${messageSendBackAppraisal}`);
           }
@@ -275,7 +277,7 @@ class Appraisal extends Component {
   handleApprove = () => {
     const { form, approveAppraisal, match } = this.props;
     const { params } = match;
-    const { dataKpis, dataValueList, generalFeedbackState } = this.state;
+    const { dataKpis, dataValueList, generalFeedbackState, teamName } = this.state;
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
@@ -314,7 +316,7 @@ class Appraisal extends Component {
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
                 history.push('/my-team/appraisal/');
-                message.success('Assessment & Values has been approved');
+                message.success(`${teamName}'s Appraisal has been send to system`);
               } else {
                 message.warning(`Sorry ${messageApproveAppraisal}`);
               }
@@ -360,16 +362,10 @@ class Appraisal extends Component {
     this.setState({ dataValueList: newData });
   };
 
-  handleChangePropose = (e) => {
-    this.setState({ proposeRating: e });
-  };
-
   render() {
     const {
       loadingKpis,
       dataKpis,
-      isModalShow,
-      loadingResult,
       dataValueList,
       optionRating,
       loadingMyValue,
@@ -377,7 +373,8 @@ class Appraisal extends Component {
       tab,
       myStep,
       isFeedback,
-      generalFeedbackState
+      generalFeedbackState,
+      teamName
     } = this.state;
     const {
       form,
@@ -386,7 +383,8 @@ class Appraisal extends Component {
     const {
       dataKpiMetrics,
       dataProposeRating,
-      dataKpiRating
+      dataKpiRating,
+      user
     } = kpiReducers;
     return (
       <div>
@@ -399,18 +397,20 @@ class Appraisal extends Component {
         }}
         >
           <Divider />
-          <Text strong>Final Appraisal </Text>
-          <Text>
-            Final end year appraisal score & ratings
-          </Text>
+          <Skeleton loading={loadingKpis} active paragraph={false} title={{ width: 400 }}>
+            <Text strong>{`Appraisal - ${teamName} `}</Text>
+            <Text>
+              Final end year appraisal score & ratings
+            </Text>
+          </Skeleton>
           <Divider />
           <center>
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
-                  boxRateColor="#F666B5"
+                  boxRateColor="inherit"
                   title="Your Rating"
-                  rate=""
+                  rate={dataKpiRating.rating}
                   desc="Your final Rating based on Score"
                 />
               </Col>
@@ -426,6 +426,7 @@ class Appraisal extends Component {
                   dataSource={dataKpis}
                   dataMetrics={dataKpiMetrics}
                   isFeedback={isFeedback}
+                  myStep={myStep}
                   handleChangeField={this.handleChangeAssessment}
                 />
                 <Form>
@@ -485,30 +486,43 @@ class Appraisal extends Component {
         >
           <center>
             <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  id="go-monitoring"
-                  // onClick={goToMonitoring}
-                  style={{ margin: 10 }}
-                >
-                  Back
-                </Button>
-                <Button
-                  id="save-assessment"
-                  onClick={this.handleSendBack}
-                  style={{ margin: 10 }}
-                >
-                  Save & Send Feedback
-                </Button>
-                <Button
-                  id="send-manager"
-                  type="primary"
-                  onClick={this.handleApprove}
-                  style={{ margin: 10 }}
-                >
-                  Approve
-                </Button>
-              </div>
+              {myStep ?
+                <div style={{ textAlign: 'center' }}>
+                  <Button
+                    id="go-monitoring"
+                    // onClick={goToMonitoring}
+                    style={{ margin: 10 }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    id="save-assessment"
+                    onClick={this.handleSendBack}
+                    style={{ margin: 10 }}
+                  >
+                    Save & Send Feedback
+                  </Button>
+                  <Button
+                    id="send-manager"
+                    type="primary"
+                    onClick={this.handleApprove}
+                    style={{ margin: 10 }}
+                  >
+                    Approve
+                  </Button>
+                </div> :
+                  <div style={{ textAlign: 'center', paddingTop: 20, lineHeight: 0, margin: 0 }}>
+                    <Title
+                      level={4}
+                      style={{ color: '#61C761', margin: 0 }}
+                      ghost
+                      strong
+                    >
+                      {`${teamName}'s Appraisal has been sent to system .`}
+                      <br />
+                      Waiting for the final Result
+                    </Title>
+                  </div> }
             </Skeleton>
           </center>
         </div>
@@ -541,7 +555,7 @@ class Appraisal extends Component {
             label="Challenge yourself"
             style={{ background: '#EDEAA6', border: 0 }}
             value={generalFeedbackState}
-            // disabled
+            disabled={!myStep}
             onChange={this.changeGeneralFeedback}
           />
         </div>

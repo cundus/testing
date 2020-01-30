@@ -79,7 +79,7 @@ class Value extends Component {
         dataIndex: 'feedback',
         placeholder: 'Enter Value Feedback',
         align: 'center',
-        editable: true,
+        editable: this.props.myStep,
         className: 'ant-table-th-yellow'
       }
     ];

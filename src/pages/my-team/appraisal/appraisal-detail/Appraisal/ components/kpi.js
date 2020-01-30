@@ -20,7 +20,7 @@ class KPI extends Component {
 
   componentDidUpdate() {
     const { metrics } = this.state;
-    const { dataMetrics } = this.props;
+    const { dataMetrics, myStep } = this.props;
     if (metrics !== dataMetrics) {
       this.getColumns();
       // eslint-disable-next-line react/no-did-update-set-state
@@ -33,7 +33,7 @@ class KPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics } = this.props;
+    const { dataMetrics, myStep } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -103,7 +103,7 @@ class KPI extends Component {
       align: 'center',
       width: 110,
       className: 'ant-table-th-yellow',
-      editable: true
+      editable: myStep
     };
     await newColumns.push(result);
     // await newColumns.push(action);
