@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TablePlanning from './table-plan';
 import { GetMyTeamKPI } from '../../../redux/actions/user';
+import globalStyle from '../../../styles/globalStyles';
 
 const { Text } = Typography;
 
@@ -33,7 +34,7 @@ class Planning extends Component {
     const { myteam } = this.props;
     const { dataSource, form } = this.state;
     return(
-      <div>
+      <div style={globalStyle.contentContainer}>
         {
           (Object.keys(dataSource).length > 0 )?
             <div>

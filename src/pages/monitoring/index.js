@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import TableKPI from './kpi';
 import { doSaveKpi, doGetKpiList, doSubmitNext, doGetLatestGoalKpi } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
+import globalStyle from '../../styles/globalStyles';
 
 
 const { confirm } = Modal;
@@ -333,6 +334,16 @@ class MonitorKPI extends Component {
     });
   };
 
+  gotToAppraisal = () => {
+    if (this.state.dataSource.length > 20) {
+      message.warning('Maximum KPI is 20');
+    } else if (this.state.kpiErr) {
+      message.warning(this.state.kpiErrMessage);
+    } else {
+      this.props.history.push('/appraisal');
+    }
+  }
+
   render() {
     const {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback, userId, isSuperior
@@ -351,7 +362,7 @@ class MonitorKPI extends Component {
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         <div>
           <Divider />
           <Text strong> Monitoring KPI - {stafname} </Text>
@@ -360,7 +371,7 @@ class MonitorKPI extends Component {
           </Text>
           <Divider />
           <center>
-            <Title level={4}>{`Performance Management - ${name || ''}`}</Title>
+            <Title level={4}>{name || ''}</Title>
             <br />
           </center>
         </div>
@@ -420,7 +431,7 @@ class MonitorKPI extends Component {
                   </Button>
                   <Button
                     id="submit-superior"
-                    onClick={()=> this.props.history.push('/appraisal')}
+                    onClick={this.gotToAppraisal}
                     type="primary" style={{ margin: 10 }}
                   >
                   Go To Appraisal

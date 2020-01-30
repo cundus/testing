@@ -13,7 +13,14 @@ const StepWizzard = (props) => {
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const { step /*stepChange*/ } = props;
   return (
-    <div style={{ ...globalStyle.contentContainer, paddingBottom: 0 }}>
+    <div style={{
+      ...globalStyle.contentContainer,
+      paddingBottom: 0,
+      borderRadius: 0,
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20
+    }}
+    >
       <Steps
         type="navigation"
         current={step}

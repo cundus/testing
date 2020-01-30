@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import { getListActivity, getActivityStatus, getActivityThreadChat, createChat } from '../../redux/actions/activity';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
+import globalStyle from '../../styles/globalStyles';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -82,7 +83,7 @@ class Chat extends Component {
     const { kpiName } = activityThread;
     const { name: chatName, fullName, feedbacks, userId } = chat;
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         <div>
           <Divider />
           <Text strong> Activity </Text>

@@ -367,7 +367,7 @@ class CreateKPI extends Component {
     } = kpiReducers;
     const { name } = dataGoal;
     return (
-      <div style={globalStyle.contentContainer}>
+      <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
         <div>
           <Divider />
           <Text strong>Create New KPI </Text>

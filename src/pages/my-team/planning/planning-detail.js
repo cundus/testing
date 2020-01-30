@@ -9,6 +9,7 @@ import {
 } from '../../../redux/actions/user';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
+import globalStyle from '../../../styles/globalStyles';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -147,7 +148,7 @@ class PlanningDetail extends Component {
 
   render() {
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         {
          (this.state.dataSource.length > 0 ) ?
            <div>

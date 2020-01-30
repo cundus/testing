@@ -59,7 +59,11 @@ const initialState = {
   dataSecondManager: {},
   dataMetrics: [],
   dataKpiMetrics: [],
-  dataKpiManagerMetrics: []
+  dataKpiManagerMetrics: [],
+  generalFeedback: {
+    id: null,
+    comment: null
+  }
 };
 
 const kpiReducers = (state = initialState, action) => {

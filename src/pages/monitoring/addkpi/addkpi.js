@@ -18,6 +18,7 @@ import {
 import CreateOwn from './component/create-own';
 import Cascade from './component/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../redux/status-code-type';
+import globalStyle from '../../../styles/globalStyles';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -366,7 +367,7 @@ class CreateKPI extends Component {
     } = kpiReducers;
     const { name } = dataGoal;
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         <div>
           <Divider />
           <Text strong>ADD New KPI </Text>

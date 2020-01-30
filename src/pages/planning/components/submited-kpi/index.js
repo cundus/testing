@@ -12,6 +12,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
+import globalStyle from '../../../../styles/globalStyles';
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -111,57 +112,61 @@ class SubmitedKPI extends Component {
     } = kpiReducers;
     return (
       <div>
-        <div>
-          <Divider />
-          <Text strong>Submit KPI </Text>
-          <Text>Submit KPI to your Superior</Text>
-          <br />
-          <Text type={weightTotalErr ? 'danger' : ''}>
-            Total KPI Weight :
-            {` ${weightTotal}%`}
-          </Text>
-          <Divider />
-        </div>
-        {!loadingKpi ?
+        <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
           <div>
-            <TableSubmitedKPI
-              dataMetrics={dataKpiMetrics}
-              dataSource={dataSource}
-              loading={loadingKpi}
-              isFeedback={isFeedback}
-            />
+            <Divider />
+            <Text strong>Submit KPI </Text>
+            <Text>Submit KPI to your Superior</Text>
+            <br />
+            <Text type={weightTotalErr ? 'danger' : ''}>
+              Total KPI Weight :
+              {` ${weightTotal}%`}
+            </Text>
+            <Divider />
+          </div>
+          {!loadingKpi ?
             <div>
-              <Text strong>Challenge yourself :</Text>
-              <TextArea
-                id="challenge-input"
-                placeholder="Challenge yourself"
-                label="Challenge yourself"
-                value={challengeYour}
-                disabled
+              <TableSubmitedKPI
+                dataMetrics={dataKpiMetrics}
+                dataSource={dataSource}
+                loading={loadingKpi}
+                isFeedback={isFeedback}
               />
-            </div>
-            {generalFeedback.comment &&
-              <div style={{
-                marginTop: 20,
-                paddingBottom: 10,
-                paddingTop: 10,
-                backgroundColor: 'rgb(250, 247, 187)',
-                overflow: 'hidden'
-              }}
-              >
-                <Text strong>General Feedback :</Text>
-                <Paragraph>{generalFeedback.comment}</Paragraph>
-              </div>}
-            <center>
-              {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
+              <div>
+                <Text strong>Challenge yourself :</Text>
+                <TextArea
+                  id="challenge-input"
+                  placeholder="Challenge yourself"
+                  label="Challenge yourself"
+                  value={challengeYour}
+                  disabled
+                />
+              </div>
+            </div> : <center><Spin /></center>}
+        </div>
+        {generalFeedback.comment &&
+          <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
+            <Text strong>General Feedback :</Text>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
+          </div>}
+        <center>
+          <div style={{
+            ...globalStyle.contentContainer,
+            textAlign: 'center',
+            borderRadius: 0,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20
+          }}
+          >
+            {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
               <Button
                 style={{ margin: 10, borderColor: '#52c41a' }}
               >
                 <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
                 <Text strong>Your KPI Approved</Text>
               </Button>}
-            </center>
-          </div> : <center><Spin /></center>}
+          </div>
+        </center>
       </div>
     );
   }

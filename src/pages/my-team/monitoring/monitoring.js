@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import { GetMyTeamKPIMonitoring } from '../../../redux/actions/user';
 import TableMonitoring from './table-monitoring';
+import globalStyle from "../../../styles/globalStyles";
 
 const { Text } = Typography;
 
@@ -17,7 +18,7 @@ class Monitoring extends Component {
   render() {
     const { myteam } = this.props;
     return(
-      <div>
+      <div style={globalStyle.contentContainer}>
         {
           (Object.keys(myteam).length)?
             <div>

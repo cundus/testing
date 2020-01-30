@@ -108,17 +108,19 @@ class Planning extends Component {
     } = kpiReducers;
     if (error) {
       return (
-        <Result
-          status={status}
-          title={status}
-          subTitle={`Sorry, ${errMessage}`}
-          // eslint-disable-next-line react/jsx-no-bind
-          extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
-        />
+        <div style={globalStyle.contentContainer}>
+          <Result
+            status={status}
+            title={status}
+            subTitle={`Sorry, ${errMessage}`}
+            // eslint-disable-next-line react/jsx-no-bind
+            extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
+          />
+        </div>
       );
     } else {
       return (
-        <div style={{ ...globalStyle.contentContainer, padding: 0, background: 'none' }}>
+        <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
           {loading ? <center><Spin /></center> :
           <div>
             <Step step={step} stepChange={stepChange} />

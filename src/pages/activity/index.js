@@ -17,6 +17,7 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
+import globalStyle from '../../styles/globalStyles';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -160,7 +161,7 @@ class Activity extends Component {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
     }
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         <div>
           <Divider />
           <Text strong> Activity </Text>

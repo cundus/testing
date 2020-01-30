@@ -17,6 +17,7 @@ import { getListAchivement, createAchievement, updateAchievement } from '../../r
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import { doGetKpiList } from '../../redux/actions/kpi';
+import globalStyle from '../../styles/globalStyles';
 
 
 const { confirm } = Modal;
@@ -161,7 +162,7 @@ class Achievement extends Component {
     }
 
     return (
-      <div>
+      <div style={globalStyle.contentContainer}>
         <div>
           <Divider />
           <Text strong> Achievement </Text>

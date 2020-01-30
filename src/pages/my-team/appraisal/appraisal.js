@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { GetMyTeamKPIApraisal } from '../../../redux/actions/user';
 import TableMonitoring from './table-appraisal';
 import TableAppraisal from "./table-appraisal";
+import globalStyle from "../../../styles/globalStyles";
 
 const { Text } = Typography;
 
@@ -18,7 +19,7 @@ class Appraisal extends Component {
   render() {
     const { myteam } = this.props;
     return(
-      <div>
+      <div style={globalStyle.contentContainer}>
         {
           (Object.keys(myteam).length)?
             <div>

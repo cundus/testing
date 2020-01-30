@@ -375,7 +375,14 @@ class DraftKPI extends Component {
             <Text strong>General Feedback :</Text>
             <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
-        <div style={{ ...globalStyle.contentContainer, textAlign: 'center', borderRadius: 0 }}>
+        <div style={{
+          ...globalStyle.contentContainer,
+          textAlign: 'center',
+          borderRadius: 0,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20
+        }}
+        >
           <Button
             id="add-kpi"
             // eslint-disable-next-line react/jsx-no-bind

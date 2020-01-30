@@ -8,10 +8,7 @@ import {
   Col,
   Row,
   message,
-  Modal,
-  Input,
-  Skeleton,
-  Button
+  Modal
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -24,8 +21,7 @@ import {
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 
-const { Text, Paragraph, Title } = Typography;
-const { TextArea } = Input;
+const { Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -422,7 +418,7 @@ class Appraisal extends Component {
     });
   };
 
-  changeGeneralFeedback = ({ target: { value } }) => {
+  changeChallenge = ({ target: { value } }) => {
     this.setState({ challengeYour: value });
   };
 
@@ -510,68 +506,10 @@ class Appraisal extends Component {
             </Tabs>
           </div>
         </div>
-        <center>
-          <Skeleton active loading={loadingKpis && loadingMyValue} paragraph={false} title={{ width: '60%' }}>
-            {myStep ?
-              <div style={{ textAlign: 'center', margin: 40 }}>
-                <Title
-                  level={4}
-                  type="warning"
-                  ghost
-                  strong
-                >
-                  Your Appraisal has been sent to your Manager
-                </Title>
-              </div> :
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  id="go-monitoring"
-                  // onClick={goToMonitoring}
-                  style={{ margin: 10 }}
-                >
-                  Back
-                </Button>
-                <Button
-                  id="save-assessment"
-                  // onClick={handleSaveAssessment}
-                  style={{ margin: 10 }}
-                >
-                  Save & Send Feedback
-                </Button>
-                <Button
-                  id="send-manager"
-                  type="primary"
-                  // onClick={handleSubmit}
-                  style={{ margin: 10 }}
-                >
-                  Approve
-                </Button>
-              </div>}
-          </Skeleton>
-        </center>
-        <div>
-          <Text strong>Challenge yourself :</Text>
-          <TextArea
-            id="challenge-input"
-            placeholder="Challenge yourself"
-            label="Challenge yourself"
-            value={challengeYour}
-            disabled
-            // onChange={changeChallenge}
-          />
-        </div>
         {generalFeedback && generalFeedback.id &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <TextArea
-              id="challenge-input"
-              placeholder="Challenge yourself"
-              label="Challenge yourself"
-              value={generalFeedback.comment}
-              // disabled
-              // onChange={changeChallenge}
-            />
-            {/* <Paragraph>{generalFeedback.comment}</Paragraph> */}
+            <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
       </div>
     );
