@@ -131,7 +131,7 @@ class CreateKPI extends Component {
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line no-unused-expressions
-    dataFirstManager && dataFirstManager.kpi.map((itemKpi) => {
+    dataFirstManager && dataFirstManager.kpi && dataFirstManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -156,7 +156,7 @@ class CreateKPI extends Component {
       return data;
     });
     // eslint-disable-next-line no-unused-expressions
-    dataSecondManager && dataSecondManager.kpi.map((itemKpi) => {
+    dataSecondManager && dataSecondManager.kpi && dataSecondManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
         return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
           metric.achievementText : metric.achievementNumeric}"}`;
@@ -255,7 +255,7 @@ class CreateKPI extends Component {
       challangeYourSelf: challenge
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err || tab === '2') {
+      if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -270,6 +270,8 @@ class CreateKPI extends Component {
           },
           onCancel() {}
         });
+      } else if (tab === '1') {
+        this.changeTab('2');
       }
     });
   };
