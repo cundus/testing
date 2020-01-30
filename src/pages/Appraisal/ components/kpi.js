@@ -20,13 +20,17 @@ class KPI extends Component {
 
   componentDidUpdate() {
     const { metrics } = this.state;
-    const { dataMetrics } = this.props;
+    const { dataMetrics, isFeedback, feedShow } = this.props;
     if (metrics !== dataMetrics) {
       this.getColumns();
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         metrics: dataMetrics
       });
+    }
+    if (isFeedback) {
+      this.getColumns();
+      feedShow(false);
     }
   }
 

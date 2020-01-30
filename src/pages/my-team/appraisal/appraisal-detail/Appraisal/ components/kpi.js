@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton, Input, Spin
+ Button, Typography, Skeleton
 } from 'antd';
 import { DataTable } from '../../../../../../components';
 import ModalAssessment from './modalAssesment';
 
-const { Text, Title } = Typography;
-const { TextArea } = Input;
+const { Text } = Typography;
 
 class KPI extends Component {
   constructor(props) {
@@ -33,7 +32,7 @@ class KPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics, isFeedback } = this.props;
+    const { dataMetrics } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -155,7 +154,7 @@ class KPI extends Component {
       editable: true
     };
     await newColumns.push(result);
-    await newColumns.push(action);
+    // await newColumns.push(action);
     await newColumns.push(Feedback);
     this.setState({
       columns: newColumns
@@ -168,75 +167,17 @@ class KPI extends Component {
       dataSource,
       loading,
       form,
-      challengeYour,
-      myStep,
-      goToMonitoring,
-      handleSubmit,
-      changeChallenge,
-      handleSaveAssessment
+      handleChangeField
     } = this.props;
     return (
       <div>
-        {/* <div> */}
-          {/* <Spin
-            spinning={loading}
-          > */}
-            <DataTable
-              form={form}
-              columns={columns}
-              loading={loading}
-              datasource={dataSource}
-            />
-            {/* <Text strong>Challenge yourself :</Text>
-            <TextArea
-              id="challenge-input"
-              placeholder="Challenge yourself"
-              label="Challenge yourself"
-              value={challengeYour}
-              disabled={myStep}
-              onChange={changeChallenge}
-            />
-          </Spin>
-        </div>
-        <center>
-          <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
-            {myStep ?
-              <div style={{ textAlign: 'center', margin: 40 }}>
-                <Title
-                  level={4}
-                  type="warning"
-                  ghost
-                  strong
-                >
-                  Your Appraisal has been sent to your Manager
-                </Title>
-              </div> :
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  id="go-monitoring"
-                  onClick={goToMonitoring}
-                  style={{ margin: 10 }}
-                >
-                  Go To Monitoring
-                </Button>
-                <Button
-                  id="save-assessment"
-                  onClick={handleSaveAssessment}
-                  style={{ margin: 10 }}
-                >
-                  Save Assessment
-                </Button>
-                <Button
-                  id="send-manager"
-                  type="primary"
-                  onClick={handleSubmit}
-                  style={{ margin: 10 }}
-                >
-                  Send To Manager
-                </Button>
-              </div>}
-          </Skeleton>
-        </center> */}
+        <DataTable
+          form={form}
+          columns={columns}
+          loading={loading}
+          handlechange={handleChangeField}
+          datasource={dataSource}
+        />
       </div>
     );
   }
@@ -254,10 +195,5 @@ KPI.propTypes = {
   loading: PropTypes.bool,
   isFeedback: PropTypes.bool,
   myStep: PropTypes.bool,
-  form: PropTypes.instanceOf(Object),
-  challengeYour: PropTypes.string,
-  goToMonitoring: PropTypes.func,
-  handleSubmit:  PropTypes.func,
-  changeChallenge: PropTypes.func,
-  handleSaveAssessment:  PropTypes.func
+  form: PropTypes.instanceOf(Object)
 };

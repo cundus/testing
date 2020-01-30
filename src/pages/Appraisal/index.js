@@ -270,6 +270,10 @@ class Appraisal extends Component {
     this.setState({ tab: activeKey });
   };
 
+  feedShow = (status) => {
+    this.setState({ isFeedback: status });
+  };
+
   goToMonitoring = () => {
     const { history } = this.props;
     history.push('/monitoring');
@@ -484,6 +488,7 @@ class Appraisal extends Component {
                     dataMetrics={dataKpiMetrics}
                     myStep={myStep}
                     isFeedback={isFeedback}
+                    feedShow={this.feedShow}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
                   />

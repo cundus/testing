@@ -8,13 +8,14 @@ import {
   Divider,
   Col,
   Row,
-  message,
   Modal,
   Input,
   Skeleton,
   Button,
+  message,
   Spin,
-  Icon
+  Icon,
+  Select
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -22,7 +23,16 @@ import TableKPI from './ components/kpi';
 import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
-  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext
+  doGetKpiList,
+  doAssessment,
+  getValueList,
+  getRatings,
+  saveValueList,
+  doGetKpiRating,
+  doSubmitNext,
+  doGetProposeRating,
+  doApproveAppraisal,
+  doSendBackAppraisal
 } from '../../../../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
@@ -31,6 +41,7 @@ const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
+const { Option } = Select;
 
 class Appraisal extends Component {
   constructor(props) {
@@ -57,19 +68,20 @@ class Appraisal extends Component {
 
   getData = async (e) => {
     const {
-      match
+      match,
+      getKpiRating,
+      getProposeRating
     } = this.props;
     const { params } = match;
-    console.log(match);
-    
     this.getOwnKpiList(params.userId);
     this.getOwnValues(params.userId);
+    getKpiRating();
+    getProposeRating();
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, getKpiRating, form } = this.props;
+    const { getKpiList, form } = this.props;
     await getKpiList(id);
-    getKpiRating();
     const { kpiReducers } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback
@@ -179,7 +191,8 @@ class Appraisal extends Component {
         name: itemValues.name,
         rating: ratingCheck.length < 1 ? 'Choose Value' : itemValues.valuesRatingDTO.rating,
         comment: itemValues.valuesRatingDTO.comment,
-        attachments: newFiles
+        attachments: newFiles,
+        feedback: itemValues.otherValuesRatingDTO.comment
       };
       newData.push(data);
     });
@@ -211,12 +224,83 @@ class Appraisal extends Component {
     });
   }
 
+  handleSendBack = () => {
+    const { form, sendBackAppraisal, match } = this.props;
+    const { params } = match;
+    const { dataKpis, dataValueList, generalFeedbackState } = this.state;
+    const kpiFeedbacks = dataKpis.map((data, index) => {
+      return {
+        id: data.id,
+        comment: data.feedback
+      };
+    });
+    const valuesFeedbacks = dataValueList.map((data, index) => {
+      return {
+        id: data.valueId,
+        comment: data.feedback
+      };
+    });
+    const data = {
+      challengeOthersRatingComments: generalFeedbackState,
+      kpiFeedbacks,
+      valuesFeedbacks
+    };
+    confirm({
+      title: 'Are you sure?',
+      onOk: async () => {
+        await sendBackAppraisal(params.userId, data);
+        const {
+          kpiReducers,
+          history
+        } = this.props;
+        const {
+          loadingSendBackAppraisal,
+          statusSendBackAppraisal,
+          messageSendBackAppraisal
+        } = kpiReducers;
+        if (!loadingSendBackAppraisal) {
+          if (statusSendBackAppraisal === Success) {
+            history.push('/my-team/appraisal/');
+            message.success('Assessment & Values has given feedback');
+          } else {
+            message.warning(`Sorry ${messageSendBackAppraisal}`);
+          }
+        }
+      },
+      onCancel() {}
+    });
+  };
+
   changeGeneralFeedback = ({ target: { value } }) => {
     this.setState({ generalFeedbackState: value });
   };
 
   changeTab = (activeKey) => {
     this.setState({ tab: activeKey });
+  };
+
+  handleChangeAssessment = (row) => {
+    const { dataKpis } = this.state;
+    const newData = [...dataKpis];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    this.setState({ dataKpis: newData });
+  };
+
+  handleChangeValues = (row) => {
+    const { dataValueList } = this.state;
+    const newData = [...dataValueList];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    this.setState({ dataValueList: newData });
   };
 
   render() {
@@ -240,7 +324,8 @@ class Appraisal extends Component {
     } = this.props;
     const {
       dataKpiMetrics,
-      generalFeedback
+      dataProposeRating,
+      dataKpiRating
     } = kpiReducers;
     return (
       <div>
@@ -300,7 +385,7 @@ class Appraisal extends Component {
                   loading={loadingMyValue}
                   dataSource={dataValueList}
                   getOwnValues={this.getOwnValues}
-                  handleChangeField={this.handleChange}
+                  handleChangeField={this.handleChangeValues}
                   handleSubmit={this.handleSubmit}
                   goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
@@ -309,6 +394,22 @@ class Appraisal extends Component {
                 />
               </TabPane>
             </Tabs>
+          </div>
+          <div>
+            <Text strong>Propose Rating : </Text>
+            {form.getFieldDecorator('dataGeneral.proposeRating', {
+              rules: [{ required: true, message: 'Rating is required' }],
+              initialValue: dataKpiRating && dataKpiRating.rating ? dataKpiRating.rating : undefined
+            })(
+              <Select
+                style={{ width: 150 }}
+                placeholder="Propose Rating"
+              >
+                {dataProposeRating.map((item, index) => {
+                  return <Option key={index} value={item.id}>{item.name}</Option>;
+                })}
+              </Select>
+            )}
           </div>
         </div>
         <div style={{
@@ -330,7 +431,7 @@ class Appraisal extends Component {
                 </Button>
                 <Button
                   id="save-assessment"
-                  // onClick={handleSaveAssessment}
+                  onClick={this.handleSendBack}
                   style={{ margin: 10 }}
                 >
                   Save & Send Feedback
@@ -397,7 +498,10 @@ const mapDispatchToProps = (dispatch) => ({
   getRatingList: () => dispatch(getRatings()),
   getKpiRating: () => dispatch(doGetKpiRating()),
   doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
-  submitNext: (id) => dispatch(doSubmitNext(id))
+  submitNext: (id) => dispatch(doSubmitNext(id)),
+  getProposeRating: () => dispatch(doGetProposeRating()),
+  sendBackAppraisal: (id, data) => dispatch(doSendBackAppraisal(id, data)),
+  approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data))
 });
 
 const connectToComponent = connect(
@@ -409,14 +513,14 @@ export default Form.create({})(withRouter(connectToComponent));
 
 Appraisal.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object),
-  doSaveValues: PropTypes.func,
-  doAssess: PropTypes.func,
   getRatingList: PropTypes.func,
   getValues: PropTypes.func,
   getKpiList: PropTypes.func,
   getKpiRating: PropTypes.func,
-  submitNext: PropTypes.func,
   match: PropTypes.instanceOf(Object),
+  submitNext: PropTypes.func,
+  doSaveValues: PropTypes.func,
+  doAssess: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)

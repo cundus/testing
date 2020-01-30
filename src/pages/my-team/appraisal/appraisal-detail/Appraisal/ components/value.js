@@ -27,39 +27,28 @@ class Value extends Component {
       {
         title: 'Ratings',
         dataIndex: 'rating',
-        align: 'center',
         render: (text, record) => {
-          const { optionRating, form, myStep } = this.props;
+          const { optionRating } = this.props;
           return (
-            <Form>
-              <Form.Item style={{ width: '100%' }}>
-                {form.getFieldDecorator(`dataGeneral[${record.index}].rating`, {
-                  rules: [{ required: true, message: 'Rating is required' }],
-                  initialValue: record.rating
-                })(
-                  <Select
-                    placeholder="Choose Value"
-                    disabled={myStep}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={() => this.change(record, [`dataGeneral[${record.index}].rating`])}
-                  >
-                    {optionRating && optionRating.map((value, index) => {
-                      return <Option key={index} value={value.id}>{value.rating}</Option>;
-                    })}
-                  </Select>
-                )}
-              </Form.Item>
-            </Form>
+            <Select
+              value={record.rating}
+              placeholder="Choose Value"
+              disabled
+              style={{ width: '100%' }}
+            >
+              {optionRating && optionRating.map((value, index) => {
+                return <Option key={index} value={value.id}>{value.rating}</Option>;
+              })}
+            </Select>
           );
         }
       },
       {
         title: 'Remarks/Evidence',
         dataIndex: 'comment',
-        align: 'center',
         placeholder: 'Enter your Remarks here',
         // eslint-disable-next-line react/destructuring-assignment
-        editable: !this.props.myStep
+        editable: false
       },
       {
         title: 'Upload',
@@ -76,7 +65,7 @@ class Value extends Component {
             onPreview: this.download,
             onDownload: this.download,
             // eslint-disable-next-line react/destructuring-assignment
-            disabled: this.props.myStep,
+            disabled: true,
             accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
           };
           return (
@@ -93,8 +82,9 @@ class Value extends Component {
       {
         title: 'Feedback',
         dataIndex: 'feedback',
-        placeholder: 'Enter Level 2',
+        placeholder: 'Enter Value Feedback',
         align: 'center',
+        editable: true,
         className: 'ant-table-th-yellow'
       }
     ];

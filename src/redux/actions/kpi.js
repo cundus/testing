@@ -37,7 +37,16 @@ import {
   DELETE_FILE_FAILED,
   GET_KPI_RATING,
   GET_KPI_RATING_SUCCESS,
-  GET_KPI_RATING_FAILED
+  GET_KPI_RATING_FAILED,
+  GET_PROPOSE_RATING,
+  GET_PROPOSE_RATING_SUCCESS,
+  GET_PROPOSE_RATING_FAILED,
+  SEND_FEEDBACK_APPRAISAL,
+  SEND_FEEDBACK_APPRAISAL_SUCCESS,
+  SEND_FEEDBACK_APPRAISAL_FAILED,
+  APPROVE_APPRAISAL,
+  APPROVE_APPRAISAL_SUCCESS,
+  APPROVE_APPRAISAL_FAILED
 } from '../action.type';
 
 import {
@@ -45,10 +54,10 @@ import {
 } from '../status-code-type';
 
 import {
-  getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext
+  getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -684,6 +693,152 @@ export const doGetKpiRating = () => async (dispatch) => {
     } else {
       dispatch({
         type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doGetProposeRating = () => async (dispatch) => {
+  dispatch({
+    type: GET_PROPOSE_RATING,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await getProposeRating();
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_PROPOSE_RATING_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_PROPOSE_RATING_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_PROPOSE_RATING_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_PROPOSE_RATING_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doSendBackAppraisal = (id, data) => async (dispatch) => {
+  dispatch({
+    type: SEND_FEEDBACK_APPRAISAL,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await sendFeedbackAppraisal(id, data);
+    await submitToPreviousStep(id);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: SEND_FEEDBACK_APPRAISAL_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: SEND_FEEDBACK_APPRAISAL_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: SEND_FEEDBACK_APPRAISAL_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: SEND_FEEDBACK_APPRAISAL_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doApproveAppraisal = (id, data) => async (dispatch) => {
+  dispatch({
+    type: APPROVE_APPRAISAL,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await approveAppraisal(id, data);
+    await submitNext(id);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: APPROVE_APPRAISAL_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',

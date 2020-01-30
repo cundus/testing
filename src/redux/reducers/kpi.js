@@ -37,7 +37,16 @@ import {
   DELETE_FILE_FAILED,
   GET_KPI_RATING,
   GET_KPI_RATING_SUCCESS,
-  GET_KPI_RATING_FAILED
+  GET_KPI_RATING_FAILED,
+  GET_PROPOSE_RATING,
+  GET_PROPOSE_RATING_SUCCESS,
+  GET_PROPOSE_RATING_FAILED,
+  SEND_FEEDBACK_APPRAISAL,
+  SEND_FEEDBACK_APPRAISAL_SUCCESS,
+  SEND_FEEDBACK_APPRAISAL_FAILED,
+  APPROVE_APPRAISAL,
+  APPROVE_APPRAISAL_SUCCESS,
+  APPROVE_APPRAISAL_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -60,6 +69,7 @@ const initialState = {
   dataMetrics: [],
   dataKpiMetrics: [],
   dataKpiManagerMetrics: [],
+  dataProposeRating: [],
   generalFeedback: {
     id: null,
     comment: null
@@ -316,7 +326,7 @@ const kpiReducers = (state = initialState, action) => {
       return {
         ...state,
         loadingKpiRating: action.loading,
-        dataKpiRating: {}
+        dataKpiRating: null
       };
     case GET_KPI_RATING_SUCCESS:
       return {
@@ -332,7 +342,73 @@ const kpiReducers = (state = initialState, action) => {
         loadingKpiRating: action.loading,
         statusKpiRating: action.status,
         messageKpiRating: action.message,
-        dataKpiRating: {}
+        dataKpiRating: null
+      };
+    case GET_PROPOSE_RATING:
+      return {
+        ...state,
+        loadingProposeRating: action.loading,
+        dataProposeRating: []
+      };
+    case GET_PROPOSE_RATING_SUCCESS:
+      return {
+        ...state,
+        loadingProposeRating: action.loading,
+        statusProposeRating: action.status,
+        messageProposeRating: action.message,
+        dataProposeRating: action.data
+      };
+    case GET_PROPOSE_RATING_FAILED:
+      return {
+        ...state,
+        loadingProposeRating: action.loading,
+        statusProposeRating: action.status,
+        messageProposeRating: action.message,
+        dataProposeRating: []
+      };
+    case SEND_FEEDBACK_APPRAISAL:
+      return {
+        ...state,
+        loadingSendBackAppraisal: action.loading,
+        dataSendBackAppraisal: null
+      };
+    case SEND_FEEDBACK_APPRAISAL_SUCCESS:
+      return {
+        ...state,
+        loadingSendBackAppraisal: action.loading,
+        statusSendBackAppraisal: action.status,
+        messageSendBackAppraisal: action.message,
+        dataSendBackAppraisal: action.data
+      };
+    case SEND_FEEDBACK_APPRAISAL_FAILED:
+      return {
+        ...state,
+        loadingSendBackAppraisal: action.loading,
+        statusSendBackAppraisal: action.status,
+        messageSendBackAppraisal: action.message,
+        dataSendBackAppraisal: null
+      };
+    case APPROVE_APPRAISAL:
+      return {
+        ...state,
+        loadingApproveAppraisal: action.loading,
+        dataApproveAppraisal: null
+      };
+    case APPROVE_APPRAISAL_SUCCESS:
+      return {
+        ...state,
+        loadingApproveAppraisal: action.loading,
+        statusApproveAppraisal: action.status,
+        messageApproveAppraisal: action.message,
+        dataApproveAppraisal: action.data
+      };
+    case APPROVE_APPRAISAL_FAILED:
+      return {
+        ...state,
+        loadingApproveAppraisal: action.loading,
+        statusApproveAppraisal: action.status,
+        messageApproveAppraisal: action.message,
+        dataApproveAppraisal: null
       };
     default:
       return { ...state };

@@ -17,12 +17,16 @@ class Appraisal extends Component {
   }
 
   componentDidMount() {
-    this.fetchAppraisalTeam();
+    const {
+      userReducers
+    } = this.props;
+    const { user } = userReducers.result;
+    this.fetchAppraisalTeam(user.userId);
   }
 
-  fetchAppraisalTeam = async () => {
+  fetchAppraisalTeam = async (id) => {
     const { getAppraisalTeam } = this.props;
-    await getAppraisalTeam('aaaa');
+    await getAppraisalTeam(id);
     const { appraisal } = this.props;
     const { data, loading } = appraisal;
     if (!loading) {
@@ -95,7 +99,8 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  appraisal: state.AppraisalReducers
+  appraisal: state.AppraisalReducers,
+  userReducers: state.userReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Appraisal);
 

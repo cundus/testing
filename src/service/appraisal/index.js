@@ -59,3 +59,29 @@ export const deleteFile = (id) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const getProposeRating = () => customAxios({
+  url: '/kpi/proposed-rating/',
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+export const sendFeedbackAppraisal = (userId, data) => customAxios({
+  url: `/user/team/appraisal/send-back/${userId}`,
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
+
+export const approveAppraisal = (userId, data) => customAxios({
+  url: `/user/team/appraisal/approve/${userId}`,
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
