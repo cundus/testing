@@ -41,7 +41,8 @@ export const metricValidator = (data) => [
               break;
             }
           }
-          if (isFilled && !isError) {            for (let index = 0; index < datas.length - 1; index++) {
+          if (isFilled && !isError) {
+            for (let index = 0; index < datas.length - 1; index++) {
               if (parseFloat(dataMetrics[datas[index]]) < parseFloat(dataMetrics[datas[index + 1]])) {
                 isSortedAsc = true;
               } else {

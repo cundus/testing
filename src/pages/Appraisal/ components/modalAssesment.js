@@ -73,7 +73,14 @@ class modalAssessment extends Component {
               {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
                 rules: [
                   { required: true, message: 'Value is required' },
-                  { type: 'number', message: 'Value must be a number' }
+                  { type: 'number', message: 'Value must be a number' },
+                  {
+                    validator: async (rule, value, callback, source) => {
+                      if (value === 0) {
+                        callback('Value must be not a zero');
+                      }
+                    }
+                  }
                 ],
                 initialValue: assessment
               })(<InputNumber size="large" style={{ width: '100%' }} />)}

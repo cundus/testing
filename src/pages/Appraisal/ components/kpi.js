@@ -125,7 +125,7 @@ class KPI extends Component {
         return (
           <div>
             <Button
-              disabled={myStep}
+              // disabled={myStep}
               type={error ? 'danger' : 'primary'}
               ghost
               // eslint-disable-next-line react/jsx-no-bind
