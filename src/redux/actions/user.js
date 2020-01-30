@@ -53,50 +53,50 @@ export const GetInfoUser = (token) => {
 };
 
 
-export const GetMyTeamKPI = (idUser) => {
-  return async (dispatch) => {
-    dispatch({
-      type: startGetMyTeam,
-      data: []
-    });
-    try {
-      const resp = await getMyTeamAction(idUser);
-      if (resp.status_code !== Success) {
-        dispatch({
-          type: errGetMyTeam,
-          data: []
-        });
-      }
-      let arayTeam = resp.data.result;
-      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
-        const Team = myT;
-        let Kpi = await getMyKPIAction(myT.userId);
-        Kpi = Kpi.data.result;
-        Team.title = _.get(Kpi, 'kpiTitle', 'none');
-        Team.score = _.get(Kpi, 'kpiScore', '-');
-        Team.ratting = _.get(Kpi, 'kpiRating', '-');
-        Team.status = _.get(Kpi, 'userStatus', '-');
-        Team.result = _.get(Kpi, 'nonKpiresult', '-');
-        Team.Key = _.get(Kpi, 'userId', '-');
-        return Team;
-      }));
+// export const GetMyTeamKPI = (idUser) => {
+//   return async (dispatch) => {
+//     dispatch({
+//       type: startGetMyTeam,
+//       data: []
+//     });
+//     try {
+//       const resp = await getMyTeamAction(idUser);
+//       if (resp.status_code !== Success) {
+//         dispatch({
+//           type: errGetMyTeam,
+//           data: []
+//         });
+//       }
+//       let arayTeam = resp.data.result;
+//       arayTeam = await Promise.all(arayTeam.map( async (myT) => {
+//         const Team = myT;
+//         let Kpi = await getMyKPIAction(myT.userId);
+//         Kpi = Kpi.data.result;
+//         Team.title = _.get(Kpi, 'kpiTitle', 'none');
+//         Team.score = _.get(Kpi, 'kpiScore', '-');
+//         Team.ratting = _.get(Kpi, 'kpiRating', '-');
+//         Team.status = _.get(Kpi, 'userStatus', '-');
+//         Team.result = _.get(Kpi, 'nonKpiresult', '-');
+//         Team.Key = _.get(Kpi, 'userId', '-');
+//         return Team;
+//       }));
 
-      resp.data.result = arayTeam;
-      dispatch({
-        type: getMyTeam,
-        data: resp.data
-      });
-    } catch (error) {
-      dispatch({
-        type: errGetMyTeam,
-        data: [{
-          error: true,
-          errorCode: error.response.status
-        }]
-      });
-    }
-  };
-};
+//       resp.data.result = arayTeam;
+//       dispatch({
+//         type: getMyTeam,
+//         data: resp.data
+//       });
+//     } catch (error) {
+//       dispatch({
+//         type: errGetMyTeam,
+//         data: [{
+//           error: true,
+//           errorCode: error.response.status
+//         }]
+//       });
+//     }
+//   };
+// };
 
 
 export const GetMyTeamKPIMonitoring = (idUser) => {
@@ -325,4 +325,53 @@ export const GetUserKpiState = () => {
       });
     }
   };
+};
+
+
+export const doGetMyTeamAppraisal = () => async (dispatch) => {
+  dispatch({
+    type: GET_KPI_RATING,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await getKpiRating();
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_KPI_RATING_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_KPI_RATING_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
 };
