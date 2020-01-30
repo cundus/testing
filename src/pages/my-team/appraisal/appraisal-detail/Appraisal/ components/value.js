@@ -106,7 +106,8 @@ class Value extends Component {
       }
     ];
     this.setState({
-      columns: newColumns
+      columns: newColumns,
+      myStepState: this.props.myStep
     });
   }
 
