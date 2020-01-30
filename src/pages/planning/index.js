@@ -6,7 +6,7 @@ import {
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
+  Step, CreateKpi, DraftKpi, SubmitKpi
 } from './components';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
@@ -130,10 +130,8 @@ class Planning extends Component {
           // eslint-disable-next-line no-nested-ternary
           step === 1 ?
             <DraftKpi stepChange={stepChange} /> :
-            step === 2 ?
-              <SubmitKpi stepChange={stepChange} /> :
-              step === 3 &&
-              <ReviewKpi stepChange={stepChange} />}
+            step === 2 &&
+              <SubmitKpi stepChange={stepChange} />}
           </div>}
         </div>
       );
