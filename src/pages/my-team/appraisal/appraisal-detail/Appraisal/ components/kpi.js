@@ -68,7 +68,7 @@ class KPI extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
-        width: 200,
+        width: 190,
         editable: false
       };
       newColumns.push(data);
@@ -145,20 +145,18 @@ class KPI extends Component {
         );
       }
     };
-    await newColumns.push(result);
-    await newColumns.push(action);
     const Feedback = {
       title: 'Feedback',
       dataIndex: 'feedback',
       placeholder: 'Enter KPI Feedback',
       align: 'center',
-      width: 100,
+      width: 110,
       className: 'ant-table-th-yellow',
-      editable: false
+      editable: true
     };
-    if (isFeedback) {
-      await newColumns.push(Feedback);
-    }
+    await newColumns.push(result);
+    await newColumns.push(action);
+    await newColumns.push(Feedback);
     this.setState({
       columns: newColumns
     });

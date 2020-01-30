@@ -93,6 +93,7 @@ class EditableCell extends React.Component {
       form,
       record
     };
+    
     if (index === 'kpi') { // kpi contain type of metrics
       const field = [];
       for (let a = 0; a < data.indexlength; a++) {
@@ -145,6 +146,7 @@ class EditableCell extends React.Component {
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
+              style={{background: '#EDEAA6', border: 0 }}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}

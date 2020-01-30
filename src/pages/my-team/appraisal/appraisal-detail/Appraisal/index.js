@@ -347,48 +347,39 @@ class Appraisal extends Component {
             </Skeleton>
           </center>
         </div>
-        <Spin spinning={loadingKpis && loadingMyValue} indicator={<Icon type="" />}>
-          <div style={{
-            ...globalStyle.contentContainer,
-            borderRadius: 0,
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
-            paddingTop: 0,
-            paddingBottom: 10
-          }}
-          >
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5,
+          paddingTop: 0,
+          paddingBottom: 10
+        }}
+        >
+          <Skeleton loading={loadingKpis} title={{ width: 100 }} paragraph={{ rows: 1 }} active>
             <Text strong>Challenge yourself :</Text>
-            {/* <Paragraph>{generalFeedback.comment}</Paragraph> */}
-            <TextArea
-              id="challenge-input"
-              placeholder="Challenge yourself"
-              label="Challenge yourself"
-              value={challengeYour}
-              disabled
-              // onChange={changeChallenge}
-            />
-          </div>
-          <div style={{
-            ...globalStyle.contentContainer,
-            background: 'rgb(250, 247, 187)',
-            borderRadius: 0,
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5
-          }}
-          >
-            <Text strong>General Feedback :</Text>
-            <TextArea
-              id="challenge-input"
-              placeholder="General Feedback"
-              label="Challenge yourself"
-              style={{ background: '#EDEAA6', border: 0 }}
-              value={generalFeedbackState}
-              // disabled
-              onChange={this.changeGeneralFeedback}
-            />
-            {/* <Paragraph>{generalFeedback.comment}</Paragraph> */}
-          </div>
-        </Spin>
+            <Paragraph>{challengeYour}</Paragraph>
+          </Skeleton>
+        </div>
+        <div style={{
+          ...globalStyle.contentContainer,
+          background: 'rgb(250, 247, 187)',
+          borderRadius: 0,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5
+        }}
+        >
+          <Text strong>General Feedback :</Text>
+          <TextArea
+            id="challenge-input"
+            placeholder="General Feedback"
+            label="Challenge yourself"
+            style={{ background: '#EDEAA6', border: 0 }}
+            value={generalFeedbackState}
+            // disabled
+            onChange={this.changeGeneralFeedback}
+          />
+        </div>
       </div>
     );
   }

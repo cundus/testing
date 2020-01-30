@@ -29,8 +29,8 @@ class Appraisal extends Component {
       let dataTeam = [];
       dataTeam = await data.map((item, index) => {
         return {
+          key: item.userId,
           ...item,
-          key: index,
           name: `${item.firstName} ${item.lastName}`,
           kpiTitle: 'loading',
           score: 'loading',
@@ -39,9 +39,7 @@ class Appraisal extends Component {
           statusNumber: 'loading'
         };
       });
-      console.log(dataTeam, 'aa');
-      
-      await this.setState({
+      this.setState({
         dataSource: dataTeam
       });
       this.fetchAppraisalTeamDetail();
@@ -55,14 +53,19 @@ class Appraisal extends Component {
       await getAppraisalTeamDetail(item.userId);
       const { appraisal } = this.props;
       const { dataa } = appraisal;
-      const newData = [...dataSource];
-      const indexItem = newData.findIndex((itemNew) => itemNew.userId === item.userId);
+      const newData = [...this.state.dataSource];
+      const indexItem = newData.findIndex((itemNew) => itemNew.key === item.key);
       const newItem = newData[index];
-      console.log(dataa);
-      // newData.splice(index, 1, {
-      //   ...item,
-      //   ...dataa
-      // });
+      const newItema = {
+        ...newItem,
+        ...dataa
+      };
+      newData.splice(indexItem, 1, {
+        ...newItema
+      });
+      this.setState({
+        dataSource: newData
+      });
     });
   }
 
