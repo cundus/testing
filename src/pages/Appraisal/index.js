@@ -120,7 +120,7 @@ class Appraisal extends Component {
       });
     }
     this.setState({
-      myStep: currentStep === 'Performance Review Manager',
+      myStep: currentStep !== 'Performance Review Employee',
       dataKpis: dataOrdered,
       challengeYour: challenge,
       loadingKpis: false,
@@ -446,7 +446,8 @@ class Appraisal extends Component {
     } = this.props;
     const {
       dataKpiMetrics,
-      generalFeedback
+      generalFeedback,
+      currentStep
     } = kpiReducers;
     return (
       <div>
@@ -487,6 +488,7 @@ class Appraisal extends Component {
                     dataSource={dataKpis}
                     dataMetrics={dataKpiMetrics}
                     myStep={myStep}
+                    currentStep={currentStep}
                     isFeedback={isFeedback}
                     feedShow={this.feedShow}
                     handleChangeField={this.handleChangeAssessment}
@@ -504,6 +506,7 @@ class Appraisal extends Component {
                   handleSubmit={this.handleSubmit}
                   goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
+                  currentStep={currentStep}
                   myStep={myStep}
                   optionRating={optionRating}
                 />

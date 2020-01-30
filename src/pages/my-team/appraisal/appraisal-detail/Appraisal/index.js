@@ -249,6 +249,8 @@ class Appraisal extends Component {
     };
     confirm({
       title: 'Are you sure?',
+      content: "Make sure you have given feedback on both KPI's & Values before sending the feedback",
+      okText: 'Send Feedback',
       onOk: async () => {
         await sendBackAppraisal(params.userId, data);
         const {
@@ -302,6 +304,8 @@ class Appraisal extends Component {
       if (!errors) {
         confirm({
           title: 'Are you sure?',
+          content: `Are you sure want to approve ${teamName}'s Appraisal?`,
+          okText: 'Approve',
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
@@ -315,7 +319,7 @@ class Appraisal extends Component {
             } = kpiReducers;
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
-                history.push('/my-team/appraisal/');
+                this.getData();
                 message.success(`${teamName}'s Appraisal has been send to system`);
               } else {
                 message.warning(`Sorry ${messageApproveAppraisal}`);

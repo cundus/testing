@@ -265,7 +265,8 @@ class Value extends Component {
       handleSave,
       loading,
       handleSubmit,
-      myStep
+      myStep,
+      currentStep
     } = this.props;
     return (
       <div>
@@ -282,14 +283,23 @@ class Value extends Component {
           <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
             {myStep ?
               <div style={{ textAlign: 'center', margin: 40 }}>
-                <Title
-                  level={4}
-                  type="warning"
-                  ghost
-                  strong
-                >
-                  Your Appraisal has been sent to your Manager
-                </Title>
+                {currentStep === 'Performance Review Manager' ?
+                  <Title
+                    level={4}
+                    type="warning"
+                    ghost
+                    strong
+                  >
+                    Your Appraisal has been sent to your Manager
+                  </Title> : currentStep === 'Compiling Process' &&
+                  <Title
+                    level={4}
+                    style={{ color: '#61C761', margin: 0 }}
+                    ghost
+                    strong
+                  >
+                    Your Values has been approved
+                  </Title>}
               </div> :
               <div style={{ textAlign: 'center' }}>
                 <Button

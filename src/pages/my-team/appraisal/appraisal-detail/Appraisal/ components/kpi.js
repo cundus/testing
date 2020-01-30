@@ -14,12 +14,13 @@ class KPI extends Component {
     super(props);
     this.state = {
       columns: [],
-      metrics: []
+      metrics: [],
+      myStepState: true
     };
   }
 
   componentDidUpdate() {
-    const { metrics } = this.state;
+    const { metrics, myStepState } = this.state;
     const { dataMetrics, myStep } = this.props;
     if (metrics !== dataMetrics) {
       this.getColumns();
@@ -27,6 +28,9 @@ class KPI extends Component {
       this.setState({
         metrics: dataMetrics
       });
+    }
+    if (myStepState !== myStep) {
+      this.getColumns();
     }
   }
 
@@ -109,7 +113,8 @@ class KPI extends Component {
     // await newColumns.push(action);
     await newColumns.push(Feedback);
     this.setState({
-      columns: newColumns
+      columns: newColumns,
+      myStepState: myStep
     });
   }
 

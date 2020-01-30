@@ -18,7 +18,29 @@ const { confirm } = Modal;
 class Value extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: [],
+      myStepState: true
+    };
+  }
+
+  componentDidUpdate() {
+    const { metrics, myStepState } = this.state;
+    const { dataMetrics, myStep } = this.props;
+    if (metrics !== dataMetrics) {
+      this.getColumns();
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        metrics: dataMetrics
+      });
+    }
+    if (myStepState !== myStep) {
+      this.getColumns();
+    }
+  }
+
+  getColumns = async () => {
+    const newColumns = [
       {
         title: 'Section',
         dataIndex: 'name'
@@ -83,6 +105,9 @@ class Value extends Component {
         className: 'ant-table-th-yellow'
       }
     ];
+    this.setState({
+      columns: newColumns
+    });
   }
 
   deleteFile = async (file) => {
@@ -241,16 +266,12 @@ class Value extends Component {
   };
 
   render() {
-    const { columns } = this;
+    const { columns } = this.state;
     const {
       dataSource,
       handleChangeField,
       form,
-      goToMonitoring,
-      handleSave,
-      loading,
-      handleSubmit,
-      myStep
+      loading
     } = this.props;
     return (
       <div>
@@ -263,45 +284,6 @@ class Value extends Component {
             datasource={dataSource}
           />
         </div>
-        {/* <center>
-          <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
-            {myStep ?
-              <div style={{ textAlign: 'center', margin: 40 }}>
-                <Title
-                  level={4}
-                  type="warning"
-                  ghost
-                  strong
-                >
-                  Your Appraisal has been sent to your Manager
-                </Title>
-              </div> :
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  id="go-monitoring"
-                  onClick={goToMonitoring}
-                  style={{ margin: 10 }}
-                >
-                  Go To Monitoring
-                </Button>
-                <Button
-                  id="save-assessment"
-                  onClick={handleSave}
-                  style={{ margin: 10 }}
-                >
-                  Save Values
-                </Button>
-                <Button
-                  id="send-manager"
-                  type="primary"
-                  onClick={handleSubmit}
-                  style={{ margin: 10 }}
-                >
-                  Send To Manager
-                </Button>
-              </div>}
-          </Skeleton>
-        </center> */}
       </div>
     );
   }
