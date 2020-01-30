@@ -11,6 +11,7 @@ import ActivityReducers from './activity';
 import ActivityStatusReducers from './statusActivity';
 import ActivityChatReducers from './activityChat';
 import AchievementReducers from './achivement';
+import AppraisalReducers from './appraisal';
 
 export default combineReducers({
   authReducer,
@@ -24,5 +25,6 @@ export default combineReducers({
   ActivityReducers,
   ActivityStatusReducers,
   ActivityChatReducers,
-  AchievementReducers
+  AchievementReducers,
+  AppraisalReducers
 });

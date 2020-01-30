@@ -1,55 +1,98 @@
-import React, { Component } from "react";
-import  { connect } from 'react-redux';
-import  { Spin, Divider, Typography } from 'antd';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
-import { GetMyTeamKPIApraisal } from '../../../redux/actions/user';
-import TableMonitoring from './table-appraisal';
-import TableAppraisal from "./table-appraisal";
-import globalStyle from "../../../styles/globalStyles";
+import { doGetAppraisalTeam, doGetAppraisalTeamDetail } from '../../../redux/actions/user';
+import TableAppraisal from './table-appraisal';
+import globalStyle from '../../../styles/globalStyles';
 
 const { Text } = Typography;
 
 class Appraisal extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: []
+    };
+  }
+
   componentDidMount() {
-    const { getMyTeamKPIApraisal } = this.props;
-    getMyTeamKPIApraisal(_.get(this, 'props.user.result.user.userId', []));
+    this.fetchAppraisalTeam();
+  }
+
+  fetchAppraisalTeam = async () => {
+    const { getAppraisalTeam } = this.props;
+    await getAppraisalTeam('aaaa');
+    const { appraisal } = this.props;
+    const { data, loading } = appraisal;
+    if (!loading) {
+      let dataTeam = [];
+      dataTeam = await data.map((item, index) => {
+        return {
+          ...item,
+          key: index,
+          name: `${item.firstName} ${item.lastName}`,
+          kpiTitle: 'loading',
+          score: 'loading',
+          rating: 'loading',
+          status: 'loading',
+          statusNumber: 'loading'
+        };
+      });
+      console.log(dataTeam, 'aa');
+      
+      await this.setState({
+        dataSource: dataTeam
+      });
+      this.fetchAppraisalTeamDetail();
+    }
+  }
+
+  fetchAppraisalTeamDetail = async () => {
+    const { dataSource } = this.state;
+    const { getAppraisalTeamDetail } = this.props;
+    dataSource.map(async (item, index) => {
+      await getAppraisalTeamDetail(item.userId);
+      const { appraisal } = this.props;
+      const { dataa } = appraisal;
+      const newData = [...dataSource];
+      const indexItem = newData.findIndex((itemNew) => itemNew.userId === item.userId);
+      const newItem = newData[index];
+      console.log(dataa);
+      // newData.splice(index, 1, {
+      //   ...item,
+      //   ...dataa
+      // });
+    });
   }
 
   render() {
-    const { myteam } = this.props;
-    return(
+    const { appraisal } = this.props;
+    const { loading } = appraisal;
+    const { dataSource } = this.state;
+    return (
       <div style={globalStyle.contentContainer}>
-        {
-          (Object.keys(myteam).length)?
-            <div>
-               <div>
-                <Divider />
-                <Text strong>Appraisal My Team KPI & Non-KPI Status </Text>
-                <Text>
-                  {`Appraisal your team KPI and Non-KPI`}
-                </Text>
-                <Divider />
-              </div>
-             <TableAppraisal team={myteam} />
-            </div>:
-            <center>
-              <Spin/>
-            </center>
-        }
+        <div>
+          <div>
+            <Divider />
+            <Text strong>Appraisal My Team KPI & Non-KPI Status </Text>
+            <Text> Appraisal your team KPI and Non-KPI </Text>
+            <Divider />
+          </div>
+          <TableAppraisal dataSource={dataSource} loading={loading} />
+        </div>
       </div>
     );
   }
 }
 
 const mapDispatchtoProps = (dispatch) => ({
-  getMyTeamKPIApraisal: (idUser) => dispatch(GetMyTeamKPIApraisal(idUser))
+  getAppraisalTeam: (idUser) => dispatch(doGetAppraisalTeam(idUser)),
+  getAppraisalTeamDetail: (idUser) => dispatch(doGetAppraisalTeamDetail(idUser))
 });
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers,
-  myteam: state.myteamReducers
+  appraisal: state.AppraisalReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Appraisal);
 
