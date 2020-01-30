@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton
+ Button, Typography, Skeleton, Form, Select
 } from 'antd';
 import { DataTable } from '../../../../../../components';
 import ModalAssessment from './modalAssesment';
 
 const { Text } = Typography;
+const { Option } = Select;
 
 class KPI extends Component {
   constructor(props) {
@@ -95,55 +96,6 @@ class KPI extends Component {
         );
       }
     };
-    const action = {
-      title: 'Action',
-      align: 'center',
-      editable: false,
-      width: 100,
-      dataIndex: 'action',
-      render: (text, record) => {
-        const {
-          form,
-          isModalShow,
-          showHideModal,
-          handleChangeField,
-          myStep,
-          dataSource
-        } = this.props;
-        let error = false;
-        const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
-        if (field.dataKpi[record.index].assessment) {
-          error = true;
-        } else {
-          error = false;
-        }
-        return (
-          <div>
-            <Button
-              disabled={myStep}
-              type={error ? 'danger' : 'primary'}
-              ghost
-              // eslint-disable-next-line react/jsx-no-bind
-              onClick={() => showHideModal(record.id)}
-            >
-              Assess
-            </Button>
-            <ModalAssessment
-              form={form}
-              dataSource={dataSource}
-              isModalShow={isModalShow === record.id}
-              assessment={record.assessment}
-              qualitativeOption={record.qualitativeOption}
-              modalRecord={record}
-              showHideModal={showHideModal}
-              handleChangeAssessment={handleChangeField}
-            />
-            <br />
-            {error && <Text type="danger">is required</Text>}
-          </div>
-        );
-      }
-    };
     const Feedback = {
       title: 'Feedback',
       dataIndex: 'feedback',
@@ -188,12 +140,8 @@ export default KPI;
 KPI.propTypes = {
   dataSource: PropTypes.instanceOf(Array),
   handleChangeField: PropTypes.func,
-  showHideModal: PropTypes.func,
   loadingResult: PropTypes.bool,
-  isModalShow: PropTypes.number,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
-  isFeedback: PropTypes.bool,
-  myStep: PropTypes.bool,
   form: PropTypes.instanceOf(Object)
 };

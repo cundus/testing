@@ -13,8 +13,8 @@ import {
   Skeleton,
   Button,
   message,
-  Spin,
-  Icon,
+  // Spin,
+  // Icon,
   Select
 } from 'antd';
 import { withRouter } from 'react-router';
@@ -34,10 +34,10 @@ import {
   doApproveAppraisal,
   doSendBackAppraisal
 } from '../../../../../redux/actions/kpi';
-import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../../redux/status-code-type';
+import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
 
-const { Text, Paragraph, Title } = Typography;
+const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
@@ -75,8 +75,8 @@ class Appraisal extends Component {
     const { params } = match;
     this.getOwnKpiList(params.userId);
     this.getOwnValues(params.userId);
-    getKpiRating();
     getProposeRating();
+    await getKpiRating(params.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -271,6 +271,63 @@ class Appraisal extends Component {
     });
   };
 
+
+  handleApprove = () => {
+    const { form, approveAppraisal, match } = this.props;
+    const { params } = match;
+    const { dataKpis, dataValueList, generalFeedbackState } = this.state;
+    const kpiFeedbacks = dataKpis.map((data, index) => {
+      return {
+        id: data.id,
+        comment: data.feedback
+      };
+    });
+    const valuesFeedbacks = dataValueList.map((data, index) => {
+      return {
+        valueId: data.valueId,
+        rating: data.rating,
+        comment: data.feedback
+      };
+    });
+    const rating = form.getFieldValue('proposeRating');
+    const data = {
+      challengeOthersRatingComments: generalFeedbackState,
+      kpiFeedbacks,
+      rating,
+      valuesFeedbacks
+    };
+    form.validateFieldsAndScroll(['proposeRating'], (errors, values) => {
+      if (!errors) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await approveAppraisal(params.userId, data);
+            const {
+              kpiReducers,
+              history
+            } = this.props;
+            const {
+              loadingApproveAppraisal,
+              statusApproveAppraisal,
+              messageApproveAppraisal
+            } = kpiReducers;
+            if (!loadingApproveAppraisal) {
+              if (statusApproveAppraisal === Success) {
+                history.push('/my-team/appraisal/');
+                message.success('Assessment & Values has been approved');
+              } else {
+                message.warning(`Sorry ${messageApproveAppraisal}`);
+              }
+            }
+          },
+          onCancel() {}
+        });
+      } else {
+        message.warning('Please, give your Propose Rating');
+      }
+    });
+  };
+
   changeGeneralFeedback = ({ target: { value } }) => {
     this.setState({ generalFeedbackState: value });
   };
@@ -301,6 +358,10 @@ class Appraisal extends Component {
       ...row
     });
     this.setState({ dataValueList: newData });
+  };
+
+  handleChangePropose = (e) => {
+    this.setState({ proposeRating: e });
   };
 
   render() {
@@ -359,25 +420,29 @@ class Appraisal extends Component {
           <div>
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
-                <div>
-                  <TableKPI
-                    form={form}
-                    loading={loadingKpis}
-                    isModalShow={isModalShow}
-                    goToMonitoring={this.goToMonitoring}
-                    handleSubmit={this.handleSubmit}
-                    changeChallenge={this.changeChallenge}
-                    challengeYour={challengeYour}
-                    loadingResult={loadingResult}
-                    showHideModal={this.showHideModal}
-                    dataSource={dataKpis}
-                    dataMetrics={dataKpiMetrics}
-                    myStep={myStep}
-                    isFeedback={isFeedback}
-                    handleChangeField={this.handleChangeAssessment}
-                    handleSaveAssessment={this.handleSaveAssessment}
-                  />
-                </div>
+                <TableKPI
+                  form={form}
+                  loading={loadingKpis}
+                  dataSource={dataKpis}
+                  dataMetrics={dataKpiMetrics}
+                  isFeedback={isFeedback}
+                  handleChangeField={this.handleChangeAssessment}
+                />
+                <Form>
+                  <Text strong>Propose Rating : </Text>
+                  <Form.Item>
+                    {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
+                      rules: [{ required: true, message: 'Propose Rating is required' }],
+                      initialValue: dataKpiRating.rating || undefined
+                    })(
+                      <Select style={{ width: 200 }} placeholder="Propose Rating">
+                        {dataProposeRating.map((item, index) => {
+                          return <Option key={index} value={item.id}>{item.name}</Option>;
+                        })}
+                      </Select>
+                      ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                  </Form.Item>
+                </Form>
               </TabPane>
               <TabPane tab="Values" key="2">
                 <TableValue
@@ -392,24 +457,23 @@ class Appraisal extends Component {
                   myStep={myStep}
                   optionRating={optionRating}
                 />
+                <Form>
+                  <Text strong>Propose Rating : </Text>
+                  <Form.Item>
+                    {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
+                      rules: [{ required: true, message: 'Propose Rating is required' }],
+                      initialValue: dataKpiRating.rating || undefined
+                    })(
+                      <Select style={{ width: 200 }} placeholder="Propose Rating">
+                        {dataProposeRating.map((item, index) => {
+                          return <Option key={index} value={item.id}>{item.name}</Option>;
+                        })}
+                      </Select>
+                      ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                  </Form.Item>
+                </Form>
               </TabPane>
             </Tabs>
-          </div>
-          <div>
-            <Text strong>Propose Rating : </Text>
-            {form.getFieldDecorator('dataGeneral.proposeRating', {
-              rules: [{ required: true, message: 'Rating is required' }],
-              initialValue: dataKpiRating && dataKpiRating.rating ? dataKpiRating.rating : undefined
-            })(
-              <Select
-                style={{ width: 150 }}
-                placeholder="Propose Rating"
-              >
-                {dataProposeRating.map((item, index) => {
-                  return <Option key={index} value={item.id}>{item.name}</Option>;
-                })}
-              </Select>
-            )}
           </div>
         </div>
         <div style={{
@@ -439,7 +503,7 @@ class Appraisal extends Component {
                 <Button
                   id="send-manager"
                   type="primary"
-                  // onClick={handleSubmit}
+                  onClick={this.handleApprove}
                   style={{ margin: 10 }}
                 >
                   Approve
@@ -496,7 +560,7 @@ const mapDispatchToProps = (dispatch) => ({
   doAssess: (data) => dispatch(doAssessment(data)),
   getValues: (id) => dispatch(getValueList(id)),
   getRatingList: () => dispatch(getRatings()),
-  getKpiRating: () => dispatch(doGetKpiRating()),
+  getKpiRating: (id) => dispatch(doGetKpiRating(id)),
   doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
   submitNext: (id) => dispatch(doSubmitNext(id)),
   getProposeRating: () => dispatch(doGetProposeRating()),

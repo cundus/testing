@@ -35,8 +35,8 @@ export const getRating = () => customAxios({
   }
 });
 
-export const getKpiRating = () => customAxios({
-  url: '/kpi/rating',
+export const getKpiRating = (id) => customAxios({
+  url: `/kpi/rating/${id}`,
   method: 'GET',
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`

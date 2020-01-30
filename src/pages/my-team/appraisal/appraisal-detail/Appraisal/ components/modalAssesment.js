@@ -81,9 +81,9 @@ class modalAssessment extends Component {
             <Form.Item label="Value">
               {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
                 rules: [{ required: true, message: 'Value is required' }],
-                initialValue: assessment
+                initialValue: assessment || undefined
               })(
-                <Select>
+                <Select placeholder="Select Value">
                   {qualitativeOption.map((value, index) => {
                     return <Option key={index} value={value}>{value}</Option>;
                   })}

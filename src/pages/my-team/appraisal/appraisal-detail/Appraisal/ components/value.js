@@ -70,12 +70,7 @@ class Value extends Component {
           };
           return (
             // eslint-disable-next-line react/jsx-props-no-spreading
-            <Upload {...propsUpload}>
-              <Button>
-                <Icon type="upload" />
-                <Text>Attach files</Text>
-              </Button>
-            </Upload>
+            <Upload {...propsUpload} />
           );
         }
       },

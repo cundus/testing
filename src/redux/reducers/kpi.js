@@ -69,6 +69,7 @@ const initialState = {
   dataMetrics: [],
   dataKpiMetrics: [],
   dataKpiManagerMetrics: [],
+  dataKpiRating: {},
   dataProposeRating: [],
   generalFeedback: {
     id: null,
@@ -326,7 +327,7 @@ const kpiReducers = (state = initialState, action) => {
       return {
         ...state,
         loadingKpiRating: action.loading,
-        dataKpiRating: null
+        dataKpiRating: {}
       };
     case GET_KPI_RATING_SUCCESS:
       return {
@@ -342,7 +343,7 @@ const kpiReducers = (state = initialState, action) => {
         loadingKpiRating: action.loading,
         statusKpiRating: action.status,
         messageKpiRating: action.message,
-        dataKpiRating: null
+        dataKpiRating: {}
       };
     case GET_PROPOSE_RATING:
       return {

@@ -59,7 +59,7 @@ class Appraisal extends Component {
   getOwnKpiList = async (id) => {
     const { getKpiList, getKpiRating, form } = this.props;
     await getKpiList(id);
-    getKpiRating();
+    getKpiRating(id);
     const { kpiReducers } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep
@@ -531,7 +531,7 @@ const mapDispatchToProps = (dispatch) => ({
   doAssess: (data) => dispatch(doAssessment(data)),
   getValues: (id) => dispatch(getValueList(id)),
   getRatingList: () => dispatch(getRatings()),
-  getKpiRating: () => dispatch(doGetKpiRating()),
+  getKpiRating: (id) => dispatch(doGetKpiRating(id)),
   doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
   submitNext: (id) => dispatch(doSubmitNext(id))
 });

@@ -654,7 +654,7 @@ export const doDeleteFiles = (id) => async (dispatch) => {
   }
 };
 
-export const doGetKpiRating = () => async (dispatch) => {
+export const doGetKpiRating = (id) => async (dispatch) => {
   dispatch({
     type: GET_KPI_RATING,
     loading: true,
@@ -663,7 +663,7 @@ export const doGetKpiRating = () => async (dispatch) => {
     data: {}
   });
   try {
-    const payload = await getKpiRating();
+    const payload = await getKpiRating(id);
     if (payload.data.status_code === Success) {
       dispatch({
         type: GET_KPI_RATING_SUCCESS,
@@ -760,8 +760,8 @@ export const doSendBackAppraisal = (id, data) => async (dispatch) => {
   });
   try {
     const payload = await sendFeedbackAppraisal(id, data);
-    await submitToPreviousStep(id);
     if (payload.data.status_code === Success) {
+      await submitToPreviousStep(id);
       dispatch({
         type: SEND_FEEDBACK_APPRAISAL_SUCCESS,
         loading: false,
@@ -809,8 +809,8 @@ export const doApproveAppraisal = (id, data) => async (dispatch) => {
   });
   try {
     const payload = await approveAppraisal(id, data);
-    await submitNext(id);
     if (payload.data.status_code === Success) {
+      await submitNext(id);
       dispatch({
         type: APPROVE_APPRAISAL_SUCCESS,
         loading: false,
