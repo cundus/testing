@@ -41,7 +41,7 @@ class CreateKPI extends Component {
         }
       ],
       tab: '1',
-      dataOwnId: 2,
+      dataOwnId: 0,
       dataManagerKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
@@ -319,7 +319,7 @@ class CreateKPI extends Component {
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
-      dataOwnId: dataOwnId + 1
+      dataOwnId: dataOwnId - 1
     });
   };
 
