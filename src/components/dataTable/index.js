@@ -90,9 +90,11 @@ class EditableCell extends React.Component {
         field.push(datas);
       }
       const metricField = [];
-      record.metrics.map((metricLabel) => {
-        metricField.push(`${type}[${indexarr}].${metricLabel.label}`);
-      });
+      for (let a = 0; a < data.indexlength; a++) {
+        record.metrics.map((metricLabel) => {
+          return metricField.push(`${type}[${a}].${metricLabel.label}`);
+        });
+      }
       return (
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
