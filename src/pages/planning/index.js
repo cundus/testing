@@ -35,14 +35,10 @@ class Planning extends Component {
       errMessage, dataKpi, status, currentStep
     } = kpiReducers;
     if (status === 0) {
-      if (step === 0) {
-        if (currentStep !== 'Emp Goal Setting') {
-          this.stepChange(2, true);
-        } else {
-          this.stepChange(1);
-        }
-      } else if (dataKpi.length === 0 && currentStep === 'Emp Goal Setting') {
+      if (dataKpi.length === 0 && currentStep === 'Emp Goal Setting') {
         this.stepChange(0);
+      } else if (dataKpi.length !== 0 && currentStep === 'Emp Goal Setting') {
+        this.stepChange(1);
       } else {
         this.stepChange(2, true);
       }
