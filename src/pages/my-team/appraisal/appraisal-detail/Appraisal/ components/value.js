@@ -20,26 +20,24 @@ class Value extends Component {
     super(props);
     this.state = {
       columns: [],
-      myStepState: true
+      myStepState: null
     };
   }
 
+  componentDidMount() {
+    this.getColumns();
+  }
+
   componentDidUpdate() {
-    const { metrics, myStepState } = this.state;
-    const { dataMetrics, myStep } = this.props;
-    if (metrics !== dataMetrics) {
-      this.getColumns();
-      // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({
-        metrics: dataMetrics
-      });
-    }
+    const { myStepState } = this.state;
+    const { myStep } = this.props;
     if (myStepState !== myStep) {
       this.getColumns();
     }
   }
 
   getColumns = async () => {
+    const { myStep } = this.props;
     const newColumns = [
       {
         title: 'Section',
@@ -101,13 +99,13 @@ class Value extends Component {
         dataIndex: 'feedback',
         placeholder: 'Enter Value Feedback',
         align: 'center',
-        editable: this.props.myStep,
+        editable: myStep,
         className: 'ant-table-th-yellow'
       }
     ];
     this.setState({
       columns: newColumns,
-      myStepState: this.props.myStep
+      myStepState: myStep
     });
   }
 

@@ -18,7 +18,27 @@ const { confirm } = Modal;
 class Value extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: [],
+      myStepState: null
+    };
+  }
+
+  componentDidMount() {
+    this.getColumns();
+  }
+
+  componentDidUpdate() {
+    const { myStepState } = this.state;
+    const { myStep } = this.props;
+    if (myStepState !== myStep) {
+      this.getColumns();
+    }
+  }
+
+  getColumns = async () => {
+    const { myStep } = this.props;
+    const newColumns = [
       {
         title: 'Section',
         dataIndex: 'name'
@@ -29,7 +49,7 @@ class Value extends Component {
         dataIndex: 'rating',
         align: 'center',
         render: (text, record) => {
-          const { optionRating, form, myStep } = this.props;
+          const { optionRating, form } = this.props;
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
@@ -95,9 +115,14 @@ class Value extends Component {
         dataIndex: 'feedback',
         placeholder: 'Enter Level 2',
         align: 'center',
+        editable: myStep,
         className: 'ant-table-th-yellow'
       }
     ];
+    this.setState({
+      columns: newColumns,
+      myStepState: myStep
+    });
   }
 
   deleteFile = async (file) => {
@@ -256,7 +281,7 @@ class Value extends Component {
   };
 
   render() {
-    const { columns } = this;
+    const { columns } = this.state;
     const {
       dataSource,
       handleChangeField,
