@@ -37,14 +37,14 @@ class Planning extends Component {
     if (status === 0) {
       if (step === 0) {
         if (currentStep !== 'Emp Goal Setting') {
-          this.stepChange(2, true);
+          this.stepChange(2);
         } else {
           this.stepChange(1);
         }
       } else if (dataKpi.length === 0 && currentStep === 'Emp Goal Setting') {
         this.stepChange(0);
       } else {
-        this.stepChange(2, true);
+        this.stepChange(2);
       }
     } else {
       this.stepChange(null);
@@ -58,44 +58,12 @@ class Planning extends Component {
     });
   }
 
-  stepChange = (target, access) => {
-    const { step } = this.state;
+  stepChange = (target) => {
     if (target !== null) {
-      if (step === 0 || step === 1) {
-        if (target === 0) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 1) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 2 && access) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 3 && access) {
-          this.setState({
-            step: target
-          });
-        } else {
-          message.warning('Sorry, You can\'t go to next step');
-        }
-      } else if (step === 3) {
-        if (target === 1 && access) {
-          this.setState({
-            step: target
-          });
-        } else {
-          message.warning('Sorry, You can\'t go back to previous step');
-        }
-      } else if (step === 2) {
-        if (target === 3) {
-          message.warning('Sorry, You can\'t go to next step');
-        } else {
-          message.warning('Sorry, You can\'t go back to previous step');
-        }
-      }
+      if (target === 1) {
+        this.setState({
+          step: target
+      });
     }
   };
 

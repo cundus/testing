@@ -446,6 +446,7 @@ class Appraisal extends Component {
     } = this.props;
     const {
       dataKpiMetrics,
+      dataKpiRating,
       generalFeedback,
       currentStep
     } = kpiReducers;
@@ -462,9 +463,9 @@ class Appraisal extends Component {
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
-                  boxRateColor="#F666B5"
+                  boxRateColor="inherit"
                   title="Your Rating"
-                  rate=""
+                  rate="N/A"
                   desc="Your final Rating based on Score"
                 />
               </Col>

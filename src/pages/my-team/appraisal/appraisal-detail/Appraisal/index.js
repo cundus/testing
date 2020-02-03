@@ -438,7 +438,7 @@ class Appraisal extends Component {
                   <Form.Item>
                     {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
-                      initialValue: dataKpiRating.rating || undefined
+                      initialValue: dataKpiRating.id || undefined
                     })(
                       <Select style={{ width: 200 }} placeholder="Propose Rating">
                         {dataProposeRating.map((item, index) => {

@@ -26,18 +26,18 @@ const CardRating = (props) => {
     }}
     >
       <Row>
-        <Col xl={18} md={18} lg={18} xs={16}>
+        <Col xl={14} md={14} lg={14} xs={12}>
           <div style={{ textAlign: 'start', marginLeft: isDesktopOrLaptop ? 100 : 0 }}>
             <Title level={3} style={{ margin: 0 }}>{title}</Title>
             <Title level={4} style={{ margin: 0, color: '#C5C1BF' }}>{desc}</Title>
           </div>
         </Col>
-        <Col xl={2} md={2} lg={2} xs={3}>
+        <Col xl={6} md={6} lg={6} xs={7}>
           <div style={{
-            background: boxRateColor, borderRadius: '5%', height: 100, width: 100
+            background: boxRateColor, borderRadius: '5%', height: 100, width: 'auto', marginTop: 20
           }}
           >
-            <Title level={2} style={{ color: 'white' }}>{rate}</Title>
+            <Title level={2} style={{ color: 'purple' }}>{rate}</Title>
           </div>
         </Col>
       </Row>
