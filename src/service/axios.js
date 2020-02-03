@@ -9,6 +9,6 @@ export const customAxios = axios.create({
 });
 
 customAxios.interceptors.request.use((config) => {
-  config.headers = Object.assign(config.headers , { 'X-Requested-With' : uuidv1() });
+  config.headers = Object.assign(config.headers , { 'X-Requested-With' : `${uuidv1()}-${new Date().getTime()}` });
   return config;
 });
