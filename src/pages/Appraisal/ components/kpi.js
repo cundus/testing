@@ -14,19 +14,29 @@ class KPI extends Component {
     super(props);
     this.state = {
       columns: [],
-      metrics: []
+      metrics: [],
+      myStepState: null
     };
   }
 
+  componentDidMount() {
+    this.getColumns();
+  }
+
   componentDidUpdate() {
-    const { metrics } = this.state;
-    const { dataMetrics, isFeedback, feedShow } = this.props;
+    const { metrics, myStepState } = this.state;
+    const {
+      dataMetrics, isFeedback, feedShow, myStep
+    } = this.props;
     if (metrics !== dataMetrics) {
       this.getColumns();
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         metrics: dataMetrics
       });
+    }
+    if (myStepState !== myStep) {
+      this.getColumns();
     }
     if (isFeedback) {
       this.getColumns();
@@ -37,7 +47,7 @@ class KPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics, isFeedback } = this.props;
+    const { dataMetrics, isFeedback, myStep } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -164,7 +174,8 @@ class KPI extends Component {
       await newColumns.push(Feedback);
     }
     this.setState({
-      columns: newColumns
+      columns: newColumns,
+      myStepState: myStep
     });
   }
 

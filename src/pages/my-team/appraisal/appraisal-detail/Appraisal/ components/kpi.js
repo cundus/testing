@@ -19,6 +19,10 @@ class KPI extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getColumns();
+  }
+
   componentDidUpdate() {
     const { metrics, myStepState } = this.state;
     const { dataMetrics, myStep } = this.props;
