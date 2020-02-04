@@ -65,8 +65,10 @@ class CreateKPI extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, form } = this.props;
-    await getKpiList(id);
+    const { getKpiList, form, access } = this.props;
+    if (access) {
+      await getKpiList(id);
+    }
     const { kpiReducers } = this.props;
     const { dataKpi, dataKpiMetrics } = kpiReducers;
     const newData = [];

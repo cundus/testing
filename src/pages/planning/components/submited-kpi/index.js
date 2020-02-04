@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
 import globalStyle from '../../../../styles/globalStyles';
+import stepKpi from '../../../../utils/stepKpi';
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -33,9 +34,13 @@ class SubmitedKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList } = this.props;
+    const {
+      userReducers, getKpiList, form, access
+    } = this.props;
     const { user } = userReducers.result;
-    await getKpiList(user.userId);
+    if (access) {
+      await getKpiList(user.userId);
+    }
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];
@@ -158,7 +163,13 @@ class SubmitedKPI extends Component {
             borderBottomRightRadius: 5
           }}
           >
-            {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
+            {currentStep !== stepKpi[0] && currentStep !== stepKpi[1] ?
+              <Button
+                style={{ margin: 10, borderColor: '#52c41a' }}
+              >
+                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+                <Text strong>Waiting for Review</Text>
+              </Button> :
               <Button
                 style={{ margin: 10, borderColor: '#52c41a' }}
               >

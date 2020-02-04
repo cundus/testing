@@ -10,20 +10,22 @@ import {
 } from './components';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
+import { Success } from '../../redux/status-code-type';
 
 class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: null,
       loading: true,
-      error: false
+      error: false,
+      access: false
     };
     this.getKpi();
   }
 
   getKpi = async () => {
-    const { step } = this.state;
     const {
       userReducers
     } = this.props;
@@ -34,15 +36,21 @@ class Planning extends Component {
     const {
       errMessage, dataKpi, status, currentStep
     } = kpiReducers;
-    if (status === 0) {
-      if (dataKpi.length === 0 && currentStep === 'Emp Goal Setting') {
-        this.stepChange(0);
-      } else if (dataKpi.length !== 0 && currentStep === 'Emp Goal Setting') {
-        this.stepChange(1);
+    if (status === Success) {
+      if (currentStep === stepKpi[0]) {
+        if (dataKpi.length === 0) {
+          // Fill KPI Form
+          this.stepChange(0);
+        } else {
+          // Draft KPI
+          this.stepChange(1);
+        }
       } else {
+        // Submitted KPI
         this.stepChange(2);
       }
     } else {
+      // Error
       this.stepChange(null);
       message.warning(`Sorry, ${errMessage}`);
       this.setState({
@@ -50,29 +58,59 @@ class Planning extends Component {
       });
     }
     this.setState({
-      loading: false
+      loading: false,
+      access: true
     });
   }
 
   stepChange = (target) => {
-    if (target !== null) {
-      if (target === 1) {
-        this.setState({
-          step: target
-      });
-    }
-  };
+    this.setState({
+      step: target
+    });
+  }
 
   render() {
     const {
-      step, loading, error
+      step, loading, error, access
     } = this.state;
     const { stepChange } = this;
     const { kpiReducers, history } = this.props;
     const {
       errMessage, status
     } = kpiReducers;
-    if (error) {
+    if (!error) {
+      if (step === 0) {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} access={access} />
+              <CreateKpi stepChange={stepChange} />
+            </div>}
+          </div>
+        );
+      } else if (step === 1) {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} access={access} />
+              <DraftKpi stepChange={stepChange} />
+            </div>}
+          </div>
+        );
+      } else {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} access={access} />
+              <SubmitKpi stepChange={stepChange} />
+            </div>}
+          </div>
+        );
+      }
+    } else {
       return (
         <div style={globalStyle.contentContainer}>
           <Result
@@ -82,23 +120,6 @@ class Planning extends Component {
             // eslint-disable-next-line react/jsx-no-bind
             extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
           />
-        </div>
-      );
-    } else {
-      return (
-        <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
-          {loading ? <center><Spin /></center> :
-          <div>
-            <Step step={step} stepChange={stepChange} />
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {step === 0 ?
-              <CreateKpi stepChange={stepChange} /> :
-          // eslint-disable-next-line no-nested-ternary
-          step === 1 ?
-            <DraftKpi stepChange={stepChange} /> :
-            step === 2 &&
-              <SubmitKpi stepChange={stepChange} />}
-          </div>}
         </div>
       );
     }

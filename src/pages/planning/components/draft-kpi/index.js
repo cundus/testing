@@ -39,9 +39,13 @@ class DraftKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, form } = this.props;
+    const {
+      userReducers, getKpiList, form, access
+    } = this.props;
     const { user } = userReducers.result;
-    await getKpiList(user.userId);
+    if (access) {
+      await getKpiList(user.userId);
+    }
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];
