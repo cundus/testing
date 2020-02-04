@@ -10,6 +10,7 @@ import {
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
+import stepKpi from '../../../utils/stepKpi';
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -306,7 +307,7 @@ class Value extends Component {
           <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
             {myStep ?
               <div style={{ textAlign: 'center', margin: 40 }}>
-                {currentStep === 'Performance Review Manager' ?
+                {currentStep === stepKpi[3] ?
                   <Title
                     level={4}
                     type="warning"
@@ -314,7 +315,7 @@ class Value extends Component {
                     strong
                   >
                     Your Appraisal has been sent to your Manager
-                  </Title> : currentStep === 'Compiling Process' &&
+                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
                   <Title
                     level={4}
                     style={{ color: '#61C761', margin: 0 }}

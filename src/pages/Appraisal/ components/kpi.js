@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { DataTable } from '../../../components';
 import ModalAssessment from './modalAssesment';
+import stepKpi from '../../../utils/stepKpi';
 
 const { Text, Title } = Typography;
 const { TextArea } = Input;
@@ -219,7 +220,7 @@ class KPI extends Component {
           <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
             {myStep ?
               <div style={{ textAlign: 'center', margin: 40 }}>
-                {currentStep === 'Performance Review Manager' ?
+                {currentStep === stepKpi[3] ?
                   <Title
                     level={4}
                     type="warning"
@@ -227,7 +228,7 @@ class KPI extends Component {
                     strong
                   >
                     Your Appraisal has been sent to your Manager
-                  </Title> : currentStep === 'Compiling Process' &&
+                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
                   <Title
                     level={4}
                     style={{ color: '#61C761', margin: 0 }}
