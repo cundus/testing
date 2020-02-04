@@ -168,7 +168,8 @@ class Appraisal extends Component {
         name: itemValues.name,
         rating: ratingCheck.length < 1 ? 'Choose Value' : itemValues.valuesRatingDTO.rating,
         comment: itemValues.valuesRatingDTO.comment,
-        attachments: newFiles
+        attachments: newFiles,
+        feedback: itemValues.otherValuesRatingDTO.comment
       };
       newData.push(data);
     });
