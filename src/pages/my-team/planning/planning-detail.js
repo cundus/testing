@@ -30,6 +30,9 @@ class PlanningDetail extends Component {
   }
 
   async getAllData() {
+    this.setState({
+      loading: true
+    });
     const newData = [];
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
@@ -64,6 +67,7 @@ class PlanningDetail extends Component {
       });
       this.setState({
         dataSource: newData,
+        loading: false,
         globalfeedback: globalFeedback.comment,
         labelList: this.props.myteamdetail.labelList
       });
@@ -71,7 +75,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: [],
         globalfeedback: '',
-        loading: true,
+        loading: false,
         labelList: this.props.myteamdetail.labelList
       });
     }
@@ -150,8 +154,7 @@ class PlanningDetail extends Component {
   render() {
     return (
       <div>
-        {
-         (!this.state.loading ) ?
+        {!this.state.loading ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
