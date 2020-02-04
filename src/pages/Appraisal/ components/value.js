@@ -95,14 +95,13 @@ class Value extends Component {
             onRemove: this.deleteFile,
             onPreview: this.download,
             onDownload: this.download,
-            // eslint-disable-next-line react/destructuring-assignment
-            disabled: this.props.myStep,
+            disabled: myStep,
             accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
           };
           return (
             // eslint-disable-next-line react/jsx-props-no-spreading
             <Upload {...propsUpload}>
-              <Button>
+              <Button disabled={myStep}>
                 <Icon type="upload" />
                 <Text>Attach files</Text>
               </Button>
@@ -388,5 +387,6 @@ Value.propTypes = {
   optionRating: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
   myStep: PropTypes.bool,
+  currentStep: PropTypes.string,
   form: PropTypes.instanceOf(Object)
 };

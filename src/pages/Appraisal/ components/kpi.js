@@ -122,7 +122,6 @@ class KPI extends Component {
           isModalShow,
           showHideModal,
           handleChangeField,
-          myStep,
           dataSource
         } = this.props;
         let error = false;
@@ -276,6 +275,7 @@ KPI.propTypes = {
   handleChangeField: PropTypes.func,
   showHideModal: PropTypes.func,
   loadingResult: PropTypes.bool,
+  currentStep: PropTypes.string,
   isModalShow: PropTypes.number,
   dataMetrics: PropTypes.instanceOf(Array),
   loading: PropTypes.bool,
@@ -286,5 +286,6 @@ KPI.propTypes = {
   goToMonitoring: PropTypes.func,
   handleSubmit:  PropTypes.func,
   changeChallenge: PropTypes.func,
+  feedShow: PropTypes.func,
   handleSaveAssessment:  PropTypes.func
 };
