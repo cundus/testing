@@ -277,7 +277,8 @@ class Appraisal extends Component {
 
 
   handleApprove = () => {
-    const { form, approveAppraisal, match } = this.props;
+    const { form, approveAppraisal, match, kpiReducers } = this.props;
+    const { dataKpiRating } = kpiReducers;
     const { params } = match;
     const { dataKpis, dataValueList, generalFeedbackState, teamName } = this.state;
     const kpiFeedbacks = dataKpis.map((data, index) => {
@@ -293,7 +294,10 @@ class Appraisal extends Component {
         comment: data.feedback
       };
     });
-    const rating = form.getFieldValue('proposeRating');
+    let rating = form.getFieldValue('proposeRating');
+    if (rating === dataKpiRating.rating) {
+      rating = dataKpiRating.id;
+    }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
       kpiFeedbacks,
@@ -438,7 +442,7 @@ class Appraisal extends Component {
                   <Form.Item>
                     {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
-                      initialValue: dataKpiRating.id || undefined
+                      initialValue: dataKpiRating.id
                     })(
                       <Select style={{ width: 200 }} placeholder="Propose Rating">
                         {dataProposeRating.map((item, index) => {
