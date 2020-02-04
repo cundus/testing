@@ -20,7 +20,8 @@ class PlanningDetail extends Component {
     this.state = {
       dataSource: [],
       globalfeedback: '',
-      labelList: []
+      labelList: [],
+      loading: false
     };
   }
 
@@ -70,6 +71,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: [],
         globalfeedback: '',
+        loading: true,
         labelList: this.props.myteamdetail.labelList
       });
     }
@@ -149,7 +151,7 @@ class PlanningDetail extends Component {
     return (
       <div>
         {
-         (this.state.dataSource.length > 0 ) ?
+         (!this.state.loading ) ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
