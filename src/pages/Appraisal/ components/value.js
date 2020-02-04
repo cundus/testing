@@ -114,7 +114,6 @@ class Value extends Component {
         dataIndex: 'feedback',
         placeholder: 'Enter Level 2',
         align: 'center',
-        editable: myStep,
         className: 'ant-table-th-yellow'
       }
     ];
