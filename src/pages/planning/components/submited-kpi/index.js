@@ -163,13 +163,13 @@ class SubmitedKPI extends Component {
             borderBottomRightRadius: 5
           }}
           >
-            {currentStep !== stepKpi[0] && currentStep !== stepKpi[1] ?
+            {currentStep === stepKpi[1] &&
               <Button
-                style={{ margin: 10, borderColor: '#52c41a' }}
+                style={{ margin: 10, borderColor: 'yellow' }}
               >
-                <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
-                <Text strong>Waiting for Review</Text>
-              </Button> :
+                <Text strong warning>Waiting for Review</Text>
+              </Button>}
+            {currentStep !== stepKpi[0] && currentStep !== stepKpi[1] &&
               <Button
                 style={{ margin: 10, borderColor: '#52c41a' }}
               >
