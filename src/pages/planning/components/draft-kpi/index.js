@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { doSaveKpi, doGetKpiList, doSubmitNext } from '../../../../redux/actions/kpi';
+import { actionGetKPI, actionSaveKpi, actionSubmitKpi } from '../../../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 import globalStyle from '../../../../styles/globalStyles';
 
@@ -123,7 +123,7 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSavingKpi, userReducers, form, kpiReducers, submitNext, stepChange
+      doSubmitKpi, userReducers, form, kpiReducers, stepChange
     } = this.props;
     const { dataKpi } = kpiReducers;
     const { user } = userReducers.result;
@@ -181,10 +181,9 @@ class DraftKPI extends Component {
           confirm({
             title: 'Are you sure?',
             onOk: async () => {
-              await doSavingKpi(data, user.userId);
+              await doSubmitKpi(data, user.userId);
               // eslint-disable-next-line react/destructuring-assignment
               if (this.props.kpiReducers.statusSaveKPI === Success || this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                await submitNext(user.userId);
                 message.success('Your KPI has been submitted to your superior');
                 stepChange(2, true); // go to submit page
                 // eslint-disable-next-line react/destructuring-assignment
@@ -421,9 +420,9 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
-  getKpiList: (id) => dispatch(doGetKpiList(id)),
-  submitNext: (id) => dispatch(doSubmitNext(id))
+  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  doSubmitKpi: (data, id) => dispatch(actionSubmitKpi(data, id)),
+  getKpiList: (id) => dispatch(actionGetKPI(id))
 });
 
 const connectToComponent = connect(

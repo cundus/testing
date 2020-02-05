@@ -160,8 +160,7 @@ export const doGetKpiList = (id) => async (dispatch) => {
     loading: true,
     status: null,
     message: null,
-    data: [],
-    page: ''
+    data: []
   });
   try {
     const payload = await getKpiList(id);

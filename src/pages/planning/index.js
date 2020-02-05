@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import {
   Step, CreateKpi, DraftKpi, SubmitKpi
 } from './components';
-import { doGetKpiList } from '../../redux/actions/kpi';
+import { actionGetKPI } from '../../redux/actions';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
 import { Success } from '../../redux/status-code-type';
@@ -47,7 +47,7 @@ class Planning extends Component {
         }
       } else {
         // Submitted KPI
-        this.stepChange(2);
+        this.stepChange(0);
       }
     } else {
       // Error
@@ -132,7 +132,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getKpiList: (id) => dispatch(doGetKpiList(id))
+  getKpiList: (id) => dispatch(actionGetKPI(id))
 });
 
 const connectToComponent = connect(

@@ -13,8 +13,8 @@ import {
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import {
-  doSaveKpi, doGetKpiList, doGetLatestGoalKpi, doGetKpiManagerList
-} from '../../../../redux/actions/kpi';
+  actionGetKPI, actionGetLatestGoalKPI, actionGetManagerKPI, actionSaveKpi
+} from '../../../../redux/actions';
 import CreateOwn from './components/create-own';
 import Cascade from './components/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
@@ -69,8 +69,8 @@ class CreateKPI extends Component {
     if (access) {
       await getKpiList(id);
     }
-    const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics } = kpiReducers;
+    const { ownKpiReducers } = this.props;
+    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const newData = [];
     const newSelectedData = [];
     // for fetching data metrics API
@@ -127,10 +127,10 @@ class CreateKPI extends Component {
   getManagerKpiList = async (id) => {
     const { getKpiManagerList, form } = this.props;
     await getKpiManagerList(id);
-    const { kpiReducers } = this.props;
+    const { managerKpiReducers } = this.props;
     const {
       dataFirstManager, dataSecondManager, dataKpiManagerMetrics
-    } = kpiReducers;
+    } = managerKpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line no-unused-expressions
@@ -255,7 +255,7 @@ class CreateKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challangeYourSelf: challenge
+      challangeYourSelf: challenge || ' '
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err || tab === '2') {
@@ -363,10 +363,13 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { kpiReducers, form } = this.props;
+    const { ownKpiReducers, form, managerKpiReducers } = this.props;
     const {
-      dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
-    } = kpiReducers;
+      dataGoal, loadingGoal, dataKpiMetrics
+    } = ownKpiReducers;
+    const {
+      dataKpiManagerMetrics
+    } = managerKpiReducers;
     const { name } = dataGoal;
     return (
       <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -421,15 +424,18 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  ownKpiReducers: state.ownKpi,
+  managerKpiReducers: state.managerKpi,
+  saveKpiReducers: state.saveKpi,
   kpiReducers: state.kpiReducers,
   userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
-  getKpiList: (id) => dispatch(doGetKpiList(id)),
-  getKpiManagerList: (id) => dispatch(doGetKpiManagerList(id)),
-  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi())
+  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  getKpiList: (id) => dispatch(actionGetKPI(id)),
+  getKpiManagerList: (id) => dispatch(actionGetManagerKPI(id)),
+  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI())
 });
 
 const connectToComponent = connect(

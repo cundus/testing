@@ -12,6 +12,9 @@ import ActivityStatusReducers from './statusActivity';
 import ActivityChatReducers from './activityChat';
 import AchievementReducers from './achivement';
 import AppraisalReducers from './appraisal';
+import {
+  ownKpi, managerKpi, saveKpi, submitKpi
+} from './kpi/';
 
 export default combineReducers({
   authReducer,
@@ -26,5 +29,9 @@ export default combineReducers({
   ActivityStatusReducers,
   ActivityChatReducers,
   AchievementReducers,
-  AppraisalReducers
+  AppraisalReducers,
+  ownKpi,
+  managerKpi,
+  saveKpi,
+  submitKpi
 });
