@@ -49,7 +49,13 @@ import {
   APPROVE_APPRAISAL_FAILED,
   TEAM_ACKNOWLEDGEMENT,
   TEAM_ACKNOWLEDGEMENT_SUCCESS,
-  TEAM_ACKNOWLEDGEMENT_FAILED
+  TEAM_ACKNOWLEDGEMENT_FAILED,
+  EMP_ACKNOWLEDGEMENT,
+  EMP_ACKNOWLEDGEMENT_SUCCESS,
+  EMP_ACKNOWLEDGEMENT_FAILED,
+  EMP_ACKNOWLEDGEMENT_LIST,
+  EMP_ACKNOWLEDGEMENT_LIST_SUCCESS,
+  EMP_ACKNOWLEDGEMENT_LIST_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -138,6 +144,8 @@ const kpiReducers = (state = initialState, action) => {
         generalFeedback: action.data.challengeOthersRatingComments,
         challenge: action.data.challangeYourSelf,
         currentStep: action.data.currentStep,
+        formStatusId: action.data.formStatusId,
+        formStatusDescription: action.data.formStatusDescription,
         holderUserId: action.data.holderUserId,
         user: action.data.user
       };
@@ -435,6 +443,56 @@ const kpiReducers = (state = initialState, action) => {
         statusTeamAck: action.status,
         messageTeamAck: action.message,
         dataTeamAck: null
+      };
+    case EMP_ACKNOWLEDGEMENT:
+      return {
+        ...state,
+        loadingEmpAck: action.loading,
+        dataEmpAck: null
+      };
+    case EMP_ACKNOWLEDGEMENT_SUCCESS:
+      return {
+        ...state,
+        loadingEmpAck: action.loading,
+        statusEmpAck: action.status,
+        messageEmpAck: action.message,
+        dataEmpAck: action.data
+      };
+    case EMP_ACKNOWLEDGEMENT_FAILED:
+      return {
+        ...state,
+        loadingEmpAck: action.loading,
+        statusEmpAck: action.status,
+        messageEmpAck: action.message,
+        dataEmpAck: null
+      };
+    case EMP_ACKNOWLEDGEMENT_LIST:
+      return {
+        ...state,
+        loadingEmpAckList: action.loading,
+        dataEmpAckList: {
+          name: '',
+          list: []
+        }
+      };
+    case EMP_ACKNOWLEDGEMENT_LIST_SUCCESS:
+      return {
+        ...state,
+        loadingEmpAckList: action.loading,
+        statusEmpAckList: action.status,
+        messageEmpAckList: action.message,
+        dataEmpAckList: action.data
+      };
+    case EMP_ACKNOWLEDGEMENT_LIST_FAILED:
+      return {
+        ...state,
+        loadingEmpAckList: action.loading,
+        statusEmpAckList: action.status,
+        messageEmpAckList: action.message,
+        dataEmpAckList: {
+          name: '',
+          list: []
+        }
       };
     default:
       return { ...state };

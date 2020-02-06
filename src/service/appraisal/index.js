@@ -97,3 +97,22 @@ export const teamAcknowledge = (data) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const empAcknowledgeList = () => customAxios({
+  url: '/kpi/employee-acknowledment/list',
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+export const empAcknowledge = (data) => customAxios({
+  url: '/kpi/employee-acknowledment',
+  method: 'GET',
+  params: {
+    elementValue: data
+  },
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});

@@ -315,7 +315,7 @@ class Value extends Component {
                     strong
                   >
                     Your Appraisal has been sent to your Manager
-                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
+                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5]) &&
                   <Title
                     level={4}
                     style={{ color: '#61C761', margin: 0 }}

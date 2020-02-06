@@ -8,7 +8,10 @@ import {
   Col,
   Row,
   message,
-  Modal
+  Modal,
+  Checkbox,
+  Radio,
+  Button
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -16,12 +19,13 @@ import TableKPI from './ components/kpi';
 import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
-  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext
+  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext, doEmpAcknowledge, doEmpAcknowledgeList
 } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
 
-const { Text, Paragraph } = Typography;
+const { Text, Paragraph, Title } = Typography;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
@@ -39,7 +43,8 @@ class Appraisal extends Component {
       challengeYour: '',
       tab: '1',
       myStep: false,
-      isFeedback: false
+      isFeedback: false,
+      dataEmpAckOptions: []
     };
   }
 
@@ -57,13 +62,26 @@ class Appraisal extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, getKpiRating, form } = this.props;
+    const { getKpiList, getKpiRating, form, empAcknowledgeList } = this.props;
     await getKpiList(id);
     getKpiRating(id);
     const { kpiReducers } = this.props;
     const {
-      dataKpi, dataKpiMetrics, challenge, currentStep
+      dataKpi, dataKpiMetrics, challenge, currentStep, formStatusId
     } = kpiReducers;
+    if (currentStep === stepKpi[6] || formStatusId === '3') {
+      await empAcknowledgeList();
+      const dataEmpAcks = this.props.kpiReducers.dataEmpAckList.list.map((ack) => {
+        return {
+          label: ack.value,
+          value: ack.value
+        };
+      });
+      this.setState({
+        dataEmpAckOptions: dataEmpAcks,
+        dataEmpAckName: this.props.kpiReducers.dataEmpAckList.name
+      });
+    }
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -336,7 +354,6 @@ class Appraisal extends Component {
     });
   };
 
-
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
@@ -437,6 +454,43 @@ class Appraisal extends Component {
     this.setState({ challengeYour: value });
   };
 
+  onCheckFinal = (e) => {
+    const { checked } = e.target;
+    this.setState({ checkedFinal: checked });
+  };
+
+  onChooseFinalAck = (e) => {
+    this.setState({
+      finalAck: e.target.value
+    });
+  };
+
+  handleSubmitAck = async () => {
+    const { finalAck } = this.state;
+    const { empAcknowledge } = this.props;
+    confirm({
+      title: 'Are you sure?',
+      onOk: async () => {
+        await empAcknowledge(finalAck);
+        const { kpiReducers } = this.props;
+        const {
+          loadingEmpAck,
+          statusEmpAck,
+          messageEmpAck
+        } = kpiReducers;
+        if (!loadingEmpAck) {
+          if (statusEmpAck === Success) {
+            this.getData();
+            message.success('Your Acknowledgement has been sent');
+          } else {
+            message.warning(`Sorry, ${messageEmpAck}`);
+          }
+        }
+      },
+      onCancel() {}
+    });
+  };
+
   render() {
     const {
       loadingKpis,
@@ -449,7 +503,11 @@ class Appraisal extends Component {
       challengeYour,
       tab,
       myStep,
-      isFeedback
+      isFeedback,
+      dataEmpAckOptions,
+      dataEmpAckName,
+      checkedFinal,
+      finalAck
     } = this.state;
     const {
       form,
@@ -458,12 +516,14 @@ class Appraisal extends Component {
     const {
       dataKpiMetrics,
       dataKpiRating,
+      loadingKpiRating,
       generalFeedback,
-      currentStep
+      currentStep,
+      formStatusId
     } = kpiReducers;
     return (
       <div>
-        <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
+        <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingBottom: 10 }}>
           <Divider />
           <Text strong>Final Appraisal </Text>
           <Text>
@@ -476,7 +536,8 @@ class Appraisal extends Component {
                 <CardRating
                   boxRateColor="inherit"
                   title="Your Rating"
-                  rate="N/A"
+                  loading={!loadingKpiRating && dataKpiRating.rating}
+                  rate={(currentStep === stepKpi[6] || formStatusId === '3') ? dataKpiRating.rating : 'N/A'}
                   desc="Your final Rating based on Score"
                 />
               </Col>
@@ -503,10 +564,19 @@ class Appraisal extends Component {
                     currentStep={currentStep}
                     isFeedback={isFeedback}
                     feedShow={this.feedShow}
+                    proposeRating={dataKpiRating.rating}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
+                    generalFeedback={generalFeedback}
                   />
                 </div>
+                {currentStep === stepKpi[6] &&
+                  <Checkbox
+                    onChange={this.onCheckFinal}
+                    checked={checkedFinal}
+                  >
+                    <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
+                  </Checkbox>}
               </TabPane>
               <TabPane tab="Values" key="2">
                 <TableValue
@@ -531,6 +601,55 @@ class Appraisal extends Component {
             <Text strong>General Feedback :</Text>
             <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
+        {formStatusId === '3' &&
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          textAlign: 'center'
+        }}
+        >
+          <Title
+            level={4}
+            style={{ color: '#61C761', margin: 0 }}
+            ghost
+            strong
+          >
+            Your KPI has been completed
+          </Title>
+        </div>}
+        {currentStep === stepKpi[6] &&
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          background: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+        >
+          <Text strong>{dataEmpAckName}</Text>
+          <br />
+          <div>
+            <Radio.Group value={finalAck} onChange={this.onChooseFinalAck} disabled={!checkedFinal} size="large" buttonStyle="solid">
+              {dataEmpAckOptions.map((ack) => (
+                <Radio
+                  style={{
+                    display: 'block',
+                    height: '30px',
+                    lineHeight: '30px',
+                    textOverflow: 'ellipsis'
+                  }}
+                  value={ack.value}
+                >
+                  {ack.label}
+                </Radio>
+              ))}
+            </Radio.Group>
+          </div>
+          <br />
+          <br />
+          <Button onClick={this.handleSubmitAck} type="primary" disabled={!checkedFinal}>Submit</Button>
+        </div>}
       </div>
     );
   }
@@ -548,7 +667,9 @@ const mapDispatchToProps = (dispatch) => ({
   getRatingList: () => dispatch(getRatings()),
   getKpiRating: (id) => dispatch(doGetKpiRating(id)),
   doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
-  submitNext: (id) => dispatch(doSubmitNext(id))
+  submitNext: (id) => dispatch(doSubmitNext(id)),
+  empAcknowledge: (data) => dispatch(doEmpAcknowledge(data)),
+  empAcknowledgeList: () => dispatch(doEmpAcknowledgeList())
 });
 
 const connectToComponent = connect(

@@ -154,6 +154,7 @@ class Appraisal extends Component {
       challengeYour: challenge,
       generalFeedbackState: generalFeedback.comment,
       loadingKpis: false,
+      // eslint-disable-next-line max-len
       acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
       teamName: `${user.firstName} ${user.lastName}`
     });
@@ -288,9 +289,8 @@ class Appraisal extends Component {
 
   handleApprove = () => {
     const {
-      form, approveAppraisal, match, kpiReducers
+      form, approveAppraisal, match
     } = this.props;
-    const { dataKpiRating } = kpiReducers;
     const { params } = match;
     const {
       dataKpis, dataValueList, generalFeedbackState, teamName
@@ -309,8 +309,10 @@ class Appraisal extends Component {
       };
     });
     let rating = form.getFieldValue('proposeRating');
-    if (rating === dataKpiRating.rating) {
-      rating = dataKpiRating.id;
+    // eslint-disable-next-line react/destructuring-assignment
+    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+      // eslint-disable-next-line react/destructuring-assignment
+      rating = this.props.kpiReducers.dataKpiRating.id;
     }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
@@ -572,7 +574,7 @@ class Appraisal extends Component {
                 </div>}
               {currentStep === stepKpi[4] &&
                 <div style={{
-                  textAlign: 'center', paddingTop: 20, lineHeight: 0, margin: 0
+                  textAlign: 'center', paddingTop: 10, lineHeight: 0, margin: 0
                 }}
                 >
                   <Title

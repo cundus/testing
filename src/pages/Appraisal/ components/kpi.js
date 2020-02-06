@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton, Input, Spin
+ Button, Typography, Skeleton, Input, Spin, Checkbox
 } from 'antd';
 import { DataTable } from '../../../components';
 import ModalAssessment from './modalAssesment';
@@ -191,7 +191,9 @@ class KPI extends Component {
       handleSubmit,
       changeChallenge,
       handleSaveAssessment,
-      currentStep
+      currentStep,
+      proposeRating,
+      generalFeedback
     } = this.props;
     return (
       <div>
@@ -205,6 +207,11 @@ class KPI extends Component {
               // loading={loading}
               datasource={dataSource}
             />
+            <Text>Propose Rating</Text>
+            <br />
+            <Text strong>{proposeRating}</Text>
+            <br />
+            <br />
             <Text strong>Challenge yourself :</Text>
             <TextArea
               id="challenge-input"
@@ -228,7 +235,7 @@ class KPI extends Component {
                     strong
                   >
                     Your Appraisal has been sent to your Manager
-                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
+                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5]) &&
                   <Title
                     level={4}
                     style={{ color: '#61C761', margin: 0 }}
