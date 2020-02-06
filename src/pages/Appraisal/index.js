@@ -44,7 +44,8 @@ class Appraisal extends Component {
       tab: '1',
       myStep: false,
       isFeedback: false,
-      dataEmpAckOptions: []
+      dataEmpAckOptions: [],
+      finalAck: ''
     };
   }
 
@@ -470,6 +471,7 @@ class Appraisal extends Component {
     const { empAcknowledge } = this.props;
     confirm({
       title: 'Are you sure?',
+      content: '',
       onOk: async () => {
         await empAcknowledge(finalAck);
         const { kpiReducers } = this.props;
@@ -648,7 +650,7 @@ class Appraisal extends Component {
           </div>
           <br />
           <br />
-          <Button onClick={this.handleSubmitAck} type="primary" disabled={!checkedFinal}>Submit</Button>
+          <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === ''}>Submit</Button>
         </div>}
       </div>
     );
