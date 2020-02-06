@@ -15,8 +15,8 @@ export const actionSubmitKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payloadSave = await saveKpi(data, id);
-    const payloadSubmit = await submitNext(id);
     if (payloadSave.data.status_code === Success) {
+      const payloadSubmit = await submitNext(id);
       if (payloadSubmit.data.status_code === Success && !payloadSubmit.data.status_description.includes('Failed')) {
         dispatch({
           type: SUBMIT_KPI_PLANNING_SUCCESS,
