@@ -80,6 +80,7 @@ const initialState = {
   dataKpiManagerMetrics: [],
   dataKpiRating: {},
   dataProposeRating: [],
+  loadingEmpAck: false,
   generalFeedback: {
     id: null,
     comment: null

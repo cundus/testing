@@ -11,7 +11,9 @@ import {
   Modal,
   Checkbox,
   Radio,
-  Button
+  Button,
+  Spin,
+  Skeleton
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -473,6 +475,9 @@ class Appraisal extends Component {
       title: 'Are you sure?',
       content: '',
       onOk: async () => {
+        this.setState({
+          loadingKpis: true
+        });
         await empAcknowledge(finalAck);
         const { kpiReducers } = this.props;
         const {
@@ -521,7 +526,8 @@ class Appraisal extends Component {
       loadingKpiRating,
       generalFeedback,
       currentStep,
-      formStatusId
+      formStatusId,
+      loadingEmpAck
     } = kpiReducers;
     return (
       <div>
@@ -572,13 +578,15 @@ class Appraisal extends Component {
                     generalFeedback={generalFeedback}
                   />
                 </div>
-                {currentStep === stepKpi[6] &&
+                {!loadingEmpAck && currentStep === stepKpi[6] &&
+                <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>
                   <Checkbox
                     onChange={this.onCheckFinal}
                     checked={checkedFinal}
                   >
                     <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
-                  </Checkbox>}
+                  </Checkbox>
+                </Skeleton>}
               </TabPane>
               <TabPane tab="Values" key="2">
                 <TableValue
@@ -619,39 +627,41 @@ class Appraisal extends Component {
             Your KPI has been completed
           </Title>
         </div>}
-        {currentStep === stepKpi[6] &&
-        <div style={{
-          ...globalStyle.contentContainer,
-          borderRadius: 0,
-          background: 'none',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}
-        >
-          <Text strong>{dataEmpAckName}</Text>
-          <br />
-          <div>
-            <Radio.Group value={finalAck} onChange={this.onChooseFinalAck} disabled={!checkedFinal} size="large" buttonStyle="solid">
-              {dataEmpAckOptions.map((ack) => (
-                <Radio
-                  style={{
-                    display: 'block',
-                    height: '30px',
-                    lineHeight: '30px',
-                    textOverflow: 'ellipsis'
-                  }}
-                  value={ack.value}
-                >
-                  {ack.label}
-                </Radio>
-              ))}
-            </Radio.Group>
+        {!loadingKpis && currentStep === stepKpi[6] &&
+        <Spin spinning={loadingEmpAck}>
+          <div style={{
+            ...globalStyle.contentContainer,
+            borderRadius: 0,
+            background: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+          >
+            <Text strong>{dataEmpAckName}</Text>
+            <br />
+            <div>
+              <Radio.Group value={finalAck} onChange={this.onChooseFinalAck} disabled={!checkedFinal} size="large" buttonStyle="solid">
+                {dataEmpAckOptions.map((ack) => (
+                  <Radio
+                    style={{
+                      display: 'block',
+                      height: '30px',
+                      lineHeight: '30px',
+                      textOverflow: 'ellipsis'
+                    }}
+                    value={ack.value}
+                  >
+                    {ack.label}
+                  </Radio>
+                ))}
+              </Radio.Group>
+            </div>
+            <br />
+            <br />
+            <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === ''}>Submit</Button>
           </div>
-          <br />
-          <br />
-          <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === ''}>Submit</Button>
-        </div>}
+        </Spin>}
       </div>
     );
   }
