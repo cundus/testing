@@ -154,7 +154,8 @@ class Appraisal extends Component {
       challengeYour: challenge,
       generalFeedbackState: generalFeedback.comment,
       loadingKpis: false,
-      teamName: user.firstName+' '+user.lastName
+      acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
+      teamName: `${user.firstName} ${user.lastName}`
     });
   }
 
@@ -164,12 +165,14 @@ class Appraisal extends Component {
         loadingMyValue: true
       });
     }
-    const { getValues, getRatingList, form } = this.props;
+    const {
+      getValues, getRatingList, form
+    } = this.props;
     if (!noLoading) {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers, teamName } = this.props;
+    const { kpiReducers } = this.props;
     const { dataValues, dataRating } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -196,7 +199,7 @@ class Appraisal extends Component {
         index,
         orderId: itemValues.orderId,
         name: itemValues.name,
-        rating: ratingCheck.length < 1 ? 'Choose Value' : itemValues.valuesRatingDTO.rating,
+        rating: ratingCheck.length < 1 ? undefined : itemValues.valuesRatingDTO.rating,
         comment: itemValues.valuesRatingDTO.comment,
         attachments: newFiles,
         feedback: itemValues.otherValuesRatingDTO.comment
@@ -227,15 +230,16 @@ class Appraisal extends Component {
     this.setState({
       loadingMyValue: false,
       optionRating: dataRating,
-      dataValueList: dataOrdered,
-      acknowledgement: `I have had feedback session with ${teamName} on his/her Performance Review Result.`
+      dataValueList: dataOrdered
     });
   }
 
   handleSendBack = () => {
-    const { teamName, sendBackAppraisal, match } = this.props;
+    const { sendBackAppraisal, match } = this.props;
     const { params } = match;
-    const { dataKpis, dataValueList, generalFeedbackState } = this.state;
+    const {
+      dataKpis, dataValueList, generalFeedbackState, teamName
+    } = this.state;
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
@@ -283,10 +287,14 @@ class Appraisal extends Component {
 
 
   handleApprove = () => {
-    const { form, approveAppraisal, match, kpiReducers } = this.props;
+    const {
+      form, approveAppraisal, match, kpiReducers
+    } = this.props;
     const { dataKpiRating } = kpiReducers;
     const { params } = match;
-    const { dataKpis, dataValueList, generalFeedbackState, teamName } = this.state;
+    const {
+      dataKpis, dataValueList, generalFeedbackState, teamName
+    } = this.state;
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
@@ -319,9 +327,9 @@ class Appraisal extends Component {
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
-              kpiReducers,
-              history
-            } = this.props;
+              // eslint-disable-next-line no-shadow
+              kpiReducers
+            } = this;
             const {
               loadingApproveAppraisal,
               statusApproveAppraisal,
@@ -383,23 +391,32 @@ class Appraisal extends Component {
 
   doAcknowledge = async () => {
     const {
-      userReducers, teamAck, kpiReducers, teamName
+      match, teamAck
     } = this.props;
-    const { user } = userReducers.result;
-    const { acknowledgement } = this.state;
+    const { params } = match;
+    const { acknowledgement, teamName } = this.state;
     const data = {
-      userId: user.userId,
+      userId: params.userId,
       acknowledgement
     };
-    await teamAck(data);
-    if (!kpiReducers.loadingAcknowledge) {
-      if (kpiReducers.statusAcknowledge === Success) {
-        this.getData();
-        message.success(`${teamName}'s Final Result has been sent`);
-      } else {
-        message.warning(`Sorry, ${kpiReducers.messageAcknowledge}`);
-      }
-    }
+    confirm({
+      title: 'Are you sure?',
+      content: `Are you sure want to approve ${teamName}'s Appraisal?`,
+      okText: 'Approve',
+      onOk: async () => {
+        await teamAck(data);
+        const { kpiReducers } = this.props;
+        if (!kpiReducers.loadingTeamAck) {
+          if (kpiReducers.statusTeamAck === Success) {
+            this.getData();
+            message.success(`${teamName}'s Final Result has been sent`);
+          } else {
+            message.warning(`Sorry, ${kpiReducers.messageTeamAck}`);
+          }
+        }
+      },
+      onCancel() {}
+    });
   }
 
   render() {
@@ -575,10 +592,10 @@ class Appraisal extends Component {
         <div style={{
           ...globalStyle.contentContainer,
           borderRadius: 0,
+          paddingBottom: 5,
           borderBottomLeftRadius: 5,
           borderBottomRightRadius: 5,
-          paddingTop: 0,
-          paddingBottom: 10
+          paddingTop: 0
         }}
         >
           <Skeleton loading={loadingKpis} title={{ width: 100 }} paragraph={{ rows: 1 }} active>
@@ -586,10 +603,43 @@ class Appraisal extends Component {
             <Paragraph>{challengeYour}</Paragraph>
           </Skeleton>
         </div>
+        {(currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          paddingTop: 0,
+          borderBottomLeftRadius: 5,
+          borderBottomRightRadius: 5
+        }}
+        >
+          <div style={{ textAlign: 'left' }}>
+            <Checkbox
+              onChange={this.onCheckResult}
+              checked={currentStep === stepKpi[6] || checkedFinal}
+              disabled={currentStep === stepKpi[6]}
+            >
+              <Text strong>{acknowledgement}</Text>
+            </Checkbox>
+          </div>
+          <br />
+          <center>
+            <Button
+              id="send-final"
+              type="primary"
+              onClick={this.handleApprove}
+              style={{ textAlign: 'center' }}
+              // disabled={currentStep === stepKpi[6] || !checkedFinal}
+            >
+              {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
+                stepKpi[6] && `Final result has been sent to ${teamName}`}
+            </Button>
+          </center>
+        </div> }
         <div style={{
           ...globalStyle.contentContainer,
           background: 'rgb(250, 247, 187)',
           borderRadius: 0,
+          paddingTop: 10,
           borderBottomLeftRadius: 5,
           borderBottomRightRadius: 5
         }}
@@ -605,29 +655,6 @@ class Appraisal extends Component {
             onChange={this.changeGeneralFeedback}
           />
         </div>
-        {(currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
-        <div>
-          <div style={{ textAlign: 'left' }}>
-            <Checkbox
-              onChange={this.onCheckResult}
-              checked={currentStep === stepKpi[6] || checkedFinal}
-              disabled={currentStep === stepKpi[6]}
-            >
-              <Text strong>{acknowledgement}</Text>
-            </Checkbox>
-          </div>
-          <br />
-          <Button
-            id="send-final"
-            type="primary"
-            onClick={this.doAcknowledge}
-            style={{ margin: 10 }}
-            disabled={currentStep === stepKpi[6] || !checkedFinal}
-          >
-            {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
-              stepKpi[6] && `Final result has been sent to ${teamName}`}
-          </Button>
-        </div> }
       </div>
     );
   }
@@ -666,10 +693,9 @@ Appraisal.propTypes = {
   getKpiList: PropTypes.func,
   getKpiRating: PropTypes.func,
   match: PropTypes.instanceOf(Object),
-  submitNext: PropTypes.func,
-  doSaveValues: PropTypes.func,
-  doAssess: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  teamAck: PropTypes.func,
+  approveAppraisal: PropTypes.func,
+  sendBackAppraisal: PropTypes.func,
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)
 };
