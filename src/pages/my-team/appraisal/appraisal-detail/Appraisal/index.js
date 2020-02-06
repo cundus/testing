@@ -626,9 +626,9 @@ class Appraisal extends Component {
             <Button
               id="send-final"
               type="primary"
-              onClick={this.handleApprove}
+              onClick={this.doAcknowledge}
               style={{ textAlign: 'center' }}
-              // disabled={currentStep === stepKpi[6] || !checkedFinal}
+              disabled={currentStep === stepKpi[6] || !checkedFinal}
             >
               {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
                 stepKpi[6] && `Final result has been sent to ${teamName}`}
@@ -696,6 +696,7 @@ Appraisal.propTypes = {
   teamAck: PropTypes.func,
   approveAppraisal: PropTypes.func,
   sendBackAppraisal: PropTypes.func,
+  getProposeRating: PropTypes.func,
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)
 };
