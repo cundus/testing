@@ -47,7 +47,7 @@ class Planning extends Component {
         }
       } else {
         // Submitted KPI
-        this.stepChange(0);
+        this.stepChange(2);
       }
     } else {
       // Error

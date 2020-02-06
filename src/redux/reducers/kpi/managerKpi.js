@@ -8,8 +8,8 @@ const initialState = {
   loading: false,
   status: null,
   message: '',
-  dataFirstManager: {},
-  dataSecondManager: {},
+  dataFirstManager: null,
+  dataSecondManager: null,
   dataKpiManagerMetrics: []
 };
 
@@ -35,7 +35,10 @@ const kpiReducers = (state = initialState, action) => {
         ...state,
         loading: action.loading,
         status: action.status,
-        message: action.message
+        message: action.message,
+        dataFirstManager: null,
+        dataSecondManager: null,
+        dataKpiManagerMetrics: []
       };
     default:
       return { ...state };

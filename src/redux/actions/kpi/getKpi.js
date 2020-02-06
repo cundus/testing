@@ -129,13 +129,23 @@ export const actionGetManagerKPI = (id) => async (dispatch) => {
   try {
     const payload = await getKpiManagerList(id);
     if (payload?.data?.status_code === Success) {
-      dispatch({
-        type: GET_KPI_MANAGER_LIST_SUCCESS,
-        loading: false,
-        status: payload?.data?.status_code,
-        message: payload?.data?.status_description,
-        data: payload?.data?.result
-      });
+      if (payload?.data?.result) {
+        dispatch({
+          type: GET_KPI_MANAGER_LIST_SUCCESS,
+          loading: false,
+          status: payload?.data?.status_code,
+          message: payload?.data?.status_description,
+          data: payload?.data?.result
+        });
+      } else {
+        dispatch({
+          type: GET_KPI_MANAGER_LIST_FAILED,
+          loading: false,
+          status: payload?.data?.status_code,
+          message: payload?.data?.status_description,
+          error: payload
+        });
+      }
     } else {
       dispatch({
         type: GET_KPI_MANAGER_LIST_FAILED,

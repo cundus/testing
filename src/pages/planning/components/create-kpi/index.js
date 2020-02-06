@@ -61,7 +61,7 @@ class CreateKPI extends Component {
     const { user } = userReducers.result;
     getLatestGoalKpi();
     this.getOwnKpiList(user.userId);
-    // this.getManagerKpiList(user.userId);
+    this.getManagerKpiList(user.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -72,8 +72,8 @@ class CreateKPI extends Component {
       await getKpiList(id);
     }
     setAccess(true);
-    const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics } = kpiReducers;
+    const { ownKpiReducers } = this.props;
+    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const newData = [];
     const newSelectedData = [];
     // for fetching data metrics API
