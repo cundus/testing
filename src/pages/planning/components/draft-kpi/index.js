@@ -40,12 +40,13 @@ class DraftKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducers, getKpiList, form, access
+      userReducers, getKpiList, form, access, setAccess
     } = this.props;
     const { user } = userReducers.result;
     if (access) {
       await getKpiList(user.userId);
     }
+    setAccess(true);
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];
@@ -85,7 +86,7 @@ class DraftKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge
+      challengeYour: challenge || ' '
     });
     this.liveCount(newData);
   };
