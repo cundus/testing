@@ -35,12 +35,13 @@ class SubmitedKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducers, getKpiList, form, access
+      userReducers, getKpiList, access, setAccess
     } = this.props;
     const { user } = userReducers.result;
     if (access) {
       await getKpiList(user.userId);
     }
+    setAccess(true);
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
     const newData = [];

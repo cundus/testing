@@ -58,8 +58,7 @@ class Planning extends Component {
       });
     }
     this.setState({
-      loading: false,
-      access: true
+      loading: false
     });
   }
 
@@ -69,11 +68,17 @@ class Planning extends Component {
     });
   }
 
+  setAccess = (access) => {
+    this.setState({
+      access
+    });
+  }
+
   render() {
     const {
       step, loading, error, access
     } = this.state;
-    const { stepChange } = this;
+    const { stepChange, setAccess } = this;
     const { kpiReducers, history } = this.props;
     const {
       errMessage, status
@@ -84,8 +89,8 @@ class Planning extends Component {
           <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
             {loading ? <center><Spin /></center> :
             <div>
-              <Step step={step} stepChange={stepChange} access={access} />
-              <CreateKpi stepChange={stepChange} />
+              <Step step={step} stepChange={stepChange} />
+              <CreateKpi stepChange={stepChange} access={access} setAccess={setAccess} />
             </div>}
           </div>
         );
@@ -94,8 +99,8 @@ class Planning extends Component {
           <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
             {loading ? <center><Spin /></center> :
             <div>
-              <Step step={step} stepChange={stepChange} access={access} />
-              <DraftKpi stepChange={stepChange} />
+              <Step step={step} stepChange={stepChange} />
+              <DraftKpi stepChange={stepChange} access={access} setAccess={setAccess} />
             </div>}
           </div>
         );
@@ -104,8 +109,8 @@ class Planning extends Component {
           <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
             {loading ? <center><Spin /></center> :
             <div>
-              <Step step={step} stepChange={stepChange} access={access} />
-              <SubmitKpi stepChange={stepChange} />
+              <Step step={step} stepChange={stepChange} />
+              <SubmitKpi stepChange={stepChange} access={access} setAccess={setAccess} />
             </div>}
           </div>
         );
