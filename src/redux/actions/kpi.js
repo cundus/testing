@@ -46,7 +46,10 @@ import {
   SEND_FEEDBACK_APPRAISAL_FAILED,
   APPROVE_APPRAISAL,
   APPROVE_APPRAISAL_SUCCESS,
-  APPROVE_APPRAISAL_FAILED
+  APPROVE_APPRAISAL_FAILED,
+  TEAM_ACKNOWLEDGEMENT,
+  TEAM_ACKNOWLEDGEMENT_SUCCESS,
+  TEAM_ACKNOWLEDGEMENT_FAILED
 } from '../action.type';
 
 import {
@@ -57,7 +60,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -838,6 +841,54 @@ export const doApproveAppraisal = (id, data) => async (dispatch) => {
     } else {
       dispatch({
         type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doTeamAcknowledge = (data) => async (dispatch) => {
+  dispatch({
+    type: TEAM_ACKNOWLEDGEMENT,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await teamAcknowledge(data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: TEAM_ACKNOWLEDGEMENT_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: TEAM_ACKNOWLEDGEMENT_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: TEAM_ACKNOWLEDGEMENT_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: TEAM_ACKNOWLEDGEMENT_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',

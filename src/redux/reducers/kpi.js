@@ -46,7 +46,10 @@ import {
   SEND_FEEDBACK_APPRAISAL_FAILED,
   APPROVE_APPRAISAL,
   APPROVE_APPRAISAL_SUCCESS,
-  APPROVE_APPRAISAL_FAILED
+  APPROVE_APPRAISAL_FAILED,
+  TEAM_ACKNOWLEDGEMENT,
+  TEAM_ACKNOWLEDGEMENT_SUCCESS,
+  TEAM_ACKNOWLEDGEMENT_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -410,6 +413,28 @@ const kpiReducers = (state = initialState, action) => {
         statusApproveAppraisal: action.status,
         messageApproveAppraisal: action.message,
         dataApproveAppraisal: null
+      };
+    case TEAM_ACKNOWLEDGEMENT:
+      return {
+        ...state,
+        loadingTeamAck: action.loading,
+        dataTeamAck: null
+      };
+    case TEAM_ACKNOWLEDGEMENT_SUCCESS:
+      return {
+        ...state,
+        loadingTeamAck: action.loading,
+        statusTeamAck: action.status,
+        messageTeamAck: action.message,
+        dataTeamAck: action.data
+      };
+    case TEAM_ACKNOWLEDGEMENT_FAILED:
+      return {
+        ...state,
+        loadingTeamAck: action.loading,
+        statusTeamAck: action.status,
+        messageTeamAck: action.message,
+        dataTeamAck: null
       };
     default:
       return { ...state };

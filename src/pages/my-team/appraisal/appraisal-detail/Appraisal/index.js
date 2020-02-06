@@ -15,7 +15,8 @@ import {
   message,
   // Spin,
   // Icon,
-  Select
+  Select,
+  Checkbox
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -32,10 +33,12 @@ import {
   doSubmitNext,
   doGetProposeRating,
   doApproveAppraisal,
-  doSendBackAppraisal
+  doSendBackAppraisal,
+  doTeamAcknowledge
 } from '../../../../../redux/actions/kpi';
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
+import stepKpi from '../../../../../utils/stepKpi';
 
 const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
@@ -57,7 +60,9 @@ class Appraisal extends Component {
       tab: '1',
       myStep: false,
       isFeedback: false,
-      generalFeedbackState: ''
+      generalFeedbackState: '',
+      checkedFinal: false,
+      acknowledgement: ''
     };
   }
 
@@ -164,7 +169,7 @@ class Appraisal extends Component {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers } = this.props;
+    const { kpiReducers, teamName } = this.props;
     const { dataValues, dataRating } = kpiReducers;
     const newData = [];
     // for fetching data metrics API
@@ -222,7 +227,8 @@ class Appraisal extends Component {
     this.setState({
       loadingMyValue: false,
       optionRating: dataRating,
-      dataValueList: dataOrdered
+      dataValueList: dataOrdered,
+      acknowledgement: `I have had feedback session with ${teamName} on his/her Performance Review Result.`
     });
   }
 
@@ -370,6 +376,32 @@ class Appraisal extends Component {
     this.setState({ dataValueList: newData });
   };
 
+  onCheckResult = (e) => {
+    const { checked } = e.target;
+    this.setState({ checkedFinal: checked });
+  }
+
+  doAcknowledge = async () => {
+    const {
+      userReducers, teamAck, kpiReducers, teamName
+    } = this.props;
+    const { user } = userReducers.result;
+    const { acknowledgement } = this.state;
+    const data = {
+      userId: user.userId,
+      acknowledgement
+    };
+    await teamAck(data);
+    if (!kpiReducers.loadingAcknowledge) {
+      if (kpiReducers.statusAcknowledge === Success) {
+        this.getData();
+        message.success(`${teamName}'s Final Result has been sent`);
+      } else {
+        message.warning(`Sorry, ${kpiReducers.messageAcknowledge}`);
+      }
+    }
+  }
+
   render() {
     const {
       loadingKpis,
@@ -382,7 +414,9 @@ class Appraisal extends Component {
       myStep,
       isFeedback,
       generalFeedbackState,
-      teamName
+      teamName,
+      checkedFinal,
+      acknowledgement
     } = this.state;
     const {
       form,
@@ -392,7 +426,7 @@ class Appraisal extends Component {
       dataKpiMetrics,
       dataProposeRating,
       dataKpiRating,
-      user
+      currentStep
     } = kpiReducers;
     return (
       <div>
@@ -494,7 +528,7 @@ class Appraisal extends Component {
         >
           <center>
             <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
-              {myStep ?
+              {myStep &&
                 <div style={{ textAlign: 'center' }}>
                   <Button
                     id="go-monitoring"
@@ -518,19 +552,23 @@ class Appraisal extends Component {
                   >
                     Approve
                   </Button>
-                </div> :
-                  <div style={{ textAlign: 'center', paddingTop: 20, lineHeight: 0, margin: 0 }}>
-                    <Title
-                      level={4}
-                      style={{ color: '#61C761', margin: 0 }}
-                      ghost
-                      strong
-                    >
-                      {`${teamName}'s Appraisal has been sent to system .`}
-                      <br />
-                      Waiting for the final Result
-                    </Title>
-                  </div> }
+                </div>}
+              {currentStep === stepKpi[4] &&
+                <div style={{
+                  textAlign: 'center', paddingTop: 20, lineHeight: 0, margin: 0
+                }}
+                >
+                  <Title
+                    level={4}
+                    style={{ color: '#61C761', margin: 0 }}
+                    ghost
+                    strong
+                  >
+                    {`${teamName}'s Appraisal has been sent to system .`}
+                    <br />
+                    Waiting for the final Result
+                  </Title>
+                </div>}
             </Skeleton>
           </center>
         </div>
@@ -567,6 +605,29 @@ class Appraisal extends Component {
             onChange={this.changeGeneralFeedback}
           />
         </div>
+        {(currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
+        <div>
+          <div style={{ textAlign: 'left' }}>
+            <Checkbox
+              onChange={this.onCheckResult}
+              checked={currentStep === stepKpi[6] || checkedFinal}
+              disabled={currentStep === stepKpi[6]}
+            >
+              <Text strong>{acknowledgement}</Text>
+            </Checkbox>
+          </div>
+          <br />
+          <Button
+            id="send-final"
+            type="primary"
+            onClick={this.doAcknowledge}
+            style={{ margin: 10 }}
+            disabled={currentStep === stepKpi[6] || !checkedFinal}
+          >
+            {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
+              stepKpi[6] && `Final result has been sent to ${teamName}`}
+          </Button>
+        </div> }
       </div>
     );
   }
@@ -587,7 +648,8 @@ const mapDispatchToProps = (dispatch) => ({
   submitNext: (id) => dispatch(doSubmitNext(id)),
   getProposeRating: () => dispatch(doGetProposeRating()),
   sendBackAppraisal: (id, data) => dispatch(doSendBackAppraisal(id, data)),
-  approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data))
+  approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data)),
+  teamAck: (data) => dispatch(doTeamAcknowledge(data))
 });
 
 const connectToComponent = connect(

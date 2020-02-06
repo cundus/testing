@@ -56,7 +56,7 @@ class Value extends Component {
               <Form.Item style={{ width: '100%' }}>
                 {form.getFieldDecorator(`dataGeneral[${record.index}].rating`, {
                   rules: [{ required: true, message: 'Rating is required' }],
-                  initialValue: record.rating || undefined
+                  initialValue: record.rating
                 })(
                   <Select
                     placeholder="Choose Value"
