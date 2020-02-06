@@ -166,7 +166,7 @@ class Appraisal extends Component {
         index,
         orderId: itemValues.orderId,
         name: itemValues.name,
-        rating: ratingCheck.length < 1 ? 'Choose Value' : itemValues.valuesRatingDTO.rating,
+        rating: ratingCheck.length < 1 ? undefined : itemValues.valuesRatingDTO.rating,
         comment: itemValues.valuesRatingDTO.comment,
         attachments: newFiles,
         feedback: itemValues.otherValuesRatingDTO.comment
