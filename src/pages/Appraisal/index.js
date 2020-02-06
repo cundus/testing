@@ -337,7 +337,7 @@ class Appraisal extends Component {
   };
 
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
       doSaveValues, userReducers, form, doAssess, submitNext
@@ -364,12 +364,16 @@ class Appraisal extends Component {
       dataValueList
     } = this.state;
     const newData = [];
+    let valuesErr = false;
     dataValueList.map((item) => {
       const data = {
         comment: item.comment,
         rating: item.rating,
         valueId: item.valueId
       };
+      if (!item.rating || !item.comment) {
+        valuesErr = true;
+      }
       newData.push(data);
       return data;
     });
@@ -378,41 +382,47 @@ class Appraisal extends Component {
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doAssess(dataAssessment);
-            await doSaveValues(user.userId, dataValues);
-            const { kpiReducers } = this.props;
-            const {
-              loadingAssess,
-              statusAssess,
-              messageAssess
-            } = kpiReducers;
-            const {
-              loadingSaveValues,
-              statusSaveValues,
-              messageSaveValues
-            } = kpiReducers;
-            if (!loadingAssess && !loadingSaveValues) {
-              if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                if (statusSaveValues === Success) {
-                  await submitNext(user.userId);
-                  this.getData();
-                  message.success('Your Appraisal has been sent to your Manager');
-                  if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                    message.warning(`Sorry, ${messageAssess}`);
+        if (valuesErr) {
+          message.warning('You need to fill Values before submiting to the manager');
+          this.changeTab('2');
+          form.validateFields(['dataGeneral']);
+        } else {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              await doAssess(dataAssessment);
+              await doSaveValues(user.userId, dataValues);
+              const { kpiReducers } = this.props;
+              const {
+                loadingAssess,
+                statusAssess,
+                messageAssess
+              } = kpiReducers;
+              const {
+                loadingSaveValues,
+                statusSaveValues,
+                messageSaveValues
+              } = kpiReducers;
+              if (!loadingAssess && !loadingSaveValues) {
+                if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  if (statusSaveValues === Success) {
+                    await submitNext(user.userId);
+                    this.getData();
+                    message.success('Your Appraisal has been sent to your Manager');
+                    if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                      message.warning(`Sorry, ${messageAssess}`);
+                    }
+                  } else {
+                    message.warning(`Sorry, ${messageSaveValues}`);
                   }
                 } else {
-                  message.warning(`Sorry, ${messageSaveValues}`);
+                  message.warning(`Sorry, ${messageAssess}`);
                 }
-              } else {
-                message.warning(`Sorry, ${messageAssess}`);
               }
-            }
-          },
-          onCancel() {}
-        });
+            },
+            onCancel() {}
+          });
+        }
       } else if (err.dataKpi) {
         message.warning('Please fill out your Assessment');
         this.changeTab('1');
