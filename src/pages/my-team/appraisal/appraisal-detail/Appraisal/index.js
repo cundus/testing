@@ -504,7 +504,7 @@ class Appraisal extends Component {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
                       initialValue: dataKpiRating.id
                     })(
-                      <Select disabled={!myStep} style={{ width: 200 }} placeholder="Propose Rating">
+                      <Select disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6])} style={{ width: 200 }} placeholder="Propose Rating">
                         {dataProposeRating.map((item, index) => {
                           return <Option key={index} value={item.id}>{item.name}</Option>;
                         })}
@@ -533,7 +533,7 @@ class Appraisal extends Component {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
                       initialValue: dataKpiRating.rating || undefined
                     })(
-                      <Select disabled={!myStep} style={{ width: 200 }} placeholder="Propose Rating">
+                      <Select disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6])} style={{ width: 200 }} placeholder="Propose Rating">
                         {dataProposeRating.map((item, index) => {
                           return <Option key={index} value={item.id}>{item.name}</Option>;
                         })}
