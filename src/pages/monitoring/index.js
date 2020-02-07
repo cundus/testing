@@ -179,7 +179,7 @@ class MonitorKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challangeYourSelf: challengeYour
+      challengeYourSelf: challengeYour
     };
     if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
@@ -308,7 +308,7 @@ class MonitorKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challangeYourSelf: challengeYour
+      challengeYourSelf: challengeYour
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {

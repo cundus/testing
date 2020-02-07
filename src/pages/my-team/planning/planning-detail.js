@@ -95,7 +95,7 @@ class PlanningDetail extends Component {
     this.state.dataSource.map((item) => {
       kpiList.find((d) => d.id === item.key).othersRatingComments.comment = item.feedback;
     });
-    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
+    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback || ' ';
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         confirm({

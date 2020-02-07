@@ -253,7 +253,7 @@ class CreateKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challangeYourSelf: challenge
+      challengeYourSelf: challenge
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err || tab === '2') {
