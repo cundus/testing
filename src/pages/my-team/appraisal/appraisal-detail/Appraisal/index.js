@@ -333,9 +333,8 @@ class Appraisal extends Component {
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
-              // eslint-disable-next-line no-shadow
               kpiReducers
-            } = this;
+            } = this.props;
             const {
               loadingApproveAppraisal,
               statusApproveAppraisal,
