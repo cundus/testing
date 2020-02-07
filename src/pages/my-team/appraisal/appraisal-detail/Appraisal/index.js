@@ -16,7 +16,9 @@ import {
   // Spin,
   // Icon,
   Select,
-  Checkbox
+  Checkbox,
+  Spin,
+  Icon
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -62,7 +64,8 @@ class Appraisal extends Component {
       isFeedback: false,
       generalFeedbackState: '',
       checkedFinal: false,
-      acknowledgement: ''
+      acknowledgement: '',
+      loadingSubmit: false
     };
   }
 
@@ -230,6 +233,7 @@ class Appraisal extends Component {
     }
     this.setState({
       loadingMyValue: false,
+      loadingSubmit: false,
       optionRating: dataRating,
       dataValueList: dataOrdered
     });
@@ -410,6 +414,9 @@ class Appraisal extends Component {
         const { kpiReducers } = this.props;
         if (!kpiReducers.loadingTeamAck) {
           if (kpiReducers.statusTeamAck === Success) {
+            this.setState({
+              loadingSubmit: true
+            });
             this.getData();
             message.success(`${teamName}'s Final Result has been sent`);
           } else {
@@ -435,7 +442,8 @@ class Appraisal extends Component {
       generalFeedbackState,
       teamName,
       checkedFinal,
-      acknowledgement
+      acknowledgement,
+      loadingSubmit
     } = this.state;
     const {
       form,
@@ -614,28 +622,30 @@ class Appraisal extends Component {
           borderBottomRightRadius: 5
         }}
         >
-          <div style={{ textAlign: 'left' }}>
-            <Checkbox
-              onChange={this.onCheckResult}
-              checked={currentStep === stepKpi[6] || checkedFinal}
-              disabled={currentStep === stepKpi[6]}
-            >
-              <Text strong>{acknowledgement}</Text>
-            </Checkbox>
-          </div>
-          <br />
-          <center>
-            <Button
-              id="send-final"
-              type="primary"
-              onClick={this.doAcknowledge}
-              style={{ textAlign: 'center' }}
-              disabled={currentStep === stepKpi[6] || !checkedFinal}
-            >
-              {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
-                stepKpi[6] && `Final result has been sent to ${teamName}`}
-            </Button>
-          </center>
+          <Spin spinning={loadingSubmit} indicator={<Icon type="loading" />}>
+            <div style={{ textAlign: 'left' }}>
+              <Checkbox
+                onChange={this.onCheckResult}
+                checked={currentStep === stepKpi[6] || checkedFinal}
+                disabled={currentStep === stepKpi[6]}
+              >
+                <Text strong>{acknowledgement}</Text>
+              </Checkbox>
+            </div>
+            <br />
+            <center>
+              <Button
+                id="send-final"
+                type="primary"
+                onClick={this.doAcknowledge}
+                style={{ textAlign: 'center' }}
+                disabled={currentStep === stepKpi[6] || !checkedFinal}
+              >
+                {currentStep === stepKpi[5] ? `Send final result to ${teamName}` :
+                  stepKpi[6] && `Final result has been sent to ${teamName}`}
+              </Button>
+            </center>
+          </Spin>
         </div> }
         <div style={{
           ...globalStyle.contentContainer,
