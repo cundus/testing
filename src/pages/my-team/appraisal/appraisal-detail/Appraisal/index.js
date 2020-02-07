@@ -258,7 +258,7 @@ class Appraisal extends Component {
       };
     });
     const data = {
-      challengeOthersRatingComments: generalFeedbackState,
+      challengeOthersRatingComments: generalFeedbackState || ' ',
       kpiFeedbacks,
       valuesFeedbacks
     };
@@ -319,7 +319,7 @@ class Appraisal extends Component {
       rating = this.props.kpiReducers.dataKpiRating.id;
     }
     const data = {
-      challengeOthersRatingComments: generalFeedbackState,
+      challengeOthersRatingComments: generalFeedbackState || ' ',
       kpiFeedbacks,
       rating,
       valuesFeedbacks
