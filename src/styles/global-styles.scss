@@ -93,3 +93,14 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
 .ant-form-item-label {
   line-height: 20px;
 }
+
+@media (max-width: 480px) {
+  .ant-steps-navigation{
+    .ant-steps-item::after {
+      display: none !important;
+    }
+    .ant-steps-item.ant-steps-item-active::before {
+      display: none !important;
+    }
+  }
+}
