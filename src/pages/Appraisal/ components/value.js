@@ -211,7 +211,7 @@ class Value extends Component {
       if (!kpiR.loadingAttach) {
         if (kpiR.statusAttach === Success) {
           onSuccess(true, file);
-          getOwnValues(user.userId, true);
+          // getOwnValues(user.userId, true);
           message.success(`"${file.name}" has been uploaded`);
         } else {
           message.warning(`Sorry, ${kpiR.messageAttach}`);
