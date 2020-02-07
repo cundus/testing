@@ -46,7 +46,9 @@ class CreateKPI extends Component {
       dataManagerKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
-      loadingManager: true
+      loadingManager: true,
+      weightTotal: 0,
+      weightTotalErr: true
     };
   }
 
@@ -78,45 +80,49 @@ class CreateKPI extends Component {
     const newSelectedData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
-    dataKpi.map((itemKpi) => {
-      let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+    if (dataKpi.length === 0) {
+      this.handleAddRow();
+    } else {
+      dataKpi.map((itemKpi) => {
+        let dataMetrics = itemKpi.metricLookup.map((metric) => {
+          return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
+            metric.achievementText : metric.achievementNumeric}"}`;
+        });
+        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+        dataMetrics = dataMetrics.reduce((result, current) => {
+          return Object.assign(result, current);
+        }, {});
+        if (itemKpi.cascadeType === 0) {
+          const data = {
+            key: itemKpi.id,
+            id: itemKpi.id,
+            cascadeType: itemKpi.cascadeType,
+            cascadeName: itemKpi.cascadeName,
+            kpi: itemKpi.name,
+            baseline: itemKpi.baseline,
+            weight: itemKpi.weight,
+            achievementType: itemKpi.achievementType,
+            metrics: dataKpiMetrics,
+            ...dataMetrics
+          };
+          newData.push(data);
+        } else {
+          const data = {
+            key: itemKpi.id,
+            id: itemKpi.id,
+            cascadeType: itemKpi.cascadeType,
+            cascadeName: itemKpi.cascadeName,
+            kpi: itemKpi.name,
+            baseline: itemKpi.baseline,
+            weight: itemKpi.weight,
+            achievementType: itemKpi.achievementType,
+            metrics: dataKpiMetrics,
+            ...dataMetrics
+          };
+          newSelectedData.push(data);
+        }
       });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
-      if (itemKpi.cascadeType === 0) {
-        const data = {
-          key: itemKpi.id,
-          id: itemKpi.id,
-          cascadeType: itemKpi.cascadeType,
-          cascadeName: itemKpi.cascadeName,
-          kpi: itemKpi.name,
-          baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
-          achievementType: itemKpi.achievementType,
-          metrics: dataKpiMetrics,
-          ...dataMetrics
-        };
-        newData.push(data);
-      } else {
-        const data = {
-          key: itemKpi.id,
-          id: itemKpi.id,
-          cascadeType: itemKpi.cascadeType,
-          cascadeName: itemKpi.cascadeName,
-          kpi: itemKpi.name,
-          baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
-          achievementType: itemKpi.achievementType,
-          metrics: dataKpiMetrics,
-          ...dataMetrics
-        };
-        newSelectedData.push(data);
-      }
-    });
+    }
     form.getFieldValue({
       dataKpi: newData
     });
@@ -125,6 +131,7 @@ class CreateKPI extends Component {
       dataSelectedCascade: newSelectedData,
       loadingOwn: false
     });
+    this.liveCount(newData);
   }
 
   getManagerKpiList = async (id) => {
@@ -193,6 +200,33 @@ class CreateKPI extends Component {
       dataManagerKpi: newData,
       loadingManager: false
     });
+  }
+
+  liveCount = (data) => {
+    let totalWeight = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        const weight = parseFloat(itemKpi.weight);
+        totalWeight += weight;
+      } else {
+        totalWeight += 0;
+      }
+    });
+    totalWeight = parseFloat(totalWeight);
+    if (typeof totalWeight === 'number') {
+      if (totalWeight === 100) {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: false
+        });
+      } else {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: true
+        });
+      }
+    }
   }
 
   handleSaveDraft = async () => {
@@ -281,27 +315,31 @@ class CreateKPI extends Component {
   };
 
   handleSelectData = (record) => {
-    const { dataSelectedCascade } = this.state;
+    const { dataSelectedCascade, dataOwn } = this.state;
     const dataChecking = dataSelectedCascade.filter(
       (item) => item.kpi === record.kpi
     );
     if (dataChecking.length !== 0) {
+      const newData = dataSelectedCascade.filter(
+        (item) => !item.statusCascade && item.kpi !== record.kpi
+      );
       this.setState({
-        dataSelectedCascade: dataSelectedCascade.filter(
-          (item) => !item.statusCascade && item.kpi !== record.kpi
-        )
+        dataSelectedCascade: newData
       });
+      this.liveCount([...dataOwn, ...newData]);
     } else {
+      const newData = [...dataSelectedCascade, record];
       this.setState({
         dataSelectedCascade: [...dataSelectedCascade, record]
       });
+      this.liveCount([...dataOwn, ...newData]);
     }
   };
 
   handleAddRow = () => {
     const { kpiReducers } = this.props;
     const { dataKpiMetrics } = kpiReducers;
-    const { dataOwnId, dataOwn } = this.state;
+    const { dataOwnId, dataOwn, dataSelectedCascade } = this.state;
     let dataMetrics = dataKpiMetrics.map((metric) => {
       return `{"${metric.label}":""}`;
     });
@@ -325,16 +363,18 @@ class CreateKPI extends Component {
       dataOwn: [...dataOwn, newData],
       dataOwnId: dataOwnId + 1
     });
+    this.liveCount([...dataOwn, ...dataSelectedCascade, newData]);
   };
 
   handleDeleteRow = (key) => {
-    const { dataOwn } = this.state;
+    const { dataOwn, dataSelectedCascade } = this.state;
     const data = [...dataOwn];
     this.setState({ dataOwn: data.filter((item) => item.key !== key) });
+    this.liveCount([...dataSelectedCascade, ...data]);
   };
 
   handleChangeField = (row) => {
-    const { dataOwn } = this.state;
+    const { dataOwn, dataSelectedCascade } = this.state;
     const newData = [...dataOwn];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
@@ -343,6 +383,7 @@ class CreateKPI extends Component {
       ...row
     });
     this.setState({ dataOwn: newData });
+    this.liveCount([...dataSelectedCascade, ...newData]);
   };
 
   changeTab = (activeKey) => {
@@ -356,7 +397,9 @@ class CreateKPI extends Component {
       dataManagerKpi,
       loadingOwn,
       loadingManager,
-      tab
+      tab,
+      weightTotalErr,
+      weightTotal
     } = this.state;
     const {
       handleAddRow,
@@ -383,6 +426,11 @@ class CreateKPI extends Component {
             {`Please complete the following form. You can create your own KPI or
             cascade from your Superior's KPI.`}
           </Text>
+          <br />
+          <Text type={weightTotalErr ? 'danger' : ''}>
+            Total KPI Weight :
+            {` ${weightTotal}%`}
+          </Text>
           <Divider />
         </div>
         <div>
@@ -393,7 +441,7 @@ class CreateKPI extends Component {
           </center>
           <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
             <TabPane
-              tab="Cascade From Superior"
+              tab="Add To My KPI"
               key="1"
             >
               {!loadingManager ?
