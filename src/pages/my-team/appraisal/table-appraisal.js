@@ -115,7 +115,7 @@ class TableAppraisal extends Component {
           } else if (record.statusNumber === 4) {
             access = true;
           } else if (record.statusNumber === 3) {
-            access = false;
+            access = true;
           } else if (record.statusNumber === 1 || record.statusNumber === 2) {
             access = false;
           } else {
