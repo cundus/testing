@@ -221,7 +221,7 @@ class Value extends Component {
     }
   };
 
-  upload = (record) => async (attach) => {
+  upload = (record) => async (event, attach) => {
     const { handleChangeField } = this.props;
     if (attach.file.status === 'removed') {
       const attachments = [...attach.fileList];
@@ -236,7 +236,8 @@ class Value extends Component {
         id: 0,
         valueId: record.valueId,
         name: attach.file.name,
-        status: attach.file.status
+        status: attach.file.status,
+        percent: event.percent
         // url: fileContent
       };
       const attachments = [...attach.fileList];

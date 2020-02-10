@@ -239,7 +239,8 @@ const kpiReducers = (state = initialState, action) => {
     case GET_VALUES:
       return {
         ...state,
-        loadingValues: action.loading
+        loadingValues: action.loading,
+        dataValues: []
       };
     case GET_VALUES_SUCCESS:
       return {
@@ -254,7 +255,8 @@ const kpiReducers = (state = initialState, action) => {
         ...state,
         loadingValues: action.loading,
         statusValues: action.status,
-        messageValues: action.message
+        messageValues: action.message,
+        dataValues: []
       };
     case SAVE_VALUES:
       return {
