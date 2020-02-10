@@ -76,12 +76,32 @@ class CreateKPI extends Component {
     setAccess(true);
     const { ownKpiReducers } = this.props;
     const { dataKpi, dataKpiMetrics } = ownKpiReducers;
+    const { dataOwnId } = this.state;
     const newData = [];
     const newSelectedData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     if (dataKpi.length === 0) {
-      this.handleAddRow();
+      let dataMetrics = dataKpiMetrics.map((metric) => {
+        return `{"${metric.label}":""}`;
+      });
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+      dataMetrics = dataMetrics.reduce((result, current) => {
+        return Object.assign(result, current);
+      }, {});
+      const data = {
+        key: dataOwnId,
+        id: 0,
+        kpi: '',
+        baseline: '',
+        weight: '',
+        cascadeType: 0,
+        cascadeName: null,
+        achievementType: 0,
+        metrics: dataKpiMetrics,
+        ...dataMetrics
+      };
+      newData.push(data);
     } else {
       dataKpi.map((itemKpi) => {
         let dataMetrics = itemKpi.metricLookup.map((metric) => {
@@ -295,7 +315,7 @@ class CreateKPI extends Component {
       challengeYourSelf: challenge || ' '
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err || tab === '2') {
+      if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
@@ -310,6 +330,8 @@ class CreateKPI extends Component {
           },
           onCancel() {}
         });
+      } else {
+        this.changeTab('2');
       }
     });
   };
@@ -369,8 +391,9 @@ class CreateKPI extends Component {
   handleDeleteRow = (key) => {
     const { dataOwn, dataSelectedCascade } = this.state;
     const data = [...dataOwn];
-    this.setState({ dataOwn: data.filter((item) => item.key !== key) });
-    this.liveCount([...dataSelectedCascade, ...data]);
+    const dataFiltered = data.filter((item) => item.key !== key);
+    this.setState({ dataOwn: dataFiltered });
+    this.liveCount([...dataSelectedCascade, ...dataFiltered]);
   };
 
   handleChangeField = (row) => {
