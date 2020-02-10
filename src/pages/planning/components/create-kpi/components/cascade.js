@@ -123,7 +123,7 @@ class Cascade extends Component {
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >
-            Save Draft
+            Add To My KPI
           </Button>
         </div>
       </div>

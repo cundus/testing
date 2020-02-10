@@ -464,7 +464,7 @@ class CreateKPI extends Component {
           </center>
           <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
             <TabPane
-              tab="Add To My KPI"
+              tab="Cascade From Superior"
               key="1"
             >
               {!loadingManager ?
