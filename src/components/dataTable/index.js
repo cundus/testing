@@ -238,13 +238,16 @@ class EditableCell extends React.Component {
             <Text style={{ width: '20%' }}>Type:</Text>
             <Select
               size="small"
+              id="type-kpi"
               defaultValue={valueType}
               placeholder="Select type"
               style={{ width: '80%', color: valueType === 'Quantitative' ? '#9ced74' : '#' }}
               disabled
             >
-              <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+              <Option id="type-kpi-qualitative" key="Qualitative">Qualitative</Option>
+              <Option id="type-kpi-quantitative" key="Quantitative">
+                <Text style={{ color: '#52c41a' }}>Quantitative</Text>
+              </Option>
             </Select>
           </div>
           <div className="editable-cell-value-wrap">
