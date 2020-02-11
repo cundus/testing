@@ -58,7 +58,10 @@ import {
   EMP_ACKNOWLEDGEMENT_LIST_FAILED,
   GET_ATTACHMENT_FILE,
   GET_ATTACHMENT_FILE_SUCCESS,
-  GET_ATTACHMENT_FILE_FAILED
+  GET_ATTACHMENT_FILE_FAILED,
+  DOWNLOAD_FILE,
+  DOWNLOAD_FILE_SUCCESS,
+  DOWNLOAD_FILE_FAILED
 } from '../action.type';
 
 import {
@@ -1042,6 +1045,54 @@ export const getAttachment = (id) => async (dispatch) => {
     } else {
       dispatch({
         type: GET_ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const downloadFile = (attachId) => async (dispatch) => {
+  dispatch({
+    type: DOWNLOAD_FILE,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await downloadFile(attachId);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: DOWNLOAD_FILE_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: DOWNLOAD_FILE_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: DOWNLOAD_FILE_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: DOWNLOAD_FILE_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',

@@ -60,6 +60,14 @@ export const getAttachId = (valueId) => customAxios({
   }
 });
 
+export const downloadFiles = (attachId) => customAxios({
+  url: `/attachments/${attachId}`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
 export const deleteFile = (id) => customAxios({
   url: `/attachment/${id}`,
   method: 'DELETE',

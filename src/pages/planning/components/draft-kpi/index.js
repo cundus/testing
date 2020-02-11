@@ -97,7 +97,9 @@ class DraftKPI extends Component {
     data.map((itemKpi) => {
       if (itemKpi.weight) {
         const weight = parseFloat(itemKpi.weight);
-        totalWeight += weight;
+        if (weight) {
+          totalWeight += weight;
+        }
       } else {
         totalWeight += 0;
       }

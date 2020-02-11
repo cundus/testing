@@ -58,7 +58,10 @@ import {
   EMP_ACKNOWLEDGEMENT_LIST_FAILED,
   GET_ATTACHMENT_FILE,
   GET_ATTACHMENT_FILE_SUCCESS,
-  GET_ATTACHMENT_FILE_FAILED
+  GET_ATTACHMENT_FILE_FAILED,
+  DOWNLOAD_FILE,
+  DOWNLOAD_FILE_SUCCESS,
+  DOWNLOAD_FILE_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -521,6 +524,28 @@ const kpiReducers = (state = initialState, action) => {
         statusAttachment: action.status,
         messageAttachment: action.message,
         dataAttachment: []
+      };
+    case DOWNLOAD_FILE:
+      return {
+        ...state,
+        loadingDownload: action.loading,
+        dataDownload: []
+      };
+    case DOWNLOAD_FILE_SUCCESS:
+      return {
+        ...state,
+        loadingDownload: action.loading,
+        statusDownload: action.status,
+        messageDownload: action.message,
+        dataDownload: action.data
+      };
+    case DOWNLOAD_FILE_FAILED:
+      return {
+        ...state,
+        loadingDownload: action.loading,
+        statusDownload: action.status,
+        messageDownload: action.message,
+        dataDownload: []
       };
     default:
       return { ...state };
