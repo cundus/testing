@@ -12,10 +12,6 @@ export const metricValidator = (data) => [
           `${data.type}[${data.indexarr}].${metric.label}`
           )}"}`;
       });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
       let isFilled = true;
       let isError = false;
       let isSortedAsc = false;
@@ -126,10 +122,6 @@ export const metricValidatorText = (data) => [
           `${data.type}[${data.indexarr}].${metric.label}`
           )}"}`;
       });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
       let isFilled = true;
       const datas = Object.keys(dataMetrics);
       const datass = Object.values(dataMetrics);

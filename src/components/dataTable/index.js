@@ -148,7 +148,7 @@ class EditableCell extends React.Component {
             <TextArea
               id={`${title}-${index}`}
               placeholder={placeholder}
-              style={{background: '#EDEAA6', border: 0 }}
+              style={{ background: '#EDEAA6', border: 0 }}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}
