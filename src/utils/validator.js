@@ -12,7 +12,7 @@ export const metricValidator = (data) => [
           `${data.type}[${data.indexarr}].${metric.label}`
           )}"}`;
       });
-      dataMetrics = JSON.parse(`[${dataMetrics}]`);
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
@@ -126,7 +126,7 @@ export const metricValidatorText = (data) => [
           `${data.type}[${data.indexarr}].${metric.label}`
           )}"}`;
       });
-      dataMetrics = JSON.parse(`[${dataMetrics}]`);
+      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
