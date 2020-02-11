@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
-  doAttachFile, doDeleteFiles
+  doAttachFile, doDeleteFiles, getAttachment
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
@@ -189,9 +189,8 @@ class Value extends Component {
       onSuccess, onError, file
     } = options;
     const {
-      attachFile, userR, getOwnValues
+      attachFile, doGetAttachment
     } = this.props;
-    const { user } = userR.result;
     const fileContent = await file.data;
     const b64 = fileContent.replace(/^data:.+;base64,/, '');
     const data = {
@@ -210,9 +209,21 @@ class Value extends Component {
       } = this.props;
       if (!kpiR.loadingAttach) {
         if (kpiR.statusAttach === Success) {
-          onSuccess(true, file);
-          getOwnValues(user.userId, true);
-          message.success(`"${file.name}" has been uploaded`);
+          await doGetAttachment(record.valueId);
+          const {
+            loadingAttachment,
+            statusAttachment,
+            messageAttachment,
+            dataAttachment
+          // eslint-disable-next-line react/destructuring-assignment
+          } = this.props.kpiR;
+          if (!loadingAttachment) {
+            if (statusAttachment === Success) {
+              // dataAttachment.map
+              message.success(`"${file.name}" has been uploaded`);
+              onSuccess(true, file);
+            }
+          }
         } else {
           message.warning(`Sorry, ${kpiR.messageAttach}`);
           onError(false, file);
@@ -221,7 +232,7 @@ class Value extends Component {
     }
   };
 
-  upload = (record) => async (event, attach) => {
+  upload = (record) => async (attach) => {
     const { handleChangeField } = this.props;
     if (attach.file.status === 'removed') {
       const attachments = [...attach.fileList];
@@ -237,7 +248,7 @@ class Value extends Component {
         valueId: record.valueId,
         name: attach.file.name,
         status: attach.file.status,
-        percent: event.percent
+        percent: attach.percent
         // url: fileContent
       };
       const attachments = [...attach.fileList];
@@ -364,6 +375,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   attachFile: (id) => dispatch(doAttachFile(id)),
+  doGetAttachment: (valueId) => dispatch(getAttachment(valueId)),
   deleteFiles: (data) => dispatch(doDeleteFiles(data))
 });
 

@@ -175,7 +175,7 @@ class Appraisal extends Component {
           valueId: files.valueId,
           name: files.fileName,
           status: 'done',
-          url: files.fileContent
+          url: 'download'
         };
         newFiles.push(data);
         return data;

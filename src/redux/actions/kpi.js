@@ -55,7 +55,10 @@ import {
   EMP_ACKNOWLEDGEMENT_FAILED,
   EMP_ACKNOWLEDGEMENT_LIST,
   EMP_ACKNOWLEDGEMENT_LIST_SUCCESS,
-  EMP_ACKNOWLEDGEMENT_LIST_FAILED
+  EMP_ACKNOWLEDGEMENT_LIST_FAILED,
+  GET_ATTACHMENT_FILE,
+  GET_ATTACHMENT_FILE_SUCCESS,
+  GET_ATTACHMENT_FILE_FAILED
 } from '../action.type';
 
 import {
@@ -66,7 +69,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -991,6 +994,54 @@ export const doEmpAcknowledge = (data) => async (dispatch) => {
     } else {
       dispatch({
         type: EMP_ACKNOWLEDGEMENT_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const getAttachment = (id) => async (dispatch) => {
+  dispatch({
+    type: GET_ATTACHMENT_FILE,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await getAttachId(id);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: GET_ATTACHMENT_FILE_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: GET_ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: GET_ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: GET_ATTACHMENT_FILE_FAILED,
         loading: false,
         status: null,
         message: 'Something wrong',

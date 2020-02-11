@@ -28,21 +28,8 @@ class CreateKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataOwn: [
-        {
-          key: 1,
-          id: null,
-          achievementType: 0,
-          name: '',
-          baseline: '',
-          weight: '',
-          Below: '',
-          Meet: '',
-          Exceed: ''
-        }
-      ],
       tab: '1',
-      dataOwnId: 2,
+      dataOwnId: 0,
       dataManagerKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
@@ -102,6 +89,9 @@ class CreateKPI extends Component {
         ...dataMetrics
       };
       newData.push(data);
+      this.setState({
+        dataOwnId: dataOwnId + 1
+      });
     } else {
       dataKpi.map((itemKpi) => {
         let dataMetrics = itemKpi.metricLookup.map((metric) => {
@@ -141,6 +131,7 @@ class CreateKPI extends Component {
           };
           newSelectedData.push(data);
         }
+        return null;
       });
     }
     form.getFieldValue({
@@ -257,22 +248,18 @@ class CreateKPI extends Component {
     const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
-      tab,
+      // tab,
       dataOwn,
       dataSelectedCascade
     } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     const newDataKpi = [];
-    // eslint-disable-next-line array-callback-return
     dataSaving.map((itemKpi, iii) => {
       const newMetricValue = [];
       const datass = Object.keys(itemKpi);
-      // eslint-disable-next-line array-callback-return
       datass.map((m, index) => {
-        // eslint-disable-next-line array-callback-return
         if (dataKpi[iii]) {
           dataKpi[iii].metricLookup.map((metric) => {
-          // if (metric.label === datass[index]) {
             if (metric.label === datass[index]) {
               const mData = {
                 id: metric.id,
@@ -282,10 +269,10 @@ class CreateKPI extends Component {
               };
               newMetricValue.push(mData);
             }
+            return null;
           });
         } else {
           dataKpiMetrics.map((metric) => {
-          // if (metric.label === datass[index]) {
             if (metric.label === datass[index]) {
               const mData = {
                 id: parseFloat(0),
@@ -295,8 +282,10 @@ class CreateKPI extends Component {
               };
               newMetricValue.push(mData);
             }
+            return null;
           });
         }
+        return null;
       });
       const data = {
         id: itemKpi.id,
@@ -309,6 +298,7 @@ class CreateKPI extends Component {
         metricLookup: newMetricValue
       };
       newDataKpi.push(data);
+      return null;
     });
     const data = {
       kpiList: newDataKpi,
@@ -520,6 +510,10 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
+  ownKpiReducers: PropTypes.instanceOf(Object),
+  managerKpiReducers: PropTypes.instanceOf(Object),
+  access: PropTypes.bool,
+  setAccess: PropTypes.func,
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

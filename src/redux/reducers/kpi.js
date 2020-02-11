@@ -55,7 +55,10 @@ import {
   EMP_ACKNOWLEDGEMENT_FAILED,
   EMP_ACKNOWLEDGEMENT_LIST,
   EMP_ACKNOWLEDGEMENT_LIST_SUCCESS,
-  EMP_ACKNOWLEDGEMENT_LIST_FAILED
+  EMP_ACKNOWLEDGEMENT_LIST_FAILED,
+  GET_ATTACHMENT_FILE,
+  GET_ATTACHMENT_FILE_SUCCESS,
+  GET_ATTACHMENT_FILE_FAILED
 } from '../action.type';
 
 const initialState = {
@@ -496,6 +499,28 @@ const kpiReducers = (state = initialState, action) => {
           name: '',
           list: []
         }
+      };
+    case GET_ATTACHMENT_FILE:
+      return {
+        ...state,
+        loadingAttachment: action.loading,
+        dataAttachment: []
+      };
+    case GET_ATTACHMENT_FILE_SUCCESS:
+      return {
+        ...state,
+        loadingAttachment: action.loading,
+        statusAttachment: action.status,
+        messageAttachment: action.message,
+        dataAttachment: action.data
+      };
+    case GET_ATTACHMENT_FILE_FAILED:
+      return {
+        ...state,
+        loadingAttachment: action.loading,
+        statusAttachment: action.status,
+        messageAttachment: action.message,
+        dataAttachment: []
       };
     default:
       return { ...state };

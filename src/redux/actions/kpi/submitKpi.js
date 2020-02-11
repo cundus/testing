@@ -3,7 +3,7 @@ import {
   SUBMIT_KPI_PLANNING_SUCCESS,
   SUBMIT_KPI_PLANNING_FAILED
 } from '../../action.type';
-import { Success } from '../../status-code-type';
+import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../status-code-type';
 import { saveKpi, submitNext } from '../../../service/kpiPlanning';
 
 export const actionSubmitKpi = (data, id) => async (dispatch) => {
@@ -15,7 +15,7 @@ export const actionSubmitKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payloadSave = await saveKpi(data, id);
-    if (payloadSave.data.status_code === Success) {
+    if (payloadSave.data.status_code === Success || payloadSave.data.status_code === FAILED_SAVE_CHALLENGE_YOURSELF) {
       const payloadSubmit = await submitNext(id);
       if (payloadSubmit.data.status_code === Success && !payloadSubmit.data.status_description.includes('Failed')) {
         dispatch({
