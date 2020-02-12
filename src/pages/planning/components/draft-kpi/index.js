@@ -195,15 +195,11 @@ class DraftKPI extends Component {
             onOk: async () => {
               await doSubmitKpi(data, user.userId);
               // eslint-disable-next-line react/destructuring-assignment
-              if (this.props.kpiReducers.statusSaveKPI === Success || this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                message.success('Your KPI has been submitted to your superior');
+              if (this.props.submitKpi.status === Success) {
                 stepChange(2, true); // go to submit page
-                // eslint-disable-next-line react/destructuring-assignment
-                if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
-                }
+                message.success('Your KPI has been submitted to your superior');
               } else {
-                message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+                message.warning(`Sorry, ${this.props.submitKpi.message}`);
               }
             },
             onCancel() {}
@@ -427,8 +423,12 @@ class DraftKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  ownKpiReducers: state.ownKpi,
+  managerKpiReducers: state.managerKpi,
+  saveKpiReducers: state.saveKpi,
   kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  submitKpi: state.submitKpi
 });
 
 const mapDispatchToProps = (dispatch) => ({
