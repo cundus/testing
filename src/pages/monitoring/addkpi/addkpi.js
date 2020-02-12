@@ -13,8 +13,8 @@ import {
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import {
-  doSaveKpi, doGetKpiList, doGetLatestGoalKpi, doGetKpiManagerList
-} from '../../../redux/actions/kpi';
+  actionGetKPI, actionGetLatestGoalKPI, actionGetManagerKPI, actionSaveKpi
+} from '../../../redux/actions';
 import CreateOwn from './component/create-own';
 import Cascade from './component/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../redux/status-code-type';
@@ -28,25 +28,14 @@ class CreateKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataOwn: [
-        {
-          key: 1,
-          id: null,
-          achievementType: 0,
-          name: '',
-          baseline: '',
-          weight: '',
-          Below: '',
-          Meet: '',
-          Exceed: ''
-        }
-      ],
       tab: '1',
-      dataOwnId: 2,
+      dataOwnId: 0,
       dataManagerKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
-      loadingManager: true
+      loadingManager: true,
+      weightTotal: 0,
+      weightTotalErr: true
     };
   }
 
@@ -65,53 +54,95 @@ class CreateKPI extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, form } = this.props;
-    await getKpiList(id);
-    const { kpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics } = kpiReducers;
+    const {
+      getKpiList, form, access, setAccess
+    } = this.props;
+    if (access) {
+      await getKpiList(id);
+    }
+    setAccess(true);
+    const { ownKpiReducers } = this.props;
+    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
+    const { dataOwnId } = this.state;
     const newData = [];
     const newSelectedData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
-    dataKpi.map((itemKpi) => {
-      let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+    if (dataKpi.length === 0) {
+      let dataMetrics = dataKpiMetrics.map((metric) => {
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
-      if (itemKpi.cascadeType === 0) {
-        const data = {
-          key: itemKpi.id,
-          id: itemKpi.id,
-          cascadeType: itemKpi.cascadeType,
-          cascadeName: itemKpi.cascadeName,
-          kpi: itemKpi.name,
-          baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
-          achievementType: itemKpi.achievementType,
-          metrics: dataKpiMetrics,
-          ...dataMetrics
-        };
-        newData.push(data);
-      } else {
-        const data = {
-          key: itemKpi.id,
-          id: itemKpi.id,
-          cascadeType: itemKpi.cascadeType,
-          cascadeName: itemKpi.cascadeName,
-          kpi: itemKpi.name,
-          baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
-          achievementType: itemKpi.achievementType,
-          metrics: dataKpiMetrics,
-          ...dataMetrics
-        };
-        newSelectedData.push(data);
-      }
-    });
+      const data = {
+        key: dataOwnId,
+        id: 0,
+        kpi: '',
+        baseline: '',
+        weight: '',
+        cascadeType: 0,
+        cascadeName: null,
+        achievementType: 0,
+        metrics: dataKpiMetrics,
+        ...dataMetrics
+      };
+      newData.push(data);
+      this.setState({
+        dataOwnId: dataOwnId + 1
+      });
+    } else {
+      dataKpi.map((itemKpi) => {
+        let dataMetrics = itemKpi.metricLookup.map((metric) => {
+          return `{"${metric.label}":""}`;
+        });
+        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+        dataMetrics = dataMetrics.reduce((result, current) => {
+          return Object.assign(result, current);
+        }, {});
+        Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+          return itemKpi.metricLookup.map((metric) => {
+            if (newDataMetric === metric.label) {
+              dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+                metric.achievementText : metric.achievementNumeric}`;
+              return dataMetrics;
+            }
+            return null;
+          });
+        });
+        if (itemKpi.cascadeType === 0) {
+          const data = {
+            key: itemKpi.id,
+            id: itemKpi.id,
+            cascadeType: itemKpi.cascadeType,
+            cascadeName: itemKpi.cascadeName,
+            kpi: itemKpi.name,
+            baseline: itemKpi.baseline,
+            weight: itemKpi.weight,
+            achievementType: itemKpi.achievementType,
+            metrics: dataKpiMetrics,
+            ...dataMetrics
+          };
+          newData.push(data);
+        } else {
+          const data = {
+            key: itemKpi.id,
+            id: itemKpi.id,
+            cascadeType: itemKpi.cascadeType,
+            cascadeName: itemKpi.cascadeName,
+            kpi: itemKpi.name,
+            baseline: itemKpi.baseline,
+            weight: itemKpi.weight,
+            achievementType: itemKpi.achievementType,
+            metrics: dataKpiMetrics,
+            ...dataMetrics
+          };
+          newSelectedData.push(data);
+        }
+        return null;
+      });
+    }
     form.getFieldValue({
       dataKpi: newData
     });
@@ -120,27 +151,37 @@ class CreateKPI extends Component {
       dataSelectedCascade: newSelectedData,
       loadingOwn: false
     });
+    this.liveCount(newData);
   }
 
   getManagerKpiList = async (id) => {
     const { getKpiManagerList, form } = this.props;
     await getKpiManagerList(id);
-    const { kpiReducers } = this.props;
+    const { managerKpiReducers } = this.props;
     const {
       dataFirstManager, dataSecondManager, dataKpiManagerMetrics
-    } = kpiReducers;
+    } = managerKpiReducers;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line no-unused-expressions
     dataFirstManager && dataFirstManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+        return itemKpi.metricLookup.map((metric) => {
+          if (newDataMetric === metric.label) {
+            dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+              metric.achievementText : metric.achievementNumeric}`;
+            return dataMetrics;
+          }
+          return null;
+        });
+      });
       const data = {
         key: itemKpi.id,
         id: 0,
@@ -159,13 +200,22 @@ class CreateKPI extends Component {
     // eslint-disable-next-line no-unused-expressions
     dataSecondManager && dataSecondManager.kpi.map((itemKpi) => {
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+        return itemKpi.metricLookup.map((metric) => {
+          if (newDataMetric === metric.label) {
+            dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+              metric.achievementText : metric.achievementNumeric}`;
+            return dataMetrics;
+          }
+          return null;
+        });
+      });
       const data = {
         key: itemKpi.id,
         id: 0,
@@ -190,6 +240,35 @@ class CreateKPI extends Component {
     });
   }
 
+  liveCount = (data) => {
+    let totalWeight = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        const weight = parseFloat(itemKpi.weight);
+        if (weight) {
+          totalWeight += weight;
+        }
+      } else {
+        totalWeight += 0;
+      }
+    });
+    totalWeight = parseFloat(totalWeight);
+    if (typeof totalWeight === 'number') {
+      if (totalWeight === 100) {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: false
+        });
+      } else {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: true
+        });
+      }
+    }
+  }
+
   handleSaveDraft = async () => {
     const {
       doSavingKpi, userReducers, stepChange, form
@@ -198,22 +277,18 @@ class CreateKPI extends Component {
     const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducers;
     const { user } = userReducers.result;
     const {
-      tab,
+      // tab,
       dataOwn,
       dataSelectedCascade
     } = this.state;
     const dataSaving = dataOwn.concat(dataSelectedCascade);
     const newDataKpi = [];
-    // eslint-disable-next-line array-callback-return
     dataSaving.map((itemKpi, iii) => {
       const newMetricValue = [];
       const datass = Object.keys(itemKpi);
-      // eslint-disable-next-line array-callback-return
       datass.map((m, index) => {
-        // eslint-disable-next-line array-callback-return
         if (dataKpi[iii]) {
           dataKpi[iii].metricLookup.map((metric) => {
-          // if (metric.label === datass[index]) {
             if (metric.label === datass[index]) {
               const mData = {
                 id: metric.id,
@@ -223,10 +298,10 @@ class CreateKPI extends Component {
               };
               newMetricValue.push(mData);
             }
+            return null;
           });
         } else {
           dataKpiMetrics.map((metric) => {
-          // if (metric.label === datass[index]) {
             if (metric.label === datass[index]) {
               const mData = {
                 id: parseFloat(0),
@@ -236,8 +311,10 @@ class CreateKPI extends Component {
               };
               newMetricValue.push(mData);
             }
+            return null;
           });
         }
+        return null;
       });
       const data = {
         id: itemKpi.id,
@@ -250,53 +327,60 @@ class CreateKPI extends Component {
         metricLookup: newMetricValue
       };
       newDataKpi.push(data);
+      return null;
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challenge
+      challengeYourSelf: challenge || ' '
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err || tab === '2') {
+      if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(data, user.userId);
             const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
+            if (kpiReducers.statusSaveKPI === Success || kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
-              this.props.history.push('/monitoring'); // go to draft
+              stepChange(1); // go to draft
             } else {
               message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
             }
           },
           onCancel() {}
         });
+      } else {
+        this.changeTab('2');
       }
     });
   };
 
   handleSelectData = (record) => {
-    const { dataSelectedCascade } = this.state;
+    const { dataSelectedCascade, dataOwn } = this.state;
     const dataChecking = dataSelectedCascade.filter(
       (item) => item.kpi === record.kpi
     );
     if (dataChecking.length !== 0) {
+      const newData = dataSelectedCascade.filter(
+        (item) => !item.statusCascade && item.kpi !== record.kpi
+      );
       this.setState({
-        dataSelectedCascade: dataSelectedCascade.filter(
-          (item) => !item.statusCascade && item.kpi !== record.kpi
-        )
+        dataSelectedCascade: newData
       });
+      this.liveCount([...dataOwn, ...newData]);
     } else {
+      const newData = [...dataSelectedCascade, record];
       this.setState({
         dataSelectedCascade: [...dataSelectedCascade, record]
       });
+      this.liveCount([...dataOwn, ...newData]);
     }
   };
 
   handleAddRow = () => {
     const { kpiReducers } = this.props;
     const { dataKpiMetrics } = kpiReducers;
-    const { dataOwnId, dataOwn } = this.state;
+    const { dataOwnId, dataOwn, dataSelectedCascade } = this.state;
     let dataMetrics = dataKpiMetrics.map((metric) => {
       return `{"${metric.label}":""}`;
     });
@@ -320,16 +404,19 @@ class CreateKPI extends Component {
       dataOwn: [...dataOwn, newData],
       dataOwnId: dataOwnId + 1
     });
+    this.liveCount([...dataOwn, ...dataSelectedCascade, newData]);
   };
 
   handleDeleteRow = (key) => {
-    const { dataOwn } = this.state;
+    const { dataOwn, dataSelectedCascade } = this.state;
     const data = [...dataOwn];
-    this.setState({ dataOwn: data.filter((item) => item.key !== key) });
+    const dataFiltered = data.filter((item) => item.key !== key);
+    this.setState({ dataOwn: dataFiltered });
+    this.liveCount([...dataSelectedCascade, ...dataFiltered]);
   };
 
   handleChangeField = (row) => {
-    const { dataOwn } = this.state;
+    const { dataOwn, dataSelectedCascade } = this.state;
     const newData = [...dataOwn];
     const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
@@ -338,6 +425,7 @@ class CreateKPI extends Component {
       ...row
     });
     this.setState({ dataOwn: newData });
+    this.liveCount([...dataSelectedCascade, ...newData]);
   };
 
   changeTab = (activeKey) => {
@@ -351,7 +439,9 @@ class CreateKPI extends Component {
       dataManagerKpi,
       loadingOwn,
       loadingManager,
-      tab
+      tab,
+      weightTotalErr,
+      weightTotal
     } = this.state;
     const {
       handleAddRow,
@@ -361,19 +451,27 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { kpiReducers, form } = this.props;
+    const { ownKpiReducers, form, managerKpiReducers } = this.props;
     const {
-      dataGoal, loadingGoal, dataKpiMetrics, dataKpiManagerMetrics
-    } = kpiReducers;
+      dataGoal, loadingGoal, dataKpiMetrics
+    } = ownKpiReducers;
+    const {
+      dataKpiManagerMetrics
+    } = managerKpiReducers;
     const { name } = dataGoal;
     return (
-      <div style={globalStyle.contentContainer}>
+      <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
         <div>
           <Divider />
-          <Text strong>ADD New KPI </Text>
+          <Text strong>Create New KPI </Text>
           <Text>
             {`Please complete the following form. You can create your own KPI or
             cascade from your Superior's KPI.`}
+          </Text>
+          <br />
+          <Text type={weightTotalErr ? 'danger' : ''}>
+            Total KPI Weight :
+            {` ${weightTotal}%`}
           </Text>
           <Divider />
         </div>
@@ -419,15 +517,18 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  ownKpiReducers: state.ownKpi,
+  managerKpiReducers: state.managerKpi,
+  saveKpiReducers: state.saveKpi,
   kpiReducers: state.kpiReducers,
   userReducers: state.userReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data, id) => dispatch(doSaveKpi(data, id)),
-  getKpiList: (id) => dispatch(doGetKpiList(id)),
-  getKpiManagerList: (id) => dispatch(doGetKpiManagerList(id)),
-  getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi())
+  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  getKpiList: (id) => dispatch(actionGetKPI(id)),
+  getKpiManagerList: (id) => dispatch(actionGetManagerKPI(id)),
+  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI())
 });
 
 const connectToComponent = connect(
@@ -438,6 +539,10 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
+  ownKpiReducers: PropTypes.instanceOf(Object),
+  managerKpiReducers: PropTypes.instanceOf(Object),
+  access: PropTypes.bool,
+  setAccess: PropTypes.func,
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

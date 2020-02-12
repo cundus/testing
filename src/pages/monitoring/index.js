@@ -65,13 +65,22 @@ class MonitorKPI extends Component {
         this.setState({ isFeedback: true });
       }
       let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+        return itemKpi.metricLookup.map((metric) => {
+          if (newDataMetric === metric.label) {
+            dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+              metric.achievementText : metric.achievementNumeric}`;
+            return dataMetrics;
+          }
+          return null;
+        });
+      });
       const data = {
         key: itemKpi.id,
         id: itemKpi.id,

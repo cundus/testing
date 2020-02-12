@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
-  doAttachFile, doDeleteFiles, getAttachment
+  doAttachFile, doDeleteFiles, getAttachment, downloadFile
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
@@ -170,8 +170,6 @@ class Value extends Component {
     mimeProp.map((item, index) => {
       if (file.name.includes(item)) {
         mediaType = mimeType[item];
-      } else {
-        // mediaType = '';
       }
       return mediaType;
     });
@@ -189,7 +187,7 @@ class Value extends Component {
       onSuccess, onError, file
     } = options;
     const {
-      attachFile, doGetAttachment
+      attachFile, doGetAttachment, handleChangeField
     } = this.props;
     const fileContent = await file.data;
     const b64 = fileContent.replace(/^data:.+;base64,/, '');
@@ -219,7 +217,20 @@ class Value extends Component {
           } = this.props.kpiR;
           if (!loadingAttachment) {
             if (statusAttachment === Success) {
-              // dataAttachment.map
+              const newFiles = dataAttachment.map((files) => {
+                return {
+                  uid: files.id,
+                  id: files.id,
+                  valueId: files.valueId,
+                  name: files.fileName,
+                  status: 'done',
+                  url: 'download'
+                };
+              });
+              handleChangeField({
+                ...record,
+                attachments: [...newFiles]
+              });
               message.success(`"${file.name}" has been uploaded`);
               onSuccess(true, file);
             }
@@ -376,7 +387,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   attachFile: (id) => dispatch(doAttachFile(id)),
   doGetAttachment: (valueId) => dispatch(getAttachment(valueId)),
-  deleteFiles: (data) => dispatch(doDeleteFiles(data))
+  deleteFiles: (data) => dispatch(doDeleteFiles(data)),
+  doDownload: (attachId) => mapDispatchToProps(downloadFile(attachId))
 });
 
 const connectToComponent = connect(
