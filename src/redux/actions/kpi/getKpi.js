@@ -11,6 +11,7 @@ import {
 } from '../../action.type';
 import { Success } from '../../status-code-type';
 import { getKpiList, getLatestGoalKpi, getKpiManagerList } from '../../../service/kpiPlanning';
+import { kpiGetSelfProcess } from '../../../utils/kpiGetProcess';
 
 export const actionGetKPI = (id) => async (dispatch) => {
   dispatch({
@@ -27,43 +28,7 @@ export const actionGetKPI = (id) => async (dispatch) => {
         const dataResult = payload.data.result;
         const dataKpi = dataResult.kpiList;
         const dataKpiMetrics = dataResult.labelList;
-        const newData = [];
-        dataKpi.map((itemKpi) => {
-          if (itemKpi.othersRatingComments.id) {
-            this.setState({ isFeedback: true });
-          }
-          let dataMetrics = itemKpi.metricLookup.map((metric) => {
-            return `{"${metric.label}":""}`;
-          });
-          dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-          dataMetrics = dataMetrics.reduce((result, current) => {
-            return Object.assign(result, current);
-          }, {});
-          Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
-            return itemKpi.metricLookup.map((metric) => {
-              if (newDataMetric === metric.label) {
-                dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
-                  metric.achievementText : metric.achievementNumeric}`;
-                return dataMetrics;
-              }
-              return null;
-            });
-          });
-          const data = {
-            key: itemKpi.id,
-            id: itemKpi.id,
-            cascadeType: itemKpi.cascadeType,
-            cascadeName: itemKpi.cascadeName,
-            kpi: itemKpi.name,
-            baseline: itemKpi.baseline,
-            weight: itemKpi.weight,
-            achievementType: itemKpi.achievementType,
-            metrics: dataKpiMetrics,
-            ...dataMetrics,
-            feedback: itemKpi.othersRatingComments.comment
-          };
-          newData.push(data);
-        });
+        const newData = kpiGetSelfProcess(dataKpi, dataKpiMetrics);
         dispatch({
           type: GET_KPI_LIST_SUCCESS,
           loading: false,

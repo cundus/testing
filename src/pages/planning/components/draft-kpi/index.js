@@ -98,7 +98,7 @@ class DraftKPI extends Component {
     const {
       doSubmitKpi, userReducers, form, ownKpiReducers, stepChange
     } = this.props;
-    const { dataKpi } = ownKpiReducers;
+    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const { user } = userReducers.result;
     const {
       dataSource,
@@ -106,7 +106,7 @@ class DraftKPI extends Component {
       kpiErrMessage,
       challengeYour
     } = this.state;
-    const newDataKpi = kpiSendProcess(dataSource, dataKpi);
+    const newDataKpi = kpiSendProcess(dataSource, dataKpi, dataKpiMetrics);
     const data = {
       kpiList: newDataKpi,
       challengeYourSelf: sendChallengeYourselfChecker(challengeYour)
@@ -188,13 +188,13 @@ class DraftKPI extends Component {
     const {
       doSavingKpi, userReducers, form, ownKpiReducers
     } = this.props;
-    const { dataKpi } = ownKpiReducers;
+    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const { user } = userReducers.result;
     const {
       dataSource,
       challengeYour
     } = this.state;
-    const newDataKpi = kpiSendProcess(dataSource, dataKpi);
+    const newDataKpi = kpiSendProcess(dataSource, dataKpi, dataKpiMetrics);
     const data = {
       kpiList: newDataKpi,
       challengeYourSelf: sendChallengeYourselfChecker(challengeYour)
