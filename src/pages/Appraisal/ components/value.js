@@ -93,7 +93,7 @@ class Value extends Component {
             onChange: this.upload(record),
             transformFile: this.getBase64,
             customRequest: this.uploadFile(record),
-            onRemove: this.deleteFile,
+            onRemove: this.deleteFile(record),
             onPreview: this.download,
             onDownload: this.download,
             disabled: myStep,
@@ -124,9 +124,11 @@ class Value extends Component {
     });
   }
 
-  deleteFile = async (file) => {
+  deleteFile = async (record) => (file) => {
     const {
-      deleteFiles
+      deleteFiles,
+      handleChangeField,
+      doGetAttachment
       // getOwnValues, userR
     } = this.props;
     // const { user } = userR.result;
@@ -144,9 +146,34 @@ class Value extends Component {
             } = this.props;
             if (!kpiR.loadingDeleteFile) {
               if (kpiR.statusDeleteFile === Success) {
-                message.success(`"${file.name}" has been deleted`);
-                // getOwnValues(user.userId, true);
-                resolve(true);
+                await doGetAttachment(record.valueId);
+                const {
+                  loadingAttachment,
+                  statusAttachment,
+                  messageAttachment,
+                  dataAttachment
+                // eslint-disable-next-line react/destructuring-assignment
+                } = this.props.kpiR;
+                if (!loadingAttachment) {
+                  if (statusAttachment === Success) {
+                    const newFiles = dataAttachment.map((files) => {
+                      return {
+                        uid: files.id,
+                        id: files.id,
+                        valueId: files.valueId,
+                        name: files.fileName,
+                        status: 'done',
+                        url: 'download'
+                      };
+                    });
+                    handleChangeField({
+                      ...record,
+                      attachments: [...newFiles]
+                    });
+                    message.success(`"${file.name}" has been deleted`);
+                    resolve(true);
+                  }
+                }
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
                 message.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
@@ -165,6 +192,7 @@ class Value extends Component {
   }
 
   download = async (file) => {
+    const { doDownload } = this.props;
     const mimeProp = Object.keys(mimeType);
     let mediaType = '';
     mimeProp.map((item, index) => {
@@ -173,13 +201,26 @@ class Value extends Component {
       }
       return mediaType;
     });
-    const linkSource = `data:${mediaType};base64,${file.url}`;
-    const downloadLink = document.createElement('a');
-    const fileName = file.name;
+    await doDownload(file.id);
+    const {
+      loadingDownload,
+      statusDownload,
+      messageDownload,
+      dataDownload
+    } = this.props;
+    if (!loadingDownload) {
+      if (statusDownload === Success) {
+        const linkSource = `data:${mediaType};base64,${dataDownload.fileContent}`;
+        const downloadLink = document.createElement('a');
+        const fileName = file.name;
 
-    downloadLink.href = linkSource;
-    downloadLink.download = fileName;
-    downloadLink.click();
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      } else {
+        message.warning(`Sorry, ${messageDownload}`);
+      }
+    }
   }
 
   uploadFile = (record) => async (options) => {
