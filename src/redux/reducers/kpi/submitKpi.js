@@ -7,7 +7,7 @@ import {
 const initialState = {
   loading: false,
   status: NaN,
-  message: ''
+  statusMessage: ''
 };
 
 const kpiReducers = (state = initialState, action) => {
@@ -22,14 +22,14 @@ const kpiReducers = (state = initialState, action) => {
         ...state,
         loading: action.loading,
         status: action.status,
-        message: action.message
+        statusMessage: action.message
       };
     case SUBMIT_KPI_PLANNING_FAILED:
       return {
         ...state,
         loading: action.loading,
         status: action.status,
-        message: action.message
+        statusMessage: action.message
       };
     default:
       return { ...state };

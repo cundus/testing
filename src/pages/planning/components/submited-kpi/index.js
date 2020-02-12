@@ -14,7 +14,7 @@ import TableSubmitedKPI from './table-submited-kpi';
 import { doGetKpiList } from '../../../../redux/actions/kpi';
 import globalStyle from '../../../../styles/globalStyles';
 import stepKpi from '../../../../utils/stepKpi';
-import challengeYourselfChecker from '../../../../utils/challengeYourselfChecker';
+import { getChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -47,7 +47,7 @@ class SubmitedKPI extends Component {
     const { dataKpiFiltered, challenge } = ownKpiReducers;
     this.setState({
       dataSource: dataKpiFiltered,
-      challengeYour: challengeYourselfChecker(challenge)
+      challengeYour: getChallengeYourselfChecker(challenge)
     });
     this.weightCount(dataKpiFiltered);
   };
