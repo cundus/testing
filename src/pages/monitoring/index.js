@@ -33,7 +33,7 @@ class MonitorKPI extends Component {
       kpiErr: false,
       isFeedback: false,
       userId: '',
-      isSuperior: false,
+      isSuperior: false
     };
   }
 
@@ -103,7 +103,7 @@ class MonitorKPI extends Component {
     this.setState({
       dataSource: newData,
       userId: user.userId,
-      challengeYour: challenge,
+      challengeYour: challenge === '----------' ? '' : challenge,
       isSuperior
     });
     this.liveCount(newData);
@@ -188,7 +188,7 @@ class MonitorKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challengeYour
+      challengeYourSelf: challengeYour || '----------'
     };
     if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
@@ -317,7 +317,7 @@ class MonitorKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challengeYour
+      challengeYourSelf: challengeYour || '----------'
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -366,7 +366,7 @@ class MonitorKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback, dataGoal, currentStep, user, holderUserId } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId } = kpiReducers;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;

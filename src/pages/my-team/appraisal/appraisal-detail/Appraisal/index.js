@@ -163,8 +163,8 @@ class Appraisal extends Component {
     this.setState({
       myStep: currentStep === 'Performance Review Manager',
       dataKpis: dataOrdered,
-      challengeYour: challenge,
-      generalFeedbackState: generalFeedback.comment,
+      challengeYour: challenge === '----------' ? '' : challenge,
+      generalFeedbackState: generalFeedback.comment === '----------' ? '' : generalFeedback.comment,
       loadingKpis: false,
       // eslint-disable-next-line max-len
       acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
@@ -267,7 +267,7 @@ class Appraisal extends Component {
       };
     });
     const data = {
-      challengeOthersRatingComments: generalFeedbackState || ' ',
+      challengeOthersRatingComments: generalFeedbackState || '----------',
       kpiFeedbacks,
       valuesFeedbacks
     };
@@ -328,7 +328,7 @@ class Appraisal extends Component {
       rating = this.props.kpiReducers.dataKpiRating.id;
     }
     const data = {
-      challengeOthersRatingComments: generalFeedbackState || ' ',
+      challengeOthersRatingComments: generalFeedbackState || '----------',
       kpiFeedbacks,
       rating,
       valuesFeedbacks

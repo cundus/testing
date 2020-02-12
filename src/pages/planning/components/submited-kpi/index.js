@@ -87,7 +87,7 @@ class SubmitedKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge
+      challengeYour: challenge || '----------'
     });
     this.weightCount(newData);
   };
@@ -162,7 +162,7 @@ class SubmitedKPI extends Component {
         {generalFeedback.comment &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
+            <Paragraph>{generalFeedback.comment === '----------' ? '' : generalFeedback.comment}</Paragraph>
           </div>}
         <center>
           <div style={{

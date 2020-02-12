@@ -95,7 +95,7 @@ class DraftKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge || ' '
+      challengeYour: challenge || '----------'
     });
     this.liveCount(newData);
   };
@@ -181,7 +181,7 @@ class DraftKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challengeYour || ' '
+      challengeYourSelf: challengeYour || '----------'
     };
     if (newDataKpi.length > 20) {
       message.warning('Maximum KPI is 20');
@@ -305,7 +305,7 @@ class DraftKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challengeYour || ' '
+      challengeYourSelf: challengeYour || '----------'
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
@@ -388,7 +388,7 @@ class DraftKPI extends Component {
         {generalFeedback.comment &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
+            <Paragraph>{generalFeedback.comment === '----------' ? '' : generalFeedback.comment}</Paragraph>
           </div>}
         <div style={{
           ...globalStyle.contentContainer,

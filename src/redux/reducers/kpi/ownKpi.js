@@ -78,7 +78,7 @@ const kpiReducers = (state = initialState, action) => {
         dataKpi: action.data.kpiList,
         dataKpiMetrics: action.data.labelList,
         generalFeedback: action.data.challengeOthersRatingComments,
-        challenge: action.data.challangeYourSelf,
+        challenge: action.data.challengeYourSelf,
         currentStep: action.data.currentStep,
         holderUserId: action.data.holderUserId,
         user: action.data.user

@@ -192,8 +192,7 @@ class KPI extends Component {
       changeChallenge,
       handleSaveAssessment,
       currentStep,
-      proposeRating,
-      generalFeedback
+      proposeRating
     } = this.props;
     return (
       <div>

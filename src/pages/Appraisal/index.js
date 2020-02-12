@@ -152,7 +152,7 @@ class Appraisal extends Component {
     this.setState({
       myStep: currentStep !== 'Performance Review Employee',
       dataKpis: dataOrdered,
-      challengeYour: challenge,
+      challengeYour: challenge === '----------' ? '' : challenge,
       loadingKpis: false,
       loadingResult: false
     });
@@ -259,7 +259,7 @@ class Appraisal extends Component {
     });
     const data = {
       assesments: assessment,
-      challengeYourself: challengeYour
+      challengeYourself: challengeYour || '----------'
     };
     form.validateFieldsAndScroll(['dataKpi'], async (err, values) => {
       if (!err) {
@@ -386,7 +386,7 @@ class Appraisal extends Component {
     });
     const dataAssessment = {
       assesments: assessment,
-      challengeYourself: challengeYour
+      challengeYourself: challengeYour || '----------'
     };
     // values
     const {
@@ -584,7 +584,6 @@ class Appraisal extends Component {
                     proposeRating={dataKpiRating.rating}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
-                    generalFeedback={generalFeedback}
                   />
                 </div>
                 {!loadingEmpAck && currentStep === stepKpi[6] &&
@@ -618,7 +617,7 @@ class Appraisal extends Component {
         {generalFeedback && generalFeedback.id &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
+            <Paragraph>{generalFeedback.comment === '----------' ? '' : generalFeedback.comment}</Paragraph>
           </div>}
         {formStatusId === '3' &&
         <div style={{
