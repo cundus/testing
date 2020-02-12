@@ -4,14 +4,13 @@ import {
   Steps,
   Icon
 } from 'antd';
-import { useMediaQuery } from 'react-responsive';
+import PropTypes from 'prop-types';
 import globalStyle from '../../../../styles/globalStyles';
 
 const { Step } = Steps;
 
 const StepWizzard = (props) => {
-  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-  const { step /* stepChange */ } = props;
+  const { step } = props;
   return (
     <div style={{
       ...globalStyle.contentContainer,
@@ -24,9 +23,6 @@ const StepWizzard = (props) => {
       <Steps
         type="navigation"
         current={step}
-        // style={{ display: 'flex' }}
-        // eslint-disable-next-line react/jsx-no-bind
-        // onChange={stepChange}
       >
         <Step
           title="Fill KPI Form"
@@ -46,3 +42,7 @@ const StepWizzard = (props) => {
 };
 
 export default withRouter(StepWizzard);
+
+StepWizzard.propTypes = {
+  step: PropTypes.number
+};
