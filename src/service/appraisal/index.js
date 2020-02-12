@@ -61,7 +61,7 @@ export const getAttachId = (valueId) => customAxios({
 });
 
 export const downloadFiles = (attachId) => customAxios({
-  url: `/attachments/${attachId}`,
+  url: `/attachment/${attachId}`,
   method: 'GET',
   headers: {
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`

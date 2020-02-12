@@ -72,7 +72,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -1054,7 +1054,7 @@ export const getAttachment = (id) => async (dispatch) => {
   }
 };
 
-export const downloadFile = (attachId) => async (dispatch) => {
+export const doDownloadFile = (attachId) => async (dispatch) => {
   dispatch({
     type: DOWNLOAD_FILE,
     loading: true,
@@ -1063,7 +1063,7 @@ export const downloadFile = (attachId) => async (dispatch) => {
     data: []
   });
   try {
-    const payload = await downloadFile(attachId);
+    const payload = await downloadFiles(attachId);
     if (payload.data.status_code === Success) {
       dispatch({
         type: DOWNLOAD_FILE_SUCCESS,

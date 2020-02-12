@@ -6,7 +6,7 @@ import {
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
-  doAttachFile, doDeleteFiles, getAttachment, downloadFile
+  doAttachFile, doDeleteFiles, getAttachment, doDownloadFile
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
@@ -124,7 +124,7 @@ class Value extends Component {
     });
   }
 
-  deleteFile = async (record) => (file) => {
+  deleteFile = (record) => async (file) => {
     const {
       deleteFiles,
       handleChangeField,
@@ -207,7 +207,7 @@ class Value extends Component {
       statusDownload,
       messageDownload,
       dataDownload
-    } = this.props;
+    } = this.props.kpiR;
     if (!loadingDownload) {
       if (statusDownload === Success) {
         const linkSource = `data:${mediaType};base64,${dataDownload.fileContent}`;
@@ -429,7 +429,7 @@ const mapDispatchToProps = (dispatch) => ({
   attachFile: (id) => dispatch(doAttachFile(id)),
   doGetAttachment: (valueId) => dispatch(getAttachment(valueId)),
   deleteFiles: (data) => dispatch(doDeleteFiles(data)),
-  doDownload: (attachId) => mapDispatchToProps(downloadFile(attachId))
+  doDownload: (attachId) => dispatch(doDownloadFile(attachId))
 });
 
 const connectToComponent = connect(
