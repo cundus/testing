@@ -1,6 +1,7 @@
 const styles = {
   sidebarContainer: {
-    zIndex: 1,
+    zIndex: 99,
+    position: 'fixed',
     boxShadow: '0px 1px 9px -3px rgba(0, 0, 0, 0.75)'
   },
   sidebarMenuWrapper: {
