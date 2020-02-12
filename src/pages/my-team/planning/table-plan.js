@@ -51,13 +51,13 @@ class TablePlan extends Component {
         render: (text) => {
           let status;
           let color;
-          if (text === 1) {
+          if (text === 0) {
             status = 'On Progress';
             color = '#ffb822';
-          } else if (text === 2) {
+          } else if (text === 1) {
             status = 'Submitted';
             color = '#fd27eb';
-          } else if (text === 3) {
+          } else if (text === 2) {
             status = 'Completed';
             color = '#1dc9b7';
           } else {
@@ -77,7 +77,7 @@ class TablePlan extends Component {
         placeholder: 'action',
         action: true,
         render: (text) => (
-          <Button type={'primary'} disabled={isNaN(text.status) || text.status !== 2}>
+          <Button type={'primary'} disabled={isNaN(text.status) || text.status !== 1}>
             <Link to={`/my-team/planning/${text.idUser}`}>
               View
             </Link>

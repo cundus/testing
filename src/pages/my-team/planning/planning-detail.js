@@ -73,7 +73,7 @@ class PlanningDetail extends Component {
       });
       this.setState({
         dataSource: newData,
-        globalfeedback: globalFeedback.comment,
+        globalfeedback: globalFeedback.comment === '----------' ? '' : globalFeedback.comment,
         labelList: this.props.myteamdetail.labelList
       });
     } else {
