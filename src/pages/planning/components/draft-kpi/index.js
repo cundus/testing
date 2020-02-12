@@ -95,7 +95,7 @@ class DraftKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge || '----------'
+      challengeYour: challenge === '----------' ? '' : challenge
     });
     this.liveCount(newData);
   };

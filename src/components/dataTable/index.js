@@ -138,7 +138,7 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (index === 'feedback') { // Feedback
+    } else if (index === 'feedback' || index === 'comment') { // Feedback && Comment
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {

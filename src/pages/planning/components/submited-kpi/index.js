@@ -87,7 +87,7 @@ class SubmitedKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      challengeYour: challenge || '----------'
+      challengeYour: challenge === '----------' ? '' : challenge
     });
     this.weightCount(newData);
   };
