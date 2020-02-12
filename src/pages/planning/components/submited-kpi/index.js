@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
-import { doGetKpiList } from '../../../../redux/actions/kpi';
+import { actionGetKPI } from '../../../../redux/actions';
 import globalStyle from '../../../../styles/globalStyles';
 import stepKpi from '../../../../utils/stepKpi';
 import { getChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
@@ -163,7 +163,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getKpiList: (id) => dispatch(doGetKpiList(id))
+  getKpiList: (id) => dispatch(actionGetKPI(id))
 });
 
 const connectToComponent = connect(

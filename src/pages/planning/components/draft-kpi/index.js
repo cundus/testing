@@ -280,7 +280,7 @@ class DraftKPI extends Component {
         {generalFeedback.comment &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment === '----------' ? '' : generalFeedback.comment}</Paragraph>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
         <div style={{
           ...globalStyle.contentContainer,
