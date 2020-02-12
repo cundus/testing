@@ -1,4 +1,4 @@
-const challengeYourselfChecker = (data) => {
+const getChallengeYourselfChecker = (data) => {
   if (data === '----------') {
     return '';
   } else {
@@ -6,4 +6,15 @@ const challengeYourselfChecker = (data) => {
   }
 };
 
-export default challengeYourselfChecker;
+const sendChallengeYourselfChecker = (data) => {
+  if (data === '') {
+    return '----------';
+  } else {
+    return data;
+  }
+};
+
+export {
+  getChallengeYourselfChecker,
+  sendChallengeYourselfChecker
+};
