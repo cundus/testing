@@ -23,6 +23,7 @@ const initialState = {
   statusKpi: NaN,
   messageKpi: '',
   dataKpi: [],
+  dataKpiFiltered: [],
   dataKpiMetrics: [],
   generalFeedback: '',
   challenge: '',
@@ -81,7 +82,8 @@ const kpiReducers = (state = initialState, action) => {
         challenge: action.data.challengeYourSelf,
         currentStep: action.data.currentStep,
         holderUserId: action.data.holderUserId,
-        user: action.data.user
+        user: action.data.user,
+        dataKpiFiltered: action.dataKpi
       };
     case GET_KPI_LIST_FAILED:
       return {

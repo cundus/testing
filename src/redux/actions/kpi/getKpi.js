@@ -24,12 +24,53 @@ export const actionGetKPI = (id) => async (dispatch) => {
     const payload = await getKpiList(id);
     if (payload.data.status_code === Success) {
       if (payload.data.result) {
+        const dataResult = payload.data.result;
+        const dataKpi = dataResult.kpiList;
+        const dataKpiMetrics = dataResult.labelList;
+        const newData = [];
+        dataKpi.map((itemKpi) => {
+          if (itemKpi.othersRatingComments.id) {
+            this.setState({ isFeedback: true });
+          }
+          let dataMetrics = itemKpi.metricLookup.map((metric) => {
+            return `{"${metric.label}":""}`;
+          });
+          dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+          dataMetrics = dataMetrics.reduce((result, current) => {
+            return Object.assign(result, current);
+          }, {});
+          Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+            return itemKpi.metricLookup.map((metric) => {
+              if (newDataMetric === metric.label) {
+                dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+                  metric.achievementText : metric.achievementNumeric}`;
+                return dataMetrics;
+              }
+              return null;
+            });
+          });
+          const data = {
+            key: itemKpi.id,
+            id: itemKpi.id,
+            cascadeType: itemKpi.cascadeType,
+            cascadeName: itemKpi.cascadeName,
+            kpi: itemKpi.name,
+            baseline: itemKpi.baseline,
+            weight: itemKpi.weight,
+            achievementType: itemKpi.achievementType,
+            metrics: dataKpiMetrics,
+            ...dataMetrics,
+            feedback: itemKpi.othersRatingComments.comment
+          };
+          newData.push(data);
+        });
         dispatch({
           type: GET_KPI_LIST_SUCCESS,
           loading: false,
           status: payload.data.status_code,
           message: payload.data.status_description,
-          data: payload.data.result
+          data: payload.data.result,
+          dataKpi: newData
         });
       } else {
         dispatch({
