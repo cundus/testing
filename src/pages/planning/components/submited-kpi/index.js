@@ -174,7 +174,6 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 SubmitedKPI.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
   getKpiList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   ownKpiReducers: PropTypes.instanceOf(Object),
