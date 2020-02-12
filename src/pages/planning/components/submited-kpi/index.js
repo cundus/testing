@@ -85,10 +85,10 @@ class SubmitedKPI extends Component {
     const {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
-    const { kpiReducers } = this.props;
+    const { ownKpiReducers } = this.props;
     const {
       loadingKpi, dataKpiMetrics, generalFeedback, currentStep
-    } = kpiReducers;
+    } = ownKpiReducers;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
