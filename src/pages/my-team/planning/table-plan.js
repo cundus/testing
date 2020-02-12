@@ -51,7 +51,7 @@ class TablePlan extends Component {
         render: (text) => {
           let status;
           let color;
-          if (text === (0 || 3)) {
+          if (text === 0) {
             status = 'On Progress';
             color = '#ffb822';
           } else if (text === 1) {

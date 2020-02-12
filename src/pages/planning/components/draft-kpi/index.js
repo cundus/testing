@@ -305,7 +305,7 @@ class DraftKPI extends Component {
     });
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: challengeYour || '----------'
+      challengeYourSelf: challengeYour === '----------' ? '' : challengeYour
     };
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
