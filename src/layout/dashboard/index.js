@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
 import { doGetMetrics } from '../../redux/actions/kpi';
+import { actionGetNotifications } from '../../redux/actions/getNotifications';
 import { Footer, Header, Sidebar } from './components';
 import { MappedRouter } from '../../routes/RouteGenerator';
 import { authProvider } from '../../service/auth/auth';
@@ -29,7 +30,7 @@ class Dashboard extends React.Component {
       localStorage.clear();
     });
     // // refresh token
-    const { auth } = this.props;
+    const { auth, getNotifications } = this.props;
     const { accessToken } = auth;
     const { expiresOn } = accessToken;
     if (accessToken) {
@@ -40,6 +41,7 @@ class Dashboard extends React.Component {
         await this.callAndStore();
       }, refresh);
     }
+    await getNotifications();
   }
 
   getToken = async () => {
@@ -119,7 +121,8 @@ class Dashboard extends React.Component {
 const mapDispatchtoProps = (dispatch) => ({
   doGetInfoUser: (token) => dispatch(GetInfoUser(token)),
   getMetrics: () => (dispatch(doGetMetrics())),
-  GetMyKpiState: () => dispatch(GetUserKpiState())
+  GetMyKpiState: () => dispatch(GetUserKpiState()),
+  getNotifications: () => dispatch(actionGetNotifications())
 });
 
 const mapStateToProps = (state) => ({
@@ -136,6 +139,7 @@ Dashboard.propTypes = {
   user: PropTypes.instanceOf(Object),
   doGetInfoUser: PropTypes.func,
   GetMyKpiState: PropTypes.func,
+  getNotifications: PropTypes.func,
   logout: PropTypes.func,
   child: PropTypes.instanceOf(Array)
 };

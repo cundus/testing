@@ -19,7 +19,7 @@ const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
   const {
-    collapsed, toggle, history, isAllowToMonitor, logout
+    collapsed, toggle, history, isAllowToMonitor, logout, notificationReducers
   } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
   const pathlocation = history.location.pathname;
@@ -31,6 +31,7 @@ const Header = (props) => {
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
+
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
@@ -107,7 +108,11 @@ const Header = (props) => {
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
           <Row type="flex" justify="space-between" align="middle">
-            <Dropdown overlay={notifMenu} trigger={['hover', 'click']} placement="bottomCenter">
+            <Dropdown
+              overlay={notifMenu(notificationReducers.data, uId)}
+              trigger={['hover', 'click']}
+              placement="bottomCenter"
+            >
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a id="account-link" href="#">
                 <Icon style={{ fontSize: 18 }} type="bell" />
@@ -142,7 +147,8 @@ const Header = (props) => {
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
   user: state.userReducers,
-  step: state.userKpiStateReducers
+  step: state.userKpiStateReducers,
+  notificationReducers: state.notificationReducers
 });
 const connectToComponent = connect(mapStateToProps)(Header);
 
@@ -154,6 +160,7 @@ Header.propTypes = {
   history: PropTypes.instanceOf(Object),
   collapsed: PropTypes.bool,
   toggle: PropTypes.func,
+  notificationReducers: PropTypes.instanceOf(Object),
   isAllowToMonitor: PropTypes.bool,
   logout: PropTypes.func
 };

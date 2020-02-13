@@ -12,6 +12,7 @@ import ActivityStatusReducers from './statusActivity';
 import ActivityChatReducers from './activityChat';
 import AchievementReducers from './achivement';
 import AppraisalReducers from './appraisal';
+import notificationReducers from './notifications';
 import {
   ownKpi, managerKpi, saveKpi, submitKpi
 } from './kpi/';
@@ -33,5 +34,6 @@ export default combineReducers({
   ownKpi,
   managerKpi,
   saveKpi,
-  submitKpi
+  submitKpi,
+  notificationReducers
 });
