@@ -44,7 +44,9 @@ class form extends Component {
               rules: [{ required: true }],
               initialValue: dataModal.achievementDate
             })(
-              <DatePicker onChange={() => this.change(['achievementName', 'achievementDate'])}>
+              <DatePicker onChange={() => this.change(['achievementName', 'achievementDate'])} disabledDate={current => {
+                return current && current > new Date()
+              }}>
               </DatePicker>
             )}
           </Form.Item>
