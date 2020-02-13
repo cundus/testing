@@ -52,7 +52,7 @@ const Sidebar = (props) => {
                 key={`${menu.path}`}
                 disabled={isDisabled}
               >
-                <Link to={menu.path}>{menu.title}</Link>
+                <Link to={menu.path} onClick={toggle}>{menu.title}</Link>
               </Menu.Item>
             );
           } else {

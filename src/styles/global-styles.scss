@@ -96,12 +96,6 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
 
 @media (max-width: 480px) {
   .ant-steps-navigation{
-    .ant-steps-item::after {
-      display: none !important;
-    }
-    .ant-steps-item.ant-steps-item-active::before {
-      display: none !important;
-    }
   }
 }
 
