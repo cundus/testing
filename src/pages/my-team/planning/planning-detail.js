@@ -10,6 +10,7 @@ import {
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 import globalStyle from '../../../styles/globalStyles';
+import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -73,7 +74,7 @@ class PlanningDetail extends Component {
       });
       this.setState({
         dataSource: newData,
-        globalfeedback: globalFeedback.comment === '----------' ? '' : globalFeedback.comment,
+        globalfeedback: globalFeedback.comment,
         labelList: this.props.myteamdetail.labelList
       });
     } else {
@@ -104,7 +105,7 @@ class PlanningDetail extends Component {
     this.state.dataSource.map((item) => {
       kpiList.find((d) => d.id === item.key).othersRatingComments.comment = item.feedback;
     });
-    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback || '----------';
+    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         confirm({
@@ -188,7 +189,7 @@ class PlanningDetail extends Component {
              />
              <Text strong>Challenge yourself :</Text>
              <TextArea
-               value={this.props.myteamdetail.challengeYourSelf === '----------' ? '' : this.props.myteamdetail.challengeYourSelf}
+               value={getChallengeYourselfChecker(this.props.myteamdetail.challengeYourSelf)}
                disabled
              />
              <br />

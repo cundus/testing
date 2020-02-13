@@ -107,15 +107,18 @@ const Header = (props) => {
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
           <Row type="flex" justify="space-between" align="middle">
-            <Dropdown overlay={notifMenu} placement="bottomRight">
-              <Icon style={{ fontSize: 18 }} type="bell" />
+            <Dropdown overlay={notifMenu} trigger={['hover', 'click']} placement="bottomCenter">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a id="account-link" href="#">
+                <Icon style={{ fontSize: 18 }} type="bell" />
+              </a>
             </Dropdown>
-            <Dropdown overlay={langMenu} placement="bottomRight">
+            <Dropdown overlay={langMenu} placement="bottomCenter">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-            <a>
-              <Dropdown overlay={accountMenu(logout)} placement="bottomRight">
+            <Dropdown trigger={['hover', 'click']} overlay={accountMenu(logout)} placement="bottomLeft">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a id="account-link" href="#">
                 <div className="accountWrapper">
                   {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
                   <Avatar
@@ -126,8 +129,8 @@ const Header = (props) => {
                     className="avatar"
                   />
                 </div>
-              </Dropdown>
-            </a>
+              </a>
+            </Dropdown>
           </Row>
         </Col>
       </Row>

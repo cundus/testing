@@ -1,5 +1,13 @@
 import React from 'react';
-import { Menu } from 'antd';
+import { Menu, List, Typography } from 'antd';
+
+const data = [
+  'Racing car sprays burning fuel into crowd.',
+  'Japanese princess to wed commoner.',
+  'Australian walks 100km after outback crash.',
+  'Man charged over missing wedding girl.',
+  'Los Angeles battles huge wildfires.',
+];
 
 export const accountMenu = (logout) => () => (
   <Menu>
@@ -22,12 +30,21 @@ export const langMenu = (
  );
 
 export const notifMenu = (
-  <Menu>
-    <Menu.Item>
-      {/* +1 chat */}
-    </Menu.Item>
-    <Menu.Item>
-      {/* +2 else */}
-    </Menu.Item>
-  </Menu>
+  <List
+    header={
+      <div style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
+        <Typography.Text style={{ fontSize: 18 }}>User Notifications </Typography.Text>
+        {/* <Typography.Text mark>2 New!</Typography.Text> */}
+      </div>
+      }
+    // bordered
+    dataSource={data}
+    // eslint-disable-next-line react/jsx-no-bind
+    renderItem={(item) => (
+      <List.Item>
+        <Typography.Text mark>[ITEM]</Typography.Text>
+        {item}
+      </List.Item>
+    )}
+  />
 );

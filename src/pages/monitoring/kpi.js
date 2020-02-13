@@ -82,7 +82,7 @@ class TableMonitorKPI extends Component {
                   Activity
                 </Link>
               </Button>
-              <Button>
+              <Button style={{ marginRight: 5 }}>
                 <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
                   Achievement
                 </Link>

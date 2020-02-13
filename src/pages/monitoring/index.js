@@ -344,13 +344,79 @@ class MonitorKPI extends Component {
   };
 
   gotToAppraisal = () => {
-    if (this.state.dataSource.length > 20) {
-      message.warning('Maximum KPI is 20');
-    } else if (this.state.kpiErr) {
-      message.warning(this.state.kpiErrMessage);
-    } else {
-      this.props.history.push('/appraisal');
+    const {
+      doSavingKpi, userReducers, form, kpiReducers
+    } = this.props;
+    const { dataKpi } = kpiReducers;
+    const { user } = userReducers.result;
+    const {
+      dataSource,
+      challengeYour
+    } = this.state;
+    if (this.state.weightTotal !== 100) {
+      return message.warning('Total KPI Weight must 100%');
+
     }
+    const newDataKpi = [];
+    // eslint-disable-next-line array-callback-return
+    dataSource.map((itemKpi, iii) => {
+      const newMetricValue = [];
+      const datass = Object.keys(itemKpi);
+      // eslint-disable-next-line array-callback-return
+      datass.map((m, index) => {
+        // eslint-disable-next-line array-callback-return
+        dataKpi[iii].metricLookup.map((metric) => {
+        // if (metric.label === datass[index]) {
+          if (metric.label === datass[index]) {
+            const mData = {
+              id: metric.id,
+              label: metric.label,
+              achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
+              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+            };
+            newMetricValue.push(mData);
+          }
+        });
+        // }
+      });
+      const data = {
+        id: itemKpi.id,
+        baseline: itemKpi.baseline,
+        name: itemKpi.kpi,
+        weight: itemKpi.weight,
+        cascadeType: itemKpi.cascadeType,
+        cascadeName: itemKpi.cascadeName,
+        achievementType: itemKpi.achievementType,
+        metricLookup: newMetricValue
+      };
+      newDataKpi.push(data);
+    });
+    const data = {
+      kpiList: newDataKpi,
+      challengeYourSelf: challengeYour || '----------'
+    };
+    form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        confirm({
+          title: 'Are you sure?',
+          onOk: async () => {
+            await doSavingKpi(data, user.userId);
+            // eslint-disable-next-line react/destructuring-assignment
+            if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
+              message.success('Success saving KPI and navigate to appraisal');
+              this.props.history.push('/appraisal');
+              // eslint-disable-next-line react/destructuring-assignment
+              if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+              }
+            } else {
+              message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+            }
+          },
+          onCancel() {}
+        });
+      }
+    });
   }
 
   render() {
@@ -404,7 +470,7 @@ class MonitorKPI extends Component {
               stafid={stafid}
             />
             <div>
-              <Text strong>Challenge Myself :</Text>
+              <Text strong>Challenge Yourself :</Text>
               {
                 isSuperior ?
                   <Text><br/> {challengeYour} </Text> :
