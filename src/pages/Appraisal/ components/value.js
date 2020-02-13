@@ -367,54 +367,6 @@ class Value extends Component {
             datasource={dataSource}
           />
         </div>
-        <center>
-          <Skeleton active loading={loading} paragraph={false} title={{ width: '60%' }}>
-            {myStep ?
-              <div style={{ textAlign: 'center', margin: 40 }}>
-                {currentStep === stepKpi[3] ?
-                  <Title
-                    level={4}
-                    type="warning"
-                    ghost
-                    strong
-                  >
-                    Your Appraisal has been sent to your Manager
-                  </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5]) &&
-                  <Title
-                    level={4}
-                    style={{ color: '#61C761', margin: 0 }}
-                    ghost
-                    strong
-                  >
-                    Your Values has been approved
-                  </Title>}
-              </div> :
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  id="go-monitoring"
-                  onClick={goToMonitoring}
-                  style={{ margin: 10 }}
-                >
-                  Go To Monitoring
-                </Button>
-                <Button
-                  id="save-assessment"
-                  onClick={handleSave}
-                  style={{ margin: 10 }}
-                >
-                  Save Values
-                </Button>
-                <Button
-                  id="send-manager"
-                  type="primary"
-                  onClick={handleSubmit}
-                  style={{ margin: 10 }}
-                >
-                  Send To Manager
-                </Button>
-              </div>}
-          </Skeleton>
-        </center>
       </div>
     );
   }

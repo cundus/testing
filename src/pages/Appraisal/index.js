@@ -595,6 +595,7 @@ class Appraisal extends Component {
                     myStep={myStep}
                     currentStep={currentStep}
                     isFeedback={isFeedback}
+                    formStatusId={formStatusId}
                     feedShow={this.feedShow}
                     proposeRating={dataKpiRating.rating}
                     handleChangeField={this.handleChangeAssessment}
@@ -634,6 +635,64 @@ class Appraisal extends Component {
             <Text strong>General Feedback :</Text>
             <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
+        <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingTop: 5 }}>
+          <center>
+            <Skeleton active loading={loadingMyValue || loadingKpis} paragraph={false} title={{ width: '60%' }}>
+              {myStep ?
+                <div style={{ textAlign: 'center', margin: 40 }}>
+                  {currentStep === stepKpi[3] ?
+                    <Title
+                      level={4}
+                      type="warning"
+                      ghost
+                      strong
+                    >
+                      Your Appraisal has been sent to your Manager
+                    </Title> : (currentStep === stepKpi[4] || currentStep === stepKpi[5]) &&
+                    <Title
+                      level={4}
+                      style={{ color: '#61C761', margin: 0 }}
+                      ghost
+                      strong
+                    >
+                      Your Self Assessment and Values has been approved
+                    </Title>}
+                </div> :
+                <div style={{ textAlign: 'center' }}>
+                  <Button
+                    id="go-monitoring"
+                    onClick={this.goToMonitoring}
+                    style={{ margin: 10 }}
+                  >
+                    Go To Monitoring
+                  </Button>
+                  {tab === '1' ?
+                    <Button
+                      id="save-assessment"
+                      onClick={this.handleSaveAssessment}
+                      style={{ margin: 10 }}
+                    >
+                      Save Assessment
+                    </Button> : tab === '2' &&
+                    <Button
+                      id="save-values"
+                      onClick={this.handleSave}
+                      style={{ margin: 10 }}
+                    >
+                      Save Values
+                    </Button>}
+                  <Button
+                    id="send-manager"
+                    type="primary"
+                    onClick={this.handleSubmit}
+                    style={{ margin: 10 }}
+                  >
+                    Send To Manager
+                  </Button>
+                </div>}
+            </Skeleton>
+          </center>
+        </div>
         {formStatusId === '3' &&
         <div style={{
           ...globalStyle.contentContainer,

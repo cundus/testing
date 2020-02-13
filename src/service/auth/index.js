@@ -54,7 +54,7 @@ export const getMyTeamMonitoring = (idUser) => customAxios({
 });
 
 export const getMyTeamApraisal = (idUser) => customAxios({
-  url: `/user/team/appraisal/${idUser}`,
+  url: `/user/teamkpi/${idUser}/appraisal`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

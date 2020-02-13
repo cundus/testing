@@ -36,17 +36,17 @@ class Appraisal extends Component {
           key: item.userId,
           ...item,
           name: `${item.firstName} ${item.lastName}`,
-          kpiTitle: 'loading',
-          score: 'loading',
-          rating: 'loading',
-          status: 'loading',
-          statusNumber: 'loading'
+          kpiTitle: item.kpiTitle,
+          score: item.kpiScore,
+          rating: item.kpiRating,
+          status: item.status,
+          statusNumber: item.statusNumber
         };
       });
       this.setState({
         dataSource: dataTeam
       });
-      this.fetchAppraisalTeamDetail();
+      // this.fetchAppraisalTeamDetail();
     }
   }
 

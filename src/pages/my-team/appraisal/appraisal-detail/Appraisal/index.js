@@ -571,59 +571,6 @@ class Appraisal extends Component {
         <div style={{
           ...globalStyle.contentContainer,
           borderRadius: 0,
-          paddingTop: 0,
-          paddingBottom: 0
-        }}
-        >
-          <center>
-            <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
-              {myStep &&
-                <div style={{ textAlign: 'center' }}>
-                  <Button
-                    id="go-monitoring"
-                    // onClick={goToMonitoring}
-                    style={{ margin: 10 }}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    id="save-assessment"
-                    onClick={this.handleSendBack}
-                    style={{ margin: 10 }}
-                  >
-                    Save & Send Feedback
-                  </Button>
-                  <Button
-                    id="send-manager"
-                    type="primary"
-                    onClick={this.handleApprove}
-                    style={{ margin: 10 }}
-                  >
-                    Approve
-                  </Button>
-                </div>}
-              {currentStep === stepKpi[4] &&
-                <div style={{
-                  textAlign: 'center', paddingTop: 10, lineHeight: 0, margin: 0
-                }}
-                >
-                  <Title
-                    level={4}
-                    style={{ color: '#61C761', margin: 0 }}
-                    ghost
-                    strong
-                  >
-                    {`${teamName}'s Appraisal has been sent to system .`}
-                    <br />
-                    Waiting for the final Result
-                  </Title>
-                </div>}
-            </Skeleton>
-          </center>
-        </div>
-        <div style={{
-          ...globalStyle.contentContainer,
-          borderRadius: 0,
           paddingBottom: 5,
           borderBottomLeftRadius: 5,
           borderBottomRightRadius: 5,
@@ -688,6 +635,59 @@ class Appraisal extends Component {
             disabled={!myStep}
             onChange={this.changeGeneralFeedback}
           />
+        </div>
+        <div style={{
+          ...globalStyle.contentContainer,
+          borderRadius: 0,
+          paddingTop: 0,
+          paddingBottom: 0
+        }}
+        >
+          <center>
+            <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
+              {myStep &&
+                <div style={{ textAlign: 'center' }}>
+                  <Button
+                    id="go-monitoring"
+                    // onClick={goToMonitoring}
+                    style={{ margin: 10 }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    id="save-assessment"
+                    onClick={this.handleSendBack}
+                    style={{ margin: 10 }}
+                  >
+                    Save & Send Feedback
+                  </Button>
+                  <Button
+                    id="send-manager"
+                    type="primary"
+                    onClick={this.handleApprove}
+                    style={{ margin: 10 }}
+                  >
+                    Approve
+                  </Button>
+                </div>}
+              {currentStep === stepKpi[4] &&
+                <div style={{
+                  textAlign: 'center', paddingTop: 10, lineHeight: 0, margin: 0
+                }}
+                >
+                  <Title
+                    level={4}
+                    style={{ color: '#61C761', margin: 0 }}
+                    ghost
+                    strong
+                  >
+                    {`${teamName}'s Appraisal has been sent to system .`}
+                    <br />
+                    Waiting for the final Result
+                  </Title>
+                </div>}
+            </Skeleton>
+          </center>
         </div>
       </div>
     );
