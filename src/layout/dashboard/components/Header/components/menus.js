@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, List, Typography, Divider, Icon } from 'antd';
+import { Menu, List, Typography, Divider } from 'antd';
 import { Link } from 'react-router-dom';
 import { navigatorManager, navigatorEmp } from '../../../../../utils/navigatorNotif';
 
