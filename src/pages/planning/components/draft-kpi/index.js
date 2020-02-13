@@ -31,8 +31,8 @@ class DraftKPI extends Component {
       weightTotal: 0,
       weightTotalErr: false,
       challengeYour: '',
-      kpiErr: true,
-      isFeedback: false
+      kpiErr: false,
+      isFeedback: true
     };
   }
 
