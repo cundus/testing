@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, List, Typography, Divider } from 'antd';
+import { Menu, List, Typography, Divider, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import { navigatorManager, navigatorEmp } from '../../../../../utils/navigatorNotif';
 
@@ -34,15 +34,16 @@ export const notifMenu = (data, userId) => () => {
 
   return (
     <List
-      style={{ width: 300 }}
+      style={{ width: 300, maxHeight: '100vh', padding: 0 }}
       header={
-        <div style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
-          <Typography.Text style={{ fontSize: 18 }}>User Notifications </Typography.Text>
-          {/* <Typography.Text mark>2 New!</Typography.Text> */}
+        <div>
+          <div style={{ textAlign: 'center', paddingTop: 20 }}>
+            <Typography.Text style={{ fontSize: 18 }}>User Notifications </Typography.Text>
+            {/* <Typography.Text mark>2 New!</Typography.Text> */}
+          </div>
           <Divider />
         </div>
         }
-      bordered
       dataSource={data}
       // eslint-disable-next-line react/jsx-no-bind
       renderItem={(item) => (
