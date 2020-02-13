@@ -26,7 +26,7 @@ class SubmitedKPI extends Component {
       dataSource: [],
       weightTotal: 0,
       challengeYour: '',
-      isFeedback: false
+      isFeedback: true
     };
   }
 

@@ -1,8 +1,5 @@
 const kpiGetSelfProcess = (dataKpi, dataKpiMetrics) => {
   return dataKpi.map((itemKpi) => {
-    if (itemKpi.othersRatingComments.id) {
-      this.setState({ isFeedback: true });
-    }
     let dataMetrics = itemKpi.metricLookup.map((metric) => {
       return `{"${metric.label}":""}`;
     });
