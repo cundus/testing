@@ -34,7 +34,7 @@ export const getKPIstate = () => customAxios({
 })
 
 export const getMyTeam = (idUser) => customAxios({
-  url: `/user/team/${idUser}`,
+  url: `/user/teamkpi/${idUser}/planning`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export const getMyTeam = (idUser) => customAxios({
 });
 
 export const getMyTeamMonitoring = (idUser) => customAxios({
-  url: `/user/team/monitoring/${idUser}`,
+  url: `/user/teamkpi/${idUser}/monitoring`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
