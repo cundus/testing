@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Layout, Menu, Row, Col, Icon, Typography, Avatar, Dropdown
+  Layout, Menu, Row, Col, Icon, Typography, Avatar, Dropdown, Badge
 } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
@@ -115,7 +115,11 @@ const Header = (props) => {
             >
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a id="account-link" href="#">
-                <Icon style={{ fontSize: 18 }} type="bell" />
+                <div>
+                  <Badge count={notificationReducers.data.length} overflowCount={20}>
+                    <Icon style={{ fontSize: 18 }} type="bell" />
+                  </Badge>
+                </div>
               </a>
             </Dropdown>
             <Dropdown overlay={langMenu} placement="bottomCenter">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, List, Typography } from 'antd';
+import { Menu, List, Typography, Divider } from 'antd';
 import { Link } from 'react-router-dom';
 import { navigatorManager, navigatorEmp } from '../../../../../utils/navigatorNotif';
 
@@ -39,9 +39,10 @@ export const notifMenu = (data, userId) => () => {
         <div style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
           <Typography.Text style={{ fontSize: 18 }}>User Notifications </Typography.Text>
           {/* <Typography.Text mark>2 New!</Typography.Text> */}
+          <Divider />
         </div>
         }
-      // bordered
+      bordered
       dataSource={data}
       // eslint-disable-next-line react/jsx-no-bind
       renderItem={(item) => (
