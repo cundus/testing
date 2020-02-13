@@ -138,7 +138,7 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (index === 'feedback' || index === 'comment') { // Feedback && Comment
+    } else if (index === 'feedback') { // Feedback && Comment
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -149,6 +149,24 @@ class EditableCell extends React.Component {
               id={`${title}-${index}`}
               placeholder={placeholder}
               style={{ background: '#EDEAA6', border: 0 }}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (index === 'comment') { // Feedback && Comment
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            // rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}

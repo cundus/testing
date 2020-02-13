@@ -4,9 +4,9 @@ import { Menu, List, Typography } from 'antd';
 const data = [
   'Racing car sprays burning fuel into crowd.',
   'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
+  'Australian walks 100km after outback crashdasdasdsa.',
   'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
+  'Los Angeles battles huge wildfires.'
 ];
 
 export const accountMenu = (logout) => () => (
@@ -31,6 +31,7 @@ export const langMenu = (
 
 export const notifMenu = (
   <List
+    style={{ maxWidth: 300 }}
     header={
       <div style={{ textAlign: 'center', paddingTop: 20, paddingBottom: 20 }}>
         <Typography.Text style={{ fontSize: 18 }}>User Notifications </Typography.Text>
@@ -42,8 +43,7 @@ export const notifMenu = (
     // eslint-disable-next-line react/jsx-no-bind
     renderItem={(item) => (
       <List.Item>
-        <Typography.Text mark>[ITEM]</Typography.Text>
-        {item}
+        <Typography.Text ellipsis>{item}</Typography.Text>
       </List.Item>
     )}
   />
