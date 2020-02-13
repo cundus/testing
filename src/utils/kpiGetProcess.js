@@ -1,5 +1,9 @@
 const kpiGetSelfProcess = (dataKpi, dataKpiMetrics) => {
-  return dataKpi.map((itemKpi) => {
+  let feedback = false;
+  const datas = dataKpi.map((itemKpi) => {
+    if (itemKpi.othersRatingComments.id) {
+      feedback = true;
+    }
     let dataMetrics = itemKpi.metricLookup.map((metric) => {
       return `{"${metric.label}":""}`;
     });
@@ -32,6 +36,10 @@ const kpiGetSelfProcess = (dataKpi, dataKpiMetrics) => {
     };
     return data;
   });
+  return {
+    dataKpi: datas,
+    isFeedback: feedback
+  };
 };
 
 const kpiGetManagerProcess = (dataManager, dataKpiManagerMetrics) => {

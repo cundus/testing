@@ -83,7 +83,8 @@ const kpiReducers = (state = initialState, action) => {
         currentStep: action.data.currentStep,
         holderUserId: action.data.holderUserId,
         user: action.data.user,
-        dataKpiFiltered: action.dataKpi
+        dataKpiFiltered: action.dataKpi,
+        isFeedback: action.isFeedback
       };
     case GET_KPI_LIST_FAILED:
       return {

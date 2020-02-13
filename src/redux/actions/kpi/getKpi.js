@@ -35,7 +35,8 @@ export const actionGetKPI = (id) => async (dispatch) => {
           status: payload.data.status_code,
           message: payload.data.status_description,
           data: payload.data.result,
-          dataKpi: newData
+          dataKpi: newData.dataKpi,
+          isFeedback: newData.isFeedback
         });
       } else {
         dispatch({
@@ -56,12 +57,12 @@ export const actionGetKPI = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error?.response?.data) {
+    if (error.response.data) {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: error?.response?.data?.status,
-        message: error?.response?.data?.error,
+        status: error.response.data.status,
+        message: error.response.data.error,
         error
       });
     } else {
@@ -104,12 +105,12 @@ export const actionGetLatestGoalKPI = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error?.response?.data) {
+    if (error.response.data) {
       dispatch({
         type: GET_LATEST_GOAL_KPI_FAILED,
         loading: false,
-        status: error?.response?.data?.status,
-        message: error?.response?.data?.error,
+        status: error.response.data.status,
+        message: error.response.data.error,
         error
       });
     } else {
@@ -162,7 +163,7 @@ export const actionGetManagerKPI = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error?.response?.data) {
+    if (error.response.data) {
       dispatch({
         type: GET_KPI_MANAGER_LIST_FAILED,
         loading: false,

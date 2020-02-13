@@ -44,9 +44,10 @@ class SubmitedKPI extends Component {
     }
     setAccess(true);
     const { ownKpiReducers } = this.props;
-    const { dataKpiFiltered, challenge } = ownKpiReducers;
+    const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
     this.setState({
       dataSource: dataKpiFiltered,
+      isFeedback,
       challengeYour: getChallengeYourselfChecker(challenge)
     });
     this.weightCount(dataKpiFiltered);

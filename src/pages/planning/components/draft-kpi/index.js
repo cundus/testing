@@ -13,7 +13,9 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { actionGetKPI, actionSaveKpi, actionSubmitKpi, actionGetNotifications } from '../../../../redux/actions';
+import {
+  actionGetKPI, actionSaveKpi, actionSubmitKpi, actionGetNotifications
+} from '../../../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 import globalStyle from '../../../../styles/globalStyles';
 import { getChallengeYourselfChecker, sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
@@ -50,12 +52,13 @@ class DraftKPI extends Component {
     }
     setAccess(true);
     const { ownKpiReducers } = this.props;
-    const { dataKpiFiltered, challenge } = ownKpiReducers;
+    const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
     form.getFieldValue({
       dataKpi: dataKpiFiltered
     });
     this.setState({
       dataSource: dataKpiFiltered,
+      isFeedback,
       challengeYour: getChallengeYourselfChecker(challenge)
     });
     this.liveCount(dataKpiFiltered);
