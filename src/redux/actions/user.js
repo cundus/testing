@@ -74,19 +74,12 @@ export const GetMyTeamKPI = (idUser) => {
           data: []
         });
       }
-      let arayTeam = resp.data.result;
-      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
-        const Team = myT;
-        let Kpi = await getMyKPIAction(myT.userId);
-        Kpi = Kpi.data.result;
-        Team.title = _.get(Kpi, 'kpiTitle', 'none');
-        Team.score = _.get(Kpi, 'kpiScore', '-');
-        Team.ratting = _.get(Kpi, 'kpiRating', '-');
-        Team.status = _.get(Kpi, 'userStatus', '-');
-        Team.result = _.get(Kpi, 'nonKpiresult', '-');
-        Team.Key = _.get(Kpi, 'userId', '-');
-        return Team;
-      }));
+      const arayTeam = resp.data.result;
+      arayTeam.map(d => {
+        d.title = d.kpiTitle;
+        d.status = d.userStatus;
+        d.Key = d.userId;
+      });
 
       resp.data.result = arayTeam;
       dispatch({
@@ -120,19 +113,12 @@ export const GetMyTeamKPIMonitoring = (idUser) => {
           data: []
         });
       }
-      let arayTeam = resp.data.result;
-      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
-        const Team = myT;
-        let Kpi = await getMyKPIAction(myT.userId);
-        Kpi = Kpi.data.result;
-        Team.title = _.get(Kpi, 'kpiTitle', 'none');
-        Team.score = _.get(Kpi, 'kpiScore', '-');
-        Team.ratting = _.get(Kpi, 'kpiRating', '-');
-        Team.status = _.get(Kpi, 'userStatus', '-');
-        Team.result = _.get(Kpi, 'nonKpiresult', '-');
-        Team.Key = _.get(Kpi, 'userId', '-');
-        return Team;
-      }));
+      const arayTeam = resp.data.result;
+      arayTeam.map(d => {
+        d.title = d.kpiTitle;
+        d.status = d.userStatus;
+        d.Key = d.userId;
+      });
 
       resp.data.result = arayTeam;
       dispatch({
