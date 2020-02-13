@@ -104,3 +104,16 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
     }
   }
 }
+
+.link-nav-notif{
+  :hover {
+    background-color: red;
+  }
+}
+
+.ant-list-bordered.ant-list-sm {
+  .ant-list-item {
+  padding-right: 0;
+  padding-left: 0;
+}
+}
