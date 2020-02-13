@@ -96,8 +96,9 @@ class Dashboard extends React.Component {
     const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
     const { collapsed } = this.state;
     const {
-      child, user, logout
+      child, user, logout, getNotifications
     } = this.props;
+    setInterval(() => getNotifications(), 180000);
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
