@@ -6,10 +6,15 @@ import {
   actionSubmitKpi
 } from './kpi/';
 
+import {
+  actionGetNotifications
+} from './getNotifications';
+
 export {
   actionGetKPI,
   actionGetLatestGoalKPI,
   actionGetManagerKPI,
   actionSaveKpi,
-  actionSubmitKpi
+  actionSubmitKpi,
+  actionGetNotifications
 };

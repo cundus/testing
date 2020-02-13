@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
 import { doGetMetrics } from '../../redux/actions/kpi';
-import { actionGetNotifications } from '../../redux/actions/getNotifications';
+import { actionGetNotifications } from '../../redux/actions';
 import { Footer, Header, Sidebar } from './components';
 import { MappedRouter } from '../../routes/RouteGenerator';
 import { authProvider } from '../../service/auth/auth';

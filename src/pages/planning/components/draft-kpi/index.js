@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableDrafKPI from './table-draf-kpi';
-import { actionGetKPI, actionSaveKpi, actionSubmitKpi } from '../../../../redux/actions';
+import { actionGetKPI, actionSaveKpi, actionSubmitKpi, actionGetNotifications } from '../../../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 import globalStyle from '../../../../styles/globalStyles';
 import { getChallengeYourselfChecker, sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
@@ -96,7 +96,7 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSubmitKpi, userReducers, form, ownKpiReducers, stepChange
+      doSubmitKpi, userReducers, form, ownKpiReducers, stepChange, getNotifications
     } = this.props;
     const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const { user } = userReducers.result;
@@ -126,6 +126,7 @@ class DraftKPI extends Component {
               const { status, statusMessage } = submitKpi;
               if (status === Success) {
                 stepChange(2, true); // go to submit page
+                getNotifications();
                 message.success('Your KPI has been submitted to your superior');
               } else {
                 message.warning(`Sorry, ${statusMessage}`);
@@ -330,7 +331,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
   doSubmitKpi: (data, id) => dispatch(actionSubmitKpi(data, id)),
-  getKpiList: (id) => dispatch(actionGetKPI(id))
+  getKpiList: (id) => dispatch(actionGetKPI(id)),
+  getNotifications: () => dispatch(actionGetNotifications())
 });
 
 const connectToComponent = connect(
@@ -343,6 +345,7 @@ export default Form.create({})(withRouter(connectToComponent));
 DraftKPI.propTypes = {
   ownKpiReducers: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
+  getNotifications: PropTypes.func,
   getKpiList: PropTypes.func,
   doSubmitKpi: PropTypes.func,
   setAccess: PropTypes.func,

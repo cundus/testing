@@ -38,6 +38,7 @@ import {
   doSendBackAppraisal,
   doTeamAcknowledge
 } from '../../../../../redux/actions/kpi';
+import { actionGetNotifications } from '../../../../../redux/actions';
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
 import stepKpi from '../../../../../utils/stepKpi';
@@ -249,7 +250,7 @@ class Appraisal extends Component {
   }
 
   handleSendBack = () => {
-    const { sendBackAppraisal, match } = this.props;
+    const { sendBackAppraisal, match, getNotifications } = this.props;
     const { params } = match;
     const {
       dataKpis, dataValueList, generalFeedbackState, teamName
@@ -267,7 +268,7 @@ class Appraisal extends Component {
       };
     });
     const data = {
-      challengeOthersRatingComments: generalFeedbackState || '----------',
+      challengeOthersRatingComments: generalFeedbackState,
       kpiFeedbacks,
       valuesFeedbacks
     };
@@ -290,6 +291,7 @@ class Appraisal extends Component {
           if (statusSendBackAppraisal === Success) {
             history.push('/my-team/appraisal/');
             message.success(`${teamName}'s Appraisal has given feedback`);
+            getNotifications();
           } else {
             message.warning(`Sorry ${messageSendBackAppraisal}`);
           }
@@ -302,7 +304,7 @@ class Appraisal extends Component {
 
   handleApprove = () => {
     const {
-      form, approveAppraisal, match
+      form, approveAppraisal, match, getNotifications
     } = this.props;
     const { params } = match;
     const {
@@ -328,7 +330,7 @@ class Appraisal extends Component {
       rating = this.props.kpiReducers.dataKpiRating.id;
     }
     const data = {
-      challengeOthersRatingComments: generalFeedbackState || '----------',
+      challengeOthersRatingComments: generalFeedbackState,
       kpiFeedbacks,
       rating,
       valuesFeedbacks
@@ -353,6 +355,7 @@ class Appraisal extends Component {
               if (statusApproveAppraisal === Success) {
                 this.getData();
                 message.success(`${teamName}'s Appraisal has been send to system`);
+                getNotifications();
               } else {
                 message.warning(`Sorry ${messageApproveAppraisal}`);
               }
@@ -405,7 +408,7 @@ class Appraisal extends Component {
 
   doAcknowledge = async () => {
     const {
-      match, teamAck
+      match, teamAck, getNotifications
     } = this.props;
     const { params } = match;
     const { acknowledgement, teamName } = this.state;
@@ -426,6 +429,7 @@ class Appraisal extends Component {
               loadingSubmit: true
             });
             this.getData();
+            getNotifications();
             message.success(`${teamName}'s Final Result has been sent`);
           } else {
             message.warning(`Sorry, ${kpiReducers.messageTeamAck}`);
@@ -514,7 +518,12 @@ class Appraisal extends Component {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
                       initialValue: dataKpiRating.id
                     })(
-                      <Select disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) || formStatusId === '3'} style={{ width: 200 }} placeholder="Propose Rating">
+                      <Select
+                        disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
+                          currentStep === stepKpi[6]) || formStatusId === '3'}
+                        style={{ width: 200 }}
+                        placeholder="Propose Rating"
+                      >
                         {dataProposeRating.map((item, index) => {
                           return <Option key={index} value={item.id}>{item.name}</Option>;
                         })}
@@ -543,7 +552,11 @@ class Appraisal extends Component {
                       rules: [{ required: true, message: 'Propose Rating is required' }],
                       initialValue: dataKpiRating.rating || undefined
                     })(
-                      <Select disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] || currentStep === stepKpi[6]) || formStatusId === '3'} style={{ width: 200 }} placeholder="Propose Rating">
+                      <Select
+                        disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
+                          currentStep === stepKpi[6]) || formStatusId === '3'}
+                        style={{ width: 200 }} placeholder="Propose Rating"
+                      >
                         {dataProposeRating.map((item, index) => {
                           return <Option key={index} value={item.id}>{item.name}</Option>;
                         })}
@@ -697,7 +710,8 @@ const mapDispatchToProps = (dispatch) => ({
   getProposeRating: () => dispatch(doGetProposeRating()),
   sendBackAppraisal: (id, data) => dispatch(doSendBackAppraisal(id, data)),
   approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data)),
-  teamAck: (data) => dispatch(doTeamAcknowledge(data))
+  teamAck: (data) => dispatch(doTeamAcknowledge(data)),
+  getNotifications: () => dispatch(actionGetNotifications())
 });
 
 const connectToComponent = connect(
@@ -718,6 +732,7 @@ Appraisal.propTypes = {
   approveAppraisal: PropTypes.func,
   sendBackAppraisal: PropTypes.func,
   getProposeRating: PropTypes.func,
+  getNotifications: PropTypes.func,
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)
 };

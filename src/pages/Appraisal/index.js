@@ -21,8 +21,17 @@ import TableKPI from './ components/kpi';
 import TableValue from './ components/value';
 import CardRating from './ components/cardRating';
 import {
-  doGetKpiList, doAssessment, getValueList, getRatings, saveValueList, doGetKpiRating, doSubmitNext, doEmpAcknowledge, doEmpAcknowledgeList
+  doGetKpiList,
+  doAssessment,
+  getValueList,
+  getRatings,
+  saveValueList,
+  doGetKpiRating,
+  doSubmitNext,
+  doEmpAcknowledge,
+  doEmpAcknowledgeList
 } from '../../redux/actions/kpi';
+import { actionGetNotifications } from '../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
@@ -65,7 +74,9 @@ class Appraisal extends Component {
   };
 
   getOwnKpiList = async (id) => {
-    const { getKpiList, getKpiRating, form, empAcknowledgeList } = this.props;
+    const {
+      getKpiList, getKpiRating, form, empAcknowledgeList
+    } = this.props;
     await getKpiList(id);
     getKpiRating(id);
     const { kpiReducers } = this.props;
@@ -74,6 +85,7 @@ class Appraisal extends Component {
     } = kpiReducers;
     if (currentStep === stepKpi[6] || formStatusId === '3') {
       await empAcknowledgeList();
+      // eslint-disable-next-line react/destructuring-assignment
       const dataEmpAcks = this.props.kpiReducers.dataEmpAckList.list.map((ack) => {
         return {
           label: ack.value,
@@ -82,6 +94,7 @@ class Appraisal extends Component {
       });
       this.setState({
         dataEmpAckOptions: dataEmpAcks,
+        // eslint-disable-next-line react/destructuring-assignment
         dataEmpAckName: this.props.kpiReducers.dataEmpAckList.name
       });
     }
@@ -369,7 +382,7 @@ class Appraisal extends Component {
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
-      doSaveValues, userReducers, form, doAssess, submitNext
+      doSaveValues, userReducers, form, doAssess, submitNext, getNotifications
     } = this.props;
     const { user } = userReducers.result;
     // assessment
@@ -437,6 +450,7 @@ class Appraisal extends Component {
                   if (statusSaveValues === Success) {
                     await submitNext(user.userId);
                     this.getData();
+                    getNotifications();
                     message.success('Your Appraisal has been sent to your Manager');
                     if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                       message.warning(`Sorry, ${messageAssess}`);
@@ -479,7 +493,7 @@ class Appraisal extends Component {
 
   handleSubmitAck = async () => {
     const { finalAck } = this.state;
-    const { empAcknowledge } = this.props;
+    const { empAcknowledge, getNotifications } = this.props;
     confirm({
       title: 'Are you sure?',
       content: '',
@@ -497,6 +511,7 @@ class Appraisal extends Component {
         if (!loadingEmpAck) {
           if (statusEmpAck === Success) {
             this.getData();
+            getNotifications();
             message.success('Your Acknowledgement has been sent');
           } else {
             message.warning(`Sorry, ${messageEmpAck}`);
@@ -617,7 +632,7 @@ class Appraisal extends Component {
         {generalFeedback && generalFeedback.id &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment === '----------' ? '' : generalFeedback.comment}</Paragraph>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
           </div>}
         {formStatusId === '3' &&
         <div style={{
@@ -649,7 +664,13 @@ class Appraisal extends Component {
             <Text strong>{dataEmpAckName}</Text>
             <br />
             <div>
-              <Radio.Group value={finalAck} onChange={this.onChooseFinalAck} disabled={!checkedFinal} size="large" buttonStyle="solid">
+              <Radio.Group
+                value={finalAck}
+                onChange={this.onChooseFinalAck}
+                disabled={!checkedFinal}
+                size="large"
+                buttonStyle="solid"
+              >
                 {dataEmpAckOptions.map((ack) => (
                   <Radio
                     style={{
@@ -685,6 +706,7 @@ const mapDispatchToProps = (dispatch) => ({
   doAssess: (data) => dispatch(doAssessment(data)),
   getValues: (id) => dispatch(getValueList(id)),
   getRatingList: () => dispatch(getRatings()),
+  getNotifications: () => dispatch(actionGetNotifications()),
   getKpiRating: (id) => dispatch(doGetKpiRating(id)),
   doSaveValues: (id, data) => dispatch(saveValueList(id, data)),
   submitNext: (id) => dispatch(doSubmitNext(id)),
@@ -708,6 +730,9 @@ Appraisal.propTypes = {
   getKpiList: PropTypes.func,
   getKpiRating: PropTypes.func,
   submitNext: PropTypes.func,
+  empAcknowledge: PropTypes.func,
+  getNotifications: PropTypes.func,
+  empAcknowledgeList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object)
