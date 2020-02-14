@@ -731,17 +731,20 @@ class Appraisal extends Component {
                 buttonStyle="solid"
               >
                 {dataEmpAckOptions.map((ack) => (
-                  <Radio
+                  <div
                     style={{
-                      display: 'block',
-                      height: '30px',
-                      lineHeight: '30px',
-                      textOverflow: 'ellipsis'
+                      width: '70%',
+                      whiteSpace: 'break-spaces',
+                      display: 'flex'
                     }}
-                    value={ack.value}
                   >
-                    {ack.label}
-                  </Radio>
+                    <Radio
+                      value={ack.value}
+                    />
+                    <p>
+                      {ack.label}
+                    </p>
+                  </div>
                 ))}
               </Radio.Group>
             </div>
