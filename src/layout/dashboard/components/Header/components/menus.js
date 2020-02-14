@@ -1,6 +1,6 @@
 import React from 'react';
 import {
- Menu, List, Typography, Divider, Empty, Icon
+ Menu, Typography, Divider, Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { navigatorManager, navigatorEmp } from '../../../../../utils/navigatorNotif';
@@ -43,8 +43,10 @@ export const notifMenu = (data, userId) => () => {
     const diffDays = Math.round(Math.abs((ndate - ldate) / oneDay));
     const diffWeeks = Math.round(Math.abs((ndate - ldate) / oneWeek));
     const diffMos = Math.round(Math.abs((ndate - ldate) / oneMonth));
-    if (diffDays === 1) {
+    if (diffDays < 1) {
       return 'Today';
+    } else if (diffDays <= 1) {
+      return 'Yesterday';
     } else if (diffDays < 7) {
       return `${diffDays} days ago`;
     } else if (diffWeeks <= 1) {
