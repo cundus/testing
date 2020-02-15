@@ -35,10 +35,11 @@ class MonitorKPI extends Component {
       userId: '',
       isSuperior: false
     };
+    this.getAllData();
   }
 
   componentDidMount() {
-    this.getAllData();
+    // this.getAllData();
   }
 
   getAllData = async () => {

@@ -55,12 +55,9 @@ class CreateKPI extends Component {
 
   getOwnKpiList = async (id) => {
     const {
-      getKpiList, form, access, setAccess
+      getKpiList, form
     } = this.props;
-    if (access) {
-      await getKpiList(id);
-    }
-    setAccess(true);
+    await getKpiList(id);
     const { ownKpiReducers } = this.props;
     const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const { dataOwnId } = this.state;
@@ -342,7 +339,7 @@ class CreateKPI extends Component {
             const { kpiReducers } = this.props;
             if (kpiReducers.statusSaveKPI === Success || kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
-              stepChange(1); // go to draft
+              this.props.history.push('/monitoring'); // go to draft
             } else {
               message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
             }
@@ -541,8 +538,6 @@ export default Form.create({})(withRouter(connectToComponent));
 CreateKPI.propTypes = {
   ownKpiReducers: PropTypes.instanceOf(Object),
   managerKpiReducers: PropTypes.instanceOf(Object),
-  access: PropTypes.bool,
-  setAccess: PropTypes.func,
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,

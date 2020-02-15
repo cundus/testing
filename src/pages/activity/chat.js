@@ -146,7 +146,7 @@ class Chat extends Component {
           <Button type="primary" htmlType="submit" className="login-form-button">Send</Button>
           </Form>
           <center>
-          <Button type="primary" onClick={()=> this.props.history.goBack()} >Back</Button>
+          <Button onClick={()=> this.props.history.goBack()} >Back</Button>
           </center>
       </div>
     );

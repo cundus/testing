@@ -41,7 +41,8 @@ class Dashboard extends React.Component {
         await this.callAndStore();
       }, refresh);
     }
-    await getNotifications();
+    getNotifications();
+    setInterval(() => getNotifications(), 180000);
   }
 
   getToken = async () => {
@@ -96,9 +97,8 @@ class Dashboard extends React.Component {
     const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
     const { collapsed } = this.state;
     const {
-      child, user, logout, getNotifications
+      child, user, logout
     } = this.props;
-    setInterval(() => getNotifications(), 180000);
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
