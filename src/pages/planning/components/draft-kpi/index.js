@@ -44,7 +44,7 @@ class DraftKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducers, getKpiList, form, access, setAccess
+      userReducers, getKpiList, access, setAccess
     } = this.props;
     const { user } = userReducers.result;
     if (access) {
@@ -53,9 +53,6 @@ class DraftKPI extends Component {
     setAccess(true);
     const { ownKpiReducers } = this.props;
     const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
-    form.getFieldValue({
-      dataKpi: dataKpiFiltered
-    });
     this.setState({
       dataSource: dataKpiFiltered,
       isFeedback,
@@ -143,7 +140,6 @@ class DraftKPI extends Component {
   };
 
   handleChange = (row) => {
-    const { form } = this.props;
     const { dataSource } = this.state;
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -151,9 +147,6 @@ class DraftKPI extends Component {
     newData.splice(index, 1, {
       ...item,
       ...row
-    });
-    form.getFieldValue({
-      dataKpi: newData
     });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
@@ -179,12 +172,19 @@ class DraftKPI extends Component {
   }
 
   handleDelete = (key) => {
+    const { form } = this.props;
     const { dataSource } = this.state;
     const data = [...dataSource];
     const newData = data.filter((item) => item.key !== key);
     this.setState({
       dataSource: newData
     });
+    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+    if (dataKpiCheck) {
+      form.setFieldsValue({
+        dataKpi: newData
+      });
+    }
     this.liveCount(newData);
   };
 

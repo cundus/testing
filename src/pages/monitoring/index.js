@@ -43,7 +43,7 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, form, getLatestGoalKpi, match } = this.props;
+    const { userReducers, getKpiList, getLatestGoalKpi, match } = this.props;
     const { params } = match;
     const { userId } = params;
     const { user } = userReducers.result;
@@ -97,9 +97,6 @@ class MonitorKPI extends Component {
         // feedback: itemKpi.othersRatingComments.comment
       };
       newData.push(data);
-    });
-    form.getFieldValue({
-      dataKpi: newData
     });
     this.setState({
       dataSource: newData,
@@ -232,9 +229,6 @@ class MonitorKPI extends Component {
       ...item,
       ...row
     });
-    form.getFieldValue({
-      dataKpi: newData
-    });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
   };
@@ -259,12 +253,19 @@ class MonitorKPI extends Component {
   }
 
   handleDelete = (key) => {
+    const { form } = this.props;
     const { dataSource } = this.state;
     const data = [...dataSource];
     const newData = data.filter((item) => item.key !== key);
     this.setState({
       dataSource: newData
     });
+    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+    if (dataKpiCheck) {
+      form.setFieldsValue({
+        dataKpi: newData
+      });
+    }
     this.liveCount(newData);
   };
 
