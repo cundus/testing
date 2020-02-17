@@ -55,7 +55,7 @@ class CreateKPI extends Component {
 
   getOwnKpiList = async (id) => {
     const {
-      getKpiList, form
+      getKpiList
     } = this.props;
     await getKpiList(id);
     const { ownKpiReducers } = this.props;
@@ -140,9 +140,6 @@ class CreateKPI extends Component {
         return null;
       });
     }
-    form.getFieldValue({
-      dataKpi: newData
-    });
     this.setState({
       dataOwn: newData,
       dataSelectedCascade: newSelectedData,
@@ -152,7 +149,7 @@ class CreateKPI extends Component {
   }
 
   getManagerKpiList = async (id) => {
-    const { getKpiManagerList, form } = this.props;
+    const { getKpiManagerList } = this.props;
     await getKpiManagerList(id);
     const { managerKpiReducers } = this.props;
     const {
@@ -227,9 +224,6 @@ class CreateKPI extends Component {
       };
       newData.push(data);
       return data;
-    });
-    form.getFieldValue({
-      dataManagerKpi: newData
     });
     this.setState({
       dataManagerKpi: newData,
@@ -405,10 +399,17 @@ class CreateKPI extends Component {
   };
 
   handleDeleteRow = (key) => {
+    const { form } = this.props;
     const { dataOwn, dataSelectedCascade } = this.state;
     const data = [...dataOwn];
     const dataFiltered = data.filter((item) => item.key !== key);
     this.setState({ dataOwn: dataFiltered });
+    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+    if (dataKpiCheck) {
+      form.setFieldsValue({
+        dataKpi: dataFiltered
+      });
+    }
     this.liveCount([...dataSelectedCascade, ...dataFiltered]);
   };
 
