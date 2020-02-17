@@ -250,7 +250,7 @@ class CreateKPI extends Component {
     };
     this.setState({
       dataOwn: [...dataOwn, newData],
-      dataOwnId: dataOwnId - 1
+      dataOwnId: dataOwnId + 1
     });
     this.liveCount([...dataOwn, ...dataSelectedCascade, newData]);
   };
