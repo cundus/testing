@@ -42,8 +42,8 @@ class Value extends Component {
     const newColumns = [
       {
         title: 'Section',
-        dataIndex: 'name'
-        // align: 'center'
+        dataIndex: 'name',
+        align: 'center'
       },
       {
         title: 'Ratings',
@@ -85,7 +85,7 @@ class Value extends Component {
       {
         title: 'Upload',
         dataIndex: 'upload',
-        // align: 'center',
+        align: 'center',
         width: 100,
         render: (text, record) => {
           const propsUpload = {

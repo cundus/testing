@@ -41,12 +41,13 @@ class Value extends Component {
     const newColumns = [
       {
         title: 'Section',
-        dataIndex: 'name'
-        // align: 'center'
+        dataIndex: 'name',
+        align: 'center'
       },
       {
         title: 'Ratings',
         dataIndex: 'rating',
+        align: 'center',
         render: (text, record) => {
           const { optionRating } = this.props;
           return (
@@ -67,13 +68,13 @@ class Value extends Component {
         title: 'Remarks/Evidence',
         dataIndex: 'comment',
         placeholder: 'Enter your Remarks here',
-        // eslint-disable-next-line react/destructuring-assignment
+        align: 'center',
         editable: false
       },
       {
         title: 'Upload',
         dataIndex: 'upload',
-        // align: 'center',
+        align: 'center',
         width: 100,
         render: (text, record) => {
           const propsUpload = {

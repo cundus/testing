@@ -28,11 +28,13 @@ class TableAppraisal extends Component {
         title: 'Name',
         dataIndex: 'firstName',
         placeholder: 'name',
+        align: 'center',
         width: 150
       },
       {
         title: 'KPI Title',
         dataIndex: 'kpiTitle',
+        align: 'center',
         placeholder: 'KPI Title',
         width: 300,
         render: (text) => {

@@ -30,10 +30,12 @@ class TableActivity extends Component {
       {
         title: 'Achievement Name',
         dataIndex: 'achievementName',
+        align: 'center',
         placeholder: 'Enter baseline'
       },
       {
         title: 'Achievement Date',
+        align: 'center',
         dataIndex: 'achievementDate'
       }
     ];

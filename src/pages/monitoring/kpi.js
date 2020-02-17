@@ -87,20 +87,18 @@ class TableMonitorKPI extends Component {
                   Achievement
                 </Link>
               </Button>
-              {
-                !isSuperior ?
+              {!isSuperior ?
                 <Popconfirm
-                title="Sure to delete?"
-                // eslint-disable-next-line react/jsx-no-bind
-                onConfirm={() => handleDelete(record.key)}
-              >
-                <Tooltip placement="bottomRight" title="delete">
-                  <Button type="danger" ghost>
-                    <Icon type="delete" />
-                  </Button>
-                </Tooltip>
-              </Popconfirm>: <div></div>
-              }
+                  title="Sure to delete?"
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onConfirm={() => handleDelete(record.key)}
+                >
+                  <Tooltip placement="bottomRight" title="delete">
+                    <Button type="danger" ghost>
+                      <Icon type="delete" />
+                    </Button>
+                  </Tooltip>
+                </Popconfirm> : <div />}
             </div>
           ) : null
         );

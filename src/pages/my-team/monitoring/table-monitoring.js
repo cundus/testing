@@ -15,17 +15,20 @@ class TableMonitoring extends Component {
         title: 'Profile Pic',
         dataIndex: 'userId',
         placeholder: 'Profile',
+        align: 'center',
         action: true,
         render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
       },
       {
         title: 'Name',
         dataIndex: 'firstName',
+        align: 'center',
         placeholder: 'name'
       },
       {
         title: 'KPI Title',
         dataIndex: 'title',
+        align: 'center',
         placeholder: 'KPI Title'
       },
       // {
@@ -46,6 +49,7 @@ class TableMonitoring extends Component {
       {
         title: 'Action',
         dataIndex: 'userId',
+        align: 'center',
         placeholder: 'action',
         action: true,
         render: (text) => (

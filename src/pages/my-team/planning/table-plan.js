@@ -16,16 +16,18 @@ class TablePlan extends Component {
         align: 'center',
         placeholder: 'Profile',
         action: true,
-        render:(text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
+        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />)
       },
       {
         title: 'Name',
         dataIndex: 'firstName',
+        align: 'center',
         placeholder: 'name'
       },
       {
         title: 'KPI Title',
         dataIndex: 'title',
+        align: 'center',
         placeholder: 'KPI Title'
       },
       // {
@@ -46,6 +48,7 @@ class TablePlan extends Component {
       {
         title: 'Status',
         dataIndex: 'status',
+        align: 'center',
         placeholder: 'Status',
         action: true,
         render: (text) => {
@@ -74,10 +77,11 @@ class TablePlan extends Component {
       {
         title: 'Action',
         dataIndex: 'costumAction',
+        align: 'center',
         placeholder: 'action',
         action: true,
         render: (text) => (
-          <Button type={'primary'} disabled={isNaN(text.status) || text.status !== 1}>
+          <Button type="primary" disabled={isNaN(text.status) || text.status !== 1}>
             <Link to={`/my-team/planning/${text.idUser}`}>
               View
             </Link>

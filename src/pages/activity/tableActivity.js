@@ -30,10 +30,12 @@ class TableActivity extends Component {
       {
         title: 'Thread',
         dataIndex: 'name',
+        align: 'center',
         placeholder: 'Enter baseline'
       },
       {
         title: 'Last Reply',
+        align: 'center',
         dataIndex: 'lastMessage'
       },
       {
