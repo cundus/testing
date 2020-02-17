@@ -1,32 +1,37 @@
 import React from 'react';
 import {
-  Layout, Menu, Row, Col, Icon, Typography, Avatar, Dropdown
+  Layout, Menu, Row, Col, Icon, Typography, Avatar, Dropdown, Badge
 } from 'antd';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
+import styles from './Header.styles';
+
 
 const { Text } = Typography;
 const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
+  const {
+    collapsed, toggle, history, isAllowToMonitor, logout, notificationReducers
+  } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
-  const pathlocation = props.history.location.pathname;
-  // eslint-disable-next-line react/prop-types
-  const { collapsed, toggle } = props;
+  const pathlocation = history.location.pathname;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = uId ? `${REACT_APP_API_URL}/user/photo/${uId}` : '';
+  const url = uId && `${REACT_APP_API_URL}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
+
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
@@ -48,8 +53,12 @@ const Header = (props) => {
               // check is has child
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
+                const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
                 return (
-                  <Menu.Item key={`${menu.path}`} disabled={menu.disabled|| false} >
+                  <Menu.Item
+                    key={`${menu.path}`}
+                    disabled={isDisabled}
+                  >
                     <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
                 );
@@ -64,8 +73,13 @@ const Header = (props) => {
                     }
                   >
                     {childsRoutes.map((menuChild) => {
+                      const isDisabled = isAllowToMonitor &&
+                      (menu.title === 'Monitoring' || menu.title === 'Appraisal');
                       return (
-                        <Menu.Item key={`${menuChild.path}`} disabled={menuChild.disabled|| false}>
+                        <Menu.Item
+                          key={`${menuChild.path}`}
+                          disabled={isDisabled}
+                        >
                           <Link to={menuChild.path}>
                             <Icon
                               type={`${menuChild.icon}`}
@@ -85,34 +99,48 @@ const Header = (props) => {
         </Col>
         <Col xs={10} sm={10} md={10} lg={8}>
           <Link to="/">
-            <img src={Logo} alt="logo" style={isDesktopOrLaptop ? {} : { width: 'auto', height: 40 }} />
+            <img
+              src={Logo}
+              alt="logo"
+              style={isDesktopOrLaptop ? {} : styles.logo}
+            />
           </Link>
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
-          {/* <Menu theme="light" mode="horizontal" className="menuWrapper"> */}
           <Row type="flex" justify="space-between" align="middle">
-            <Dropdown overlay={notifMenu} placement="bottomRight">
-              <Icon style={{ fontSize: 18 }} type="bell" />
+            <Dropdown
+              overlay={notifMenu(notificationReducers.data, uId)}
+              trigger={['hover', 'click']}
+              placement="bottomCenter"
+            >
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a id="account-link" href="#">
+                <div>
+                  <Badge count={notificationReducers.data.length} overflowCount={20}>
+                    <Icon style={{ fontSize: 18 }} type="bell" />
+                  </Badge>
+                </div>
+              </a>
             </Dropdown>
-            <Dropdown overlay={langMenu} placement="bottomRight">
+            <Dropdown overlay={langMenu} placement="bottomCenter">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
-            <a>
-            <Dropdown overlay={()=>accountMenu(props.logout)} placement="bottomRight">
-              <div className="accountWrapper">
-                {isDesktopOrLaptop && <Text>{`Hi, ${name}`}</Text>}
-                <Avatar
-                  shape="square"
-                  size={isDesktopOrLaptop ? 'large' : 'default'}
-                  src={url}
-                  icon="user"
-                  className="avatar"
-                />
-              </div>
+            <Dropdown trigger={['hover', 'click']} overlay={accountMenu(logout)} placement="bottomLeft">
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <a id="account-link" href="#">
+                <div className="accountWrapper">
+                  {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
+                  <Avatar
+                    shape="square"
+                    size={isDesktopOrLaptop ? 'large' : 'default'}
+                    src={url}
+                    icon="user"
+                    className="avatar"
+                  />
+                </div>
+              </a>
             </Dropdown>
-            </a>
           </Row>
-          {/* </Menu> */}
         </Col>
       </Row>
     </Layout.Header>
@@ -122,9 +150,21 @@ const Header = (props) => {
 
 const mapStateToProps = (state) => ({
   auth: state.authReducer,
-  user: state.userReducers
+  user: state.userReducers,
+  step: state.userKpiStateReducers,
+  notificationReducers: state.notificationReducers
 });
 const connectToComponent = connect(mapStateToProps)(Header);
 
 
 export default withRouter(connectToComponent);
+
+
+Header.propTypes = {
+  history: PropTypes.instanceOf(Object),
+  collapsed: PropTypes.bool,
+  toggle: PropTypes.func,
+  notificationReducers: PropTypes.instanceOf(Object),
+  isAllowToMonitor: PropTypes.bool,
+  logout: PropTypes.func
+};

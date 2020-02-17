@@ -6,17 +6,21 @@ import {
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
-  Step, CreateKpi, DraftKpi, SubmitKpi, ReviewKpi
+  Step, CreateKpi, DraftKpi, SubmitKpi
 } from './components';
-import { doGetKpiList } from '../../redux/actions/kpi';
+import { actionGetKPI } from '../../redux/actions';
+import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
+import { Success } from '../../redux/status-code-type';
 
 class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0,
+      step: null,
       loading: true,
-      error: false
+      error: false,
+      access: false
     };
     this.getKpi();
   }
@@ -32,17 +36,21 @@ class Planning extends Component {
     const {
       errMessage, dataKpi, status, currentStep
     } = kpiReducers;
-    if (status === 0) {
-      if (currentStep === 'Emp Goal Setting') {
+    if (status === Success) {
+      if (currentStep === stepKpi[0]) {
         if (dataKpi.length === 0) {
+          // Fill KPI Form
           this.stepChange(0);
         } else {
+          // Draft KPI
           this.stepChange(1);
         }
       } else {
-        this.stepChange(2, true);
+        // Submitted KPI
+        this.stepChange(2);
       }
     } else {
+      // Error
       this.stepChange(null);
       message.warning(`Sorry, ${errMessage}`);
       this.setState({
@@ -54,83 +62,69 @@ class Planning extends Component {
     });
   }
 
-  stepChange = (target, access) => {
-    const { step } = this.state;
-    if (target !== null) {
-      if (step === 0 || step === 1) {
-        if (target === 0) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 1) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 2 && access) {
-          this.setState({
-            step: target
-          });
-        } else if (target === 3 && access) {
-          this.setState({
-            step: target
-          });
-        } else {
-          message.warning('Sorry, You can\'t go to next step');
-        }
-      } else if (step === 3) {
-        if (target === 1 && access) {
-          this.setState({
-            step: target
-          });
-        } else {
-          message.warning('Sorry, You can\'t go back to previous step');
-        }
-      } else if (step === 2) {
-        if (target === 3) {
-          message.warning('Sorry, You can\'t go to next step');
-        } else {
-          message.warning('Sorry, You can\'t go back to previous step');
-        }
-      }
-    }
-  };
+  stepChange = (target) => {
+    this.setState({
+      step: target
+    });
+  }
+
+  setAccess = (access) => {
+    this.setState({
+      access
+    });
+  }
 
   render() {
     const {
-      step, loading, error
+      step, loading, error, access
     } = this.state;
-    const { stepChange } = this;
+    const { stepChange, setAccess } = this;
     const { kpiReducers, history } = this.props;
     const {
       errMessage, status
     } = kpiReducers;
-    if (error) {
-      return (
-        <Result
-          status={status}
-          title={status}
-          subTitle={`Sorry, ${errMessage}`}
-          // eslint-disable-next-line react/jsx-no-bind
-          extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
-        />
-      );
+    if (!error) {
+      if (step === 0) {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} />
+              <CreateKpi stepChange={stepChange} access={access} setAccess={setAccess} />
+            </div>}
+          </div>
+        );
+      } else if (step === 1) {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} />
+              <DraftKpi stepChange={stepChange} access={access} setAccess={setAccess} />
+            </div>}
+          </div>
+        );
+      } else {
+        return (
+          <div style={{ ...globalStyle.contentContainer, padding: 0 }}>
+            {loading ? <center><Spin /></center> :
+            <div>
+              <Step step={step} stepChange={stepChange} />
+              <SubmitKpi stepChange={stepChange} access={access} setAccess={setAccess} />
+            </div>}
+          </div>
+        );
+      }
     } else {
       return (
-        <div>
-          {loading ? <center><Spin /></center> :
-          <div>
-            <Step step={step} stepChange={stepChange} />
-            {/* eslint-disable-next-line no-nested-ternary */}
-            {step === 0 ?
-              <CreateKpi stepChange={stepChange} /> :
-          // eslint-disable-next-line no-nested-ternary
-          step === 1 ?
-            <DraftKpi stepChange={stepChange} /> :
-            step === 2 ?
-              <SubmitKpi stepChange={stepChange} /> :
-              step === 3 &&
-              <ReviewKpi stepChange={stepChange} />}
-          </div>}
+        <div style={globalStyle.contentContainer}>
+          <Result
+            status={status}
+            title={status}
+            subTitle={`Sorry, ${errMessage}`}
+            // eslint-disable-next-line react/jsx-no-bind
+            extra={<Button type="primary" onClick={() => history.push('/home')}>Back Home</Button>}
+          />
         </div>
       );
     }
@@ -143,7 +137,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getKpiList: (id) => dispatch(doGetKpiList(id))
+  getKpiList: (id) => dispatch(actionGetKPI(id))
 });
 
 const connectToComponent = connect(

@@ -49,3 +49,11 @@ export const submitNext = (id) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const submitToPreviousStep = (id) => customAxios({
+  url: `/kpi/submitToPreviousStep/${id}?comment=kpi was submitted`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});

@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
-import { Avatar, Button } from 'antd';
-import DataTable from '../../../components/dataTable/index';
+import {
+  Avatar, Button, Skeleton, Typography, Tag
+} from 'antd';
+import { withRouter } from 'react-router-dom';
+import DataTable from '../../../components/dataTable';
+
+const { Text } = Typography;
 
 const {
   REACT_APP_API_URL
@@ -14,78 +19,138 @@ class TableAppraisal extends Component {
         title: 'Profile Pic',
         dataIndex: 'userId',
         placeholder: 'Profile',
+        width: 100,
+        align: 'center',
         action: true,
-        render: (text) => {
-          return (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />);
-        }
+        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />)
       },
       {
         title: 'Name',
         dataIndex: 'firstName',
-        placeholder: 'name'
+        placeholder: 'name',
+        align: 'center',
+        width: 150
       },
       {
         title: 'KPI Title',
-        dataIndex: 'title',
-        placeholder: 'KPI Title'
+        dataIndex: 'kpiTitle',
+        align: 'center',
+        placeholder: 'KPI Title',
+        width: 300,
+        render: (text) => {
+          return (
+            <Skeleton active loading={text === 'loading'} paragraph={false} title={{ width: '100%' }}>
+              <Text>{text || '(none)'}</Text>
+            </Skeleton>
+          );
+        }
       },
       {
         title: 'KPI Score',
         dataIndex: 'score',
-        placeholder: 'Score'
+        placeholder: 'Score',
+        width: 100,
+        align: 'center',
+        render: (text) => {
+          return (
+            <Skeleton active loading={text === 'loading'} paragraph={false} title={{ width: '100%' }}>
+              <Text>{text || '(none)'}</Text>
+            </Skeleton>
+          );
+        }
       },
       {
         title: 'KPI Rating',
-        dataIndex: 'ratting',
-        placeholder: 'Rating'
+        dataIndex: 'rating',
+        placeholder: 'Rating',
+        width: 100,
+        align: 'center',
+        render: (text) => {
+          return (
+            <Skeleton active loading={text === 'loading'} paragraph={false} title={{ width: '100%' }}>
+              <Text>{text || '(none)'}</Text>
+            </Skeleton>
+          );
+        }
       },
       {
-        title: 'Non-KPI Result',
-        dataIndex: 'result',
-        placeholder: 'Non-KPI Result'
+        title: 'Status',
+        dataIndex: 'statusNumber',
+        placeholder: 'Status',
+        width: 100,
+        align: 'center',
+        render: (text, record) => {
+          let color = '';
+          if (text === 6) {
+            color = '#4CAF50';
+          } else if (text === 5) {
+            color = '#FFA000';
+          } else if (text === 4) {
+            color = '#8BC34A';
+          } else if (text === 3) {
+            color = '#FFEB3B';
+          } else if (text === 2) {
+            color = '#607D8B';
+          } else {
+            color = '#ccc';
+          }
+          return (
+            <Skeleton active loading={text === 'loading'} paragraph={false} title={{ width: '100%' }}>
+              <Tag color={color}>{record.status || 'N/A'}</Tag>
+            </Skeleton>
+          );
+        }
       },
       {
         title: 'Action',
-        dataIndex: 'userId',
+        dataIndex: 'action',
         placeholder: 'action',
+        width: 100,
+        align: 'center',
         action: true,
-        render: (text) => (<Button type={'primary'}>Appraisal</Button>)
+        render: (text, record) => {
+          let access = false;
+          if (record.statusNumber === 6) {
+            access = true;
+          } else if (record.statusNumber === 5) {
+            access = true;
+          } else if (record.statusNumber === 4) {
+            access = true;
+          } else if (record.statusNumber === 3) {
+            access = true;
+          } else if (record.statusNumber === 1 || record.statusNumber === 2) {
+            access = false;
+          } else {
+            access = false;
+          }
+          return (
+            <Button
+              type="primary"
+              disabled={!access}
+              // eslint-disable-next-line react/jsx-no-bind
+              onClick={() => this.props.history.push(`/my-team/appraisal/${record.userId}`)}
+            >
+              View
+            </Button>
+          );
+        }
       }
     ];
-
-    this.state = {
-      dataSource: []
-    };
-  }
-
-  componentDidMount() {
-    this.getAllData();
-  }
-
-  getAllData = () => {
-    const team = this.props;
-    const { result } = team;
-    this.setState(
-      {
-        dataSource: result,
-      }
-    );
   }
 
   render() {
-    const { dataSource } = this.state;
+    const { dataSource, loading } = this.props;
     const { columns } = this;
     return (
       <div>
-        {/* <Layout> */}
         <DataTable
           columns={columns}
+          loading={loading}
           datasource={dataSource}
         />
-        {/* </Layout> */}
       </div>
     );
   }
 }
 
-export default TableAppraisal;
+export default withRouter(TableAppraisal);

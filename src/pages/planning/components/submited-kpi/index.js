@@ -11,7 +11,10 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableSubmitedKPI from './table-submited-kpi';
-import { doGetKpiList } from '../../../../redux/actions/kpi';
+import { actionGetKPI } from '../../../../redux/actions';
+import globalStyle from '../../../../styles/globalStyles';
+import stepKpi from '../../../../utils/stepKpi';
+import { getChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -23,7 +26,7 @@ class SubmitedKPI extends Component {
       dataSource: [],
       weightTotal: 0,
       challengeYour: '',
-      isFeedback: false
+      isFeedback: true
     };
   }
 
@@ -32,48 +35,22 @@ class SubmitedKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList } = this.props;
+    const {
+      userReducers, getKpiList, access, setAccess
+    } = this.props;
     const { user } = userReducers.result;
-    await getKpiList(user.userId);
-    const { kpiReducers } = this.props;
-    const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
-    const newData = [];
-
-    // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
-    dataKpi.map((itemKpi) => {
-      if (itemKpi.othersRatingComments.id) {
-        this.setState({ isFeedback: true });
-      }
-      let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-          metric.achievementText : metric.achievementNumeric}"}`;
-      });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
-      const data = {
-        key: itemKpi.id,
-        id: itemKpi.id,
-        cascadeType: itemKpi.cascadeType,
-        cascadeName: itemKpi.cascadeName,
-        // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
-        kpi: itemKpi.name,
-        baseline: itemKpi.baseline,
-        weight: itemKpi.weight,
-        achievementType: itemKpi.achievementType,
-        metrics: dataKpiMetrics,
-        ...dataMetrics,
-        feedback: itemKpi.othersRatingComments.comment
-      };
-      newData.push(data);
-    });
+    if (access) {
+      await getKpiList(user.userId);
+    }
+    setAccess(true);
+    const { ownKpiReducers } = this.props;
+    const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
     this.setState({
-      dataSource: newData,
-      challengeYour: challenge
+      dataSource: dataKpiFiltered,
+      isFeedback,
+      challengeYour: getChallengeYourselfChecker(challenge)
     });
-    this.weightCount(newData);
+    this.weightCount(dataKpiFiltered);
   };
 
   weightCount = (data) => {
@@ -81,11 +58,15 @@ class SubmitedKPI extends Component {
     // eslint-disable-next-line array-callback-return
     data.map((itemKpi) => {
       if (itemKpi.weight) {
-        totalWeight += itemKpi.weight;
+        const weight = parseFloat(itemKpi.weight);
+        if (weight) {
+          totalWeight += weight;
+        }
       } else {
         totalWeight += 0;
       }
     });
+    totalWeight = parseFloat(totalWeight);
     if (typeof totalWeight === 'number') {
       if (totalWeight === 100) {
         this.setState({
@@ -105,75 +86,85 @@ class SubmitedKPI extends Component {
     const {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
-    const { kpiReducers } = this.props;
+    const { ownKpiReducers } = this.props;
     const {
       loadingKpi, dataKpiMetrics, generalFeedback, currentStep
-    } = kpiReducers;
+    } = ownKpiReducers;
     return (
       <div>
-        <div>
-          <Divider />
-          <Text strong>Submit KPI </Text>
-          <Text>Submit KPI to your Superior</Text>
-          <br />
-          <Text type={weightTotalErr ? 'danger' : ''}>
-            Total KPI Weight :
-            {` ${weightTotal}%`}
-          </Text>
-          <Divider />
-        </div>
-        {!loadingKpi ?
+        <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
           <div>
-            <TableSubmitedKPI
-              dataMetrics={dataKpiMetrics}
-              dataSource={dataSource}
-              loading={loadingKpi}
-              isFeedback={isFeedback}
-            />
+            <Divider />
+            <Text strong>Submit KPI </Text>
+            <Text>Submit KPI to your Superior</Text>
+            <br />
+            <Text type={weightTotalErr ? 'danger' : ''}>
+              Total KPI Weight :
+              {` ${weightTotal}%`}
+            </Text>
+            <Divider />
+          </div>
+          {!loadingKpi ?
             <div>
-              <Text strong>Challenge yourself :</Text>
-              <TextArea
-                id="challenge-input"
-                placeholder="Challenge yourself"
-                label="Challenge yourself"
-                value={challengeYour}
-                disabled
+              <TableSubmitedKPI
+                dataMetrics={dataKpiMetrics}
+                dataSource={dataSource}
+                loading={loadingKpi}
+                isFeedback={isFeedback}
               />
-            </div>
-            {generalFeedback.comment &&
-              <div style={{
-                marginTop: 20,
-                paddingBottom: 10,
-                paddingTop: 10,
-                backgroundColor: 'rgb(250, 247, 187)',
-                overflow: 'hidden'
-              }}
+              <div>
+                <Text strong>Challenge yourself :</Text>
+                <TextArea
+                  id="challenge-input"
+                  placeholder="Challenge yourself"
+                  label="Challenge yourself"
+                  value={challengeYour}
+                  disabled
+                />
+              </div>
+            </div> : <center><Spin /></center>}
+        </div>
+        {generalFeedback.comment &&
+          <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
+            <Text strong>General Feedback :</Text>
+            <Paragraph>{generalFeedback.comment}</Paragraph>
+          </div>}
+        <center>
+          <div style={{
+            ...globalStyle.contentContainer,
+            textAlign: 'center',
+            borderRadius: 0,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5
+          }}
+          >
+            {currentStep === stepKpi[1] &&
+              <Button
+                style={{ margin: 10, borderColor: 'yellow' }}
               >
-                <Text strong>General Feedback :</Text>
-                <Paragraph>{generalFeedback.comment}</Paragraph>
-              </div>}
-            <center>
-              {currentStep !== 'Emp Goal Setting' && currentStep !== 'Manager Goal Review' &&
+                <Text strong warning>Waiting for Review</Text>
+              </Button>}
+            {currentStep !== stepKpi[0] && currentStep !== stepKpi[1] &&
               <Button
                 style={{ margin: 10, borderColor: '#52c41a' }}
               >
                 <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
                 <Text strong>Your KPI Approved</Text>
               </Button>}
-            </center>
-          </div> : <center><Spin /></center>}
+          </div>
+        </center>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  ownKpiReducers: state.ownKpi
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getKpiList: (id) => dispatch(doGetKpiList(id))
+  getKpiList: (id) => dispatch(actionGetKPI(id))
 });
 
 const connectToComponent = connect(
@@ -184,8 +175,9 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 SubmitedKPI.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object)
-  // history: PropTypes.instanceOf(Object).isRequired
+  userReducers: PropTypes.instanceOf(Object),
+  ownKpiReducers: PropTypes.instanceOf(Object),
+  access: PropTypes.bool,
+  setAccess: PropTypes.func
 };

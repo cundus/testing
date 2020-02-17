@@ -7,15 +7,23 @@ export const metricValidator = (data) => [
     validator: async (rule, value, callback, source) => {
       const { record } = data;
       let dataMetrics = record.metrics.map((metric) => {
-        return `{"${metric.label}":
-        "${data.form.getFieldValue(
-          `${data.type}[${data.indexarr}].${metric.label}`
-          )}"}`;
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      Object.keys(dataMetrics).map((newData, newIndex) => {
+        return record.metrics.map((metric) => {
+          if (newData === metric.label) {
+            dataMetrics[newData] = `${data.form.getFieldValue(
+              `${data.type}[${data.indexarr}].${metric.label}`
+              )}`;
+            return dataMetrics;
+          }
+          return null;
+        });
+      });
       let isFilled = true;
       let isError = false;
       let isSortedAsc = false;
@@ -121,15 +129,23 @@ export const metricValidatorText = (data) => [
     validator: async (rule, value, callback, source) => {
       const { record } = data;
       let dataMetrics = record.metrics.map((metric) => {
-        return `{"${metric.label}":
-        "${data.form.getFieldValue(
-          `${data.type}[${data.indexarr}].${metric.label}`
-          )}"}`;
+        return `{"${metric.label}":""}`;
       });
       dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
       dataMetrics = dataMetrics.reduce((result, current) => {
         return Object.assign(result, current);
       }, {});
+      Object.keys(dataMetrics).map((newData, newIndex) => {
+        return record.metrics.map((metric) => {
+          if (newData === metric.label) {
+            dataMetrics[newData] = `${data.form.getFieldValue(
+              `${data.type}[${data.indexarr}].${metric.label}`
+              )}`;
+            return dataMetrics;
+          }
+          return null;
+        });
+      });
       let isFilled = true;
       const datas = Object.keys(dataMetrics);
       const datass = Object.values(dataMetrics);

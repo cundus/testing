@@ -4,6 +4,7 @@ import {
   Input,
   Form,
   Select,
+  Empty,
   Typography
 } from 'antd';
 import PropTypes from 'prop-types';
@@ -22,7 +23,14 @@ class EditableCell extends React.Component {
   change = (index, field) => {
     const { record, handlechange, form } = this.props;
     setTimeout(() => form.validateFields(field, (errors, values) => {
-      const item = values.dataKpi[index];
+      let item = {};
+      if (record.cascadeType === 1) {
+        item = values.dataManagerKpi[index];
+      } else if (record.cascadeType === 0) {
+        item = values.dataKpi[index];
+      } else {
+        item = values.dataGeneral[index];
+      }
       handlechange({
         ...record,
         ...item
@@ -65,8 +73,10 @@ class EditableCell extends React.Component {
     let type = '';
     if (cascadeType === 1) {
       type = 'dataManagerKpi';
-    } else {
+    } else if (cascadeType === 0) {
       type = 'dataKpi';
+    } else {
+      type = 'dataGeneral';
     }
     let valueType = 'Select type"';
     if (record.achievementType === 0) {
@@ -83,6 +93,7 @@ class EditableCell extends React.Component {
       form,
       record
     };
+
     if (index === 'kpi') { // kpi contain type of metrics
       const field = [];
       for (let a = 0; a < data.indexlength; a++) {
@@ -103,7 +114,7 @@ class EditableCell extends React.Component {
               size="small"
               defaultValue={valueType}
               placeholder="Select type"
-              onChange={this.changeSwitch(metricField, indexarr)}
+              onChange={this.changeSwitch(metricField, indexarr, indexlength)}
               style={{ width: '80%', color: valueType === 'Quantitative' ? '#52c41a' : '#' }}
             >
               <Option key="Qualitative"><Text style={{}}>Qualitative</Text></Option>
@@ -127,7 +138,26 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (index === 'feedback') { // Feedback
+    } else if (index === 'feedback') { // Feedback && Comment
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            // rules: validator(data),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              style={{ background: '#EDEAA6', border: 0 }}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (index === 'comment') { // Feedback && Comment
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -166,7 +196,7 @@ class EditableCell extends React.Component {
     } else if (isMetric.length !== 0) {
       const field = [];
       record.metrics.map((metricLabel) => {
-        field.push(`${type}[${indexarr}].${metricLabel.label}`);
+        return field.push(`${type}[${indexarr}].${metricLabel.label}`);
       });
       return (
         <Form.Item style={{ margin: 0 }}>
@@ -226,13 +256,16 @@ class EditableCell extends React.Component {
             <Text style={{ width: '20%' }}>Type:</Text>
             <Select
               size="small"
+              id="type-kpi"
               defaultValue={valueType}
               placeholder="Select type"
               style={{ width: '80%', color: valueType === 'Quantitative' ? '#9ced74' : '#' }}
               disabled
             >
-              <Option key="Qualitative">Qualitative</Option>
-              <Option key="Quantitative"><Text style={{ color: '#52c41a' }}>Quantitative</Text></Option>
+              <Option id="type-kpi-qualitative" key="Qualitative">Qualitative</Option>
+              <Option id="type-kpi-quantitative" key="Quantitative">
+                <Text style={{ color: '#52c41a' }}>Quantitative</Text>
+              </Option>
             </Select>
           </div>
           <div className="editable-cell-value-wrap">
@@ -296,7 +329,8 @@ const DataTable = (props) => {
       handlechange,
       columns,
       loading,
-      form
+      form,
+      emptytext
     } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -332,6 +366,12 @@ const DataTable = (props) => {
         form={form}
         loading={loading}
         components={components}
+        locale={{
+          emptyText: <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description={emptytext || 'No Data'}
+          />
+        }}
         rowClassName="editable-row"
         bordered
         dataSource={datasource}
@@ -347,6 +387,7 @@ const DataTable = (props) => {
 export default DataTable;
 
 DataTable.propTypes = {
+  emptytext: PropTypes.string,
   datasource: PropTypes.instanceOf(Array),
   handlechange: PropTypes.func,
   loading: PropTypes.bool,

@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TablePlanning from './table-plan';
 import { GetMyTeamKPI } from '../../../redux/actions/user';
+import globalStyle from '../../../styles/globalStyles';
 
 const { Text } = Typography;
 
@@ -12,12 +13,14 @@ class Planning extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataSource: []
+      dataSource: [],
+      loading: false
     };
   }
 
   async componentDidMount() {
     const { getMyTeamKPI } = this.props;
+    this.setState({loading:true});
     await getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
     const newData = this.props.myteam.result.map( d => {
       d.costumAction = {
@@ -26,16 +29,16 @@ class Planning extends Component {
       };
       return d;
     });
-    this.setState({ dataSource: newData });
+    this.setState({ dataSource: newData, loading: false });
   }
 
   render() {
     const { myteam } = this.props;
     const { dataSource, form } = this.state;
     return(
-      <div>
+      <div style={globalStyle.contentContainer}>
         {
-          (Object.keys(dataSource).length > 0 )?
+          !this.state.loading?
             <div>
               <div>
                 <Divider />

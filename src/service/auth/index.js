@@ -23,8 +23,18 @@ export const getUserDetail = (idUser) => customAxios({
   }
 });
 
+export const getKPIstate = () => customAxios({
+  url: '/kpi/current-step',
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+})
+
 export const getMyTeam = (idUser) => customAxios({
-  url: `/user/team/${idUser}`,
+  url: `/user/teamkpi/${idUser}/planning`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
@@ -32,6 +42,37 @@ export const getMyTeam = (idUser) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const getMyTeamMonitoring = (idUser) => customAxios({
+  url: `/user/teamkpi/${idUser}/monitoring`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+export const getMyTeamApraisal = (idUser) => customAxios({
+  url: `/user/teamkpi/${idUser}/appraisal`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
+export const getMyTeamApraisalDetail = (idUser) => customAxios({
+  url: `/user/team/appraisal/detail/${idUser}`,
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});
+
 
 export const getMyTeamDetailKPI = (idUser) => customAxios({
   url: `/user/team/kpi/detail/${idUser}`,

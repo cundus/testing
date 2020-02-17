@@ -89,3 +89,29 @@
 th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
   vertical-align: middle;
 }
+
+.ant-form-item-label {
+  line-height: 20px;
+}
+
+@media (max-width: 480px) {
+  .ant-steps-navigation{
+  }
+}
+
+.link-nav-notif{
+  :hover {
+    background-color: red;
+  }
+}
+
+.ant-list-bordered.ant-list-sm {
+  .ant-list-item {
+  padding-right: 0;
+  padding-left: 0;
+}
+}
+
+.ant-upload-list {
+  text-align: left;
+}

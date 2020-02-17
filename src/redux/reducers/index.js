@@ -6,6 +6,17 @@ import myteamReducers from './myTeam';
 import myTeamDetailReducers from './myTeamDetail';
 import userDetailReducers from './userDetail';
 import feedbackReducers from './feedback';
+import userKpiStateReducers from './kpiState';
+import ActivityReducers from './activity';
+import ActivityStatusReducers from './statusActivity';
+import ActivityChatReducers from './activityChat';
+import AchievementReducers from './achivement';
+import AppraisalReducers from './appraisal';
+import notificationReducers from './notifications';
+import {
+  ownKpi, managerKpi, saveKpi, submitKpi
+} from './kpi/';
+
 export default combineReducers({
   authReducer,
   userReducers,
@@ -13,5 +24,16 @@ export default combineReducers({
   myteamReducers,
   myTeamDetailReducers,
   userDetailReducers,
-  feedbackReducers
+  feedbackReducers,
+  userKpiStateReducers,
+  ActivityReducers,
+  ActivityStatusReducers,
+  ActivityChatReducers,
+  AchievementReducers,
+  AppraisalReducers,
+  ownKpi,
+  managerKpi,
+  saveKpi,
+  submitKpi,
+  notificationReducers
 });

@@ -3,7 +3,9 @@ import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import MenuList from '../../../../routes/MenuList';
+import styles from './Sidebar.styles';
 
 const { Sider } = Layout;
 
@@ -12,21 +14,21 @@ const Sidebar = (props) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
-  const { collapsed, toggle } = props;
+  const { collapsed, toggle, isAllowToMonitor } = props;
   const isManager = _.get(props, 'user.result.user.manager', false);
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
   return (
     <Sider
-      style={{ zIndex: 1, boxShadow: '0px 1px 9px -3px rgba(0, 0, 0, 0.75)' }}
+      style={styles.sidebarContainer}
       trigger={null}
       collapsible
       collapsedWidth={0}
       collapsed={collapsed}
     >
       <Menu
-        style={{ width: 275, height: '100vh' }}
+        style={styles.sidebarMenuWrapper}
         selectedKeys={[pathlocation]}
         mode="inline"
         theme="light"
@@ -34,12 +36,7 @@ const Sidebar = (props) => {
         <div style={{ padding: 4, textAlign: 'right' }}>
           <Icon
             type="close"
-            style={{
-              color: 'white',
-              background: 'lightgray',
-              padding: 4,
-              borderRadius: 4
-            }}
+            style={styles.sidebarIconClose}
             onClick={toggle}
           />
         </div>
@@ -49,11 +46,13 @@ const Sidebar = (props) => {
             (menuChild) => menuChild.parent === menu.title
           );
           if (childsRoutes.length === 0) {
+            const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
             return (
-              <Menu.Item key={`${menu.path}`}>
-                <Link to={menu.path} onClick={toggle}>
-                  {menu.title}
-                </Link>
+              <Menu.Item
+                key={`${menu.path}`}
+                disabled={isDisabled}
+              >
+                <Link to={menu.path} onClick={toggle}>{menu.title}</Link>
               </Menu.Item>
             );
           } else {
@@ -65,8 +64,12 @@ const Sidebar = (props) => {
                 }
               >
                 {childsRoutes.map((menuChild) => {
+                  const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
                   return (
-                    <Menu.Item key={`${menuChild.path}`}>
+                    <Menu.Item
+                      key={`${menuChild.path}`}
+                      disabled={isDisabled}
+                    >
                       <Link to={menuChild.path} onClick={toggle}>
                         <Icon
                           type={`${menuChild.icon}`}
@@ -94,3 +97,9 @@ const mapStateToProps = (state) => ({
 const connectToComponent = connect(mapStateToProps)(Sidebar);
 
 export default connectToComponent;
+
+Sidebar.propTypes = {
+  collapsed: PropTypes.bool,
+  toggle: PropTypes.func,
+  isAllowToMonitor: PropTypes.bool
+};

@@ -25,11 +25,13 @@ class TableEditMyKPI extends Component {
       {
         title: 'Baseline',
         dataIndex: 'baseline',
+        align: 'center',
         placeholder: 'Enter baseline'
       },
       {
         title: 'Weight (100%)',
         dataIndex: 'weight',
+        align: 'center',
         placeholder: 'Enter KPI Weight',
         type: 'number'
       }
@@ -47,6 +49,7 @@ class TableEditMyKPI extends Component {
     newColumns.push({
       title: 'Feedback',
       dataIndex: 'feedback',
+      align: 'center',
       placeholder: 'Feedback',
       editable: true
     });

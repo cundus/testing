@@ -7,8 +7,11 @@ import {
 import {
   GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
 } from '../../../redux/actions/user';
+import { actionGetNotifications } from '../../../redux/actions';
 import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
+import globalStyle from '../../../styles/globalStyles';
+import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -45,13 +48,22 @@ class PlanningDetail extends Component {
         let dataMetrics;
         if (itemKpi.metricLookup !== null) {
           dataMetrics = itemKpi.metricLookup.map((metric) => {
-            return `{"${metric.label}":"${itemKpi.achievementType === 0 ?
-              metric.achievementText : metric.achievementNumeric}"}`;
+            return `{"${metric.label}":""}`;
           });
           dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
           dataMetrics = dataMetrics.reduce((result, current) => {
             return Object.assign(result, current);
           }, {});
+          Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+            return itemKpi.metricLookup.map((metric) => {
+              if (newDataMetric === metric.label) {
+                dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+                  metric.achievementText : metric.achievementNumeric}`;
+                return dataMetrics;
+              }
+              return null;
+            });
+          });
         }
         const data = {
           key: itemKpi.id,
@@ -94,7 +106,7 @@ class PlanningDetail extends Component {
   };
 
   handleFeedback = () => {
-    const { giveFeedbackKpi, match, myteamdetail, form } = this.props;
+    const { giveFeedbackKpi, match, myteamdetail, form, getNotifications } = this.props;
     const userId = match.params.id;
     const { kpiList } = myteamdetail;
     this.state.dataSource.map((item) => {
@@ -113,6 +125,7 @@ class PlanningDetail extends Component {
             if (this.props.feedback.success === true) {
               message.success('Feedback  Send');
               this.props.history.push('/my-team/planning');
+              getNotifications();
             }
 
           },
@@ -123,7 +136,7 @@ class PlanningDetail extends Component {
   }
 
   handleApprove = () => {
-    const { approveKpi, match, myteamdetail } = this.props;
+    const { approveKpi, match, myteamdetail, getNotifications } = this.props;
     const userId = match.params.id;
     const { kpiList } = myteamdetail;
     this.state.dataSource.map((item)=>{
@@ -140,6 +153,7 @@ class PlanningDetail extends Component {
         if (this.props.feedback.success === true) {
           message.success('Approved Kpi');
           this.props.history.push('/my-team/planning');
+          getNotifications();
         }
 
       },
@@ -153,8 +167,9 @@ class PlanningDetail extends Component {
 
   render() {
     return (
-      <div>
-        {!this.state.loading ?
+      <div style={globalStyle.contentContainer}>
+        {
+         (this.state.dataSource.length > 0 ) ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
@@ -183,7 +198,7 @@ class PlanningDetail extends Component {
              />
              <Text strong>Challenge yourself :</Text>
              <TextArea
-               value={this.props.myteamdetail.challangeYourSelf}
+               value={getChallengeYourselfChecker(this.props.myteamdetail.challengeYourSelf)}
                disabled
              />
              <br />
@@ -221,7 +236,8 @@ const mapDispatchtoProps = (dispatch) => ({
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   getUserDetail: (idUser) => dispatch(GetUserDetail(idUser)),
   giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data)),
-  approveKpi: (idUser, data) => dispatch(ApproveKPI(idUser, data))
+  approveKpi: (idUser, data) => dispatch(ApproveKPI(idUser, data)),
+  getNotifications: () => dispatch(actionGetNotifications())
 });
 
 const mapStateToProps = (state) => ({

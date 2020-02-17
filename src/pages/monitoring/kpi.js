@@ -1,77 +1,149 @@
 import React, { Component } from 'react';
-import DataTable from '../../components/dataTable';
-
-class KPI extends Component {
+import PropTypes from 'prop-types';
+import {
+ Button, Popconfirm, Tooltip, Icon
+} from 'antd';
+import { DataTable } from '../../components';
+import { Link } from  'react-router-dom';
+class TableMonitorKPI extends Component {
   constructor(props) {
     super(props);
-    this.columns = [
+    this.state = {
+      columns: []
+    };
+  }
+
+  componentDidMount() {
+    setTimeout(() => this.getColumns(), 10);
+    // the settimeout would leaking memory (showing warn)
+    // but i have to make it for getting a newest feedback props
+  }
+
+  getColumns = async () => {
+     // the async await on this function would leaking memory (showing warn)
+     // but i have to async await for making it table
+    const { dataMetrics, isFeedback, userId, isSuperior, stafid } = this.props;
+    const newColumns = [
       {
         title: 'KPI Subject',
-        dataIndex: 'description',
-        placeholder: 'Enter 2019 baseline'
+        dataIndex: 'kpi',
+        placeholder: 'Enter KPI Subject',
+        align: 'center',
+        width: 200,
+        className: 'td-top',
+        editable: (!isSuperior)
       },
       {
-        title: '2019 Baseline',
+        title: 'Baseline',
         dataIndex: 'baseline',
-        placeholder: 'Enter 2019 baseline'
+        placeholder: 'Enter baseline',
+        align: 'center',
+        className: 'td-top',
+        width: 200,
+        editable: (!isSuperior)
       },
       {
         title: 'Weight (%)',
         dataIndex: 'weight',
         placeholder: 'Enter KPI Weight',
-        type: 'number'
-      },
-      {
-        title: 'L1',
-        dataIndex: 'L1',
-        placeholder: 'Enter Level 1'
-      },
-      {
-        title: 'L2',
-        dataIndex: 'L2',
-        placeholder: 'Enter Level 2'
-      },
-      {
-        title: 'L3',
-        dataIndex: 'L3',
-        placeholder: 'Enter Level 3'
-      },
-      // {
-      //   title: '',
-      //   dataIndex: 'action',
-      //   action: true,
-      //   render: (text, record) =>
-      //     this.props.dataOwn.length >= 1 ? (
-      //       <Popconfirm
-      //         title="Sure to delete?"
-      //         onConfirm={() => this.props.handleDeleteRow(record.key)}
-      //       >
-      //         <Tooltip placement="bottomRight" title={'delete'}>
-      //           <Button>
-      //             <Icon type="delete" />
-      //           </Button>
-      //         </Tooltip>
-      //       </Popconfirm>
-      //     ) : null
-      // }
+        align: 'center',
+        className: 'td-top',
+        type: 'number',
+        width: 90,
+        editable: (!isSuperior)
+      }
     ];
+    // eslint-disable-next-line array-callback-return
+    await dataMetrics.map((itemMetric) => {
+      const data = {
+        title: itemMetric.label,
+        dataIndex: itemMetric.label,
+        placeholder: `Enter Level ${itemMetric.index}`,
+        align: 'center',
+        className: 'td-top',
+        width: 150,
+        editable: (!isSuperior)
+      };
+      newColumns.push(data);
+    });
+    const action = {
+      title: 'Progress Tracking',
+      align: 'center',
+      editable: false,
+      width: 250,
+      dataIndex: 'action',
+      render: (text, record) => {
+        const { dataSource, handleDelete } = this.props;
+        return (
+          dataSource.length >= 1 ? (
+            <div>
+              <Button style={{ marginRight: 5 }}>
+                <Link to={`/Activity/${record.key}/${!isSuperior ? userId : stafid}`}>
+                  Activity
+                </Link>
+              </Button>
+              <Button style={{ marginRight: 5 }}>
+                <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
+                  Achievement
+                </Link>
+              </Button>
+              {!isSuperior ?
+                <Popconfirm
+                  title="Sure to delete?"
+                  // eslint-disable-next-line react/jsx-no-bind
+                  onConfirm={() => handleDelete(record.key)}
+                >
+                  <Tooltip placement="bottomRight" title="delete">
+                    <Button type="danger" ghost>
+                      <Icon type="delete" />
+                    </Button>
+                  </Tooltip>
+                </Popconfirm> : <div />}
+            </div>
+          ) : null
+        );
+      }
+    };
+    await newColumns.push(action);
+    this.setState({
+      columns: newColumns
+    });
   }
 
   render() {
-    const { columns } = this;
+    const { columns } = this.state;
     const {
-      dataOwn,
-      handleChangeField,
+      dataSource,
+      handleChange,
+      handleError,
+      loading,
+      form
     } = this.props;
     return (
       <div>
         <DataTable
+          form={form}
           columns={columns}
-          datasource={dataOwn}
-          handlechange={handleChangeField}
+          loading={loading}
+          datasource={dataSource}
+          handleerror={handleError}
+          // it (lowercase) handle vdom warn, but another vdom valid function err show
+          handlechange={handleChange}
         />
       </div>
     );
   }
 }
-export default KPI;
+
+export default TableMonitorKPI;
+
+TableMonitorKPI.propTypes = {
+  dataSource: PropTypes.instanceOf(Array),
+  handleChange: PropTypes.func,
+  handleError: PropTypes.func,
+  handleDelete: PropTypes.func,
+  isFeedback: PropTypes.bool,
+  dataMetrics: PropTypes.instanceOf(Array),
+  form: PropTypes.instanceOf(Object),
+  loading: PropTypes.bool
+};
