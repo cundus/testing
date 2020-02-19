@@ -3,9 +3,9 @@ FROM node:8.10.0 as builder
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
-ENV CONTAINER_TIMEZONE Asia/Jakarta
+#ENV CONTAINER_TIMEZONE Asia/Jakarta
 COPY package.json /usr/src/app/package.json
-RUN npm install
+RUN npm install --production
 RUN npm install react-scripts@3.2.0 -g --silent
 COPY . /usr/src/app
 
