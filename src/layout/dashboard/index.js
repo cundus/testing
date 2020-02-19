@@ -99,6 +99,15 @@ class Dashboard extends React.Component {
     const {
       child, user, logout
     } = this.props;
+    let mainRouter = child;
+    const isManager = _.get(this.props, 'user.result.user.manager', false);
+    const isNoEmpleyee = _.get(this.props, 'user.result.user.managerId', null);
+    if (isManager === false) {
+      mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
+    }
+    if (!isNoEmpleyee) {
+      mainRouter = mainRouter.filter((d) => d.title.includes('My Team'));
+    }
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
@@ -107,7 +116,7 @@ class Dashboard extends React.Component {
           <Content style={styles.contentContainer}>
             {/* <div style={{ padding: 24, background: '#fff', borderRadius: 5 }}> */}
             {Object.keys(user).length ? (
-              <MappedRouter routes={child} />
+              <MappedRouter routes={mainRouter} />
             ) : (
               <center><Spin /></center>
             )}

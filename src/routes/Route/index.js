@@ -56,37 +56,37 @@ export const routes = [
         path: '/my-team/planning/',
         component: Lazyload(MyTeamPlaningPage),
         exact: true,
-        title: 'Planning'
+        title: 'My Team - Planning'
       },
       {
         path: '/my-team/planning/:id',
         component: Lazyload(MyTeamPlaningDetailPage),
         exact: true,
-        title: 'Planning Detail'
+        title: 'My Team - Planning Detail'
       },
       {
         path: '/my-team/monitoring',
         component: Lazyload(MonitoringTeamPage),
         exact: true,
-        title: 'Monitoring'
+        title: 'My Team - Monitoring'
       },
       {
         path: '/my-team/monitoring/:userId',
         component: Lazyload(MonitoringPage),
         exact: true,
-        title: 'Monitoring'
+        title: 'My Team - Monitoring'
       },
       {
         path: '/my-team/appraisal',
         component: Lazyload(AppraisalTeamPage),
         exact: true,
-        title: 'Appraisal'
+        title: 'My Team - Appraisal'
       },
       {
         path: '/my-team/appraisal/:userId',
         component: Lazyload(AppraisalTeamPageDetail),
         exact: true,
-        title: 'Monitoring'
+        title: 'My Team - Monitoring'
       },
       {
         path: '/monitoring',

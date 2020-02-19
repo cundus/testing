@@ -28,10 +28,13 @@ const Header = (props) => {
   const url = uId && `${REACT_APP_API_URL}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
+  const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
-
+  if (!isNoEmpleyee) {
+    mainRouter = mainRouter.filter((d) => d.title === 'My Team');
+  }
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
