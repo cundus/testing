@@ -327,7 +327,7 @@ class CreateKPI extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (dataSaving.length === 0) {
         message.warning('You must have at least one KPI');
-      } else if (!err && form.getFieldValue('dataKpi')) {
+      } else if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
