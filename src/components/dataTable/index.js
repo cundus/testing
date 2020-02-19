@@ -41,7 +41,7 @@ class EditableCell extends React.Component {
           ...item
         });
       });
-    }, 200);
+    }, 100);
   };
 
   changeSwitch = (field, index) => async (value) => {
