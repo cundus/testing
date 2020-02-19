@@ -20,9 +20,9 @@ const Sidebar = (props) => {
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
-  if (!isNoEmpleyee) {
-    mainRouter = mainRouter.filter((d) => d.title === 'My Team');
-  }
+  // if (!isNoEmpleyee) {
+  //   mainRouter = mainRouter.filter((d) => d.title === 'My Team');
+  // }
   return (
     <Sider
       style={styles.sidebarContainer}

@@ -105,9 +105,9 @@ class Dashboard extends React.Component {
     if (isManager === false) {
       mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
     }
-    if (!isNoEmpleyee) {
-      mainRouter = mainRouter.filter((d) => d.title.includes('My Team'));
-    }
+    // if (!isNoEmpleyee) {
+    //   mainRouter = mainRouter.filter((d) => d.title.includes('My Team'));
+    // }
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />

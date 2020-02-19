@@ -98,19 +98,19 @@ export const routes = [
         path: '/Activity/:idActivity/:userId',
         component: LazyLoad(ActivityPage),
         exact: true,
-        title: 'Activity'
+        title: 'My Team - Activity'
       },
       {
         path: '/Achievement/:idAchievement/:userId',
         component: LazyLoad(AchievementPage),
         exact: true,
-        title: 'Achievement'
+        title: 'My Team - Achievement'
       },
       {
         path: '/Activity/Chat/:idActivity/:idThread/:userId',
         exact: true,
         component: LazyLoad(ChatActivityPage),
-        title: 'Activity Chat'
+        title: 'My Team - Activity Chat'
       },
       {
         path: '/monitoring/add',

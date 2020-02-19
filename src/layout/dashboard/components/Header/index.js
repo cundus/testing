@@ -32,9 +32,9 @@ const Header = (props) => {
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
-  if (!isNoEmpleyee) {
-    mainRouter = mainRouter.filter((d) => d.title === 'My Team');
-  }
+  // if (!isNoEmpleyee) {
+  //   mainRouter = mainRouter.filter((d) => d.title === 'My Team');
+  // }
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
