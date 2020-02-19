@@ -22,7 +22,11 @@ const EditableContext = React.createContext();
 class EditableCell extends React.Component {
   change = (index, field) => {
     const { record, handlechange, form } = this.props;
-    setTimeout(() => form.validateFields(field, (errors, values) => {
+    let checkField = field;
+    if (field.length > 1) {
+      checkField = field.filter((item) => form.getFieldValue(item));
+    }
+    setTimeout(() => form.validateFields(checkField, (errors, values) => {
       let item = {};
       if (record.cascadeType === 1) {
         item = values.dataManagerKpi[index];
@@ -50,7 +54,9 @@ class EditableCell extends React.Component {
     await form.setFieldsValue({
       dataKpi: dataFieldKPI.dataKpi
     });
-    form.validateFields(field);
+    const checkField = field.filter((item) => form.getFieldValue(item));
+    // console.log(field, 'aaa', checkField);
+    form.validateFields(checkField);
   };
 
   renderCell = () => {

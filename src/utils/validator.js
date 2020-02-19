@@ -29,6 +29,7 @@ export const metricValidator = (data) => [
       let isSortedAsc = false;
       let isSortedDesc = false;
       const datas = Object.keys(dataMetrics);
+      const datass = Object.values(dataMetrics);
       const regexNumber = new RegExp('^[0-9]*$');
       const regexZero = new RegExp('^[0-0]*$');
       if (value) {
@@ -48,6 +49,19 @@ export const metricValidator = (data) => [
               isError = true;
               break;
             }
+          }
+          if (isFilled) {
+            const data1 = datass.map(
+              (d) => (datass.filter((i) => i === d)).length
+            );
+            // eslint-disable-next-line array-callback-return
+            data1.filter((a, i) => {
+              if (a > 1) {
+                if (data.title === datas[i]) {
+                  callback('Value must be different');
+                }
+              }
+            });
           }
           if (isFilled && !isError) {
             for (let index = 0; index < datas.length - 1; index++) {
