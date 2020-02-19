@@ -120,7 +120,7 @@ class Cascade extends Component {
           <Button
             id="save-draft"
             type="primary"
-            disabled={dataSelectedCascade === 0}
+            disabled={dataSelectedCascade.length === 0}
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >
