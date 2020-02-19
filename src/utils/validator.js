@@ -52,7 +52,7 @@ export const metricValidator = (data) => [
           }
           if (isFilled) {
             const data1 = datass.map(
-              (d) => (datass.filter((i) => i === d)).length
+              (d) => (datass.filter((i) => i.trim() === d.trim())).length
             );
             // eslint-disable-next-line array-callback-return
             data1.filter((a, i) => {
@@ -114,7 +114,7 @@ export const kpiValidator = (data) => [
       // eslint-disable-next-line array-callback-return
       dataKpis.map((kpi, index) => {
         if (index !== data.indexarr) {
-          if (dataKpis[data.indexarr] === kpi) {
+          if (dataKpis[data.indexarr].trim() === kpi.trim()) {
             callback('KPI Subject should not be duplicate');
           }
         }
@@ -176,7 +176,7 @@ export const metricValidatorText = (data) => [
           }
           if (isFilled) {
             const data1 = datass.map(
-              (d) => (datass.filter((i) => i === d)).length
+              (d) => (datass.filter((i) => i.trim() === d.trim())).length
             );
             // eslint-disable-next-line array-callback-return
             data1.filter((a, i) => {

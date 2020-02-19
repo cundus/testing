@@ -175,7 +175,9 @@ class CreateKPI extends Component {
       challengeYourSelf: sendChallengeYourselfChecker(challenge)
     };
     form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
+      if (dataSaving.length === 0) {
+        message.warning('You must have at least one KPI');
+      } else if (!err && !form.getFieldValue('dataKpi')) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
