@@ -40,7 +40,8 @@ export const notifMenu = (data, userId) => () => {
     const oneMonth = oneWeek * 4;
     const ldate = new Date(lastDate);
     const ndate = new Date();
-    const diffDays = Math.round(Math.abs((ndate - ldate) / oneDay));
+    let diffDays = Math.round(Math.abs((ndate - ldate) / oneDay));
+    diffDays -= 1;
     const diffWeeks = Math.round(Math.abs((ndate - ldate) / oneWeek));
     const diffMos = Math.round(Math.abs((ndate - ldate) / oneMonth));
     if (diffDays < 1) {
