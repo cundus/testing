@@ -23,23 +23,25 @@ class EditableCell extends React.Component {
   change = (index, field) => {
     const { record, handlechange, form } = this.props;
     let checkField = field;
-    if (field.length > 1) {
-      checkField = field.filter((item) => form.getFieldValue(item));
-    }
-    setTimeout(() => form.validateFields(checkField, (errors, values) => {
-      let item = {};
-      if (record.cascadeType === 1) {
-        item = values.dataManagerKpi[index];
-      } else if (record.cascadeType === 0) {
-        item = values.dataKpi[index];
-      } else {
-        item = values.dataGeneral[index];
+    setTimeout(() => {
+      if (field.length > 1) {
+        checkField = field.filter((item) => form.getFieldValue(item));
       }
-      handlechange({
-        ...record,
-        ...item
+      form.validateFields(checkField, (errors, values) => {
+        let item = {};
+        if (record.cascadeType === 1) {
+          item = values.dataManagerKpi[index];
+        } else if (record.cascadeType === 0) {
+          item = values.dataKpi[index];
+        } else {
+          item = values.dataGeneral[index];
+        }
+        handlechange({
+          ...record,
+          ...item
+        });
       });
-    }), 100);
+    }, 200);
   };
 
   changeSwitch = (field, index) => async (value) => {
