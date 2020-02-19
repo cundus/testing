@@ -101,7 +101,7 @@ class Dashboard extends React.Component {
     } = this.props;
     let mainRouter = child;
     const isManager = _.get(this.props, 'user.result.user.manager', false);
-    const isNoEmpleyee = _.get(this.props, 'user.result.user.managerId', null);
+    // const isNoEmpleyee = _.get(this.props, 'user.result.user.managerId', null);
     if (isManager === false) {
       mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
     }

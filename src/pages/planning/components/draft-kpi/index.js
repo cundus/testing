@@ -96,7 +96,7 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSubmitKpi, userReducers, form, ownKpiReducers, stepChange, getNotifications
+      doSubmitKpi, userReducers, form, ownKpiReducers, stepChange, getNotifications, doSavingKpi
     } = this.props;
     const { dataKpi, dataKpiMetrics } = ownKpiReducers;
     const { user } = userReducers.result;
@@ -121,15 +121,30 @@ class DraftKPI extends Component {
           confirm({
             title: 'Are you sure?',
             onOk: async () => {
-              await doSubmitKpi(data, user.userId);
-              const { submitKpi } = this.props;
-              const { status, statusMessage } = submitKpi;
-              if (status === Success) {
-                stepChange(2, true); // go to submit page
-                getNotifications();
-                message.success('Your KPI has been submitted to your superior');
+              if (user.managerId) {
+                await doSubmitKpi(data, user.userId);
+                const { submitKpi } = this.props;
+                const { status, statusMessage } = submitKpi;
+                if (status === Success) {
+                  stepChange(2, true); // go to submit page
+                  getNotifications();
+                  message.success('Your KPI has been submitted to your superior');
+                } else {
+                  message.warning(`Sorry, ${statusMessage}`);
+                }
               } else {
-                message.warning(`Sorry, ${statusMessage}`);
+                await doSavingKpi(data, user.userId);
+                const { saveKpi } = this.props;
+                const { status, statusMessage } = saveKpi;
+                if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  message.success('Your KPI has been saved');
+                  this.getAllData();
+                  if (status === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                    message.warning(`Sorry, ${statusMessage}`);
+                  }
+                } else {
+                  message.warning(`Sorry, ${statusMessage}`);
+                }
               }
             },
             onCancel() {}
@@ -239,8 +254,11 @@ class DraftKPI extends Component {
       changeChallenge,
       handleError
     } = this;
-    const { ownKpiReducers, stepChange, form } = this.props;
+    const {
+      ownKpiReducers, stepChange, form, userReducers
+    } = this.props;
     const { loadingKpi, dataKpiMetrics, generalFeedback } = ownKpiReducers;
+    const { user } = userReducers.result;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -314,7 +332,7 @@ class DraftKPI extends Component {
             onClick={handleSubmit}
             type="primary" style={{ margin: 10 }}
           >
-            Submit To Superior
+            {user.managerId ? 'Submit To Superior' : 'Submit'}
           </Button>
         </div>
       </div>
