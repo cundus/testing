@@ -3,6 +3,7 @@ import {
  Menu, Typography, Divider, Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import { navigatorManager, navigatorEmp } from '../../../../../utils/navigatorNotif';
 
 export const accountMenu = (logout) => () => (
@@ -35,15 +36,11 @@ export const notifMenu = (data, userId) => () => {
   };
 
   const dateToday = (lastDate) => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    const oneWeek = oneDay * 7;
-    const oneMonth = oneWeek * 4;
-    const ldate = new Date(lastDate);
-    const ndate = new Date();
-    let diffDays = Math.round(Math.abs((ndate - ldate) / oneDay));
-    diffDays -= 1;
-    const diffWeeks = Math.round(Math.abs((ndate - ldate) / oneWeek));
-    const diffMos = Math.round(Math.abs((ndate - ldate) / oneMonth));
+    const a = moment(new Date(lastDate));
+    const b = moment(new Date());
+    const diffDays = b.diff(a, 'days');
+    const diffWeeks = a.diff(b, 'week');
+    const diffMos = a.diff(b, 'months');
     if (diffDays < 1) {
       return 'Today';
     } else if (diffDays <= 1) {
