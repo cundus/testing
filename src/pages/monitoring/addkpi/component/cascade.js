@@ -103,7 +103,7 @@ class Cascade extends Component {
 
   render() {
     const {
-      dataSource, handleSaveDraft, handleError
+      dataSource, handleSaveDraft, handleError, dataSelectedCascade
     } = this.props;
     const { columns, loading } = this.state;
 
@@ -120,10 +120,11 @@ class Cascade extends Component {
           <Button
             id="save-draft"
             type="primary"
+            disabled={dataSelectedCascade === 0}
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >
-            Save Draft
+            Add To My KPI
           </Button>
         </div>
       </div>
