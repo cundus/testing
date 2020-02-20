@@ -161,6 +161,14 @@ const kpiReducers = (state = initialState, action) => {
         ...state,
         loadingKpi: action.loading,
         status: action.status,
+        dataKpi: [],
+        dataKpiMetrics: [],
+        generalFeedback: '',
+        challenge: '',
+        currentStep: '',
+        formStatusId: '',
+        formStatusDescription: '',
+        holderUserId: '',
         errMessage: action.message
       };
     case GET_KPI_MANAGER_LIST:
