@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Form, Upload, Button, Icon, Typography, message, Modal, Skeleton
+  Select, Form, Upload, Button, Icon, Typography, message, Modal
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
@@ -10,10 +10,9 @@ import {
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
-import stepKpi from '../../../utils/stepKpi';
 
 const { Option } = Select;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { confirm } = Modal;
 
 class Value extends Component {
