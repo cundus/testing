@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Form, Upload, Button, Icon, Typography, message, Modal, Skeleton
+  Select, Upload, message, Modal
 } from 'antd';
 import DataTable from '../../../../../../components/dataTable';
 import {
-  doAttachFile, doDeleteFiles
+  doAttachFile, doDeleteFiles, getAttachment, doDownloadFile
 } from '../../../../../../redux/actions/kpi';
 import mimeType from '../../../../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../../../../redux/status-code-type';
 
 const { Option } = Select;
-const { Text, Title } = Typography;
 const { confirm } = Modal;
 
 class Value extends Component {
@@ -151,23 +150,35 @@ class Value extends Component {
   }
 
   download = async (file) => {
+    const { doDownload } = this.props;
     const mimeProp = Object.keys(mimeType);
     let mediaType = '';
     mimeProp.map((item, index) => {
       if (file.name.includes(item)) {
         mediaType = mimeType[item];
-      } else {
-        // mediaType = '';
       }
       return mediaType;
     });
-    const linkSource = `data:${mediaType};base64,${file.url}`;
-    const downloadLink = document.createElement('a');
-    const fileName = file.name;
+    await doDownload(file.id);
+    const {
+      loadingDownload,
+      statusDownload,
+      messageDownload,
+      dataDownload
+    } = this.props.kpiR;
+    if (!loadingDownload) {
+      if (statusDownload === Success) {
+        const linkSource = `data:${mediaType};base64,${dataDownload.fileContent}`;
+        const downloadLink = document.createElement('a');
+        const fileName = file.name;
 
-    downloadLink.href = linkSource;
-    downloadLink.download = fileName;
-    downloadLink.click();
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
+      } else {
+        message.warning(`Sorry, ${messageDownload}`);
+      }
+    }
   }
 
   uploadFile = (record) => async (options) => {
@@ -296,7 +307,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   attachFile: (id) => dispatch(doAttachFile(id)),
-  deleteFiles: (data) => dispatch(doDeleteFiles(data))
+  doGetAttachment: (valueId) => dispatch(getAttachment(valueId)),
+  deleteFiles: (data) => dispatch(doDeleteFiles(data)),
+  doDownload: (attachId) => dispatch(doDownloadFile(attachId))
 });
 
 const connectToComponent = connect(
