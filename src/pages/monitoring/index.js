@@ -269,7 +269,7 @@ class MonitorKPI extends Component {
     this.liveCount(newData);
   };
 
-  handleSaveDraft = () => {
+  handleSaveDraft = (type) => async () => {
     const {
       doSavingKpi, userReducers, form, kpiReducers
     } = this.props;
@@ -279,10 +279,6 @@ class MonitorKPI extends Component {
       dataSource,
       challengeYour
     } = this.state;
-    if (this.state.weightTotal !== 100) {
-      return message.warning('Total KPI Weight must 100%');
-
-    }
     const newDataKpi = [];
     // eslint-disable-next-line array-callback-return
     dataSource.map((itemKpi, iii) => {
@@ -321,28 +317,37 @@ class MonitorKPI extends Component {
       kpiList: newDataKpi,
       challengeYourSelf: challengeYour || '----------'
     };
-    form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        confirm({
-          title: 'Are you sure?',
-          onOk: async () => {
-            await doSavingKpi(data, user.userId);
-            // eslint-disable-next-line react/destructuring-assignment
-            if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
-              message.success('Your KPI has been saved');
-              this.getAllData();
+    if (type === 'save') {
+      form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              await doSavingKpi(data, user.userId);
               // eslint-disable-next-line react/destructuring-assignment
-              if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+              if (this.props.kpiReducers.statusSaveKPI === Success || FAILED_SAVE_CHALLENGE_YOURSELF) {
+                message.success('Your KPI has been saved');
+                this.getAllData();
+                // eslint-disable-next-line react/destructuring-assignment
+                if (this.props.kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
+                }
+              } else {
                 message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
               }
-            } else {
-              message.warning(`Sorry, ${this.props.kpiReducers.messageSaveKPI}`);
-            }
-          },
-          onCancel() {}
-        });
-      }
-    });
+            },
+            onCancel() {}
+          });
+        }
+      });
+    } else {
+      form.validateFieldsAndScroll(async (err, values) => {
+        if (!err) {
+          await doSavingKpi(data, user.userId);
+          this.props.history.push('/monitoring/add');
+        }
+      });
+    }
   };
 
   gotToAppraisal = () => {
@@ -495,15 +500,16 @@ class MonitorKPI extends Component {
                   <Button
                     id="add-kpi"
                   // eslint-disable-next-line react/jsx-no-bind
-                    onClick={() =>  this.props.history.push('/monitoring/add')}
+                    onClick={handleSaveDraft('add')}
                     style={{ margin: 10 }}
                     disabled={isHasSubmit}
+                    loading={kpiReducers.loadingSaveKPI}
                   >
                   Add KPI
                   </Button>
                   <Button
                     id="save-draft"
-                    onClick={handleSaveDraft}
+                    onClick={handleSaveDraft('save')}
                     style={{ margin: 10 }}
                     disabled={isHasSubmit}
                   >

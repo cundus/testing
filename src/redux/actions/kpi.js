@@ -775,7 +775,7 @@ export const doSendBackAppraisal = (id, data) => async (dispatch) => {
   try {
     const payload = await sendFeedbackAppraisal(id, data);
     if (payload.data.status_code === Success) {
-      await submitNext(id);
+      await submitToPreviousStep(id);
       dispatch({
         type: SEND_FEEDBACK_APPRAISAL_SUCCESS,
         loading: false,

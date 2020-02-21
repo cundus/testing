@@ -259,7 +259,9 @@ class Appraisal extends Component {
   }
 
   handleSendBack = () => {
-    const { sendBackAppraisal, match, getNotifications } = this.props;
+    const {
+      sendBackAppraisal, match, getNotifications, form
+    } = this.props;
     const { params } = match;
     const {
       dataKpis, dataValueList, generalFeedbackState, teamName
@@ -276,9 +278,16 @@ class Appraisal extends Component {
         comment: data.feedback
       };
     });
+    let rating = form.getFieldValue('proposeRating');
+    // eslint-disable-next-line react/destructuring-assignment
+    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+      // eslint-disable-next-line react/destructuring-assignment
+      rating = this.props.kpiReducers.dataKpiRating.id;
+    }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
       kpiFeedbacks,
+      rating,
       valuesFeedbacks
     };
     confirm({
@@ -569,7 +578,7 @@ class Appraisal extends Component {
                       optionRating={optionRating}
                     />
                     <Form>
-                      <Text strong>Propose Rating : </Text>
+                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
@@ -676,13 +685,13 @@ class Appraisal extends Component {
             <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
               {myStep &&
                 <div style={{ textAlign: 'center' }}>
-                  {/* <Button
-                    id="go-monitoring"
-                    // onClick={goToMonitoring}
+                  <Button
+                    id="go-back"
+                    onClick={()=> this.props.history.goBack()}
                     style={{ margin: 10 }}
                   >
                     Back
-                  </Button> */}
+                  </Button>
                   <Button
                     id="save-assessment"
                     onClick={this.handleSendBack}

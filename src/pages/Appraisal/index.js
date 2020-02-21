@@ -735,7 +735,6 @@ class Appraisal extends Component {
                   >
                     <Radio
                       value={ack.value}
-                      label={ack.label}
                     >
                       {ack.label}
                     </Radio>
