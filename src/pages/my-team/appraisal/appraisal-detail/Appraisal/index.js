@@ -676,19 +676,19 @@ class Appraisal extends Component {
             <Skeleton active loading={loadingKpis || loadingMyValue} paragraph={false} title={{ width: '60%' }}>
               {myStep &&
                 <div style={{ textAlign: 'center' }}>
-                  <Button
+                  {/* <Button
                     id="go-monitoring"
                     // onClick={goToMonitoring}
                     style={{ margin: 10 }}
                   >
                     Back
-                  </Button>
+                  </Button> */}
                   <Button
                     id="save-assessment"
                     onClick={this.handleSendBack}
                     style={{ margin: 10 }}
                   >
-                    Save & Send Feedback
+                    Send Feedback
                   </Button>
                   <Button
                     id="send-manager"

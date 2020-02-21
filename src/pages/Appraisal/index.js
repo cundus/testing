@@ -498,9 +498,6 @@ class Appraisal extends Component {
       title: 'Are you sure?',
       content: '',
       onOk: async () => {
-        this.setState({
-          loadingKpis: true
-        });
         await empAcknowledge(finalAck);
         const { kpiReducers } = this.props;
         const {
@@ -510,6 +507,9 @@ class Appraisal extends Component {
         } = kpiReducers;
         if (!loadingEmpAck) {
           if (statusEmpAck === Success) {
+            this.setState({
+              loadingKpis: true
+            });
             this.getData();
             getNotifications();
             message.success('Your Acknowledgement has been sent');
@@ -602,15 +602,6 @@ class Appraisal extends Component {
                     handleSaveAssessment={this.handleSaveAssessment}
                   />
                 </div>
-                {!loadingEmpAck && currentStep === stepKpi[6] &&
-                <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>
-                  <Checkbox
-                    onChange={this.onCheckFinal}
-                    checked={checkedFinal}
-                  >
-                    <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
-                  </Checkbox>
-                </Skeleton>}
               </TabPane>
               <TabPane tab="Values" key="2">
                 <TableValue
@@ -692,23 +683,27 @@ class Appraisal extends Component {
                 </div>}
             </Skeleton>
           </center>
+          {!loadingEmpAck && currentStep === stepKpi[6] &&
+            <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>
+              <Checkbox
+                onChange={this.onCheckFinal}
+                checked={checkedFinal}
+              >
+                <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
+              </Checkbox>
+            </Skeleton>}
+          {formStatusId === '3' &&
+          <center>
+            <Title
+              level={4}
+              style={{ color: '#61C761', margin: 0 }}
+              ghost
+              strong
+            >
+                Your KPI has been completed
+            </Title>
+          </center>}
         </div>
-        {formStatusId === '3' &&
-        <div style={{
-          ...globalStyle.contentContainer,
-          borderRadius: 0,
-          textAlign: 'center'
-        }}
-        >
-          <Title
-            level={4}
-            style={{ color: '#61C761', margin: 0 }}
-            ghost
-            strong
-          >
-            Your KPI has been completed
-          </Title>
-        </div>}
         {!loadingKpis && currentStep === stepKpi[6] &&
         <Spin spinning={loadingEmpAck}>
           <div style={{
@@ -720,7 +715,7 @@ class Appraisal extends Component {
             alignItems: 'center'
           }}
           >
-            <Text strong>{dataEmpAckName}</Text>
+            <Text strong style={{ fontSize: 18 }}>{dataEmpAckName}</Text>
             <br />
             <div>
               <Radio.Group
@@ -733,24 +728,24 @@ class Appraisal extends Component {
                 {dataEmpAckOptions.map((ack) => (
                   <div
                     style={{
-                      width: '70%',
                       whiteSpace: 'break-spaces',
-                      display: 'flex'
+                      display: 'flex',
+                      alignSelf: 'center'
                     }}
                   >
                     <Radio
                       value={ack.value}
-                    />
-                    <p>
+                      label={ack.label}
+                    >
                       {ack.label}
-                    </p>
+                    </Radio>
                   </div>
                 ))}
               </Radio.Group>
             </div>
             <br />
             <br />
-            <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === ''}>Submit</Button>
+            <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === '' && !checkedFinal}>Submit</Button>
           </div>
         </Spin>}
       </div>
