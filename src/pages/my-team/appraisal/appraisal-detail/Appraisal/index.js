@@ -536,7 +536,7 @@ class Appraisal extends Component {
                       handleChangeField={this.handleChangeAssessment}
                     />
                     <Form>
-                      <Text strong>Propose Rating : </Text>
+                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
