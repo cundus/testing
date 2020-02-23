@@ -61,7 +61,10 @@ import {
   GET_ATTACHMENT_FILE_FAILED,
   DOWNLOAD_FILE,
   DOWNLOAD_FILE_SUCCESS,
-  DOWNLOAD_FILE_FAILED
+  DOWNLOAD_FILE_FAILED,
+  DO_ASSESSMENT_ALL,
+  DO_ASSESSMENT_SUCCESS_ALL,
+  DO_ASSESSMENT_FAILED_ALL
 } from '../action.type';
 
 const initialState = {
@@ -234,16 +237,36 @@ const kpiReducers = (state = initialState, action) => {
     case DO_ASSESSMENT:
       return {
         ...state,
-        loadingAssess: action.loading
+        loadingAssessOne: action.loading
       };
     case DO_ASSESSMENT_SUCCESS:
+      return {
+        ...state,
+        loadingAssessOne: action.loading,
+        statusAssessOne: action.status,
+        messageAssessOne: action.message,
+        dataAssessOne: action.data
+      };
+    case DO_ASSESSMENT_FAILED:
+      return {
+        ...state,
+        loadingAssessOne: action.loading,
+        statusAssessOne: action.status,
+        messageAssessOne: action.message
+      };
+    case DO_ASSESSMENT_ALL:
+      return {
+        ...state,
+        loadingAssess: action.loading
+      };
+    case DO_ASSESSMENT_SUCCESS_ALL:
       return {
         ...state,
         loadingAssess: action.loading,
         statusAssess: action.status,
         messageAssess: action.message
       };
-    case DO_ASSESSMENT_FAILED:
+    case DO_ASSESSMENT_FAILED_ALL:
       return {
         ...state,
         loadingAssess: action.loading,
