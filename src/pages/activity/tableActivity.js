@@ -39,6 +39,11 @@ class TableActivity extends Component {
         dataIndex: 'lastMessage'
       },
       {
+        title: 'Status',
+        align: 'center',
+        dataIndex: 'status'
+      },
+      {
         title: 'Action',
         dataIndex: 'actions',
         align: 'center',

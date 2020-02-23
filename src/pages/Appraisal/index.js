@@ -29,7 +29,8 @@ import {
   doGetKpiRating,
   doSubmitNext,
   doEmpAcknowledge,
-  doEmpAcknowledgeList
+  doEmpAcknowledgeList,
+  doAssessmentAll
 } from '../../redux/actions/kpi';
 import { actionGetNotifications } from '../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
@@ -47,7 +48,7 @@ class Appraisal extends Component {
       dataKpis: [],
       loadingKpis: true,
       isModalShow: 0,
-      loadingResult: false,
+      loadingResult: 0,
       dataValueList: [],
       optionRating: [],
       loadingMyValue: false,
@@ -167,7 +168,7 @@ class Appraisal extends Component {
       dataKpis: dataOrdered,
       challengeYour: challenge === '----------' ? '' : challenge,
       loadingKpis: false,
-      loadingResult: false
+      loadingResult: 0
     });
   }
 
@@ -258,7 +259,7 @@ class Appraisal extends Component {
 
   handleSaveAssessment = async () => {
     const { dataKpis, challengeYour } = this.state;
-    const { doAssess, form } = this.props;
+    const { doAssessAll, form } = this.props;
     const assessment = [];
     dataKpis.map((item) => {
       const data = {
@@ -279,13 +280,15 @@ class Appraisal extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doAssess(data);
+            await doAssessAll(data);
             const { kpiReducers, userReducers } = this.props;
             const { user } = userReducers.result;
             const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
             if (!loadingAssess) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                this.setState({ loadingResult: true });
+                this.setState({
+                  loadingKpis: true
+                });
                 this.getOwnKpiList(user.userId);
                 message.success('Your Assessment has been saved');
                 if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
@@ -335,6 +338,12 @@ class Appraisal extends Component {
     this.setState({ dataValueList: newData });
   };
 
+  handleAssesLoading = (id) => {
+    this.setState({
+      loadingResult: id
+    });
+  }
+
 
   handleSave = () => {
     const {
@@ -382,7 +391,7 @@ class Appraisal extends Component {
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
-      doSaveValues, userReducers, form, doAssess, submitNext, getNotifications
+      doSaveValues, userReducers, form, doAssessAll, submitNext, getNotifications
     } = this.props;
     const { user } = userReducers.result;
     // assessment
@@ -432,8 +441,11 @@ class Appraisal extends Component {
           confirm({
             title: 'Are you sure?',
             onOk: async () => {
-              await doAssess(dataAssessment);
+              await doAssessAll(dataAssessment);
               await doSaveValues(user.userId, dataValues);
+              this.setState({
+                loadingKpis: true
+              });
               const { kpiReducers } = this.props;
               const {
                 loadingAssess,
@@ -498,9 +510,6 @@ class Appraisal extends Component {
       title: 'Are you sure?',
       content: '',
       onOk: async () => {
-        this.setState({
-          loadingKpis: true
-        });
         await empAcknowledge(finalAck);
         const { kpiReducers } = this.props;
         const {
@@ -510,6 +519,9 @@ class Appraisal extends Component {
         } = kpiReducers;
         if (!loadingEmpAck) {
           if (statusEmpAck === Success) {
+            this.setState({
+              loadingKpis: true
+            });
             this.getData();
             getNotifications();
             message.success('Your Acknowledgement has been sent');
@@ -588,6 +600,8 @@ class Appraisal extends Component {
                     handleSubmit={this.handleSubmit}
                     changeChallenge={this.changeChallenge}
                     challengeYour={challengeYour}
+                    handleAssesLoading={this.handleAssesLoading}
+                    getOwnKpiList={this.getOwnKpiList}
                     loadingResult={loadingResult}
                     showHideModal={this.showHideModal}
                     dataSource={dataKpis}
@@ -602,15 +616,6 @@ class Appraisal extends Component {
                     handleSaveAssessment={this.handleSaveAssessment}
                   />
                 </div>
-                {!loadingEmpAck && currentStep === stepKpi[6] &&
-                <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>
-                  <Checkbox
-                    onChange={this.onCheckFinal}
-                    checked={checkedFinal}
-                  >
-                    <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
-                  </Checkbox>
-                </Skeleton>}
               </TabPane>
               <TabPane tab="Values" key="2">
                 <TableValue
@@ -692,23 +697,27 @@ class Appraisal extends Component {
                 </div>}
             </Skeleton>
           </center>
+          {!loadingEmpAck && currentStep === stepKpi[6] &&
+            <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>
+              <Checkbox
+                onChange={this.onCheckFinal}
+                checked={checkedFinal}
+              >
+                <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
+              </Checkbox>
+            </Skeleton>}
+          {formStatusId === '3' &&
+          <center>
+            <Title
+              level={4}
+              style={{ color: '#61C761', margin: 0 }}
+              ghost
+              strong
+            >
+                Your KPI has been completed
+            </Title>
+          </center>}
         </div>
-        {formStatusId === '3' &&
-        <div style={{
-          ...globalStyle.contentContainer,
-          borderRadius: 0,
-          textAlign: 'center'
-        }}
-        >
-          <Title
-            level={4}
-            style={{ color: '#61C761', margin: 0 }}
-            ghost
-            strong
-          >
-            Your KPI has been completed
-          </Title>
-        </div>}
         {!loadingKpis && currentStep === stepKpi[6] &&
         <Spin spinning={loadingEmpAck}>
           <div style={{
@@ -720,7 +729,7 @@ class Appraisal extends Component {
             alignItems: 'center'
           }}
           >
-            <Text strong>{dataEmpAckName}</Text>
+            <Text strong style={{ fontSize: 18 }}>{dataEmpAckName}</Text>
             <br />
             <div>
               <Radio.Group
@@ -733,24 +742,29 @@ class Appraisal extends Component {
                 {dataEmpAckOptions.map((ack) => (
                   <div
                     style={{
-                      width: '70%',
                       whiteSpace: 'break-spaces',
-                      display: 'flex'
+                      display: 'flex',
+                      alignSelf: 'center'
                     }}
                   >
                     <Radio
                       value={ack.value}
-                    />
-                    <p>
+                    >
                       {ack.label}
-                    </p>
+                    </Radio>
                   </div>
                 ))}
               </Radio.Group>
             </div>
             <br />
             <br />
-            <Button onClick={this.handleSubmitAck} type="primary" disabled={finalAck === ''}>Submit</Button>
+            <Button
+              onClick={this.handleSubmitAck}
+              type="primary"
+              disabled={finalAck === '' && !checkedFinal}
+            >
+              Submit
+            </Button>
           </div>
         </Spin>}
       </div>
@@ -766,6 +780,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   doAssess: (data) => dispatch(doAssessment(data)),
+  doAssessAll: (data) => dispatch(doAssessmentAll(data)),
   getValues: (id) => dispatch(getValueList(id)),
   getRatingList: () => dispatch(getRatings()),
   getNotifications: () => dispatch(actionGetNotifications()),
@@ -786,7 +801,7 @@ export default Form.create({})(withRouter(connectToComponent));
 Appraisal.propTypes = {
   kpiReducers: PropTypes.instanceOf(Object),
   doSaveValues: PropTypes.func,
-  doAssess: PropTypes.func,
+  // doAssess: PropTypes.func,
   getRatingList: PropTypes.func,
   getValues: PropTypes.func,
   getKpiList: PropTypes.func,
@@ -797,5 +812,6 @@ Appraisal.propTypes = {
   empAcknowledgeList: PropTypes.func,
   userReducers: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
-  form: PropTypes.instanceOf(Object)
+  form: PropTypes.instanceOf(Object),
+  doAssessAll: PropTypes.func
 };

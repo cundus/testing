@@ -105,7 +105,7 @@ class KPI extends Component {
           colorring = '#484ef0';
         }
         return (
-          <Skeleton active loading={loadingResult} paragraph={false} title={{ width: 'auto' }}>
+          <Skeleton active loading={loadingResult === record.id} paragraph={false} title={{ width: 'auto' }}>
             <Text strong style={{ color: colorring }}>{record.rating}</Text>
           </Skeleton>
         );
@@ -123,7 +123,9 @@ class KPI extends Component {
           isModalShow,
           showHideModal,
           handleChangeField,
-          dataSource
+          dataSource,
+          handleAssesLoading,
+          getOwnKpiList
         } = this.props;
         let error = false;
         const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
@@ -151,6 +153,8 @@ class KPI extends Component {
               qualitativeOption={record.qualitativeOption}
               modalRecord={record}
               showHideModal={showHideModal}
+              handleAssesLoading={handleAssesLoading}
+              getOwnKpiList={getOwnKpiList}
               handleChangeAssessment={handleChangeField}
             />
             <br />
@@ -209,7 +213,7 @@ class KPI extends Component {
             />
             {(currentStep === stepKpi[6] || currentStep === stepKpi[7] || formStatusId === '3') &&
             <div>
-              <Text>Propose Rating</Text>
+              <Text>{formStatusId === '3' ? 'Final Rating' : 'Propose Rating'}</Text>
               <br />
               <Text strong>{proposeRating}</Text>
               <br />
@@ -250,5 +254,7 @@ KPI.propTypes = {
   handleSubmit:  PropTypes.func,
   changeChallenge: PropTypes.func,
   feedShow: PropTypes.func,
+  handleAssesLoading: PropTypes.func,
+  getOwnKpiList: PropTypes.func,
   handleSaveAssessment:  PropTypes.func
 };

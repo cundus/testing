@@ -18,7 +18,8 @@ import {
   Select,
   Checkbox,
   Spin,
-  Icon
+  Icon,
+  Result
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -95,81 +96,85 @@ class Appraisal extends Component {
     await getKpiList(id);
     const { kpiReducers } = this.props;
     const {
-      dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback, user
+      dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback, user, status
     } = kpiReducers;
-    const newData = [];
-    // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
-    await dataKpi.map((itemKpi, index) => {
-      if (itemKpi.othersRatingComments.id) {
-        this.setState({ isFeedback: true });
-      }
-      let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":""}`;
-      });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
-      Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
-        return itemKpi.metricLookup.map((metric) => {
-          if (newDataMetric === metric.label) {
-            dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
-              metric.achievementText : metric.achievementNumeric}`;
-            return dataMetrics;
-          }
-          return null;
+    if (status === Success) {
+      const newData = [];
+      // for fetching data metrics API
+      // eslint-disable-next-line array-callback-return
+      await dataKpi.map((itemKpi, index) => {
+        if (itemKpi.othersRatingComments.id) {
+          this.setState({ isFeedback: true });
+        }
+        let dataMetrics = itemKpi.metricLookup.map((metric) => {
+          return `{"${metric.label}":""}`;
         });
+        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+        dataMetrics = dataMetrics.reduce((result, current) => {
+          return Object.assign(result, current);
+        }, {});
+        Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+          return itemKpi.metricLookup.map((metric) => {
+            if (newDataMetric === metric.label) {
+              dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
+                metric.achievementText : metric.achievementNumeric}`;
+              return dataMetrics;
+            }
+            return null;
+          });
+        });
+        const dataKeyMetric = Object.keys(dataMetrics);
+        const newOption = [];
+        dataKeyMetric.map((item) => {
+          const data = dataMetrics[item];
+          newOption.push(data);
+          return data;
+        });
+        const data = {
+          key: itemKpi.id,
+          id: itemKpi.id,
+          cascadeType: itemKpi.cascadeType,
+          cascadeName: itemKpi.cascadeName,
+          kpi: itemKpi.name,
+          baseline: itemKpi.baseline,
+          weight: itemKpi.weight,
+          rating: itemKpi.rating,
+          index,
+          achievementType: itemKpi.achievementType,
+          assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
+          qualitativeOption: newOption,
+          metrics: dataKpiMetrics,
+          ...dataMetrics,
+          feedback: itemKpi.othersRatingComments.comment
+        };
+        newData.push(data);
       });
-      const dataKeyMetric = Object.keys(dataMetrics);
-      const newOption = [];
-      dataKeyMetric.map((item) => {
-        const data = dataMetrics[item];
-        newOption.push(data);
-        return data;
+      const dataOrdered = await newData.sort((a, b) => {
+        return a.id - b.id;
       });
-      const data = {
-        key: itemKpi.id,
-        id: itemKpi.id,
-        cascadeType: itemKpi.cascadeType,
-        cascadeName: itemKpi.cascadeName,
-        kpi: itemKpi.name,
-        baseline: itemKpi.baseline,
-        weight: itemKpi.weight,
-        rating: itemKpi.rating,
-        index,
-        achievementType: itemKpi.achievementType,
-        assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
-        qualitativeOption: newOption,
-        metrics: dataKpiMetrics,
-        ...dataMetrics,
-        feedback: itemKpi.othersRatingComments.comment
-      };
-      newData.push(data);
-    });
-    const dataOrdered = await newData.sort((a, b) => {
-      return a.id - b.id;
-    });
-    const dataGen = dataOrdered.map((item, i) => {
-      return {
-        assesment: item.assesment
-      };
-    });
-    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
-    if (dataKpiCheck) {
-      form.setFieldsValue({
-        dataKpi: dataGen
+      const dataGen = dataOrdered.map((item, i) => {
+        return {
+          assesment: item.assesment
+        };
+      });
+      const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+      if (dataKpiCheck) {
+        form.setFieldsValue({
+          dataKpi: dataGen
+        });
+      }
+      this.setState({
+        myStep: currentStep === 'Performance Review Manager',
+        dataKpis: dataOrdered,
+        challengeYour: challenge === '----------' ? '' : challenge,
+        generalFeedbackState: generalFeedback.comment,
+        // eslint-disable-next-line max-len
+        acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
+        teamName: `${user.firstName} ${user.lastName}`
       });
     }
     this.setState({
-      myStep: currentStep === 'Performance Review Manager',
-      dataKpis: dataOrdered,
-      challengeYour: challenge === '----------' ? '' : challenge,
-      generalFeedbackState: generalFeedback.comment === '----------' ? '' : generalFeedback.comment,
-      loadingKpis: false,
-      // eslint-disable-next-line max-len
-      acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
-      teamName: `${user.firstName} ${user.lastName}`
+      loadingKpis: false
     });
   }
 
@@ -187,70 +192,76 @@ class Appraisal extends Component {
     }
     await getValues(id);
     const { kpiReducers } = this.props;
-    const { dataValues, dataRating } = kpiReducers;
-    const newData = [];
-    // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
-    await dataValues.map((itemValues, index) => {
-      const newFiles = [];
-      // eslint-disable-next-line no-unused-expressions
-      itemValues.attachments && itemValues.attachments.map((files) => {
+    const { dataValues, dataRating, statusValues } = kpiReducers;
+    if (statusValues === Success) {
+      const newData = [];
+      // for fetching data metrics API
+      // eslint-disable-next-line array-callback-return
+      await dataValues.map((itemValues, index) => {
+        const newFiles = [];
+        // eslint-disable-next-line no-unused-expressions
+        itemValues.attachments && itemValues.attachments.map((files) => {
+          const data = {
+            uid: files.id,
+            id: files.id,
+            valueId: files.valueId,
+            name: files.fileName,
+            status: 'done',
+            url: 'download'
+          };
+          newFiles.push(data);
+          return data;
+        });
+        const ratingCheck = dataRating.filter((itemRating) => itemRating.id === itemValues.valuesRatingDTO.rating);
         const data = {
-          uid: files.id,
-          id: files.id,
-          valueId: files.valueId,
-          name: files.fileName,
-          status: 'done',
-          url: 'download'
+          key: itemValues.id,
+          valueId: itemValues.id,
+          index,
+          orderId: itemValues.orderId,
+          name: itemValues.name,
+          rating: ratingCheck.length < 1 ? undefined : itemValues.valuesRatingDTO.rating,
+          comment: itemValues.valuesRatingDTO.comment,
+          attachments: newFiles,
+          feedback: itemValues.otherValuesRatingDTO.comment
         };
-        newFiles.push(data);
-        return data;
+        newData.push(data);
       });
-      const ratingCheck = dataRating.filter((itemRating) => itemRating.id === itemValues.valuesRatingDTO.rating);
-      const data = {
-        key: itemValues.id,
-        valueId: itemValues.id,
-        index,
-        orderId: itemValues.orderId,
-        name: itemValues.name,
-        rating: ratingCheck.length < 1 ? undefined : itemValues.valuesRatingDTO.rating,
-        comment: itemValues.valuesRatingDTO.comment,
-        attachments: newFiles,
-        feedback: itemValues.otherValuesRatingDTO.comment
-      };
-      newData.push(data);
-    });
-    let dataOrdered = await newData.sort((a, b) => {
-      return a.orderId - b.orderId;
-    });
-    dataOrdered = dataOrdered.map((item, index) => {
-      return {
-        ...item,
-        index
-      };
-    });
-    const dataGen = dataOrdered.map((item, i) => {
-      return {
-        rating: item.rating,
-        comment: item.comment
-      };
-    });
-    const dataGeneral = form.getFieldsValue(['dataGeneral']);
-    if (dataGeneral) {
-      form.setFieldsValue({
-        dataGeneral: dataGen
+      let dataOrdered = await newData.sort((a, b) => {
+        return a.orderId - b.orderId;
+      });
+      dataOrdered = dataOrdered.map((item, index) => {
+        return {
+          ...item,
+          index
+        };
+      });
+      const dataGen = dataOrdered.map((item, i) => {
+        return {
+          rating: item.rating,
+          comment: item.comment
+        };
+      });
+      const dataGeneral = form.getFieldsValue(['dataGeneral']);
+      if (dataGeneral) {
+        form.setFieldsValue({
+          dataGeneral: dataGen
+        });
+      }
+      this.setState({
+        loadingSubmit: false,
+        optionRating: dataRating,
+        dataValueList: dataOrdered
       });
     }
     this.setState({
-      loadingMyValue: false,
-      loadingSubmit: false,
-      optionRating: dataRating,
-      dataValueList: dataOrdered
+      loadingMyValue: false
     });
   }
 
   handleSendBack = () => {
-    const { sendBackAppraisal, match, getNotifications } = this.props;
+    const {
+      sendBackAppraisal, match, getNotifications, form
+    } = this.props;
     const { params } = match;
     const {
       dataKpis, dataValueList, generalFeedbackState, teamName
@@ -267,9 +278,16 @@ class Appraisal extends Component {
         comment: data.feedback
       };
     });
+    let rating = form.getFieldValue('proposeRating');
+    // eslint-disable-next-line react/destructuring-assignment
+    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+      // eslint-disable-next-line react/destructuring-assignment
+      rating = this.props.kpiReducers.dataKpiRating.id;
+    }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
       kpiFeedbacks,
+      rating,
       valuesFeedbacks
     };
     confirm({
@@ -466,7 +484,11 @@ class Appraisal extends Component {
       dataProposeRating,
       dataKpiRating,
       currentStep,
-      formStatusId
+      formStatusId,
+      status,
+      errMessage,
+      statusValues,
+      messageValues
     } = kpiReducers;
     return (
       <div>
@@ -502,68 +524,84 @@ class Appraisal extends Component {
           <div>
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
-                <TableKPI
-                  form={form}
-                  loading={loadingKpis}
-                  dataSource={dataKpis}
-                  dataMetrics={dataKpiMetrics}
-                  isFeedback={isFeedback}
-                  myStep={myStep}
-                  handleChangeField={this.handleChangeAssessment}
-                />
-                <Form>
-                  <Text strong>Propose Rating : </Text>
-                  <Form.Item>
-                    {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
-                      rules: [{ required: true, message: 'Propose Rating is required' }],
-                      initialValue: dataKpiRating.id
-                    })(
-                      <Select
-                        disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                          currentStep === stepKpi[6]) || formStatusId === '3'}
-                        style={{ width: 200 }}
-                        placeholder="Propose Rating"
-                      >
-                        {dataProposeRating.map((item, index) => {
-                          return <Option key={index} value={item.id}>{item.name}</Option>;
-                        })}
-                      </Select>
-                      ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
-                  </Form.Item>
-                </Form>
+                {statusValues === Success ?
+                  <div>
+                    <TableKPI
+                      form={form}
+                      loading={loadingKpis}
+                      dataSource={dataKpis}
+                      dataMetrics={dataKpiMetrics}
+                      isFeedback={isFeedback}
+                      myStep={myStep}
+                      handleChangeField={this.handleChangeAssessment}
+                    />
+                    <Form>
+                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
+                      <Form.Item>
+                        {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
+                          rules: [{ required: true, message: 'Propose Rating is required' }],
+                          initialValue: dataKpiRating.id
+                        })(
+                          <Select
+                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
+                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                            style={{ width: 200 }}
+                            placeholder="Propose Rating"
+                          >
+                            {dataProposeRating.map((item, index) => {
+                              return <Option key={index} value={item.id}>{item.name}</Option>;
+                            })}
+                          </Select>
+                          ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                      </Form.Item>
+                    </Form>
+                  </div> :
+                  <Result
+                    status={status}
+                    title={status}
+                    subTitle={`Sorry, ${messageValues}`}
+                  />}
               </TabPane>
               <TabPane tab="Values" key="2">
-                <TableValue
-                  form={form}
-                  loading={loadingMyValue}
-                  dataSource={dataValueList}
-                  getOwnValues={this.getOwnValues}
-                  handleChangeField={this.handleChangeValues}
-                  handleSubmit={this.handleSubmit}
-                  goToMonitoring={this.goToMonitoring}
-                  handleSave={this.handleSave}
-                  myStep={myStep}
-                  optionRating={optionRating}
-                />
-                <Form>
-                  <Text strong>Propose Rating : </Text>
-                  <Form.Item>
-                    {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
-                      rules: [{ required: true, message: 'Propose Rating is required' }],
-                      initialValue: dataKpiRating.rating || undefined
-                    })(
-                      <Select
-                        disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                          currentStep === stepKpi[6]) || formStatusId === '3'}
-                        style={{ width: 200 }} placeholder="Propose Rating"
-                      >
-                        {dataProposeRating.map((item, index) => {
-                          return <Option key={index} value={item.id}>{item.name}</Option>;
-                        })}
-                      </Select>
-                      ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
-                  </Form.Item>
-                </Form>
+                {status === Success ?
+                  <div>
+                    <TableValue
+                      form={form}
+                      loading={loadingMyValue}
+                      dataSource={dataValueList}
+                      getOwnValues={this.getOwnValues}
+                      handleChangeField={this.handleChangeValues}
+                      handleSubmit={this.handleSubmit}
+                      goToMonitoring={this.goToMonitoring}
+                      handleSave={this.handleSave}
+                      myStep={myStep}
+                      optionRating={optionRating}
+                    />
+                    <Form>
+                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
+                      <Form.Item>
+                        {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
+                          rules: [{ required: true, message: 'Propose Rating is required' }],
+                          initialValue: dataKpiRating.rating || undefined
+                        })(
+                          <Select
+                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
+                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                            style={{ width: 200 }} placeholder="Propose Rating"
+                          >
+                            {dataProposeRating.map((item, index) => {
+                              return <Option key={index} value={item.id}>{item.name}</Option>;
+                            })}
+                          </Select>
+                          ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                      </Form.Item>
+                    </Form>
+                  </div> :
+                  <Result
+                    status={status}
+                    title={status}
+                    subTitle={`Sorry, ${errMessage}`}
+                  />}
               </TabPane>
             </Tabs>
           </div>
@@ -639,8 +677,8 @@ class Appraisal extends Component {
         <div style={{
           ...globalStyle.contentContainer,
           borderRadius: 0,
-          paddingTop: 0,
-          paddingBottom: 0
+          paddingTop: 20,
+          paddingBottom: 20
         }}
         >
           <center>
@@ -648,8 +686,8 @@ class Appraisal extends Component {
               {myStep &&
                 <div style={{ textAlign: 'center' }}>
                   <Button
-                    id="go-monitoring"
-                    // onClick={goToMonitoring}
+                    id="go-back"
+                    onClick={()=> this.props.history.goBack()}
                     style={{ margin: 10 }}
                   >
                     Back
@@ -659,7 +697,7 @@ class Appraisal extends Component {
                     onClick={this.handleSendBack}
                     style={{ margin: 10 }}
                   >
-                    Save & Send Feedback
+                    Send Feedback
                   </Button>
                   <Button
                     id="send-manager"

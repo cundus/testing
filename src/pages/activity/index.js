@@ -73,6 +73,7 @@ class Activity extends Component {
         return {
           key: d.id,
           ...d,
+          status: d.status[0].toUpperCase() + d.status.slice(1),
           lastMessage: (d.lastReply !== null) ? d.lastReply.feedback : '',
           actions: {
             threadId: d.id,

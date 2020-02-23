@@ -61,7 +61,10 @@ import {
   GET_ATTACHMENT_FILE_FAILED,
   DOWNLOAD_FILE,
   DOWNLOAD_FILE_SUCCESS,
-  DOWNLOAD_FILE_FAILED
+  DOWNLOAD_FILE_FAILED,
+  DO_ASSESSMENT_SUCCESS_ALL,
+  DO_ASSESSMENT_ALL,
+  DO_ASSESSMENT_FAILED_ALL
 } from '../action.type';
 
 import {
@@ -72,7 +75,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -386,7 +389,8 @@ export const doAssessment = (data) => async (dispatch) => {
         type: DO_ASSESSMENT_SUCCESS,
         loading: false,
         status: payload.data.status_code,
-        message: payload.data.status_description
+        message: payload.data.status_description,
+        data: payload.data.result
       });
     } else {
       dispatch({
@@ -418,6 +422,52 @@ export const doAssessment = (data) => async (dispatch) => {
   }
 };
 
+export const doAssessmentAll = (data) => async (dispatch) => {
+  dispatch({
+    type: DO_ASSESSMENT_ALL,
+    loading: true,
+    status: null,
+    message: null,
+    data: []
+  });
+  try {
+    const payload = await doAssessAll(data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: DO_ASSESSMENT_SUCCESS_ALL,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: DO_ASSESSMENT_FAILED_ALL,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: DO_ASSESSMENT_FAILED_ALL,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: DO_ASSESSMENT_FAILED_ALL,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
 export const getValueList = (id) => async (dispatch) => {
   dispatch({
     type: GET_VALUES,
