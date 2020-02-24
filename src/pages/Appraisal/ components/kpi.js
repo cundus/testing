@@ -213,7 +213,10 @@ class KPI extends Component {
             />
             {(currentStep === stepKpi[6] || currentStep === stepKpi[7] || formStatusId === '3') &&
             <div>
-              <Text>{formStatusId === '3' ? 'Final Rating' : 'Propose Rating'}</Text>
+              <Text>
+                {(currentStep === stepKpi[5] ||
+                currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+              </Text>
               <br />
               <Text strong>{proposeRating}</Text>
               <br />

@@ -536,7 +536,10 @@ class Appraisal extends Component {
                       handleChangeField={this.handleChangeAssessment}
                     />
                     <Form>
-                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
+                      <Text strong>
+                        {(currentStep === stepKpi[5] ||
+                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
@@ -578,7 +581,10 @@ class Appraisal extends Component {
                       optionRating={optionRating}
                     />
                     <Form>
-                      <Text strong>{formStatusId === '3' ? 'Final Rating : ' : 'Propose Rating : '} </Text>
+                      <Text strong>
+                        {(currentStep === stepKpi[5] ||
+                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
