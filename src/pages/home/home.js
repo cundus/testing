@@ -64,7 +64,7 @@ class Home extends Component {
               <img alt="appraisal" src={CustomerIcon} className="yellow" style={{ width: 120, height: 120 }} />
               <h1>Appraisal</h1>
               <p className="qoute-text">View your final performance rating</p>
-              <Link to="/Appraisal">
+              <Link to="/appraisal">
                 <Button shape="round" className="homeBtn  yellowBtn" disabled={(isAllowToMonitor)}>
                   View My Final Performance
                 </Button>
