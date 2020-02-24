@@ -693,7 +693,7 @@ class Appraisal extends Component {
                 <div style={{ textAlign: 'center' }}>
                   <Button
                     id="go-back"
-                    onClick={()=> this.props.history.goBack()}
+                    onClick={()=> this.props.history.push('/my-team/appraisal/')}
                     style={{ margin: 10 }}
                   >
                     Back

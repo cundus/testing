@@ -494,7 +494,7 @@ class MonitorKPI extends Component {
               {
                 isSuperior ?
                 <div>
-                  <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
+                  <Button type="default" onClick={()=> this.props.history.push('/my-team/monitoring/')}>Back</Button>
                 </div>:
                 <div>
                   <Button
