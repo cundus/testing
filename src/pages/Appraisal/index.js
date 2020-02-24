@@ -422,7 +422,7 @@ class Appraisal extends Component {
         rating: item.rating,
         valueId: item.valueId
       };
-      if (!item.rating || !item.comment) {
+      if (!item.rating) {
         valuesErr = true;
       }
       newData.push(data);
