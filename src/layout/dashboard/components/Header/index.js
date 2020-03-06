@@ -12,10 +12,10 @@ import Indonesia from '../../../../assets/flags/004-indonesia.svg';
 import MenuList from '../../../../routes/MenuList';
 import { accountMenu, langMenu, notifMenu } from './components/menus';
 import styles from './Header.styles';
+import apiUrl from '../../../../utils/apiUrl';
 
 
 const { Text } = Typography;
-const { REACT_APP_API_URL } = process.env;
 
 const Header = (props) => {
   const {
@@ -25,7 +25,7 @@ const Header = (props) => {
   const pathlocation = history.location.pathname;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = uId && `${REACT_APP_API_URL}/user/photo/${uId}`;
+  const url = uId && `${apiUrl()}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);

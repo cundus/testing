@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { Avatar, Button } from 'antd';
 import DataTable from '../../../components/dataTable/index';
 import  { Link } from 'react-router-dom';
+import apiUrl from '../../../utils/apiUrl';
 
-const {
-  REACT_APP_API_URL
-} = process.env;
 
 class TableMonitoring extends Component {
   constructor(props) {
@@ -17,7 +15,7 @@ class TableMonitoring extends Component {
         placeholder: 'Profile',
         align: 'center',
         action: true,
-        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`}/>)
+        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`}/>)
       },
       {
         title: 'Name',

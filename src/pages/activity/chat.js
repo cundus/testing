@@ -18,12 +18,11 @@ import { getListActivity, getActivityStatus, getActivityThreadChat, createChat }
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
+import apiUrl from '../../utils/apiUrl';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
 const { TextArea } = Input;
-const { REACT_APP_API_URL } = process.env;
-
 
 class Chat extends Component {
   constructor(props) {
@@ -103,7 +102,7 @@ class Chat extends Component {
               <Avatar
                 shape="circle"
                 size={'large'}
-                src={`${REACT_APP_API_URL}/user/photo/${userId}`}
+                src={`${apiUrl()}/user/photo/${userId}`}
                 icon="user"
                 className="avatar"
                 type="rounded"
@@ -119,7 +118,7 @@ class Chat extends Component {
                       <Avatar
                       shape="circle"
                       size={'default'}
-                      src={`${REACT_APP_API_URL}/user/photo/${d.userId}`}
+                      src={`${apiUrl()}/user/photo/${d.userId}`}
                       icon="user"
                       className="avatar"
                     />&nbsp;

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import {Avatar, Tag, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import DataTable from '../../../components/dataTable/index';
-const {
-  REACT_APP_API_URL
-} = process.env;
+import apiUrl from '../../../utils/apiUrl';
 
 class TablePlan extends Component {
   constructor(props) {
@@ -16,7 +14,7 @@ class TablePlan extends Component {
         align: 'center',
         placeholder: 'Profile',
         action: true,
-        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />)
+        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`} />)
       },
       {
         title: 'Name',

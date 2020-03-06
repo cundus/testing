@@ -4,12 +4,9 @@ import {
 } from 'antd';
 import { withRouter } from 'react-router-dom';
 import DataTable from '../../../components/dataTable';
+import apiUrl from '../../../utils/apiUrl';
 
 const { Text } = Typography;
-
-const {
-  REACT_APP_API_URL
-} = process.env;
 
 class TableAppraisal extends Component {
   constructor(props) {
@@ -22,7 +19,7 @@ class TableAppraisal extends Component {
         width: 100,
         align: 'center',
         action: true,
-        render: (text) => (<Avatar src={`${REACT_APP_API_URL}/user/photo/${text}`} />)
+        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`} />)
       },
       {
         title: 'Name',
