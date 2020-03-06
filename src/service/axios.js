@@ -5,7 +5,7 @@ const { REACT_APP_API_URL } = process.env;
 
 // custom config to create a new instance
 export const customAxios = axios.create({
-  baseURL: process.env.NODE_ENV === 'development' ? REACT_APP_API_URL : `${window.location.href}api`
+  baseURL: process.env.NODE_ENV === 'development' ? REACT_APP_API_URL : 'api'
 });
 
 customAxios.interceptors.request.use((config) => {
