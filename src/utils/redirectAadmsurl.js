@@ -1,6 +1,6 @@
 const { REACT_APP_REDIRECT_URI_AADMS } = process.env;
 
-const apiUrl = () => {
+const redirectAadmsurl = () => {
   if (process.env.NODE_ENV === 'development') {
     return REACT_APP_REDIRECT_URI_AADMS;
   } else {
@@ -8,4 +8,4 @@ const apiUrl = () => {
   }
 };
 
-export default apiUrl;
+export default redirectAadmsurl;
