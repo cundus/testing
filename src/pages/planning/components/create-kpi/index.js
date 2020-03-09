@@ -334,6 +334,7 @@ class CreateKPI extends Component {
           </center>
           <Tabs activeKey={tab} type="card" onChange={this.changeTab}>
             <TabPane
+              id="cascade-superior-tab"
               tab="Cascade From Superior"
               key="1"
             >
@@ -347,7 +348,7 @@ class CreateKPI extends Component {
                   handleSelectData={handleSelectData}
                 /> : <center><Spin /></center>}
             </TabPane>
-            <TabPane tab="Create Own KPI" key="2">
+            <TabPane id="create-own-tab" tab="Create Own KPI" key="2">
               {!loadingOwn ?
                 <CreateOwn
                   form={form}
