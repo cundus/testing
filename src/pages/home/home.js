@@ -51,7 +51,7 @@ class Home extends Component {
               <br />
               <img alt="monitoring" src={UsersIcon} className="pink" style={{ width: 120, height: 120 }} />
               <h1>Monitoring</h1>
-              <p className="qoute-text">Feedbask session with Superior</p>
+              <p className="qoute-text">Feedback session with Superior</p>
               <Link to="/monitoring">
                 <Button shape="round" className="homeBtn  pinkBtn" disabled={(isAllowToMonitor)}>
                   View Feedback Session
