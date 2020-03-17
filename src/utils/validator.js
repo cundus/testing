@@ -129,7 +129,7 @@ export const weightValidator = () => [
     message: 'Weight is required'
   },
   {
-    pattern: new RegExp('^[1]*?(?<Percentage>[1-9][0-9]?|100)?$'),
+    pattern: new RegExp('^0*(?:[1-9][0-9]?|100)$'),
     message: 'Weight\'s value must between 1 to 100'
   }
 ];
