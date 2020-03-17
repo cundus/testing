@@ -26,14 +26,16 @@ class TableEditMyKPI extends Component {
         title: 'Baseline',
         dataIndex: 'baseline',
         align: 'center',
-        placeholder: 'Enter baseline'
+        placeholder: 'Enter baseline',
+        width: 200
       },
       {
         title: 'Weight (100%)',
         dataIndex: 'weight',
         align: 'center',
         placeholder: 'Enter KPI Weight',
-        type: 'number'
+        type: 'number',
+        width: 90
       }
     ];
     await dataMetrics.map((itemMetric) => {
@@ -51,7 +53,8 @@ class TableEditMyKPI extends Component {
       dataIndex: 'feedback',
       align: 'center',
       placeholder: 'Feedback',
-      editable: true
+      editable: true,
+      width: 200,
     });
     this.setState({
       columns: newColumns

@@ -477,7 +477,8 @@ class Appraisal extends Component {
     } = this.state;
     const {
       form,
-      kpiReducers
+      kpiReducers,
+      history
     } = this.props;
     const {
       dataKpiMetrics,
@@ -524,7 +525,7 @@ class Appraisal extends Component {
           <div>
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
-                {statusValues === Success ?
+                {status === Success || loadingKpis ?
                   <div>
                     <TableKPI
                       form={form}
@@ -562,11 +563,11 @@ class Appraisal extends Component {
                   <Result
                     status={status}
                     title={status}
-                    subTitle={`Sorry, ${messageValues}`}
+                    subTitle={`Sorry, ${errMessage}`}
                   />}
               </TabPane>
               <TabPane tab="Values" key="2">
-                {status === Success ?
+                {statusValues === Success || loadingMyValue ?
                   <div>
                     <TableValue
                       form={form}
@@ -604,9 +605,9 @@ class Appraisal extends Component {
                     </Form>
                   </div> :
                   <Result
-                    status={status}
-                    title={status}
-                    subTitle={`Sorry, ${errMessage}`}
+                    status={statusValues}
+                    title={statusValues}
+                    subTitle={`Sorry, ${messageValues}`}
                   />}
               </TabPane>
             </Tabs>
@@ -693,7 +694,8 @@ class Appraisal extends Component {
                 <div style={{ textAlign: 'center' }}>
                   <Button
                     id="go-back"
-                    onClick={()=> this.props.history.push('/my-team/appraisal/')}
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onClick={() => history.push('/my-team/appraisal/')}
                     style={{ margin: 10 }}
                   >
                     Back

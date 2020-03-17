@@ -41,11 +41,13 @@ class Value extends Component {
       {
         title: 'Section',
         dataIndex: 'name',
+        width: 200,
         align: 'center'
       },
       {
         title: 'Ratings',
         dataIndex: 'rating',
+        width: 100,
         align: 'center',
         render: (text, record) => {
           const { optionRating } = this.props;
@@ -66,6 +68,7 @@ class Value extends Component {
       {
         title: 'Remarks/Evidence',
         dataIndex: 'comment',
+        width: 200,
         placeholder: 'Enter your Remarks here',
         align: 'center',
         editable: false
@@ -100,6 +103,7 @@ class Value extends Component {
         placeholder: 'Enter Value Feedback',
         align: 'center',
         editable: myStep,
+        width: 100,
         className: 'ant-table-th-yellow'
       }
     ];

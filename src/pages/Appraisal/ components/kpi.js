@@ -63,7 +63,7 @@ class KPI extends Component {
         dataIndex: 'baseline',
         placeholder: 'Enter baseline',
         align: 'center',
-        width: 200,
+        width: 150,
         editable: false
       },
       {

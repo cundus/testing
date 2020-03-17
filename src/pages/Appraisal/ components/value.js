@@ -42,10 +42,12 @@ class Value extends Component {
       {
         title: 'Section',
         dataIndex: 'name',
-        align: 'center'
+        align: 'center',
+        width: 200
       },
       {
         title: 'Ratings',
+        width: 100,
         dataIndex: 'rating',
         align: 'center',
         render: (text, record) => {
@@ -77,6 +79,7 @@ class Value extends Component {
         title: 'Remarks/Evidence',
         dataIndex: 'comment',
         align: 'center',
+        width: 200,
         placeholder: 'Enter your Remarks here',
         // eslint-disable-next-line react/destructuring-assignment
         editable: !this.props.myStep
@@ -114,6 +117,7 @@ class Value extends Component {
         dataIndex: 'feedback',
         placeholder: 'Enter Level 2',
         align: 'center',
+        width: 100,
         className: 'ant-table-th-yellow'
       }
     ];
