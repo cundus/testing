@@ -83,7 +83,7 @@ class KPI extends Component {
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
         align: 'center',
-        width: 200,
+        width: 150,
         editable: false
       };
       newColumns.push(data);
