@@ -19,7 +19,6 @@ const { Content } = Layout;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
-    apiUrl();
     this.state = {
       collapsed: true
     };
@@ -29,8 +28,7 @@ class Dashboard extends React.Component {
     await this.callAndStore();
     // listen when browser close
     window.addEventListener('onbeforeunload', () => {
-      localStorage.removeItem('token');
-      localStorage.removeItem('sfToken');
+      localStorage.clear();
     });
     // // refresh token
     const { auth, getNotifications } = this.props;
