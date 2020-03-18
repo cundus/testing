@@ -29,7 +29,8 @@ class Dashboard extends React.Component {
     await this.callAndStore();
     // listen when browser close
     window.addEventListener('onbeforeunload', () => {
-      localStorage.clear();
+      localStorage.removeItem('token');
+      localStorage.removeItem('sfToken');
     });
     // // refresh token
     const { auth, getNotifications } = this.props;
