@@ -25,7 +25,7 @@ const Header = (props) => {
   const pathlocation = history.location.pathname;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
   const uId = _.get(props, 'user.result.user.userId', '');
-  const url = uId && `${localStorage.getItem('apiUrl')}/user/photo/${uId}`;
+  const url = uId && `${apirUrl()}/user/photo/${uId}`;
   const name = _.get(props, 'user.result.user.firstName', '');
   const isManager = _.get(props, 'user.result.user.manager', false);
   const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);

@@ -102,7 +102,7 @@ class Chat extends Component {
               <Avatar
                 shape="circle"
                 size={'large'}
-                src={`${localStorage.getItem('apiUrl')}/user/photo/${userId}`}
+                src={`${apirUrl()}/user/photo/${userId}`}
                 icon="user"
                 className="avatar"
                 type="rounded"
@@ -118,7 +118,7 @@ class Chat extends Component {
                       <Avatar
                       shape="circle"
                       size={'default'}
-                      src={`${localStorage.getItem('apiUrl')}/user/photo/${d.userId}`}
+                      src={`${apirUrl()}/user/photo/${d.userId}`}
                       icon="user"
                       className="avatar"
                     />&nbsp;
