@@ -15,7 +15,7 @@ class TableMonitoring extends Component {
         placeholder: 'Profile',
         align: 'center',
         action: true,
-        render: (text) => (<Avatar src={`${apiUrl()()}/user/photo/${text}`}/>)
+        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`}/>)
       },
       {
         title: 'Name',
