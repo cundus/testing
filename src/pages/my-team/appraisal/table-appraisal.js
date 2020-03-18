@@ -19,7 +19,7 @@ class TableAppraisal extends Component {
         width: 100,
         align: 'center',
         action: true,
-        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`} />)
+        render: (text) => (<Avatar src={`${localStorage.getItem('apiUrl')}/user/photo/${text}`} />)
       },
       {
         title: 'Name',

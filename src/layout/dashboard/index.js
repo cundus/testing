@@ -11,6 +11,7 @@ import { Footer, Header, Sidebar } from './components';
 import { MappedRouter } from '../../routes/RouteGenerator';
 import { authProvider } from '../../service/auth/auth';
 import styles from './Dashboard.style';
+import apiUrl from '../../utils/apiUrl';
 
 // import Stores from "../../redux/store/index";
 const { Content } = Layout;
@@ -18,6 +19,7 @@ const { Content } = Layout;
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    apiUrl();
     this.state = {
       collapsed: true
     };

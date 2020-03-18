@@ -14,7 +14,7 @@ class TablePlan extends Component {
         align: 'center',
         placeholder: 'Profile',
         action: true,
-        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`} />)
+        render: (text) => (<Avatar src={`${localStorage.getItem('apiUrl')}/user/photo/${text}`} />)
       },
       {
         title: 'Name',
