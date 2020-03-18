@@ -5,7 +5,7 @@ const uuidv1 = require('uuid/v1');
 
 // custom config to create a new instance
 export const customAxios = axios.create({
-  baseURL: localStorage.getItem('apiUrl') || '/api'
+  baseURL: localStorage.getItem('apiUrl')
 });
 
 customAxios.interceptors.request.use((config) => {
