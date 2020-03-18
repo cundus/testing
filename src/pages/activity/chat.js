@@ -102,7 +102,7 @@ class Chat extends Component {
               <Avatar
                 shape="circle"
                 size={'large'}
-                src={`${apirUrl()}/user/photo/${userId}`}
+                src={`${apiUrl()()}/user/photo/${userId}`}
                 icon="user"
                 className="avatar"
                 type="rounded"
@@ -118,7 +118,7 @@ class Chat extends Component {
                       <Avatar
                       shape="circle"
                       size={'default'}
-                      src={`${apirUrl()}/user/photo/${d.userId}`}
+                      src={`${apiUrl()()}/user/photo/${d.userId}`}
                       icon="user"
                       className="avatar"
                     />&nbsp;
