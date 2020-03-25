@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Layout, Spin, message } from 'antd';
+import { Layout, Spin, message, Result, Button } from 'antd';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
@@ -12,6 +12,7 @@ import { MappedRouter } from '../../routes/RouteGenerator';
 import { authProvider } from '../../service/auth/auth';
 import styles from './Dashboard.style';
 import apiUrl from '../../utils/apiUrl';
+import IdleTimer from 'react-idle-timer';
 
 // import Stores from "../../redux/store/index";
 const { Content } = Layout;
@@ -22,6 +23,7 @@ class Dashboard extends React.Component {
     this.state = {
       collapsed: true
     };
+    this.idleTimer = null
   }
 
   async componentDidMount() {
@@ -71,7 +73,7 @@ class Dashboard extends React.Component {
     } else {
       const header = document.querySelector('.headerContainer');
       header.style.display = 'none';
-      message.error('user not found');
+      message.error('There is error when login to application, please relogin');
     }
   }
 
@@ -93,6 +95,11 @@ class Dashboard extends React.Component {
     });
   };
 
+  onIdle = (e) => {
+    const token = localStorage.getItem('token');
+    this.getDetailUser(token);
+  }
+
   render() {
     const step = _.get(this, 'props.step.currentStep', 'Emp Goal Setting');
     const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
@@ -111,17 +118,31 @@ class Dashboard extends React.Component {
     // }
     return (
       <Layout style={{ minHeight: '100vh' }}>
+        <IdleTimer
+          ref={ref => { this.idleTimer = ref }}
+          element={document}
+          onIdle={this.onIdle}
+          debounce={250}
+          timeout={1000 * 60 * 15} // 15mnt
+        />
         <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
         <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
           <Header collapsed={collapsed} toggle={this.toggle} logout={logout} isAllowToMonitor={isAllowToMonitor} />
           <Content style={styles.contentContainer}>
             {/* <div style={{ padding: 24, background: '#fff', borderRadius: 5 }}> */}
             {Object.keys(user).length ? (
-              <MappedRouter routes={mainRouter} />
-            ) : (
+              user.result ?
+                <MappedRouter routes={mainRouter} />:
+                <Result
+                  status="500"
+                  title="There is error when login to application, please relogin"
+                  extra={
+                    <Button type="primary" onClick={logout}>Logout</Button>
+                  }
+                />
+              ) : (
               <center><Spin /></center>
             )}
-            {/* </div> */}
           </Content>
           <Footer />
         </Layout>
