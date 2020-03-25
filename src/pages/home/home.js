@@ -30,7 +30,6 @@ class Home extends Component {
     if (!isManager) {
       size = 8;
     }
-    if (user.result) {
       return (
         <div style={{ ...globalStyle.contentContainer, textAlign: 'center' }}>
           <Row style={{ paddingTop: 50, paddingBottom: 50 }}>
@@ -85,15 +84,6 @@ class Home extends Component {
           </Row>
         </div>
       );
-    } else {
-      return (
-        <Result
-          status="500"
-          title="500"
-          subTitle="User not found."
-        />
-      );
-    }
   }
 }
 const mapDispatchtoProps = (dispatch) => ({
