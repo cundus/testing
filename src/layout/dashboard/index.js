@@ -129,7 +129,6 @@ class Dashboard extends React.Component {
         <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
           <Header collapsed={collapsed} toggle={this.toggle} logout={logout} isAllowToMonitor={isAllowToMonitor} />
           <Content style={styles.contentContainer}>
-            {/* <div style={{ padding: 24, background: '#fff', borderRadius: 5 }}> */}
             {Object.keys(user).length ? (
               user.result ?
                 <MappedRouter routes={mainRouter} />:
