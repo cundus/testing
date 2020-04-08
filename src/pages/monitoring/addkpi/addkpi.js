@@ -416,6 +416,7 @@ class CreateKPI extends Component {
       form.setFieldsValue({
         dataKpi: dataFiltered
       });
+      form.validateFields();
     }
     this.liveCount([...dataSelectedCascade, ...dataFiltered]);
   };
