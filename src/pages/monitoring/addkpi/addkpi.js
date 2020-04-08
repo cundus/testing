@@ -19,6 +19,7 @@ import CreateOwn from './component/create-own';
 import Cascade from './component/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../redux/status-code-type';
 import globalStyle from '../../../styles/globalStyles';
+import stepKpi from '../../../utils/stepKpi';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -45,12 +46,16 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducers, getLatestGoalKpi
+      userReducers, getLatestGoalKpi, step
     } = this.props;
     const { user } = userReducers.result;
-    getLatestGoalKpi();
-    this.getOwnKpiList(user.userId);
-    this.getManagerKpiList(user.userId);
+    if (step.currentStep === stepKpi[2]) {
+      getLatestGoalKpi();
+      this.getOwnKpiList(user.userId);
+      this.getManagerKpiList(user.userId);
+    } else {
+      this.props.history.push('/monitoring');
+    }
   };
 
   getOwnKpiList = async (id) => {
@@ -521,7 +526,8 @@ const mapStateToProps = (state) => ({
   managerKpiReducers: state.managerKpi,
   saveKpiReducers: state.saveKpi,
   kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({

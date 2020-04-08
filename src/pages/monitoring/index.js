@@ -474,7 +474,7 @@ class MonitorKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
               userId={userId}
-              isEditable={(currentStep === stepKpi[2] || currentStep === stepKpi[3])}
+              isEditable={currentStep === stepKpi[2]}
               isSuperior={isSuperior || isHasSubmit}
               stafid={stafid}
             />
@@ -501,7 +501,7 @@ class MonitorKPI extends Component {
                   </Button>
                 </div>: */}
                 <div>
-                {(currentStep === stepKpi[2] || currentStep === stepKpi[3]) ? 
+                {currentStep === stepKpi[2] ? 
                 <div>
                   <Button
                     id="add-kpi"
