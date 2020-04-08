@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
- Spin, Input, Button, Divider, Typography, Modal, message, Form
+ Spin, Input, Button, Divider, Typography, Modal, message, Form, Result
 } from 'antd';
 import {
   GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
@@ -12,6 +12,7 @@ import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 import globalStyle from '../../../styles/globalStyles';
 import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
+import stepKpi from '../../../utils/stepKpi';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -23,13 +24,21 @@ class PlanningDetail extends Component {
     this.state = {
       dataSource: [],
       globalfeedback: '',
+      currentStep: '',
       labelList: [],
       loading: false
     };
   }
 
   async componentDidMount() {
-    await this.getAllData();
+    const { userReducers, match, step } = this.props;
+    const { params } = match;
+    const { user } = userReducers.result;
+    if (user.userId === params.id) {
+      this.props.history.push('/planning/kpi');
+    } else {
+      this.getAllData();
+    }
   }
 
   async getAllData() {
@@ -40,11 +49,11 @@ class PlanningDetail extends Component {
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
     await this.props.getUserDetail(this.props.match.params.id);
-    const mydata = this.props.myteamdetail.kpiList;
+    const mydata = this.props.myteamdetail;
     const globalFeedback = this.props.myteamdetail.challengeOthersRatingComments;
-    if (mydata[0].error !== true) {
+    if (!mydata.error) {
       // eslint-disable-next-line array-callback-return
-      mydata.map((itemKpi) => {
+      mydata.kpiList.map((itemKpi) => {
         let dataMetrics;
         if (itemKpi.metricLookup !== null) {
           dataMetrics = itemKpi.metricLookup.map((metric) => {
@@ -80,6 +89,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: newData,
         loading: false,
+        currentStep: mydata.currentStep,
         globalfeedback: globalFeedback.comment,
         labelList: this.props.myteamdetail.labelList
       });
@@ -87,6 +97,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: [],
         globalfeedback: '',
+        currentStep: '',
         loading: false,
         labelList: this.props.myteamdetail.labelList
       });
@@ -166,6 +177,7 @@ class PlanningDetail extends Component {
   };
 
   render() {
+    if(!this.props.myteamdetail.error) {
     return (
       <div style={globalStyle.contentContainer}>
         {
@@ -186,7 +198,7 @@ class PlanningDetail extends Component {
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
                 <div style={{ textAlign: 'center' }}>
-                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
+                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name || ''} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
                 </div> :
                 <div />
             }
@@ -194,6 +206,7 @@ class PlanningDetail extends Component {
                dataSource={this.state.dataSource}
                form={this.props.form}
                handleChange={this.handleChange}
+               editableFeedback={this.state.currentStep === stepKpi[1]}
                dataMetrics={this.state.labelList}
              />
              <Text strong>Challenge yourself :</Text>
@@ -207,10 +220,12 @@ class PlanningDetail extends Component {
              <TextArea
                value={this.state.globalfeedback}
                onChange={this.changeGlobalfeedback}
+               disabled={!(this.state.currentStep === stepKpi[1])}
                placeholder="Please make necessary changes on KPI items, please refer to my KPI or just cascading it."
              />
              <br />
              <br />
+             {this.state.currentStep === stepKpi[1] &&
              <center>
                <Button
                  style={{ 'background-color': 'orange', color: 'white' }}
@@ -220,14 +235,28 @@ class PlanningDetail extends Component {
                </Button>
                &nbsp;&nbsp;
                <Button onClick={this.handleApprove} type="primary">Approve</Button>
-             </center>
+             </center>}
            </div> :
            <center>
              <Spin />
            </center>
         }
       </div>
-    );
+    ); 
+    } else {
+      return (
+        <div style={globalStyle.contentContainer}>
+        <Result
+          status={'error'}
+          title={this.props.myteamdetail.errorDetail.status_code}
+          subTitle={`Sorry, ${this.props.myteamdetail.errorDetail.status_description || this.props.myteamdetail.errorDetail}`}
+          extra={[
+            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+          ]}
+        />
+        </div>
+      )
+    }
   }
 }
 
@@ -244,6 +273,7 @@ const mapStateToProps = (state) => ({
   myteamdetail: state.myTeamDetailReducers,
   kpi: state.kpiReducers,
   userDetail: state.userDetailReducers,
+  userReducers: state.userReducers,
   feedback: state.feedbackReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);

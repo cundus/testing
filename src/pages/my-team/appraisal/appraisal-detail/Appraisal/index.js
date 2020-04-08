@@ -72,7 +72,18 @@ class Appraisal extends Component {
   }
 
   componentDidMount() {
-    this.getData();
+    const { userReducers, match, step } = this.props;
+    const { params } = match;
+    const { user } = userReducers.result;
+    if (user.userId === params.userId) {
+      if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
+        this.props.history.push('/planning/kpi');
+      } else {
+        this.props.history.push('/appraisal');
+      }
+    } else {
+      this.getData();
+    }
   }
 
   getData = async (e) => {
@@ -525,7 +536,7 @@ class Appraisal extends Component {
           <div>
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
-                {status === Success || loadingKpis ?
+                {(status === Success) || loadingKpis ?
                   <div>
                     <TableKPI
                       form={form}
@@ -561,13 +572,16 @@ class Appraisal extends Component {
                     </Form>
                   </div> :
                   <Result
-                    status={status}
+                    status={'error'}
                     title={status}
                     subTitle={`Sorry, ${errMessage}`}
+                    extra={[
+                      <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+                    ]}
                   />}
               </TabPane>
               <TabPane tab="Values" key="2">
-                {statusValues === Success || loadingMyValue ?
+                {(statusValues === Success) || loadingMyValue ?
                   <div>
                     <TableValue
                       form={form}
@@ -605,14 +619,18 @@ class Appraisal extends Component {
                     </Form>
                   </div> :
                   <Result
-                    status={statusValues}
+                    status={'error'}
                     title={statusValues}
                     subTitle={`Sorry, ${messageValues}`}
+                    extra={[
+                      <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+                    ]}
                   />}
               </TabPane>
             </Tabs>
           </div>
         </div>
+        {status === Success &&
         <div style={{
           ...globalStyle.contentContainer,
           borderRadius: 0,
@@ -626,7 +644,7 @@ class Appraisal extends Component {
             <Text strong>Challenge yourself :</Text>
             <Paragraph>{challengeYour}</Paragraph>
           </Skeleton>
-        </div>
+        </div>}
         {(currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
         <div style={{
           ...globalStyle.contentContainer,
@@ -661,6 +679,7 @@ class Appraisal extends Component {
             </center>
           </Spin>
         </div> }
+        {status === Success &&
         <div style={{
           ...globalStyle.contentContainer,
           background: 'rgb(250, 247, 187)',
@@ -680,7 +699,8 @@ class Appraisal extends Component {
             disabled={!myStep}
             onChange={this.changeGeneralFeedback}
           />
-        </div>
+        </div>}
+        {status === Success &&
         <div style={{
           ...globalStyle.contentContainer,
           borderRadius: 0,
@@ -734,7 +754,7 @@ class Appraisal extends Component {
                 </div>}
             </Skeleton>
           </center>
-        </div>
+        </div>}
       </div>
     );
   }
@@ -742,7 +762,8 @@ class Appraisal extends Component {
 
 const mapStateToProps = (state) => ({
   kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({

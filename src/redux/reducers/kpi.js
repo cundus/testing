@@ -126,17 +126,12 @@ const kpiReducers = (state = initialState, action) => {
     case GET_LATEST_GOAL_KPI_SUCCESS:
       return {
         ...state,
-        loadingGoal: action.loading,
-        status: action.status,
-        message: action.message,
-        dataGoal: action.data
+        loadingGoal: action.loading
       };
     case GET_LATEST_GOAL_KPI_FAILED:
       return {
         ...state,
-        loadingGoal: action.loading,
-        status: action.status,
-        message: action.message
+        loadingGoal: action.loading
       };
     case GET_KPI_LIST:
       return {
@@ -323,17 +318,12 @@ const kpiReducers = (state = initialState, action) => {
     case GET_RATING_SUCCESS:
       return {
         ...state,
-        loading: action.loading,
-        status: action.status,
-        message: action.message,
-        dataRating: action.data.ratings
+        loading: action.loading
       };
     case GET_RATING_FAILED:
       return {
         ...state,
         loading: action.loading,
-        status: action.status,
-        message: action.message,
         dataRating: []
       };
     case ATTACHMENT_FILE:

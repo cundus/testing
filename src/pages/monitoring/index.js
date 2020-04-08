@@ -7,7 +7,8 @@ import {
   message,
   Input,
   Spin,
-  Form
+  Form,
+  Result
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -16,6 +17,7 @@ import TableKPI from './kpi';
 import { doSaveKpi, doGetKpiList, doSubmitNext, doGetLatestGoalKpi } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
@@ -35,11 +37,23 @@ class MonitorKPI extends Component {
       userId: '',
       isSuperior: false
     };
-    this.getAllData();
   }
 
   componentDidMount() {
-    // this.getAllData();
+    const { userReducers, match, step } = this.props;
+    const { params } = match;
+    const { user } = userReducers.result;
+    if (user.userId === params.userId) {
+      if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
+        this.props.history.push('/planning/kpi');
+      } else if(step.currentStep === stepKpi[2]) {
+        this.props.history.push('/monitoring');
+      } else {
+        this.props.history.push('/appraisal');
+      }
+    } else {
+      this.getAllData();
+    }
   }
 
   getAllData = async () => {
@@ -48,7 +62,7 @@ class MonitorKPI extends Component {
     const { userId } = params;
     const { user } = userReducers.result;
     let isSuperior  = this.state.isSuperior;
-    await getLatestGoalKpi();
+    getLatestGoalKpi();
     if (userId) {
       await getKpiList(userId);
       isSuperior = true;
@@ -56,9 +70,9 @@ class MonitorKPI extends Component {
       await getKpiList(user.userId);
     }
     const { kpiReducers } = this.props;
-    const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
+    const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducers;
     const newData = [];
-
+    if (status === Success) {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
@@ -105,6 +119,7 @@ class MonitorKPI extends Component {
       isSuperior
     });
     this.liveCount(newData);
+    }
   };
 
   liveCount = (data) => {
@@ -439,11 +454,13 @@ class MonitorKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducers;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
     const isHasSubmit = (currentStep === 'Performance Review Manager')
+    console.log(loadingKpi, status === Success)
+    if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -458,7 +475,7 @@ class MonitorKPI extends Component {
             <br />
           </center>
         </div>
-        {!loadingKpi && (currentStep === 'Performance Review Employee' || currentStep === 'Performance Review Manager') ?
+        {!loadingKpi ?
           <div>
             <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
@@ -473,6 +490,7 @@ class MonitorKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
               userId={userId}
+              isEditable={currentStep === stepKpi[2]}
               isSuperior={isSuperior || isHasSubmit}
               stafid={stafid}
             />
@@ -499,6 +517,8 @@ class MonitorKPI extends Component {
                   </Button>
                 </div>:
                 <div>
+                {currentStep === stepKpi[2] ? 
+                <div>
                   <Button
                     id="add-kpi"
                   // eslint-disable-next-line react/jsx-no-bind
@@ -524,18 +544,41 @@ class MonitorKPI extends Component {
                   >
                   Go To Appraisal
                   </Button>
+                </div>:<div>
+                  <Button
+                    id="submit-superior"
+                    onClick={this.gotToAppraisal}
+                    type="primary" style={{ margin: 10 }}
+                  >
+                    Go To Appraisal
+                  </Button>
+                  </div>}
                 </div>
-              }
+                }
             </div>
           </div> : <center><Spin /></center>}
       </div>
-    );
+    );} else {
+      return (
+        <div style={globalStyle.contentContainer}>
+        <Result
+          status={'error'}
+          title={status}
+          subTitle={`Sorry, ${errMessage}`}
+          extra={[
+            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+          ]}
+        />
+        </div>
+      )
+    }
   }
 }
 
 const mapStateToProps = (state) => ({
   kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({

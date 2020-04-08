@@ -192,27 +192,27 @@ export const GetMyTeamKPIDetail = (idUser) => {
     });
     try {
       const resp = await getMyTeamDetailKPIAction(idUser);
-      if (resp.status.status_code !== Success || resp.data.kpiList.result.length <= 0) {
-        dispatch({
-          type: errGetMyTeamDetail,
-          data: [{
-            error: true
-          }]
-        });
-      }
-      if (resp.data.result.kpiList.length > 0) {
+      if (resp.data.status_code === 0) {
         dispatch({
           type: getMyTeamDetail,
           data: resp.data.result
+        });
+      } else {
+        dispatch({
+          type: errGetMyTeamDetail,
+          data: {
+            error: true,
+            errorDetail: resp.data
+          }
         });
       }
     } catch (error) {
       dispatch({
         type: errGetMyTeamDetail,
-        data: [{
+        data: {
           error: true,
-          errorCode: error.response.status
-        }]
+          errorDetail: error
+        }
       });
     }
   };

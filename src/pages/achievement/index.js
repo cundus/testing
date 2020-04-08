@@ -18,6 +18,7 @@ import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
@@ -180,6 +181,7 @@ class Achievement extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
+              editable={this.props.step.currentStep === stepKpi[2]}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               isSuperior={this.state.isSuperior}
@@ -213,6 +215,7 @@ const mapStateToProps = (state) => ({
   achievementThread: state.AchievementReducers,
   userReducers: state.userReducers,
   kpiReducers: state.kpiReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
