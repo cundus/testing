@@ -280,7 +280,6 @@ class MonitorKPI extends Component {
       form.setFieldsValue({
         dataKpi: newData
       });
-      form.validateFields();
     }
     this.liveCount(newData);
   };
