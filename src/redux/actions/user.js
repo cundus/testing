@@ -192,10 +192,18 @@ export const GetMyTeamKPIDetail = (idUser) => {
     });
     try {
       const resp = await getMyTeamDetailKPIAction(idUser);
-      if (resp.data.result.kpiList.length > 0) {
+      if (resp.data.status_code === 0) {
         dispatch({
           type: getMyTeamDetail,
           data: resp.data.result
+        });
+      } else {
+        dispatch({
+          type: errGetMyTeamDetail,
+          data: {
+            error: true,
+            errorDetail: resp.data
+          }
         });
       }
     } catch (error) {
@@ -203,7 +211,7 @@ export const GetMyTeamKPIDetail = (idUser) => {
         type: errGetMyTeamDetail,
         data: {
           error: true,
-          errorCode: error.response.status
+          errorDetail: error
         }
       });
     }

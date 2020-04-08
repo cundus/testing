@@ -21,6 +21,7 @@ class TableActivity extends Component {
   }
 
   getColumns = async () => {
+    const { editable } = this.props;
     const newColumns = [
       {
         title: 'Created at',
@@ -56,7 +57,7 @@ class TableActivity extends Component {
               {/* eslint-disable-next-line react/jsx-no-bind */}
               {
                 !this.props.isSuperior?
-                <Button icon="edit" onClick={() => this.props.showModalForm(record.key)} />: <div></div>
+                <Button icon="edit" disable={!editable} onClick={() => this.props.showModalForm(record.key)} />: <div></div>
               }
             </div>
           );

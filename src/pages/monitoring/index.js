@@ -7,7 +7,8 @@ import {
   message,
   Input,
   Spin,
-  Form
+  Form,
+  Result
 } from 'antd';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -39,7 +40,20 @@ class MonitorKPI extends Component {
   }
 
   componentDidMount() {
-    this.getAllData();
+    const { userReducers, match, step } = this.props;
+    const { params } = match;
+    const { user } = userReducers.result;
+    if (user.userId === params.userId) {
+      if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
+        this.props.history.push('/planning/kpi');
+      } else if(step.currentStep === stepKpi[2]) {
+        this.props.history.push('/monitoring');
+      } else {
+        this.props.history.push('/appraisal');
+      }
+    } else {
+      this.getAllData();
+    }
   }
 
   getAllData = async () => {
@@ -56,9 +70,9 @@ class MonitorKPI extends Component {
       await getKpiList(user.userId);
     }
     const { kpiReducers } = this.props;
-    const { dataKpi, challenge, dataKpiMetrics } = kpiReducers;
+    const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducers;
     const newData = [];
-
+    if (status === Success) {
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
     dataKpi.map((itemKpi) => {
@@ -105,6 +119,7 @@ class MonitorKPI extends Component {
       isSuperior
     });
     this.liveCount(newData);
+    }
   };
 
   liveCount = (data) => {
@@ -439,12 +454,13 @@ class MonitorKPI extends Component {
       handleError
     } = this;
     const { kpiReducers, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId } = kpiReducers;
+    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducers;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
     const isHasSubmit = (currentStep === 'Performance Review Manager')
-    console.log(currentStep)
+    console.log(loadingKpi, status === Success)
+    if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -542,13 +558,27 @@ class MonitorKPI extends Component {
             </div>
           </div> : <center><Spin /></center>}
       </div>
-    );
+    );} else {
+      return (
+        <div style={globalStyle.contentContainer}>
+        <Result
+          status={'error'}
+          title={status}
+          subTitle={`Sorry, ${errMessage}`}
+          extra={[
+            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+          ]}
+        />
+        </div>
+      )
+    }
   }
 }
 
 const mapStateToProps = (state) => ({
   kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  userReducers: state.userReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({

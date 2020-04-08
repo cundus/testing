@@ -4,7 +4,9 @@ import {
   startGetMyTeamDetail
 } from '../action.type';
 
-const initMyteamDetail = {};
+const initMyteamDetail = {
+  error: false
+};
 
 export default (state = initMyteamDetail, action) => {
   switch (action.type) {

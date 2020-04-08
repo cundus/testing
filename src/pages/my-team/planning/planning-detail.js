@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
- Spin, Input, Button, Divider, Typography, Modal, message, Form
+ Spin, Input, Button, Divider, Typography, Modal, message, Form, Result
 } from 'antd';
 import {
   GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
@@ -31,7 +31,14 @@ class PlanningDetail extends Component {
   }
 
   async componentDidMount() {
-    await this.getAllData();
+    const { userReducers, match, step } = this.props;
+    const { params } = match;
+    const { user } = userReducers.result;
+    if (user.userId === params.id) {
+      this.props.history.push('/planning/kpi');
+    } else {
+      this.getAllData();
+    }
   }
 
   async getAllData() {
@@ -170,6 +177,7 @@ class PlanningDetail extends Component {
   };
 
   render() {
+    if(!this.props.myteamdetail.error) {
     return (
       <div style={globalStyle.contentContainer}>
         {
@@ -234,7 +242,21 @@ class PlanningDetail extends Component {
            </center>
         }
       </div>
-    );
+    ); 
+    } else {
+      return (
+        <div style={globalStyle.contentContainer}>
+        <Result
+          status={'error'}
+          title={this.props.myteamdetail.errorDetail.status_code}
+          subTitle={`Sorry, ${this.props.myteamdetail.errorDetail.status_description || this.props.myteamdetail.errorDetail}`}
+          extra={[
+            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+          ]}
+        />
+        </div>
+      )
+    }
   }
 }
 
@@ -251,6 +273,7 @@ const mapStateToProps = (state) => ({
   myteamdetail: state.myTeamDetailReducers,
   kpi: state.kpiReducers,
   userDetail: state.userDetailReducers,
+  userReducers: state.userReducers,
   feedback: state.feedbackReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);

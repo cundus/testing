@@ -18,6 +18,7 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -180,6 +181,7 @@ class Activity extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
+              editable={this.props.step.currentStep === stepKpi[2]}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               userId={userId}
@@ -216,6 +218,7 @@ const mapStateToProps = (state) => ({
   activityStatus: state.ActivityStatusReducers,
   userReducers: state.userReducers,
   kpiReducers: state.kpiReducers,
+  step: state.userKpiStateReducers
 });
 
 const mapDispatchToProps = (dispatch) => ({
