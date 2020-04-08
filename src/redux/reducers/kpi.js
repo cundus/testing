@@ -126,7 +126,8 @@ const kpiReducers = (state = initialState, action) => {
     case GET_LATEST_GOAL_KPI_SUCCESS:
       return {
         ...state,
-        loadingGoal: action.loading
+        loadingGoal: action.loading,
+        dataGoal: action.data
       };
     case GET_LATEST_GOAL_KPI_FAILED:
       return {
