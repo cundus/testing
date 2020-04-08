@@ -57,7 +57,6 @@ class EditableCell extends React.Component {
       dataKpi: dataFieldKPI.dataKpi
     });
     const checkField = field.filter((item) => form.getFieldValue(item));
-    // console.log(field, 'aaa', checkField);
     form.validateFields(checkField);
   };
 
