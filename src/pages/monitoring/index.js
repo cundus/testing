@@ -493,13 +493,13 @@ class MonitorKPI extends Component {
               }
             </div>
             <div style={{ textAlign: 'center' }}>
-              {/* {
+              {
                 isSuperior ?
                 <div>
                   <Button type="default" onClick={()=> this.props.history.push('/my-team/monitoring/')}>
                     Back
                   </Button>
-                </div>: */}
+                </div>:
                 <div>
                 {currentStep === stepKpi[2] ? 
                 <div>
@@ -538,7 +538,7 @@ class MonitorKPI extends Component {
                   </Button>
                   </div>}
                 </div>
-              {/* } */}
+                }
             </div>
           </div> : <center><Spin /></center>}
       </div>
