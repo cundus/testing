@@ -318,7 +318,8 @@ const kpiReducers = (state = initialState, action) => {
     case GET_RATING_SUCCESS:
       return {
         ...state,
-        loading: action.loading
+        loading: action.loading,
+        dataRating: action.data.ratings
       };
     case GET_RATING_FAILED:
       return {
