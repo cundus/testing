@@ -119,7 +119,7 @@ class Planning extends Component {
       return (
         <div style={globalStyle.contentContainer}>
           <Result
-            status={status}
+            status={'error'}
             title={status}
             subTitle={`Sorry, ${errMessage}`}
             // eslint-disable-next-line react/jsx-no-bind

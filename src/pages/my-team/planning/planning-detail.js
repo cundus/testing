@@ -198,7 +198,7 @@ class PlanningDetail extends Component {
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
                 <div style={{ textAlign: 'center' }}>
-                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
+                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name || ''} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
                 </div> :
                 <div />
             }

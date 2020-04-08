@@ -13,7 +13,8 @@ import {
   Radio,
   Button,
   Spin,
-  Skeleton
+  Skeleton,
+  Result
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -82,8 +83,9 @@ class Appraisal extends Component {
     getKpiRating(id);
     const { kpiReducers } = this.props;
     const {
-      dataKpi, dataKpiMetrics, challenge, currentStep, formStatusId
+      dataKpi, dataKpiMetrics, challenge, currentStep, formStatusId, status
     } = kpiReducers;
+    if (status === Success) {
     if (currentStep === stepKpi[6] || formStatusId === '3') {
       await empAcknowledgeList();
       // eslint-disable-next-line react/destructuring-assignment
@@ -170,6 +172,11 @@ class Appraisal extends Component {
       loadingKpis: false,
       loadingResult: 0
     });
+    } else {
+      this.setState({
+        loadingKpis: false,
+      })
+    }
   }
 
   getOwnValues = async (id, noLoading) => {
@@ -563,7 +570,11 @@ class Appraisal extends Component {
       generalFeedback,
       currentStep,
       formStatusId,
-      loadingEmpAck
+      loadingEmpAck,
+      status,
+      errMessage,
+      statusValues,
+      messageValues
     } = kpiReducers;
     return (
       <div>
@@ -592,6 +603,7 @@ class Appraisal extends Component {
             <Tabs defaultActiveKey="1" activeKey={tab} onChange={this.changeTab} type="card">
               <TabPane tab="KPI" key="1">
                 <div>
+                {(status === Success) || loadingKpis ?
                   <TableKPI
                     form={form}
                     loading={loadingKpis}
@@ -614,10 +626,19 @@ class Appraisal extends Component {
                     proposeRating={dataKpiRating.rating}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
-                  />
+                  /> :
+                  <Result
+                    status={'error'}
+                    title={status}
+                    subTitle={`Sorry, ${errMessage}`}
+                    extra={[
+                      <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+                    ]}
+                  />}
                 </div>
               </TabPane>
               <TabPane tab="Values" key="2">
+                {(statusValues === Success) || loadingMyValue ?
                 <TableValue
                   form={form}
                   loading={loadingMyValue}
@@ -630,7 +651,15 @@ class Appraisal extends Component {
                   currentStep={currentStep}
                   myStep={myStep}
                   optionRating={optionRating}
-                />
+                /> :
+                <Result
+                  status={'error'}
+                  title={statusValues}
+                  subTitle={`Sorry, ${messageValues}`}
+                  extra={[
+                    <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+                  ]}
+                />}
               </TabPane>
             </Tabs>
           </div>
@@ -642,6 +671,7 @@ class Appraisal extends Component {
           </div>}
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingTop: 5 }}>
           <center>
+            {((loadingKpis || loadingMyValue) || (status === Success)) &&
             <Skeleton active loading={loadingMyValue || loadingKpis} paragraph={false} title={{ width: '60%' }}>
               {myStep ?
                 <div style={{ textAlign: 'center', margin: 40 }}>
@@ -695,7 +725,7 @@ class Appraisal extends Component {
                     Send To Manager
                   </Button>
                 </div>}
-            </Skeleton>
+            </Skeleton>}
           </center>
           {!loadingEmpAck && currentStep === stepKpi[6] &&
             <Skeleton active loading={loadingKpis} paragraph={false} title={{ width: '40%' }}>

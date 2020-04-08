@@ -621,7 +621,7 @@ class Appraisal extends Component {
                   <Result
                     status={'error'}
                     title={statusValues}
-                    subTitle={`Sorry, ${errMessage}`}
+                    subTitle={`Sorry, ${messageValues}`}
                     extra={[
                       <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
                     ]}
