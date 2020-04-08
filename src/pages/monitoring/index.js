@@ -459,7 +459,6 @@ class MonitorKPI extends Component {
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
     const isHasSubmit = (currentStep === 'Performance Review Manager')
-    console.log(loadingKpi, status === Success)
     if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
