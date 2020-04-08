@@ -22,7 +22,7 @@ class TableMonitorKPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics, isFeedback, userId, isSuperior, stafid } = this.props;
+    const { dataMetrics, isFeedback, userId, isSuperior, isEditable, stafid } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -31,7 +31,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         width: 200,
         className: 'td-top',
-        editable: (!isSuperior)
+        editable: (!isSuperior && isEditable)
       },
       {
         title: 'Baseline',
@@ -40,7 +40,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 200,
-        editable: (!isSuperior)
+        editable: (!isSuperior && isEditable)
       },
       {
         title: 'Weight (%)',
@@ -50,7 +50,7 @@ class TableMonitorKPI extends Component {
         className: 'td-top',
         type: 'number',
         width: 90,
-        editable: (!isSuperior)
+        editable: (!isSuperior && isEditable)
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -62,7 +62,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 150,
-        editable: (!isSuperior)
+        editable: (!isSuperior && isEditable)
       };
       newColumns.push(data);
     });

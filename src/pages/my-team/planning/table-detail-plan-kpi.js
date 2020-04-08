@@ -13,7 +13,7 @@ class TableEditMyKPI extends Component {
   }
 
   getColumns = async () =>{
-    const { kpiReducers, dataMetrics } = this.props;
+    const { kpiReducers, dataMetrics, editableFeedback } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -53,7 +53,7 @@ class TableEditMyKPI extends Component {
       dataIndex: 'feedback',
       align: 'center',
       placeholder: 'Feedback',
-      editable: true,
+      editable: editableFeedback,
       width: 200,
     });
     this.setState({

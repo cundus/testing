@@ -16,6 +16,7 @@ import TableKPI from './kpi';
 import { doSaveKpi, doGetKpiList, doSubmitNext, doGetLatestGoalKpi } from '../../redux/actions/kpi';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
+import stepKpi from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
@@ -35,11 +36,10 @@ class MonitorKPI extends Component {
       userId: '',
       isSuperior: false
     };
-    this.getAllData();
   }
 
   componentDidMount() {
-    // this.getAllData();
+    this.getAllData();
   }
 
   getAllData = async () => {
@@ -48,7 +48,7 @@ class MonitorKPI extends Component {
     const { userId } = params;
     const { user } = userReducers.result;
     let isSuperior  = this.state.isSuperior;
-    await getLatestGoalKpi();
+    getLatestGoalKpi();
     if (userId) {
       await getKpiList(userId);
       isSuperior = true;
@@ -444,6 +444,7 @@ class MonitorKPI extends Component {
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
     const isHasSubmit = (currentStep === 'Performance Review Manager')
+    console.log(currentStep)
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -458,7 +459,7 @@ class MonitorKPI extends Component {
             <br />
           </center>
         </div>
-        {!loadingKpi && (currentStep === 'Performance Review Employee' || currentStep === 'Performance Review Manager') ?
+        {!loadingKpi ?
           <div>
             <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
@@ -473,6 +474,7 @@ class MonitorKPI extends Component {
               handleChange={handleChange}
               handleDelete={handleDelete}
               userId={userId}
+              isEditable={(currentStep === stepKpi[2] || currentStep === stepKpi[3])}
               isSuperior={isSuperior || isHasSubmit}
               stafid={stafid}
             />
@@ -491,13 +493,15 @@ class MonitorKPI extends Component {
               }
             </div>
             <div style={{ textAlign: 'center' }}>
-              {
+              {/* {
                 isSuperior ?
                 <div>
                   <Button type="default" onClick={()=> this.props.history.push('/my-team/monitoring/')}>
                     Back
                   </Button>
-                </div>:
+                </div>: */}
+                <div>
+                {(currentStep === stepKpi[2] || currentStep === stepKpi[3]) ? 
                 <div>
                   <Button
                     id="add-kpi"
@@ -524,8 +528,17 @@ class MonitorKPI extends Component {
                   >
                   Go To Appraisal
                   </Button>
+                </div>:<div>
+                  <Button
+                    id="submit-superior"
+                    onClick={this.gotToAppraisal}
+                    type="primary" style={{ margin: 10 }}
+                  >
+                    Go To Appraisal
+                  </Button>
+                  </div>}
                 </div>
-              }
+              {/* } */}
             </div>
           </div> : <center><Spin /></center>}
       </div>

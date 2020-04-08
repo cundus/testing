@@ -12,6 +12,7 @@ import { doGetLatestGoalKpi } from '../../../redux/actions/kpi';
 import TablePlanningDetails from './table-detail-plan-kpi';
 import globalStyle from '../../../styles/globalStyles';
 import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
+import stepKpi from '../../../utils/stepKpi';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -23,6 +24,7 @@ class PlanningDetail extends Component {
     this.state = {
       dataSource: [],
       globalfeedback: '',
+      currentStep: '',
       labelList: [],
       loading: false
     };
@@ -40,11 +42,11 @@ class PlanningDetail extends Component {
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
     await this.props.getUserDetail(this.props.match.params.id);
-    const mydata = this.props.myteamdetail.kpiList;
+    const mydata = this.props.myteamdetail;
     const globalFeedback = this.props.myteamdetail.challengeOthersRatingComments;
-    if (mydata[0].error !== true) {
+    if (!mydata.error) {
       // eslint-disable-next-line array-callback-return
-      mydata.map((itemKpi) => {
+      mydata.kpiList.map((itemKpi) => {
         let dataMetrics;
         if (itemKpi.metricLookup !== null) {
           dataMetrics = itemKpi.metricLookup.map((metric) => {
@@ -80,6 +82,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: newData,
         loading: false,
+        currentStep: mydata.currentStep,
         globalfeedback: globalFeedback.comment,
         labelList: this.props.myteamdetail.labelList
       });
@@ -87,6 +90,7 @@ class PlanningDetail extends Component {
       this.setState({
         dataSource: [],
         globalfeedback: '',
+        currentStep: '',
         loading: false,
         labelList: this.props.myteamdetail.labelList
       });
@@ -194,6 +198,7 @@ class PlanningDetail extends Component {
                dataSource={this.state.dataSource}
                form={this.props.form}
                handleChange={this.handleChange}
+               editableFeedback={this.state.currentStep === stepKpi[1]}
                dataMetrics={this.state.labelList}
              />
              <Text strong>Challenge yourself :</Text>
@@ -207,10 +212,12 @@ class PlanningDetail extends Component {
              <TextArea
                value={this.state.globalfeedback}
                onChange={this.changeGlobalfeedback}
+               disabled={!(this.state.currentStep === stepKpi[1])}
                placeholder="Please make necessary changes on KPI items, please refer to my KPI or just cascading it."
              />
              <br />
              <br />
+             {this.state.currentStep === stepKpi[1] &&
              <center>
                <Button
                  style={{ 'background-color': 'orange', color: 'white' }}
@@ -220,7 +227,7 @@ class PlanningDetail extends Component {
                </Button>
                &nbsp;&nbsp;
                <Button onClick={this.handleApprove} type="primary">Approve</Button>
-             </center>
+             </center>}
            </div> :
            <center>
              <Spin />
