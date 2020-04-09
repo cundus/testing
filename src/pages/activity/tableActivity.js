@@ -57,7 +57,7 @@ class TableActivity extends Component {
               {/* eslint-disable-next-line react/jsx-no-bind */}
               {
                 (!this.props.isSuperior && editable)?
-                <Button icon="edit" disable={!editable} onClick={() => this.props.showModalForm(record.key)} />: <div></div>
+                <Button icon="edit" disabled={!editable} onClick={() => this.props.showModalForm(record.key)} />: <div></div>
               }
             </div>
           );
