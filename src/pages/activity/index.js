@@ -64,8 +64,13 @@ class Activity extends Component {
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
     const isSuperior = (userId !== userReducers.result.user.userId)
-    if (isSuperior) {
-       await doGetKpiList(userId);
+    if(isSuperior) {
+      await doGetKpiList(userId);
+      if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
+       this.props.history.push('/my-team/monitoring');
+      }
+    } else if (this.props.step.currentStep !== stepKpi[2]){
+      this.props.history.push('/monitoring');
     }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
