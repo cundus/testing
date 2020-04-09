@@ -161,7 +161,7 @@ class Achievement extends Component {
     if (this.state.isSuperior === true) {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`;
     }
-
+    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]);
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -188,7 +188,7 @@ class Achievement extends Component {
             />
             <center>
               {
-               (!this.state.isSuperior && (this.props.step.currentStep === stepKpi[2])) &&
+               isCanAdd &&
                 <Button type="primary" onClick={() => this.showModalForm()}>Add Achievement</Button>
               }
               &nbsp;
