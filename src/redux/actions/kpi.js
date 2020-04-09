@@ -1021,6 +1021,7 @@ export const doEmpAcknowledge = (data) => async (dispatch) => {
   });
   try {
     const payload = await empAcknowledge(data);
+    await getKPIstate();
     if (payload.data.status_code === Success) {
       dispatch({
         type: EMP_ACKNOWLEDGEMENT_SUCCESS,
