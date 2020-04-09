@@ -87,7 +87,7 @@ class TableMonitorKPI extends Component {
                   Achievement
                 </Link>
               </Button>
-              {!isSuperior ?
+              {(!isSuperior && isEditable) ?
                 <Popconfirm
                   title="Sure to delete?"
                   // eslint-disable-next-line react/jsx-no-bind

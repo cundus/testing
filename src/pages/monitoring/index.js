@@ -61,13 +61,17 @@ class MonitorKPI extends Component {
     const { params } = match;
     const { userId } = params;
     const { user } = userReducers.result;
-    let isSuperior  = this.state.isSuperior;
     getLatestGoalKpi();
     if (userId) {
       await getKpiList(userId);
-      isSuperior = true;
+      this.setState({
+        isSuperior: true
+      })
     } else {
       await getKpiList(user.userId);
+      this.setState({
+        isSuperior: false
+      })
     }
     const { kpiReducers } = this.props;
     const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducers;
@@ -115,8 +119,7 @@ class MonitorKPI extends Component {
     this.setState({
       dataSource: newData,
       userId: user.userId,
-      challengeYour: challenge === '----------' ? '' : challenge,
-      isSuperior
+      challengeYour: challenge === '----------' ? '' : challenge
     });
     this.liveCount(newData);
     }
@@ -458,7 +461,6 @@ class MonitorKPI extends Component {
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
     const stafid = holderUserId;
-    const isHasSubmit = (currentStep === 'Performance Review Manager')
     if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
@@ -490,7 +492,7 @@ class MonitorKPI extends Component {
               handleDelete={handleDelete}
               userId={userId}
               isEditable={currentStep === stepKpi[2]}
-              isSuperior={isSuperior || isHasSubmit}
+              isSuperior={isSuperior}
               stafid={stafid}
             />
             <div>
@@ -503,6 +505,7 @@ class MonitorKPI extends Component {
                     placeholder="Challenge yourself"
                     label="Challenge yourself"
                     value={challengeYour}
+                    disabled={!(!isSuperior && (currentStep === stepKpi[2]))}
                     onChange={changeChallenge}
                   />
               }
@@ -523,7 +526,7 @@ class MonitorKPI extends Component {
                   // eslint-disable-next-line react/jsx-no-bind
                     onClick={handleSaveDraft('add')}
                     style={{ margin: 10 }}
-                    disabled={isHasSubmit}
+                    disabled={currentStep === stepKpi[2]}
                     loading={kpiReducers.loadingSaveKPI}
                   >
                   Add KPI
@@ -532,7 +535,7 @@ class MonitorKPI extends Component {
                     id="save-draft"
                     onClick={handleSaveDraft('save')}
                     style={{ margin: 10 }}
-                    disabled={isHasSubmit}
+                    disabled={currentStep === stepKpi[2]}
                   >
                   Save
                   </Button>
