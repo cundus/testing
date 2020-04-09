@@ -21,7 +21,7 @@ import stepKpi from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
-const { Text, Title } = Typography;
+const { Text, Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class MonitorKPI extends Component {
@@ -498,8 +498,8 @@ class MonitorKPI extends Component {
             <div>
               <Text strong>Challenge Yourself :</Text>
               {
-                isSuperior ?
-                  <Text><br/> {challengeYour} </Text> :
+                !isSuperior ?
+                  <Paragraph ellipsis={{ rows: 3, expandable: true }}> {challengeYour} </Paragraph> :
                   <TextArea
                     id="challenge-input"
                     placeholder="Challenge yourself"
