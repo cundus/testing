@@ -661,20 +661,12 @@ export const doAttachFile = (data) => async (dispatch) => {
           error
         });
       }
-    } else if(error.toString().toLowerCase().include('network')) {
-      dispatch({
-        type: ATTACHMENT_FILE_FAILED,
-        loading: false,
-        status: null,
-        message: 'Network error, try again',
-        error
-      });
     } else {
       dispatch({
         type: ATTACHMENT_FILE_FAILED,
         loading: false,
         status: null,
-        message: 'Failed when attaching files',
+        message: 'Network error, try again',
         error
       });
     }
