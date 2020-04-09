@@ -496,19 +496,19 @@ class MonitorKPI extends Component {
               stafid={stafid}
             />
             <div>
-              <Text strong>Challenge Yourself :</Text>
-              {
-                isSuperior ?
-                  <Paragraph> {challengeYour} </Paragraph> :
-                  <TextArea
-                    id="challenge-input"
-                    placeholder="Challenge yourself"
-                    label="Challenge yourself"
-                    value={challengeYour}
-                    disabled={!(!isSuperior && (currentStep === stepKpi[2]))}
-                    onChange={changeChallenge}
-                  />
-              }
+              <Text strong className='label-challenge'>Challenge Yourself :</Text>
+              {(!isSuperior && (currentStep === stepKpi[2])) ?
+                <TextArea
+                  autosize
+                  placeholder="Challenge yourself"
+                  value={challengeYour}
+                  onChange={changeChallenge}
+                />:
+                <TextArea
+                  autosize
+                  className="challenge-input-disabled"
+                  value={challengeYour}
+                />}
             </div>
             <div style={{ textAlign: 'center' }}>
               {

@@ -211,18 +211,24 @@ class PlanningDetail extends Component {
              />
              <Text strong>Challenge yourself :</Text>
              <TextArea
-               value={getChallengeYourselfChecker(this.props.myteamdetail.challengeYourSelf)}
-               disabled
-             />
+                autosize
+                className="challenge-input-disabled"
+                value={getChallengeYourselfChecker(this.props.myteamdetail.challengeYourSelf)}
+              />
              <br />
              <br />
              <Text strong>General Feedbacks :</Text>
+             {(this.state.currentStep === stepKpi[1]) ?
              <TextArea
+               autosize
                value={this.state.globalfeedback}
                onChange={this.changeGlobalfeedback}
-               disabled={!(this.state.currentStep === stepKpi[1])}
                placeholder="Please make necessary changes on KPI items, please refer to my KPI or just cascading it."
-             />
+             />:<TextArea
+                autosize
+                value={this.state.globalfeedback}
+                className="challenge-input-disabled"
+              />}
              <br />
              <br />
              {this.state.currentStep === stepKpi[1] &&

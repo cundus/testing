@@ -127,3 +127,13 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
 .ant-typography, .ant-typography p{
   word-wrap: break-word;
 }
+
+.challenge-input-disabled{
+  background-color: transparent;
+  border: 10px;
+  border-color: transparent;
+  border-right-width: 1px !important;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 2px transparent !important;
+  box-shadow: 0 0 0 2px transparent !important;
+}
