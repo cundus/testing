@@ -5,6 +5,7 @@ import {
 } from '../../action.type';
 import { Success } from '../../status-code-type';
 import { saveKpi } from '../../../service/kpiPlanning';
+import { getKPIstate } from '../../../service/auth';
 
 export const actionSaveKpi = (data, id) => async (dispatch) => {
   dispatch({
@@ -15,6 +16,7 @@ export const actionSaveKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payload = await saveKpi(data, id);
+    await getKPIstate();
     if (payload.data.status_code === Success) {
       dispatch({
         type: SAVE_KPI_SUCCESS,

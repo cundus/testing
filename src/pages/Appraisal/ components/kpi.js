@@ -225,13 +225,13 @@ class KPI extends Component {
             <Text strong>Challenge yourself :</Text>
             {!(myStep) ?
             <TextArea
-              autosize
+              autoSize
               placeholder="Challenge yourself"
               value={challengeYour}
               onChange={changeChallenge}
             />:
             <TextArea
-              autosize
+              autoSize
               className="challenge-input-disabled"
               value={challengeYour}
             />}

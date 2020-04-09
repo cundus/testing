@@ -64,8 +64,13 @@ class Activity extends Component {
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
     const isSuperior = (userId !== userReducers.result.user.userId)
-    if (isSuperior) {
-       await doGetKpiList(userId);
+    if(isSuperior) {
+      await doGetKpiList(userId);
+      if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
+       this.props.history.push('/my-team/monitoring');
+      }
+    } else if (this.props.step.currentStep !== stepKpi[2]){
+      this.props.history.push('/monitoring');
     }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
@@ -162,6 +167,7 @@ class Activity extends Component {
     if (this.state.isSuperior === true) {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
     }
+    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]);
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -189,10 +195,10 @@ class Activity extends Component {
             />
             <center>
               {
-                this.state.isSuperior === false && (this.props.step.currentStep === stepKpi[2])?
-                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button> :
-                <div></div>
+               isCanAdd &&
+                <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button>
               }
+              &nbsp;
               &nbsp;
               <Button type="default" onClick={()=> this.props.history.goBack()} >Back</Button>
               <FormSend
