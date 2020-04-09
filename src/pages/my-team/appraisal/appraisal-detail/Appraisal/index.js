@@ -700,12 +700,14 @@ class Appraisal extends Component {
             <TextArea
               autoSize
               placeholder="General Feedback"
+              style={{ background: '#EDEAA6', border: 0 }}
               value={generalFeedbackState}
               onChange={this.changeGeneralFeedback}
             />:
             <TextArea
               autoSize
               className="challenge-input-disabled"
+              style={{background: 'transparent'}}
               value={generalFeedbackState}
             />}
         </div>}

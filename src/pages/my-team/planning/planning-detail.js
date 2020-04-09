@@ -221,6 +221,7 @@ class PlanningDetail extends Component {
              {(this.state.currentStep === stepKpi[1]) ?
              <TextArea
                autoSize
+               style={{ background: '#EDEAA6', border: 0 }}
                value={this.state.globalfeedback}
                onChange={this.changeGlobalfeedback}
                placeholder="Please make necessary changes on KPI items, please refer to my KPI or just cascading it."
