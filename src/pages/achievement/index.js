@@ -188,7 +188,7 @@ class Achievement extends Component {
             />
             <center>
               {
-               ((this.state.isSuperior === false) && (this.props.step.currentStep === stepKpi[2]))?
+               !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2])?
                 <Button type="primary" onClick={() => this.showModalForm()}>Add Achievement</Button>:<div></div>
               }
               &nbsp;
