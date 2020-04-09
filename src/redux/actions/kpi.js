@@ -661,7 +661,7 @@ export const doAttachFile = (data) => async (dispatch) => {
           error
         });
       }
-    } else if(error.toString().include('Network')) {
+    } else if(error.toString().toLowerCase().include('network')) {
       dispatch({
         type: ATTACHMENT_FILE_FAILED,
         loading: false,
