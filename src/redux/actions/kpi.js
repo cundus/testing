@@ -625,8 +625,6 @@ export const doAttachFile = (data) => async (dispatch) => {
   });
   try {
     const payload = await attachFile(data);
-    console.log(payload);
-    console.log(payload.toString());
     if (payload.data.status_code === Success) {
       dispatch({
         type: ATTACHMENT_FILE_SUCCESS,
