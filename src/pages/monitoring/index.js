@@ -21,7 +21,7 @@ import stepKpi from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
-const { Text, Title } = Typography;
+const { Text, Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 class MonitorKPI extends Component {
@@ -499,7 +499,7 @@ class MonitorKPI extends Component {
               <Text strong>Challenge Yourself :</Text>
               {
                 isSuperior ?
-                  <Text><br/> {challengeYour} </Text> :
+                  <Paragraph> {challengeYour} </Paragraph> :
                   <TextArea
                     id="challenge-input"
                     placeholder="Challenge yourself"
@@ -519,14 +519,14 @@ class MonitorKPI extends Component {
                   </Button>
                 </div>:
                 <div>
-                {currentStep === stepKpi[2] ? 
+                {(currentStep === stepKpi[2]) ? 
                 <div>
                   <Button
                     id="add-kpi"
                   // eslint-disable-next-line react/jsx-no-bind
                     onClick={handleSaveDraft('add')}
                     style={{ margin: 10 }}
-                    disabled={currentStep === stepKpi[2]}
+                    disabled={currentStep !== stepKpi[2]}
                     loading={kpiReducers.loadingSaveKPI}
                   >
                   Add KPI
@@ -535,7 +535,7 @@ class MonitorKPI extends Component {
                     id="save-draft"
                     onClick={handleSaveDraft('save')}
                     style={{ margin: 10 }}
-                    disabled={currentStep === stepKpi[2]}
+                    disabled={currentStep !== stepKpi[2]}
                   >
                   Save
                   </Button>
@@ -549,7 +549,7 @@ class MonitorKPI extends Component {
                 </div>:<div>
                   <Button
                     id="submit-superior"
-                    onClick={this.gotToAppraisal}
+                    onClick={() => this.props.history.push('/appraisal')}
                     type="primary" style={{ margin: 10 }}
                   >
                     Go To Appraisal

@@ -123,3 +123,7 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
 #cascade-superior-tab {
   background-color: none;
 }
+
+.ant-typography, .ant-typography p{
+  word-wrap: break-word;
+}
