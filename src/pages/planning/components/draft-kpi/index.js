@@ -290,9 +290,8 @@ class DraftKPI extends Component {
                 />
                 <Text strong>Challenge yourself :</Text>
                 <TextArea
-                  id="challenge-input"
+                  autosize
                   placeholder="Challenge yourself"
-                  label="Challenge yourself"
                   value={challengeYour}
                   onChange={changeChallenge}
                 />
@@ -302,7 +301,11 @@ class DraftKPI extends Component {
         {generalFeedback.comment &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
+            <TextArea
+              autosize
+              className="challenge-input-disabled"
+              value={generalFeedback.comment}
+            />
           </div>}
         <div style={{
           ...globalStyle.contentContainer,

@@ -37,6 +37,7 @@ import { actionGetNotifications } from '../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
+import TextArea from 'antd/lib/input/TextArea';
 
 const { Text, Paragraph, Title } = Typography;
 const { TabPane } = Tabs;
@@ -667,7 +668,12 @@ class Appraisal extends Component {
         {generalFeedback && generalFeedback.id &&
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
-            <Paragraph>{generalFeedback.comment}</Paragraph>
+            <TextArea
+              autosize
+              label="Challenge yourself"
+              className="challenge-input-disabled"
+              value={generalFeedback.comment}
+            />
           </div>}
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingTop: 5 }}>
           <center>

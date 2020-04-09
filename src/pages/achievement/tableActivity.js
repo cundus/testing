@@ -40,7 +40,7 @@ class TableActivity extends Component {
         dataIndex: 'achievementDate'
       }
     ];
-    if (this.props.isSuperior === false) {
+    if (this.props.isSuperior === false && editable) {
         newColumns.push({
           title: 'Action',
           dataIndex: 'actions',

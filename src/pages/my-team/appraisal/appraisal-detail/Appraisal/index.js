@@ -642,7 +642,13 @@ class Appraisal extends Component {
         >
           <Skeleton loading={loadingKpis} title={{ width: 100 }} paragraph={{ rows: 1 }} active>
             <Text strong>Challenge yourself :</Text>
-            <Paragraph>{challengeYour}</Paragraph>
+            <TextArea
+              autosize
+              placeholder="Challenge yourself"
+              label="Challenge yourself"
+              className="challenge-input-disabled"
+              value={challengeYour}
+            />
           </Skeleton>
         </div>}
         {(currentStep === stepKpi[5] || currentStep === stepKpi[6]) &&
@@ -690,15 +696,18 @@ class Appraisal extends Component {
         }}
         >
           <Text strong>General Feedback :</Text>
-          <TextArea
-            id="challenge-input"
-            placeholder="General Feedback"
-            label="Challenge yourself"
-            style={{ background: '#EDEAA6', border: 0 }}
-            value={generalFeedbackState}
-            disabled={!myStep}
-            onChange={this.changeGeneralFeedback}
-          />
+          {(myStep) ?
+            <TextArea
+              autosize
+              placeholder="General Feedback"
+              value={generalFeedbackState}
+              onChange={this.changeGeneralFeedback}
+            />:
+            <TextArea
+              autosize
+              className="challenge-input-disabled"
+              value={generalFeedbackState}
+            />}
         </div>}
         {status === Success &&
         <div style={{
