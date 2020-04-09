@@ -99,6 +99,10 @@ class Value extends Component {
             onPreview: this.download,
             onDownload: this.download,
             disabled: myStep,
+            showUploadList: {
+              showDownloadIcon: true,
+              showRemoveIcon: true,
+            },
             accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
           };
           return (
