@@ -519,7 +519,7 @@ class MonitorKPI extends Component {
                   </Button>
                 </div>:
                 <div>
-                {currentStep === stepKpi[2] ? 
+                {(currentStep === stepKpi[2]) ? 
                 <div>
                   <Button
                     id="add-kpi"
@@ -549,7 +549,7 @@ class MonitorKPI extends Component {
                 </div>:<div>
                   <Button
                     id="submit-superior"
-                    onClick={this.gotToAppraisal}
+                    onClick={() => this.props.history.push('/appraisal')}
                     type="primary" style={{ margin: 10 }}
                   >
                     Go To Appraisal
