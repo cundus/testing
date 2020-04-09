@@ -662,6 +662,8 @@ export const doAttachFile = (data) => async (dispatch) => {
         });
       }
     } else {
+      console.error(error);
+      console.error(error.toString());
       dispatch({
         type: ATTACHMENT_FILE_FAILED,
         loading: false,
