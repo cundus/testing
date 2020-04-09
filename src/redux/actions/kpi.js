@@ -666,7 +666,7 @@ export const doAttachFile = (data) => async (dispatch) => {
         type: ATTACHMENT_FILE_FAILED,
         loading: false,
         status: null,
-        message: 'Failed when attaching files',
+        message: 'Network error, try again',
         error
       });
     }
