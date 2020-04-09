@@ -499,7 +499,7 @@ class MonitorKPI extends Component {
               <Text strong>Challenge Yourself :</Text>
               {
                 isSuperior ?
-                  <Paragraph ellipsis={{ rows: 3, expandable: true }}> {challengeYour} </Paragraph> :
+                  <Paragraph> {challengeYour} </Paragraph> :
                   <TextArea
                     id="challenge-input"
                     placeholder="Challenge yourself"
