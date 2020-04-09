@@ -625,6 +625,8 @@ export const doAttachFile = (data) => async (dispatch) => {
   });
   try {
     const payload = await attachFile(data);
+    console.log(payload);
+    console.log(payload.toString());
     if (payload.data.status_code === Success) {
       dispatch({
         type: ATTACHMENT_FILE_SUCCESS,
@@ -661,6 +663,14 @@ export const doAttachFile = (data) => async (dispatch) => {
           error
         });
       }
+    } else if(error.toString().include('Network Error')) {
+      dispatch({
+        type: ATTACHMENT_FILE_FAILED,
+        loading: false,
+        status: null,
+        message: 'Network error, try again',
+        error
+      });
     } else {
       dispatch({
         type: ATTACHMENT_FILE_FAILED,
