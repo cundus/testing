@@ -526,7 +526,7 @@ class MonitorKPI extends Component {
                   // eslint-disable-next-line react/jsx-no-bind
                     onClick={handleSaveDraft('add')}
                     style={{ margin: 10 }}
-                    disabled={currentStep === stepKpi[2]}
+                    disabled={currentStep !== stepKpi[2]}
                     loading={kpiReducers.loadingSaveKPI}
                   >
                   Add KPI
@@ -535,7 +535,7 @@ class MonitorKPI extends Component {
                     id="save-draft"
                     onClick={handleSaveDraft('save')}
                     style={{ margin: 10 }}
-                    disabled={currentStep === stepKpi[2]}
+                    disabled={currentStep !== stepKpi[2]}
                   >
                   Save
                   </Button>
