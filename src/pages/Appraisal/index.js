@@ -669,7 +669,7 @@ class Appraisal extends Component {
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
             <TextArea
-              autosize
+              autoSize
               label="Challenge yourself"
               className="challenge-input-disabled"
               value={generalFeedback.comment}
