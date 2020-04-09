@@ -189,7 +189,7 @@ class Activity extends Component {
             />
             <center>
               {
-                this.state.isSuperior === false && (this.props.step.currentStep === stepKpi[2])?
+               ((this.state.isSuperior === false) && (this.props.step.currentStep === stepKpi[2]))?
                 <Button type="primary" onClick={() => this.showModalForm()}>Add Activity</Button> :
                 <div></div>
               }
