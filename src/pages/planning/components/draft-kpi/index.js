@@ -305,6 +305,7 @@ class DraftKPI extends Component {
               autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               value={generalFeedback.comment}
+              readOnly
             />
           </div>}
         <div style={{

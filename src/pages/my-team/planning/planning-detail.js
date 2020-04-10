@@ -214,6 +214,7 @@ class PlanningDetail extends Component {
                 autoSize={{minRows: 3}}
                 className="challenge-input-disabled"
                 value={getChallengeYourselfChecker(this.props.myteamdetail.challengeYourSelf)}
+                readOnly
               />
              <br />
              <br />
@@ -229,6 +230,7 @@ class PlanningDetail extends Component {
                 autoSize={{minRows: 3}}
                 value={this.state.globalfeedback}
                 className="challenge-input-disabled"
+                readOnly
               />}
              <br />
              <br />

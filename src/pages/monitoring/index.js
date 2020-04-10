@@ -508,6 +508,7 @@ class MonitorKPI extends Component {
                   autoSize={{minRows: 3}}
                   className="challenge-input-disabled"
                   value={challengeYour}
+                  readOnly
                 />}
             </div>
             <div style={{ textAlign: 'center' }}>

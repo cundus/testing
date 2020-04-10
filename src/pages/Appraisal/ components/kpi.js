@@ -234,6 +234,7 @@ class KPI extends Component {
               autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               value={challengeYour}
+              readOnly
             />}
           </Spin>
         </div>
