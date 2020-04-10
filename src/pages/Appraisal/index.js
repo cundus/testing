@@ -670,9 +670,9 @@ class Appraisal extends Component {
             <Text strong>General Feedback :</Text>
             <TextArea
               autoSize={{minRows: 3}}
-              label="Challenge yourself"
               className="challenge-input-disabled"
               value={generalFeedback.comment}
+              readOnly
             />
           </div>}
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingTop: 5 }}>

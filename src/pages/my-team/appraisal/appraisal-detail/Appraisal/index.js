@@ -648,6 +648,7 @@ class Appraisal extends Component {
               label="Challenge yourself"
               className="challenge-input-disabled"
               value={challengeYour}
+              readOnly
             />
           </Skeleton>
         </div>}
@@ -707,8 +708,9 @@ class Appraisal extends Component {
             <TextArea
               autoSize={{minRows: 3}}
               className="challenge-input-disabled"
-              style={{background: 'transparent'}}
+              style={{background: '#EDEAA6'}}
               value={generalFeedbackState}
+              readOnly
             />}
         </div>}
         {status === Success &&

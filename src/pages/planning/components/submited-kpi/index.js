@@ -118,6 +118,7 @@ class SubmitedKPI extends Component {
                   autoSize={{minRows: 3}}
                   className="challenge-input-disabled"
                   value={challengeYour}
+                  readOnly
                 />
               </div>
             </div> : <center><Spin /></center>}
@@ -129,6 +130,7 @@ class SubmitedKPI extends Component {
               autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               value={generalFeedback.comment}
+              readOnly
             />
           </div>}
         <center>
