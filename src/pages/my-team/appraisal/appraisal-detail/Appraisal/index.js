@@ -643,7 +643,7 @@ class Appraisal extends Component {
           <Skeleton loading={loadingKpis} title={{ width: 100 }} paragraph={{ rows: 1 }} active>
             <Text strong>Challenge yourself :</Text>
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               placeholder="Challenge yourself"
               label="Challenge yourself"
               className="challenge-input-disabled"
@@ -698,14 +698,14 @@ class Appraisal extends Component {
           <Text strong>General Feedback :</Text>
           {(myStep) ?
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               placeholder="General Feedback"
               style={{ background: '#EDEAA6', border: 0 }}
               value={generalFeedbackState}
               onChange={this.changeGeneralFeedback}
             />:
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               style={{background: 'transparent'}}
               value={generalFeedbackState}

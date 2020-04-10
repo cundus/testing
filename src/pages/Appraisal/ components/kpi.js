@@ -225,13 +225,13 @@ class KPI extends Component {
             <Text strong>Challenge yourself :</Text>
             {!(myStep) ?
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               placeholder="Challenge yourself"
               value={challengeYour}
               onChange={changeChallenge}
             />:
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               value={challengeYour}
             />}

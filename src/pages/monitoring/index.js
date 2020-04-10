@@ -499,13 +499,13 @@ class MonitorKPI extends Component {
               <Text strong className='label-challenge'>Challenge Yourself :</Text>
               {(!isSuperior && (currentStep === stepKpi[2])) ?
                 <TextArea
-                  autoSize
+                  autoSize={{minRows: 3}}
                   placeholder="Challenge yourself"
                   value={challengeYour}
                   onChange={changeChallenge}
                 />:
                 <TextArea
-                  autoSize
+                  autoSize={{minRows: 3}}
                   className="challenge-input-disabled"
                   value={challengeYour}
                 />}
