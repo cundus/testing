@@ -115,7 +115,7 @@ class SubmitedKPI extends Component {
               <div>
                 <Text strong>Challenge yourself :</Text>
                 <TextArea
-                  autoSize
+                  autoSize={{minRows: 3}}
                   className="challenge-input-disabled"
                   value={challengeYour}
                 />
@@ -126,7 +126,7 @@ class SubmitedKPI extends Component {
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
             <TextArea
-              autoSize
+              autoSize={{minRows: 3}}
               className="challenge-input-disabled"
               value={generalFeedback.comment}
             />
