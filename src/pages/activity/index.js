@@ -19,6 +19,7 @@ import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
+import { GetUserKpiState } from '../../redux/actions/user';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -57,20 +58,18 @@ class Activity extends Component {
       GetActivityStatus,
       userReducers,
       doGetKpiList,
-      match
+      match,
+      GetMyKpiState
     } = this.props;
     const { params } = match;
     const { idActivity, userId } = params;
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
+    GetMyKpiState();
     const isSuperior = (userId !== userReducers.result.user.userId)
     if(isSuperior) {
       await doGetKpiList(userId);
-      if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
-       this.props.history.push('/my-team/monitoring');
-      }
     } else if (this.props.step.currentStep !== stepKpi[2]){
-      this.props.history.push('/monitoring');
     }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
@@ -167,7 +166,7 @@ class Activity extends Component {
     if (this.state.isSuperior === true) {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
     }
-    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]);
+    const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]));
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -232,6 +231,7 @@ const mapDispatchToProps = (dispatch) => ({
   GetActivityStatus: () => dispatch(getActivityStatus()),
   CreateActivity: (data) => dispatch(createActivity(data)),
   UpdateActivity: (data) => dispatch(updateActivity(data)),
+  GetMyKpiState: () => dispatch(GetUserKpiState()),
   doGetKpiList: (id) => dispatch(doGetKpiList(id))
 });
 

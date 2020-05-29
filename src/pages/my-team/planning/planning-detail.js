@@ -229,6 +229,7 @@ class PlanningDetail extends Component {
              />:<TextArea
                 autoSize={{minRows: 3}}
                 value={this.state.globalfeedback}
+                style={{ background: '#EDEAA6', border: 0 }}
                 className="challenge-input-disabled"
                 readOnly
               />}
