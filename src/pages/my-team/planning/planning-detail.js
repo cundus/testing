@@ -78,7 +78,7 @@ class PlanningDetail extends Component {
           key: itemKpi.id,
           kpi: itemKpi.name,
           baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
+          weight: parseFloat(itemKpi.weight),
           achievementType: itemKpi.achievementType,
           metrics: this.props.myteamdetail.labelList,
           ...dataMetrics,
@@ -229,6 +229,7 @@ class PlanningDetail extends Component {
              />:<TextArea
                 autoSize={{minRows: 3}}
                 value={this.state.globalfeedback}
+                style={{ background: '#EDEAA6', border: 0 }}
                 className="challenge-input-disabled"
                 readOnly
               />}

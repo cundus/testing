@@ -77,7 +77,6 @@ import {
 import {
   doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll
 } from '../../service/appraisal';
-import { getKPIstate } from '../../service/auth';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
   dispatch({
@@ -136,7 +135,6 @@ export const doSaveKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payload = await saveKpi(data, id);
-    await getKPIstate();
     if (payload.data.status_code === Success) {
       dispatch({
         type: SAVE_KPI_SUCCESS,
@@ -339,7 +337,6 @@ export const doSubmitNext = (id) => async (dispatch) => {
   });
   try {
     const payload = await submitNext(id);
-    await getKPIstate();
     if (payload.data.status_code === Success) {
       dispatch({
         type: SUBMIT_NEXT_SUCCESS,
@@ -1023,7 +1020,6 @@ export const doEmpAcknowledge = (data) => async (dispatch) => {
   });
   try {
     const payload = await empAcknowledge(data);
-    await getKPIstate();
     if (payload.data.status_code === Success) {
       dispatch({
         type: EMP_ACKNOWLEDGEMENT_SUCCESS,

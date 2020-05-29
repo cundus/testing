@@ -37,7 +37,7 @@ const kpiSendProcess = (dataSource, dataKpi, dataKpiMetrics) => {
       id: itemKpi.id,
       baseline: itemKpi.baseline,
       name: itemKpi.kpi,
-      weight: itemKpi.weight,
+      weight: parseFloat(itemKpi.weight),
       cascadeType: itemKpi.cascadeType,
       cascadeName: itemKpi.cascadeName,
       achievementType: itemKpi.achievementType,
@@ -46,6 +46,7 @@ const kpiSendProcess = (dataSource, dataKpi, dataKpiMetrics) => {
     newDataKpi.push(data);
     return newDataKpi;
   });
+  console.log(JSON.stringify(newDataKpi))
   return newDataKpi;
 };
 

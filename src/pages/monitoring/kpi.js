@@ -66,7 +66,6 @@ class TableMonitorKPI extends Component {
       };
       newColumns.push(data);
     });
-    if (isEditable) {
     const action = {
       title: 'Progress Tracking',
       align: 'center',
@@ -106,7 +105,6 @@ class TableMonitorKPI extends Component {
       }
     };
     await newColumns.push(action);
-    }
     this.setState({
       columns: newColumns
     });

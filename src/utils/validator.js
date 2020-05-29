@@ -30,13 +30,17 @@ export const metricValidator = (data) => [
       let isSortedDesc = false;
       const datas = Object.keys(dataMetrics);
       const datass = Object.values(dataMetrics);
-      const regexNumber = new RegExp('^[0-9]*$');
+      // const regexNumber = new RegExp('^[0-9]*$');
       const regexZero = new RegExp('^[0-0]*$');
+      const regexPercent = new RegExp(/^(\d*\.)?\d+$/igm);
+      const regexNumber = new RegExp(/[^0-9|.]/g);
       if (value) {
         if (regexZero.test(value)) {
-          callback('Value must be not a zero');
-        } else if (!regexNumber.test(value)) {
-          callback('Value must be a number');
+          callback('Value must be more than 0');
+        } else if (regexNumber.test(value)) {
+          callback('Value must be a decimal, e.g 12.5');
+        } else if (!regexPercent.test(value)) {
+          callback('Value is invalid, e.g 12.5');
         } else {
           for (let index = 0; index < datas.length; index++) {
             if (!dataMetrics[datas[index]]) {
@@ -125,12 +129,22 @@ export const kpiValidator = (data) => [
 
 export const weightValidator = () => [
   {
-    required: true,
-    message: 'Weight is required'
-  },
-  {
-    pattern: new RegExp('^0*(?:[1-9][0-9]?|100)$'),
-    message: 'Weight\'s value must between 1 to 100'
+    validator: async (rule,value,callback,source) => {
+      const regexPercent = new RegExp(/(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g);
+      const regexNumber = new RegExp(/[^0-9|.]/g);
+      let weight = value;
+      if (!weight) {
+        callback('Weight is required')
+      } else if(regexNumber.test(weight)){
+        callback('Weight\'s value must be decimal, e.g 12.5')
+      } else if (parseFloat(weight)  <= 0) {
+        callback('Weight\'s value cannot 0');
+      } else if (parseFloat(weight) > 100) {
+        callback('Weight\'s value cannot more than 100');
+      } else if (!regexPercent.test(weight)){
+        callback('Weight\'s values is invalid, e.g 12.5')
+      }
+    }
   }
 ];
 

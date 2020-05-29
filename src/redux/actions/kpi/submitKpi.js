@@ -5,7 +5,6 @@ import {
 } from '../../action.type';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../status-code-type';
 import { saveKpi, submitNext } from '../../../service/kpiPlanning';
-import { getKPIstate } from '../../../service/auth';
 
 export const actionSubmitKpi = (data, id) => async (dispatch) => {
   dispatch({
@@ -16,7 +15,6 @@ export const actionSubmitKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payloadSave = await saveKpi(data, id);
-    await getKPIstate();
     if (payloadSave.data.status_code === Success || payloadSave.data.status_code === FAILED_SAVE_CHALLENGE_YOURSELF) {
       const payloadSubmit = await submitNext(id);
       if (payloadSubmit.data.status_code === Success) {
