@@ -78,7 +78,7 @@ class PlanningDetail extends Component {
           key: itemKpi.id,
           kpi: itemKpi.name,
           baseline: itemKpi.baseline,
-          weight: itemKpi.weight,
+          weight: parseFloat(itemKpi.weight),
           achievementType: itemKpi.achievementType,
           metrics: this.props.myteamdetail.labelList,
           ...dataMetrics,

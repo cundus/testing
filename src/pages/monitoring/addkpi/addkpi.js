@@ -121,7 +121,7 @@ class CreateKPI extends Component {
             cascadeName: itemKpi.cascadeName,
             kpi: itemKpi.name,
             baseline: itemKpi.baseline,
-            weight: itemKpi.weight,
+            weight: parseFloat(itemKpi.weight),
             achievementType: itemKpi.achievementType,
             metrics: dataKpiMetrics,
             ...dataMetrics
@@ -135,7 +135,7 @@ class CreateKPI extends Component {
             cascadeName: itemKpi.cascadeName,
             kpi: itemKpi.name,
             baseline: itemKpi.baseline,
-            weight: itemKpi.weight,
+            weight: parseFloat(itemKpi.weight),
             achievementType: itemKpi.achievementType,
             metrics: dataKpiMetrics,
             ...dataMetrics
@@ -188,7 +188,7 @@ class CreateKPI extends Component {
         cascadeName: `${dataFirstManager.manager.firstName} ${dataFirstManager.manager.lastName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
-        weight: itemKpi.weight,
+        weight: parseFloat(itemKpi.weight),
         achievementType: itemKpi.achievementType,
         metrics: dataKpiManagerMetrics,
         ...dataMetrics
@@ -222,7 +222,7 @@ class CreateKPI extends Component {
         cascadeName: `${dataSecondManager.manager.firstName} ${dataSecondManager.manager.lastName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
-        weight: itemKpi.weight,
+        weight: parseFloat(itemKpi.weight),
         achievementType: itemKpi.achievementType,
         metrics: dataKpiManagerMetrics,
         ...dataMetrics
@@ -316,7 +316,7 @@ class CreateKPI extends Component {
         id: itemKpi.id,
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
-        weight: itemKpi.weight,
+        weight: parseFloat(itemKpi.weight),
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
