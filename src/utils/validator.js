@@ -46,10 +46,7 @@ export const metricValidator = (data) => [
             if (!dataMetrics[datas[index]]) {
               isFilled = false;
               break;
-            } else if (regexZero.test(dataMetrics[datas[index]])) {
-              isError = true;
-              break;
-            } else if (!regexNumber.test(dataMetrics[datas[index]])) {
+            } else if (regexNumber.test(dataMetrics[datas[index]])) {
               isError = true;
               break;
             }
