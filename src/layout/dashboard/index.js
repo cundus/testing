@@ -71,6 +71,7 @@ class Dashboard extends React.Component {
       await localStorage.setItem('sfToken', result.accessToken);
       GetMyKpiState();
     } else {
+      console.log(result)
       const header = document.querySelector('.headerContainer');
       header.style.display = 'none';
       message.error('There is error when login to application, please relogin');
