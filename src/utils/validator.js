@@ -127,23 +127,54 @@ export const kpiValidator = (data) => [
 export const weightValidator = () => [
   {
     validator: async (rule,value,callback,source) => {
-      const regexPercent = new RegExp(/(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g);
+      const regexPercent = new RegExp(
+        /(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g
+      );
       const regexNumber = new RegExp(/[^0-9|.]/g);
       let weight = value;
-      if (!weight) {
-        callback('Weight is required')
-      } else if(regexNumber.test(weight)){
-        callback('Weight\'s value must be decimal, e.g 12.5')
-      } else if (parseFloat(weight)  <= 0) {
-        callback('Weight\'s value cannot 0');
-      } else if (parseFloat(weight) > 100) {
-        callback('Weight\'s value cannot more than 100');
-      } else if (!regexPercent.test(weight)){
-        callback('Weight\'s values is invalid, e.g 12.5')
+      let score = parseFloat(value);
+      if (!value) {
+        callback("Score is required");
+      } else if (regexNumber.test(value)) {
+        callback("Score's value must be decimal, e.g 2.5");
+      } else if (result === "Below" && (score < 1 || score > 1.9)) {
+        callback(
+          "Out of range! Input range is between >= 1.0 until < 2.0"
+        );
+      } else if (result === "Meet" && (score < 2 || score > 2.9)) {
+        callback(
+          "Out of range! Input range is between >= 2.0 until < 3.0"
+        );
+      } else if (result === "Exceed" && (score < 3 || score > 3.9)) {
+        callback(
+          "Out of range! Input range is between >= 3.0 until < 4.0"
+        );
+      } else if (!regexPercent.test(weight)) {
+        callback("Score's value must be decimal, e.g 2.5");
       }
     }
   }
 ];
+
+export const achievementScoreValidator = (result) => [
+  {
+    validator: async (rule,value,callback,source) => {
+      const regexNumber = new RegExp(/[^0-9|.]/g);
+      let score = value;
+      if (!score) {
+        callback('Weight is required')
+      } else if(regexNumber.test(score)){
+        callback('Weight\'s value must be decimal, e.g 2.5')
+      } else if (result === "Below" && score < 1 && score > 2) {
+        callback('Out of range! Input range is between >= 1.0 until < 2.0')
+      } else if (result === "Meet" && score < 2 && score > 3) {
+        callback('Out of range! Input range is between >= 2.0 until < 3.0')
+      } else if (result === "Exceed" && score < 3 && score > 4) {
+        callback('Out of range! Input range is between >= 3.0 until < 4.0')
+      }
+    }
+  }
+]
 
 export const metricValidatorText = (data) => [
   {

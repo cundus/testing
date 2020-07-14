@@ -1,3 +1,6 @@
+HOWT
+
+
 CARA MENDEPLOY
 
 1. yang di deploy hanya yang ada di folder build

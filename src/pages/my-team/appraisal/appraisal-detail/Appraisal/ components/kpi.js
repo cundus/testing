@@ -104,6 +104,14 @@ class KPI extends Component {
         );
       }
     };
+    const KPIAchievementScore = {
+      title: 'KPI Achievement Score',
+      dataIndex: 'achievementScore',
+      placeholder: 'Enter KPI Achievement Score',
+      align: 'center',
+      width: 110,
+      editable: myStep
+    };
     const Feedback = {
       title: 'Feedback',
       dataIndex: 'feedback',
@@ -113,6 +121,7 @@ class KPI extends Component {
       className: 'ant-table-th-yellow',
       editable: myStep
     };
+    await newColumns.push(KPIAchievementScore);
     await newColumns.push(result);
     // await newColumns.push(action);
     await newColumns.push(Feedback);

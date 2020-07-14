@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import {
-  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator
+  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator, achievementScoreValidator
 } from '../../utils/validator';
 
 const { Option } = Select;
@@ -216,6 +216,24 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, field)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (index === 'achievementScore') {
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: achievementScoreValidator(record.result),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={placeholder}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
