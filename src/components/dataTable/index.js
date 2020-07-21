@@ -168,8 +168,8 @@ class EditableCell extends React.Component {
       return (
         <>
         {indexarr === 0 &&
-          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6'}}>
-            <span style={{textAlign: 'justify'}}>
+          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6', textAlign: 'left', padding: 5, borderRadius: 4}}>
+            <span style={{}}>
             Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
             </span>
           </div>
@@ -303,17 +303,18 @@ class EditableCell extends React.Component {
   render() {
     const {
       editable,
+      verticalAlign,
       ...restProps
     } = this.props;
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
-      <td {...restProps}>
+      <td {...restProps} style={{verticalAlign: verticalAlign, textAlign: 'center'}}>
         {!editable ? (
           <div>
             <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
-            <div style={{ verticalAlign: 'top' }}>
+            <div>
               <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
             </div>
           )}
@@ -369,6 +370,7 @@ const DataTable = (props) => {
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
+        verticalAlign: col.verticalAlign,
         col: columnList,
         color: col.color,
         handlechange
