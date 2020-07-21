@@ -148,7 +148,7 @@ class Appraisal extends Component {
           cascadeName: itemKpi.cascadeName,
           kpi: itemKpi.name,
           baseline: itemKpi.baseline,
-          weight: parseFloat(itemKpi.weight),
+          weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
           rating: itemKpi.rating,
           index,
           achievementType: itemKpi.achievementType,

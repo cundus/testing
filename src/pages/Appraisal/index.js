@@ -140,7 +140,7 @@ class Appraisal extends Component {
         cascadeName: itemKpi.cascadeName,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
         rating: itemKpi.rating,
         index,
         achievementType: itemKpi.achievementType,
@@ -273,7 +273,7 @@ class Appraisal extends Component {
       const data = {
         achievementType: item.achievementType,
         actualAchievementText: item.achievementType === 0 ? item.assessment : '',
-        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
+        actualAchievement: item.achievementType === 1 ? parseFloat(item.assessment) : 0,
         id: item.id
       };
       assessment.push(data);
@@ -408,7 +408,7 @@ class Appraisal extends Component {
       const data = {
         achievementType: item.achievementType,
         actualAchievementText: item.achievementType === 0 ? item.assessment : '',
-        actualAchievement: parseFloat(item.achievementType === 1 ? item.assessment : ''),
+        actualAchievement: item.achievementType === 1 ? parseFloat(item.assessment) : 0,
         id: item.id
       };
       assessment.push(data);

@@ -28,7 +28,7 @@ const kpiGetSelfProcess = (dataKpi, dataKpiMetrics) => {
       cascadeName: itemKpi.cascadeName,
       kpi: itemKpi.name,
       baseline: itemKpi.baseline,
-      weight: parseFloat(itemKpi.weight),
+      weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat('0'),
       achievementType: itemKpi.achievementType,
       metrics: dataKpiMetrics,
       ...dataMetrics,
@@ -69,7 +69,7 @@ const kpiGetManagerProcess = (dataManager, dataKpiManagerMetrics) => {
         cascadeName: `${dataManager.manager.firstName || ''} ${dataManager.manager.lastName || ''}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat('0'),
         achievementType: itemKpi.achievementType,
         metrics: dataKpiManagerMetrics,
         ...dataMetrics
