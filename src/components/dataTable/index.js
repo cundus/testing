@@ -145,7 +145,7 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (index === 'feedback') { // Feedback && Comment
+    } else if (index === 'feedback') { // Feedback
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -164,8 +164,16 @@ class EditableCell extends React.Component {
           )}
         </Form.Item>
       );
-    } else if (index === 'comment') { // Feedback && Comment
+    } else if (index === 'comment') { // Comment
       return (
+        <>
+        {indexarr === 0 &&
+          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6'}}>
+            <span style={{textAlign: 'justify'}}>
+            Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
+            </span>
+          </div>
+        }
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             // rules: validator(data),
@@ -181,6 +189,7 @@ class EditableCell extends React.Component {
             />
           )}
         </Form.Item>
+        </>
       );
     } else if (index === 'weight') {
       return (
