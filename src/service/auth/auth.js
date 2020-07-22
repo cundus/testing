@@ -11,8 +11,8 @@ const config = {
   auth: {
     clientId: REACT_APP_CLIENTID_AADMS,
     authority: REACT_APP_AUTHORITY_AADMS,
-    redirectURI: () => REACT_APP_REDIRECT_URI_AADMS,
-    postLogoutRedirectUri: () => REACT_APP_REDIRECT_URI_AADMS
+    redirectURI: redirectAadmsurl(),
+    postLogoutRedirectUri: redirectAadmsurl()
   },
   cache: {
     cacheLocation: 'localStorage',
@@ -23,7 +23,7 @@ const config = {
 const scopesConf = {
   scopes: ['openid']
 };
-console.log(REACT_APP_REDIRECT_URI_AADMS)
+
 export const authProvider = new MsalAuthProvider(
   config,
   scopesConf,
