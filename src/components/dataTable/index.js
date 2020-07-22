@@ -256,7 +256,8 @@ class EditableCell extends React.Component {
     const {
       dataindex,
       record,
-      children
+      children,
+      indexarr
     } = this.props;
     const index = dataindex;
     let valueType = 'Select type"';
@@ -288,6 +289,21 @@ class EditableCell extends React.Component {
             {record[index]}
           </div>
         </div>
+      );
+    } else if (index === 'comment') { // Comment
+      return (
+        <>
+        {indexarr === 0 &&
+          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6', textAlign: 'left', padding: 5, borderRadius: 4}}>
+            <span style={{}}>
+            Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
+            </span>
+          </div>
+        }
+        <div className="editable-cell-value-wrap">
+          {children}
+        </div>
+        </>
       );
     } else {
       return (
