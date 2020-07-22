@@ -167,13 +167,6 @@ class EditableCell extends React.Component {
     } else if (index === 'comment') { // Comment
       return (
         <>
-        {indexarr === 0 &&
-          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6', textAlign: 'left', padding: 5, borderRadius: 4}}>
-            <span style={{}}>
-            Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
-            </span>
-          </div>
-        }
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             // rules: validator(data),
@@ -257,7 +250,8 @@ class EditableCell extends React.Component {
       dataindex,
       record,
       children,
-      indexarr
+      indexarr,
+      isManager
     } = this.props;
     const index = dataindex;
     let valueType = 'Select type"';
@@ -293,7 +287,7 @@ class EditableCell extends React.Component {
     } else if (index === 'comment') { // Comment
       return (
         <>
-        {indexarr === 0 &&
+        {(indexarr === 0 && isManager) &&
           <div style={{marginBottom: 5, backgroundColor: '#EDEAA6', textAlign: 'left', padding: 5, borderRadius: 4}}>
             <span style={{}}>
             Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
@@ -387,6 +381,7 @@ const DataTable = (props) => {
         type: col.type,
         placeholder: col.placeholder,
         verticalAlign: col.verticalAlign,
+        isManager: col.isManager,
         col: columnList,
         color: col.color,
         handlechange

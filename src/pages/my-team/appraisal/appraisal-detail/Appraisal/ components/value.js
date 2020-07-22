@@ -69,6 +69,7 @@ class Value extends Component {
       {
         title: 'Remarks/Evidence',
         dataIndex: 'comment',
+        isManager: true,
         width: 200,
         placeholder: 'Enter your Remarks here',
         align: 'center',
