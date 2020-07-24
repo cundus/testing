@@ -145,7 +145,7 @@ class EditableCell extends React.Component {
           </Form.Item>
         </div>
       );
-    } else if (index === 'feedback') { // Feedback && Comment
+    } else if (index === 'feedback') { // Feedback
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -164,8 +164,9 @@ class EditableCell extends React.Component {
           )}
         </Form.Item>
       );
-    } else if (index === 'comment') { // Feedback && Comment
+    } else if (index === 'comment') { // Comment
       return (
+        <>
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
             // rules: validator(data),
@@ -181,6 +182,7 @@ class EditableCell extends React.Component {
             />
           )}
         </Form.Item>
+        </>
       );
     } else if (index === 'weight') {
       return (
@@ -265,7 +267,9 @@ class EditableCell extends React.Component {
     const {
       dataindex,
       record,
-      children
+      children,
+      indexarr,
+      isManager
     } = this.props;
     const index = dataindex;
     let valueType = 'Select type"';
@@ -298,6 +302,21 @@ class EditableCell extends React.Component {
           </div>
         </div>
       );
+    } else if (index === 'comment') { // Comment
+      return (
+        <>
+        {(indexarr === 0 && isManager) &&
+          <div style={{marginBottom: 5, backgroundColor: '#EDEAA6', textAlign: 'left', padding: 5, borderRadius: 4}}>
+            <span style={{}}>
+            Uncomprimising Integrity is a hygiene factor in an Employee's Performance Review. If an Employee is rated low in Uncompromising Integrity, it will be further followed-up, and may lead to discplinary action.
+            </span>
+          </div>
+        }
+        <div className="editable-cell-value-wrap">
+          {children}
+        </div>
+        </>
+      );
     } else {
       return (
         <div>
@@ -312,17 +331,18 @@ class EditableCell extends React.Component {
   render() {
     const {
       editable,
+      verticalAlign,
       ...restProps
     } = this.props;
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
-      <td {...restProps}>
+      <td {...restProps} style={{verticalAlign: verticalAlign, textAlign: 'center'}}>
         {!editable ? (
           <div>
             <EditableContext.Consumer>{this.disableCell}</EditableContext.Consumer>
           </div>
           ) : (
-            <div style={{ verticalAlign: 'top' }}>
+            <div>
               <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
             </div>
           )}
@@ -378,6 +398,8 @@ const DataTable = (props) => {
         title: col.title,
         type: col.type,
         placeholder: col.placeholder,
+        verticalAlign: col.verticalAlign,
+        isManager: col.isManager,
         col: columnList,
         color: col.color,
         handlechange

@@ -49,6 +49,7 @@ class Value extends Component {
         title: 'Ratings',
         width: 100,
         dataIndex: 'rating',
+        verticalAlign: 'top',
         align: 'center',
         render: (text, record) => {
           const { optionRating, form } = this.props;
@@ -88,6 +89,7 @@ class Value extends Component {
         title: 'Upload',
         dataIndex: 'upload',
         align: 'center',
+        verticalAlign: 'top',
         width: 100,
         render: (text, record) => {
           const propsUpload = {
