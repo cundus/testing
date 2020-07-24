@@ -106,10 +106,10 @@ class KPI extends Component {
     };
     const KPIAchievementScore = {
       title: 'KPI Achievement Score',
-      dataIndex: 'achievementScore',
+      dataIndex: 'kpiScore',
       placeholder: 'Enter KPI Achievement Score',
       align: 'center',
-      width: 110,
+      width: 130,
       editable: myStep
     };
     const Feedback = {
@@ -121,8 +121,8 @@ class KPI extends Component {
       className: 'ant-table-th-yellow',
       editable: myStep
     };
-    await newColumns.push(KPIAchievementScore);
     await newColumns.push(result);
+    await newColumns.push(KPIAchievementScore);
     // await newColumns.push(action);
     await newColumns.push(Feedback);
     this.setState({

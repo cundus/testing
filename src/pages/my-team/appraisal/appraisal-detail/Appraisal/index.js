@@ -67,11 +67,13 @@ class Appraisal extends Component {
       generalFeedbackState: '',
       checkedFinal: false,
       acknowledgement: '',
-      loadingSubmit: false
+      loadingSubmit: false,
+      scoreTotal: 0
     };
   }
 
   componentDidMount() {
+    console.log('did')
     const { userReducers, match, step } = this.props;
     const { params } = match;
     const { user } = userReducers.result;
@@ -86,7 +88,30 @@ class Appraisal extends Component {
     }
   }
 
+  liveSUMkpiCount = (data) => {
+    let totalScore = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        const score = parseFloat(itemKpi.kpiScore);
+        if (score) {
+          totalScore += score;
+        }
+      } else {
+        totalScore += 0;
+      }
+    });
+    totalScore = parseFloat(totalScore);
+    totalScore = totalScore / data.length
+    if (typeof totalScore === 'number') {
+      this.setState({
+        scoreTotal: totalScore
+      });
+    }
+  }
+
   getData = async (e) => {
+    console.log('data')
     const {
       match,
       getKpiRating,
@@ -146,12 +171,13 @@ class Appraisal extends Component {
           id: itemKpi.id,
           cascadeType: itemKpi.cascadeType,
           cascadeName: itemKpi.cascadeName,
-          kpi: itemKpi.name,
+          // kpi: itemKpi.name,
           baseline: itemKpi.baseline,
           weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
           rating: itemKpi.rating,
           index,
           achievementType: itemKpi.achievementType,
+          kpiScore: itemKpi.officialRating.kpiScore,
           assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
           qualitativeOption: newOption,
           metrics: dataKpiMetrics,
@@ -183,6 +209,7 @@ class Appraisal extends Component {
         acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
         teamName: `${user.firstName} ${user.lastName}`
       });
+      this.liveSUMkpiCount(dataOrdered)
     }
     this.setState({
       loadingKpis: false
@@ -342,7 +369,8 @@ class Appraisal extends Component {
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
-        comment: data.feedback
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
       };
     });
     const valuesFeedbacks = dataValueList.map((data, index) => {
@@ -392,8 +420,10 @@ class Appraisal extends Component {
           },
           onCancel() {}
         });
-      } else {
+      } else if (errors.proposeRating) {
         message.warning('Please, give your Propose Rating');
+      } else if(errors.dataKpi) {
+        message.warning('Please, fill your KPI Score');
       }
     });
   };
@@ -416,6 +446,7 @@ class Appraisal extends Component {
       ...row
     });
     this.setState({ dataKpis: newData });
+    this.liveSUMkpiCount(newData)
   };
 
   handleChangeValues = (row) => {
@@ -517,6 +548,11 @@ class Appraisal extends Component {
             <Text strong>{`Appraisal - ${teamName} `}</Text>
             <Text>
               Final end year appraisal score & ratings
+            </Text>
+            <br />
+            <Text>
+              SUM of Weighted KPI Score :
+              {` ${this.state.scoreTotal}`}
             </Text>
           </Skeleton>
           <Divider />

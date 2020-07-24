@@ -224,11 +224,11 @@ class EditableCell extends React.Component {
           )}
         </Form.Item>
       );
-    } else if (index === 'achievementScore') {
+    } else if (index === 'kpiScore') {
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: achievementScoreValidator(record.result),
+            rules: achievementScoreValidator(record.rating),
             initialValue: record[index]
           })(
             <TextArea
