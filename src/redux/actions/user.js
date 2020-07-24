@@ -313,7 +313,7 @@ export const GetUserKpiState = () => {
         type: errGetUserKpiState,
         data: {
           error: true,
-          errorCode: error.response.status
+          errorCode: error?.response?.status
         }
       });
     }

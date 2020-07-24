@@ -32,7 +32,7 @@ class modalAssessment extends Component {
         const data = {
           achievementType: modalRecord.achievementType,
           actualAchievementText: modalRecord.achievementType === 0 ? item.assessment : '',
-          actualAchievement: parseFloat(modalRecord.achievementType === 1 ? item.assessment : ''),
+          actualAchievement: modalRecord.achievementType === 1 ? parseFloat(item.assessment) : 0,
           id: modalRecord.id
         };
         handleAssesLoading(modalRecord.id);

@@ -108,7 +108,7 @@ class MonitorKPI extends Component {
         // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
         kpi: itemKpi.name,
         baseline: itemKpi.baseline,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
         achievementType: itemKpi.achievementType,
         metrics: dataKpiMetrics,
         ...dataMetrics,
@@ -183,7 +183,7 @@ class MonitorKPI extends Component {
               id: metric.id,
               label: metric.label,
               achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
-              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+              achievementNumeric: itemKpi.achievementType === 1 ? parseFloat(itemKpi[m]) : 0
             };
             newMetricValue.push(mData);
           }
@@ -194,7 +194,7 @@ class MonitorKPI extends Component {
         id: itemKpi.id,
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
@@ -312,7 +312,7 @@ class MonitorKPI extends Component {
               id: metric.id,
               label: metric.label,
               achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
-              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+              achievementNumeric: itemKpi.achievementType === 1 ? parseFloat(itemKpi[m]) : 0
             };
             newMetricValue.push(mData);
           }
@@ -323,7 +323,7 @@ class MonitorKPI extends Component {
         id: itemKpi.id,
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
@@ -397,7 +397,7 @@ class MonitorKPI extends Component {
               id: metric.id,
               label: metric.label,
               achievementText: itemKpi.achievementType === 0 ? itemKpi[m] : '',
-              achievementNumeric: parseFloat(itemKpi.achievementType === 1 ? itemKpi[m] : '')
+              achievementNumeric: itemKpi.achievementType === 1 ? parseFloat(itemKpi[m]) : 0
             };
             newMetricValue.push(mData);
           }
@@ -408,7 +408,7 @@ class MonitorKPI extends Component {
         id: itemKpi.id,
         baseline: itemKpi.baseline,
         name: itemKpi.kpi,
-        weight: parseFloat(itemKpi.weight),
+        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
         cascadeType: itemKpi.cascadeType,
         cascadeName: itemKpi.cascadeName,
         achievementType: itemKpi.achievementType,
