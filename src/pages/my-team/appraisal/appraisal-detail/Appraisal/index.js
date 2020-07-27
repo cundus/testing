@@ -516,7 +516,7 @@ class Appraisal extends Component {
           <Skeleton loading={loadingKpis} active paragraph={false} title={{ width: 400 }}>
             <Text strong>{`Appraisal - ${teamName} `}</Text>
             <Text>
-              Final end year appraisal score & ratings
+              Final appraisal score & ratings
             </Text>
           </Skeleton>
           <Divider />

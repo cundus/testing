@@ -583,7 +583,7 @@ class Appraisal extends Component {
           <Divider />
           <Text strong>Final Appraisal </Text>
           <Text>
-            Final end year appraisal score & ratings
+            Final appraisal score & ratings
           </Text>
           <Divider />
           <center>
