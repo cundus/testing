@@ -582,9 +582,6 @@ class Appraisal extends Component {
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingBottom: 10 }}>
           <Divider />
           <Text strong>Final Appraisal </Text>
-          <Text>
-            Final appraisal score & ratings
-          </Text>
           <Divider />
           <center>
             <Row>
