@@ -177,7 +177,7 @@ class Appraisal extends Component {
           rating: itemKpi.rating,
           index,
           achievementType: itemKpi.achievementType,
-          kpiScore: itemKpi.officialRating.kpiScore,
+          kpiScore: itemKpi?.officialRating?.kpiScore <= 0 ? 0 : itemKpi?.officialRating?.kpiScore,
           assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
           qualitativeOption: newOption,
           metrics: dataKpiMetrics,
@@ -307,7 +307,8 @@ class Appraisal extends Component {
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
-        comment: data.feedback
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
       };
     });
     const valuesFeedbacks = dataValueList.map((data, index) => {
@@ -392,7 +393,7 @@ class Appraisal extends Component {
       rating,
       valuesFeedbacks
     };
-    form.validateFieldsAndScroll(['proposeRating'], (errors, values) => {
+    form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
         confirm({
           title: 'Are you sure?',
@@ -423,7 +424,7 @@ class Appraisal extends Component {
       } else if (errors.proposeRating) {
         message.warning('Please, give your Propose Rating');
       } else if(errors.dataKpi) {
-        message.warning('Please, fill your KPI Score');
+        message.warning('Please, fill your KPI Achievement Score');
       }
     });
   };
