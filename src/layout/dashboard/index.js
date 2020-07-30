@@ -13,6 +13,7 @@ import { authProvider } from '../../service/auth/auth';
 import styles from './Dashboard.style';
 import apiUrl from '../../utils/apiUrl';
 import IdleTimer from 'react-idle-timer';
+import { menuMonitoringAllow, menuAppraisalAllow } from '../../utils/stepKpi';
 
 // import Stores from "../../redux/store/index";
 const { Content } = Layout;
@@ -103,7 +104,8 @@ class Dashboard extends React.Component {
 
   render() {
     const step = _.get(this, 'props.step.currentStep', 'Emp Goal Setting');
-    const isAllowToMonitor = step === 'Manager Goal Review' || step === 'Emp Goal Setting';
+    const isMonitoring = menuMonitoringAllow.includes(step)
+    const isAppraisal = menuAppraisalAllow.includes(step)
     const { collapsed } = this.state;
     const {
       child, user, logout
@@ -126,9 +128,9 @@ class Dashboard extends React.Component {
           debounce={250}
           timeout={1000 * 60 * 15} // 15mnt
         />
-        <Sidebar collapsed={collapsed} toggle={this.toggle} isAllowToMonitor={isAllowToMonitor} />
+        <Sidebar collapsed={collapsed} toggle={this.toggle} isMonitoring={isMonitoring} isAppraisal={isAppraisal} />
         <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
-          <Header collapsed={collapsed} toggle={this.toggle} logout={logout} isAllowToMonitor={isAllowToMonitor} />
+          <Header collapsed={collapsed} toggle={this.toggle} logout={logout} isMonitoring={isMonitoring} isAppraisal={isAppraisal} />
           <Content style={styles.contentContainer}>
             {Object.keys(user).length ? (
               user.result ?

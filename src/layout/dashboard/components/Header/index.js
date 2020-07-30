@@ -19,7 +19,7 @@ const { Text } = Typography;
 
 const Header = (props) => {
   const {
-    collapsed, toggle, history, isAllowToMonitor, logout, notificationReducers
+    collapsed, toggle, history, isMonitoring, isAppraisal, logout, notificationReducers
   } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
   const pathlocation = history.location.pathname;
@@ -56,11 +56,12 @@ const Header = (props) => {
               // check is has child
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
-                const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+                const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+                const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
                 return (
                   <Menu.Item
                     key={`${menu.path}`}
-                    disabled={isDisabled}
+                    disabled={isMonDisabled || isApDisabled}
                   >
                     <Link to={menu.path}>{menu.title}</Link>
                   </Menu.Item>
@@ -76,12 +77,12 @@ const Header = (props) => {
                     }
                   >
                     {childsRoutes.map((menuChild) => {
-                      const isDisabled = isAllowToMonitor &&
-                      (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+                      const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+                      const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
                       return (
                         <Menu.Item
                           key={`${menuChild.path}`}
-                          disabled={isDisabled}
+                          disabled={isMonDisabled || isApDisabled}
                         >
                           <Link to={menuChild.path}>
                             <Icon
@@ -168,6 +169,5 @@ Header.propTypes = {
   collapsed: PropTypes.bool,
   toggle: PropTypes.func,
   notificationReducers: PropTypes.instanceOf(Object),
-  isAllowToMonitor: PropTypes.bool,
   logout: PropTypes.func
 };

@@ -14,7 +14,7 @@ const Sidebar = (props) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
-  const { collapsed, toggle, isAllowToMonitor } = props;
+  const { collapsed, toggle, isMonitoring, isAppraisal, } = props;
   const isManager = _.get(props, 'user.result.user.manager', false);
   const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);
   if (isManager === false) {
@@ -50,11 +50,12 @@ const Sidebar = (props) => {
             (menuChild) => menuChild.parent === menu.title
           );
           if (childsRoutes.length === 0) {
-            const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+            const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+            const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
             return (
               <Menu.Item
                 key={`${menu.path}`}
-                disabled={isDisabled}
+                disabled={isMonDisabled || isApDisabled}
               >
                 <Link to={menu.path} onClick={toggle}>{menu.title}</Link>
               </Menu.Item>
@@ -68,11 +69,12 @@ const Sidebar = (props) => {
                 }
               >
                 {childsRoutes.map((menuChild) => {
-                  const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+                const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+                const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
                   return (
                     <Menu.Item
                       key={`${menuChild.path}`}
-                      disabled={isDisabled}
+                      disabled={isMonDisabled || isApDisabled}
                     >
                       <Link to={menuChild.path} onClick={toggle}>
                         <Icon
@@ -104,6 +106,5 @@ export default connectToComponent;
 
 Sidebar.propTypes = {
   collapsed: PropTypes.bool,
-  toggle: PropTypes.func,
-  isAllowToMonitor: PropTypes.bool
+  toggle: PropTypes.func
 };

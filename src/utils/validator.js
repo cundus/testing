@@ -137,8 +137,8 @@ export const weightValidator = (result) => [
         callback('Out of range! Input range is between >= 1.0 until < 2.0')
       } else if (result === "Meet" && score < 2 && score > 3) {
         callback('Out of range! Input range is between >= 2.0 until < 3.0')
-      } else if (result === "Exceed" && score < 3 && score > 4) {
-        callback('Out of range! Input range is between >= 3.0 until < 4.0')
+      } else if (result === "Exceed" && score < 3 && score >= 4) {
+        callback('Out of range! Input range is between >= 3.0 until <= 4.0')
       }
     }
   }

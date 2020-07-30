@@ -329,11 +329,6 @@ class Appraisal extends Component {
     this.setState({ isFeedback: status });
   };
 
-  goToMonitoring = () => {
-    const { history } = this.props;
-    history.push('/monitoring');
-  }
-
   handleChange = (row) => {
     const { dataValueList } = this.state;
     const newData = [...dataValueList];
@@ -606,7 +601,6 @@ class Appraisal extends Component {
                     form={form}
                     loading={loadingKpis}
                     isModalShow={isModalShow}
-                    goToMonitoring={this.goToMonitoring}
                     handleSubmit={this.handleSubmit}
                     changeChallenge={this.changeChallenge}
                     challengeYour={challengeYour}
@@ -644,7 +638,6 @@ class Appraisal extends Component {
                   getOwnValues={this.getOwnValues}
                   handleChangeField={this.handleChange}
                   handleSubmit={this.handleSubmit}
-                  goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
                   currentStep={currentStep}
                   myStep={myStep}
@@ -697,13 +690,6 @@ class Appraisal extends Component {
                     </Title>}
                 </div> :
                 <div style={{ textAlign: 'center' }}>
-                  <Button
-                    id="go-monitoring"
-                    onClick={this.goToMonitoring}
-                    style={{ margin: 10 }}
-                  >
-                    Go To Monitoring
-                  </Button>
                   {tab === '1' ?
                     <Button
                       id="save-assessment"
