@@ -166,9 +166,9 @@ export const achievementScoreValidator = (result) => [
         callback(
           "Out of range! Input range is between >= 2.0 until < 3.0"
         );
-      } else if (result === "Exceed" && (score < 3 || score > 3.9)) {
+      } else if (result === "Exceed" && (score < 3 || score > 4)) {
         callback(
-          "Out of range! Input range is between >= 3.0 until < 4.0"
+          "Out of range! Input range is between >= 3.0 until <= 4.0"
         );
       } else if (!regexPercent.test(weight)) {
         callback("Score's value must be decimal, e.g 2.5");
