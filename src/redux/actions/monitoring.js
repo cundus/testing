@@ -1,7 +1,6 @@
 import { REVISE_KPI, REVISE_KPI_SUCCESS, REVISE_KPI_FAILED } from "../action.type";
 import { reviseKpi } from "../../service/monitoring";
 import { Success } from "../status-code-type";
-import { submitToPreviousStep } from "../../service/kpiPlanning";
 
 export const doReviseKPI = (id) => async (dispatch) => {
     dispatch({
@@ -12,7 +11,7 @@ export const doReviseKPI = (id) => async (dispatch) => {
       data: []
     });
     try {
-      const payload = await submitToPreviousStep(id);
+      const payload = await reviseKpi(id);
       if (payload.data.status_code === Success) {
         dispatch({
           type: REVISE_KPI_SUCCESS,
