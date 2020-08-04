@@ -12,13 +12,19 @@ class TableAlignmentDetail extends Component {
         title: 'Employee ID',
         dataIndex: 'userId',
         align: 'center',
-        placeholder: 'Employee ID'
+        placeholder: 'Employee ID',
+        sorter: {
+          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        },
       },
       {
         title: 'Employee Name',
         dataIndex: 'firstName',
         align: 'center',
         placeholder: 'Employee Name',
+        sorter: {
+          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        },
         render: (text, record) => {
           return (
             <span>{text}&nbsp;{record?.lastName}</span>
@@ -30,6 +36,9 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'managerFirstName',
         align: 'center',
         placeholder: 'Superior',
+        sorter: {
+          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        },
         render: (text, record) => {
           return (
             <span>{text}&nbsp;{record?.managerLastName}</span>
@@ -40,13 +49,19 @@ class TableAlignmentDetail extends Component {
         title: 'KPI Achievement Score',
         dataIndex: 'kpiAchievementScore',
         align: 'center',
-        placeholder: 'KPI Achievement Score'
+        placeholder: 'KPI Achievement Score',
+        sorter: {
+          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        },
       },
       {
         title: 'Pre Alignment',
         dataIndex: 'preAlignment',
         align: 'center',
-        placeholder: 'Pre Alignment'
+        placeholder: 'Pre Alignment',
+        sorter: {
+          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        },
       },
       {
         title: 'Post Alignment',
