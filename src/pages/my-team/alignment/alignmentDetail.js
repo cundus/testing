@@ -90,7 +90,7 @@ class AlignmentList extends Component {
                                 <Divider />
                                 <Text strong style={{ fontSize: 20 }}>Performance Review Alignment (Callibration) : </Text><br />
                                 <Text strong>Member : </Text>
-                                {alignmentReducers?.dataDetail?.usersCalibration.map((item) =>
+                                {alignmentReducers?.dataDetail?.usersCalibration?.map((item) =>
                                     <Text>{item?.firstName}&nbsp;{item?.lastName}</Text>
                                 )}
                                 <Divider />
