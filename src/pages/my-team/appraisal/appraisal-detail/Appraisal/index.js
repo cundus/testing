@@ -550,11 +550,6 @@ class Appraisal extends Component {
             <Text>
               Final appraisal
             </Text>
-            <br />
-            <Text>
-              SUM of Weighted KPI Score :
-              {` ${this.state.scoreTotal}`}
-            </Text>
           </Skeleton>
           <Divider />
           <center>
@@ -605,6 +600,11 @@ class Appraisal extends Component {
                             })}
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                          <br />
+                          <Text strong>
+                            SUM of Weighted KPI Score :
+                            {` ${this.state.scoreTotal}`}
+                          </Text>
                       </Form.Item>
                     </Form>
                   </div> :
@@ -652,6 +652,11 @@ class Appraisal extends Component {
                             })}
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                          <br />
+                          <Text strong>
+                            SUM of Weighted KPI Score :
+                            {` ${this.state.scoreTotal}`}
+                          </Text>
                       </Form.Item>
                     </Form>
                   </div> :
