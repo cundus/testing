@@ -6,6 +6,8 @@ import Lazyload from '../../components/lazyLoad';
 // Shared layouts
 import { Dashboard as DashboardLayout } from '../../layout';
 import { LazyLoad } from '../../components';
+import AlignmentList from '../../pages/my-team/alignment/alignmentList';
+import AlignmentDetail from '../../pages/my-team/alignment/alignmentDetail';
 // import PlanningPage from '../../pages/planning';
 // import Clear from '../../layout/clear';
 
@@ -129,7 +131,19 @@ export const routes = [
         component: Lazyload(Error500Page),
         exact: true,
         title: 'Error 500'
-      }
+      },
+      {
+        path: '/my-team/performance-review-alignment/',
+        component: Lazyload(AlignmentList),
+        exact: true,
+        title: 'My Team - Appraisal'
+      },
+      {
+        path: '/my-team/performance-review-alignment/:sessionId',
+        component: Lazyload(AlignmentDetail),
+        exact: true,
+        title: 'My Team - Appraisal'
+      },
     ]
   }
 ];

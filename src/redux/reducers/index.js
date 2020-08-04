@@ -14,6 +14,7 @@ import AchievementReducers from './achivement';
 import AppraisalReducers from './appraisal';
 import notificationReducers from './notifications';
 import monitoringReducers from './monitoring';
+import alignmentReducers from './alignment';
 import {
   ownKpi, managerKpi, saveKpi, submitKpi
 } from './kpi/';
@@ -37,5 +38,6 @@ export default combineReducers({
   saveKpi,
   submitKpi,
   notificationReducers,
-  monitoringReducers
+  monitoringReducers,
+  alignmentReducers
 });

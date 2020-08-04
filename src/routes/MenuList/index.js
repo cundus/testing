@@ -69,7 +69,7 @@ const MenuList = [
     menuLevel: 2,
     title: 'Monitoring',
     parent: 'My Team',
-    icon: 'bar-chart',
+    icon: 'stock',
     theme: 'outlined',
     disabled: true
   },
@@ -80,6 +80,16 @@ const MenuList = [
     title: 'Appraisal',
     parent: 'My Team',
     icon: 'check-square',
+    theme: 'outlined',
+    disabled: true
+  },
+  {
+    id: 12,
+    path: '/my-team/performance-review-alignment/',
+    menuLevel: 2,
+    title: 'Performance Review Alignment',
+    parent: 'My Team',
+    icon: 'bar-chart',
     theme: 'outlined',
     disabled: true
   }

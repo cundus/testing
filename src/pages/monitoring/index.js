@@ -123,6 +123,8 @@ class MonitorKPI extends Component {
       challengeYour: challenge === '----------' ? '' : challenge
     });
     this.liveCount(newData);
+    } else {
+      this.props.history.push('/my-team/monitoring');
     }
   };
 
@@ -241,7 +243,7 @@ class MonitorKPI extends Component {
     const { kpiReducers, stepChange, form } = this.props;
     const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducers;
     const { name  } = dataGoal;
-    const stafname = isSuperior ? `${user.firstName} ${user.lastName}` : '';
+    const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
     const stafid = holderUserId;
     if (status === Success || loadingKpi) {
     return (
