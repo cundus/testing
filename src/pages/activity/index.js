@@ -18,7 +18,7 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi from '../../utils/stepKpi';
+import stepKpi, { stepKpiMonitoring }  from '../../utils/stepKpi';
 import { GetUserKpiState } from '../../redux/actions/user';
 
 const { confirm } = Modal;
@@ -69,11 +69,6 @@ class Activity extends Component {
     const isSuperior = (userId !== userReducers.result.user.userId)
     if(isSuperior) {
       await doGetKpiList(userId);
-      if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
-        this.props.history.push('/my-team/monitoring');
-      }
-    } else if (this.props.step.currentStep !== stepKpi[2]){
-      this.props.history.push('/monitoring');
     }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
@@ -170,7 +165,7 @@ class Activity extends Component {
     if (this.state.isSuperior === true) {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
     }
-    const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]));
+    const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]));
     return (
       <div style={globalStyle.contentContainer}>
         <div>

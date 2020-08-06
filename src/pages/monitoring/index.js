@@ -19,6 +19,7 @@ import { Success } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
 import { doReviseKPI } from '../../redux/actions/monitoring';
+import { GetUserKpiState } from '../../redux/actions/user';
 
 
 const { confirm } = Modal;
@@ -58,13 +59,15 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, getLatestGoalKpi, match } = this.props;
+    const { userReducers, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
     const { params } = match;
     const { userId } = params;
     const { user } = userReducers.result;
     getLatestGoalKpi();
+    doGetStep()
     if (userId) {
       await getKpiList(userId);
+      await
       this.setState({
         isSuperior: true
       })
@@ -244,7 +247,7 @@ class MonitorKPI extends Component {
     const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducers;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
-    const stafid = holderUserId;
+    const stafid = user?.userId;
     if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
@@ -331,7 +334,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
-  doRevisingKPI: (id) => dispatch(doReviseKPI(id))
+  doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
+  doGetStep: (id) => dispatch(GetUserKpiState(id))
 });
 
 const connectToComponent = connect(

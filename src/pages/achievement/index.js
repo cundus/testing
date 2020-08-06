@@ -18,7 +18,7 @@ import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi from '../../utils/stepKpi';
+import stepKpi, { stepKpiMonitoring }  from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
@@ -65,15 +65,7 @@ class Achievement extends Component {
     const activities = this.props.achievementThread.achievements;
     let dataSource = [];
     const isSuperior = (userId !== userReducers.result.user.userId)
-    if(isSuperior) {
-       await doGetKpiList(userId);
-       if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
-        this.props.history.push('/my-team/monitoring');
-       }
-    } else if (this.props.step.currentStep !== stepKpi[2]){
-      this.props.history.push('/monitoring');
-    }
-    if (activities.length > 0 && idAchievement) {
+    if (activities?.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
           key: d.id,
@@ -166,7 +158,7 @@ class Achievement extends Component {
     if (this.state.isSuperior === true) {
       stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`;
     }
-    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]);
+    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]);
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -186,7 +178,7 @@ class Achievement extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
-              editable={this.props.step.currentStep === stepKpi[2]}
+              editable={this.props.step.currentStep === stepKpiMonitoring[0]}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               isSuperior={this.state.isSuperior}
