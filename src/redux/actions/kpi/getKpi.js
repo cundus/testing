@@ -23,20 +23,20 @@ export const actionGetKPI = (id) => async (dispatch) => {
   });
   try {
     const payload = await getKpiList(id);
-    if (payload.data.status_code === Success) {
-      if (payload.data.result) {
-        const dataResult = payload.data.result;
-        const dataKpi = dataResult.kpiList;
-        const dataKpiMetrics = dataResult.labelList;
+    if (payload?.data?.status_code === Success) {
+      if (payload?.data?.result) {
+        const dataResult = payload?.data?.result;
+        const dataKpi = dataResult?.kpiList;
+        const dataKpiMetrics = dataResult?.labelList;
         const newData = kpiGetSelfProcess(dataKpi, dataKpiMetrics);
         dispatch({
           type: GET_KPI_LIST_SUCCESS,
           loading: false,
-          status: payload.data.status_code,
-          message: payload.data.status_description,
-          data: payload.data.result,
-          dataKpi: newData.dataKpi,
-          isFeedback: newData.isFeedback
+          status: payload?.data?.status_code,
+          message: payload?.data?.status_description,
+          data: payload?.data?.result,
+          dataKpi: newData?.dataKpi,
+          isFeedback: newData?.isFeedback
         });
       } else {
         dispatch({
@@ -51,18 +51,18 @@ export const actionGetKPI = (id) => async (dispatch) => {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
+        status: payload?.data?.status_code,
+        message: payload?.data?.status_description,
         error: payload
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response?.data) {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response?.data?.status,
+        message: error?.response?.data?.error,
         error
       });
     } else {
@@ -87,30 +87,30 @@ export const actionGetLatestGoalKPI = () => async (dispatch) => {
   });
   try {
     const payload = await getLatestGoalKpi();
-    if (payload.data.status_code === Success) {
+    if (payload?.data?.status_code === Success) {
       dispatch({
         type: GET_LATEST_GOAL_KPI_SUCCESS,
         loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
-        data: payload.data.result
+        status: payload?.data?.status_code,
+        message: payload?.data?.status_description,
+        data: payload?.data?.result
       });
     } else {
       dispatch({
         type: GET_LATEST_GOAL_KPI_FAILED,
         loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
+        status: payload?.data?.status_code,
+        message: payload?.data?.status_description,
         error: payload
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response?.data) {
       dispatch({
         type: GET_LATEST_GOAL_KPI_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response?.data?.status,
+        message: error?.response?.data?.error,
         error
       });
     } else {
@@ -135,21 +135,21 @@ export const actionGetManagerKPI = (id) => async (dispatch) => {
   });
   try {
     const payload = await getKpiManagerList(id);
-    if (payload.data.status_code === Success) {
-      if (payload.data.result) {
+    if (payload?.data?.status_code === Success) {
+      if (payload?.data?.result) {
         dispatch({
           type: GET_KPI_MANAGER_LIST_SUCCESS,
           loading: false,
-          status: payload.data.status_code,
-          message: payload.data.status_description,
-          data: payload.data.result
+          status: payload?.data?.status_code,
+          message: payload?.data?.status_description,
+          data: payload?.data?.result
         });
       } else {
         dispatch({
           type: GET_KPI_MANAGER_LIST_FAILED,
           loading: false,
-          status: payload.data.status_code,
-          message: payload.data.status_description,
+          status: payload?.data?.status_code,
+          message: payload?.data?.status_description,
           error: payload
         });
       }
@@ -157,18 +157,18 @@ export const actionGetManagerKPI = (id) => async (dispatch) => {
       dispatch({
         type: GET_KPI_MANAGER_LIST_FAILED,
         loading: false,
-        status: payload.data.status_code,
-        message: payload.data.status_description,
+        status: payload?.data?.status_code,
+        message: payload?.data?.status_description,
         error: payload
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response?.data) {
       dispatch({
         type: GET_KPI_MANAGER_LIST_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response?.data?.status,
+        message: error?.response?.data?.error,
         error
       });
     } else {
