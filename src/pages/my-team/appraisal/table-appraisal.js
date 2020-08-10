@@ -107,16 +107,8 @@ class TableAppraisal extends Component {
         action: true,
         render: (text, record) => {
           let access = false;
-          if (record.statusNumber === 6) {
+          if (!record.statusNumber === 1 || !record.statusNumber === 2 || !record.statusNumber === 3 || !record.statusNumber === 4) {
             access = true;
-          } else if (record.statusNumber === 5) {
-            access = true;
-          } else if (record.statusNumber === 4) {
-            access = true;
-          } else if (record.statusNumber === 3) {
-            access = true;
-          } else if (record.statusNumber === 1 || record.statusNumber === 2) {
-            access = false;
           } else {
             access = false;
           }
