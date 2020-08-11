@@ -114,14 +114,14 @@ class AlignmentList extends Component {
                     alignmentReducers?.dataDetail?.totalRequirementOutstanding * usersCalibration
                 ],
                 stack: 'Requirements',
-                color: 'orange'
+                color: '#324aa8'
             }, {
                 name: 'Actual',
                 data: [
                     alignmentReducers?.dataDetail?.totalActualOutstanding
                 ],
                 stack: 'Actual',
-                color: '#324aa8'
+                color: 'orange'
             }]
         }
         return (
