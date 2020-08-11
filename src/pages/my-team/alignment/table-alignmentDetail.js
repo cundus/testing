@@ -3,16 +3,41 @@ import {
   Select, Form
 } from 'antd';
 import DataTable from '../../../components/dataTable/index';
+import _ from 'lodash';
 
 class TableAlignmentDetail extends Component {
-  constructor(props) {
-    super(props);
-    this.columns = [
+  render() {
+    const { dataSource, filteredInfo, sortedInfo, handleChangeTable } = this.props;
+    const userIds = dataSource.map((item)=> {
+      return { text: item?.userId, value: item?.userId}
+    })
+    const names = dataSource.map((item)=> {
+      return { text: item?.name, value: item?.name}
+    })
+    const managerNames = dataSource.map((item)=> {
+      return { text: item?.managerName, value: item?.managerName}
+    })
+    const kpiAchievementScores = dataSource.map((item)=> {
+      return { text: item?.kpiAchievementScore, value: item?.kpiAchievementScore}
+    })
+    const preAlignments = dataSource.map((item)=> {
+      return { text: item?.preAlignment, value: item?.preAlignment}
+    })
+    const departments = dataSource.map((item)=> {
+      return { text: item?.department, value: item?.department}
+    })
+    const columns = [
       {
         title: 'Employee ID',
         dataIndex: 'userId',
         align: 'center',
         placeholder: 'Employee ID',
+        filters: _.uniqBy(userIds, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.userId || null,
+        sortOrder: sortedInfo.columnKey === 'userId' && sortedInfo.order,
+        onFilter: (value, record) => record.userId.includes(value),
         sorter: (a, b) => a.userId - b.userId,
       },
       {
@@ -20,6 +45,12 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'name',
         align: 'center',
         placeholder: 'Employee Name',
+        sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+        filters: _.uniqBy(names, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.name ?? null,
+        onFilter: (value, record) => record.name.includes(value),
         sorter: (a, b) => {
           if(a.name && b.name){
             return a.name.localeCompare(b.name);
@@ -31,6 +62,12 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'managerName',
         align: 'center',
         placeholder: 'Superior',
+        sortOrder: sortedInfo.columnKey === 'managerName' && sortedInfo.order,
+        filters: _.uniqBy(managerNames, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.managerName ?? null,
+        onFilter: (value, record) => record.managerName.includes(value),
         sorter: (a, b) => {
           if(a.managerName && b.managerName){
             return a.managerName.localeCompare(b.managerName);
@@ -42,6 +79,12 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'kpiAchievementScore',
         align: 'center',
         placeholder: 'KPI Achievement Score',
+        sortOrder: sortedInfo.columnKey === 'kpiAchievementScore' && sortedInfo.order,
+        filters: _.uniqBy(kpiAchievementScores, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.kpiAchievementScore ?? null,
+        onFilter: (value, record) => record.kpiAchievementScore.includes(value),
         sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
       },
       {
@@ -49,6 +92,12 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'preAlignment',
         align: 'center',
         placeholder: 'Pre Alignment',
+        sortOrder: sortedInfo.columnKey === 'preAlignment' && sortedInfo.order,
+        filters: _.uniqBy(preAlignments, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.preAlignment ?? null,
+        onFilter: (value, record) => record.preAlignment.includes(value),
         sorter: (a, b) => {
           if(a.preAlignment && b.preAlignment){
             return a.preAlignment.localeCompare(b.preAlignment);
@@ -56,10 +105,16 @@ class TableAlignmentDetail extends Component {
         },
       },
       {
-        title: 'Directorat',
+        title: 'Directorate',
         dataIndex: 'department',
         align: 'center',
-        placeholder: 'Pre Alignment',
+        placeholder: 'Directorate',
+        sortOrder: sortedInfo.columnKey === 'Directorate' && sortedInfo.order,
+        filters: _.uniqBy(departments, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.department ?? null,
+        onFilter: (value, record) => record.department.includes(value),
         sorter: (a, b) => {
           if(a.department && b.department){
             return a.department.localeCompare(b.department);
@@ -97,22 +152,13 @@ class TableAlignmentDetail extends Component {
         }
       },
     ];
-
-    this.state = {
-      dataSource: []
-    };
-  }
-
-
-  render() {
-    const { team } = this.props;
-    const { columns } = this;
     return (
       <div>
         {/* <Layout> */}
         <DataTable
           columns={columns}
-          datasource={team}
+          datasource={dataSource}
+          handleChangeTable={handleChangeTable}
         />
         {/* </Layout> */}
       </div>

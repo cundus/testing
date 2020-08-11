@@ -375,7 +375,8 @@ const DataTable = (props) => {
       columns,
       loading,
       form,
-      emptytext
+      emptytext,
+      handleChangeTable
     } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -421,6 +422,7 @@ const DataTable = (props) => {
         }}
         rowClassName="editable-row"
         bordered
+        onChange={handleChangeTable}
         dataSource={datasource}
         columns={columnList}
         scroll={isDesktopOrLaptop ? { x: false } : { x: true }}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Spin, Divider, Typography, AutoComplete, Input } from 'antd';
+import { Spin, Divider, Typography, AutoComplete, Input, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TableAlignmentDetail from './table-alignmentDetail';
@@ -22,7 +22,7 @@ const options = {
     },
 
     xAxis: {
-        categories: ['Need Improvement', 'Well Done', 'Outstanding']
+        categories: ['Outstanding']
     },
 
     yAxis: {
@@ -56,7 +56,9 @@ class AlignmentList extends Component {
       this.state = {
         usersCalibration: [],
         dataTable: [],
-        autoCompleteDataSource: []
+        autoCompleteDataSource: [],
+        sortedInfo: {},
+        filteredInfo: {}
     }
     }
     componentDidMount() {
@@ -78,75 +80,50 @@ class AlignmentList extends Component {
                 kpiAchievementScore: `${kpiScore}`,
             }
         })
-        
-        let autoCompleteDataSource = [
-            ...newData.map(item => item.name),
-            ...newData.map(item => item.managerName),
-            ...newData.map(item => item.userId),
-            ...newData.map(item => item.preAlignment),
-            ...newData.map(item => item.department),
-            ...newData.map(item => item.kpiAchievementScore),
-        ]
-        autoCompleteDataSource = _.uniq(autoCompleteDataSource);
 
         this.setState({
             usersCalibration: newData,
             dataTable: newData,
-            autoCompleteDataBase: autoCompleteDataSource,
-            autoCompleteDataSource: autoCompleteDataSource
         })
     }
 
-    search = (keyword) => {
-        const keysearch = keyword ? keyword.toLowerCase() : '';
-        const { usersCalibration, autoCompleteDataBase } = this.state
-        const found = usersCalibration.filter(item => {
-            if (item.name.toLowerCase().includes(keysearch)) {
-                return item
-            } else if (item.managerName.toLowerCase().includes(keysearch)) {
-                return item
-            } else if (item.kpiAchievementScore.toLowerCase().includes(keysearch)) {
-                return item
-            } else if (item.department.toLowerCase().includes(keysearch)) {
-                return item
-            } else if (item.preAlignment.toLowerCase().includes(keysearch)) {
-                return item
-            } else if (item.userId.toLowerCase().includes(keysearch)) {
-                return item
-            }
-        })
-        const searchData = autoCompleteDataBase.filter(item => item.toLowerCase().includes(keysearch))
+    
+    handleChange = (pagination, filters, sorter) => {
         this.setState({
-            dataTable: keyword ? found : usersCalibration,
-            autoCompleteDataSource: keyword ? searchData : autoCompleteDataBase
-        })
-    }
+        filteredInfo: filters,
+        sortedInfo: sorter,
+        });
+    };
+
+
+    clearAll = () => {
+        this.setState({
+          filteredInfo: null,
+          sortedInfo: null,
+        });
+      };
+
     render() {
         const { alignmentReducers } = this.props;
-        const { usersCalibration, autoCompleteDataSource,dataTable } = this.state;
+        const { usersCalibration, sortedInfo, filteredInfo,dataTable } = this.state;
         const contentChart = {
             ...options,
             series: [{
                 name: 'Requirements',
                 data: [
-                    alignmentReducers?.dataDetail?.totalRequirementWellDone,
-                    alignmentReducers?.dataDetail?.totalRequirementNeedImprovement,
-                    alignmentReducers?.dataDetail?.totalRequirementOutstanding
+                    alignmentReducers?.dataDetail?.totalRequirementOutstanding * usersCalibration
                 ],
                 stack: 'Requirements',
-                color: '#324aa8'
+                color: 'orange'
             }, {
                 name: 'Actual',
                 data: [
-                    alignmentReducers?.dataDetail?.totalActualWellDone,
-                    alignmentReducers?.dataDetail?.totalActualNeedImprovement,
                     alignmentReducers?.dataDetail?.totalActualOutstanding
                 ],
                 stack: 'Actual',
-                color: 'orange'
+                color: '#324aa8'
             }]
         }
-        
         return (
             <div style={globalStyle.contentContainer}>
                 {
@@ -163,20 +140,16 @@ class AlignmentList extends Component {
                                 )}
                                 <Divider />
                             </div>
-                            <div style={{ width: '50vw' }}>
+                            <div style={{ width: '50vw', marginBottom: 20 }}>
                                 <HighchartsReact
                                     highcharts={Highcharts}
                                     options={contentChart}
                                 />
                             </div>
-                            <AutoComplete
-                                dataSource={autoCompleteDataSource}
-                                onChange={keyword => this.search(keyword)}
-                                allowClear
-                            >
-                                <Input.Search size="large" placeholder="Search" />
-                            </AutoComplete>
-                            <TableAlignmentDetail team={dataTable ?? []} />
+                            <div style={{marginBottom: 10}}>
+                                <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+                            </div>
+                            <TableAlignmentDetail handleChangeTable={this.handleChange} sortedInfo={sortedInfo} filteredInfo={filteredInfo} dataSource={dataTable ?? []} />
                         </div> :
                         <center>
                             <Spin />
