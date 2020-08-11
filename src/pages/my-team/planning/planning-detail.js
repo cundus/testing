@@ -27,7 +27,7 @@ class PlanningDetail extends Component {
       globalfeedback: '',
       currentStep: '',
       labelList: [],
-      loading: false
+      loading: true
     };
   }
 
@@ -43,9 +43,6 @@ class PlanningDetail extends Component {
   }
 
   async getAllData() {
-    this.setState({
-      loading: true
-    });
     const newData = [];
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
@@ -103,6 +100,9 @@ class PlanningDetail extends Component {
         labelList: this.props.myteamdetail.labelList
       });
     }
+    this.setState({
+      loading: false
+    });
   }
 
 
@@ -163,8 +163,8 @@ class PlanningDetail extends Component {
         const { feedback } = this.props;
         const { status, statusMessage } = feedback;
         if (status === Success) {
-          message.success('Success, kpi has been approve');
-          this.props.history.push('/my-team/planning');
+          message.success('Success, kpi has been approved');
+          this.props.history.push('/my-team/monitoring');
           getNotifications();
         } else {
           message.error(`Sorry, ${statusMessage}`);
@@ -183,7 +183,7 @@ class PlanningDetail extends Component {
     return (
       <div style={globalStyle.contentContainer}>
         {
-         (this.state.dataSource.length > 0 ) ?
+         (!this.state.loading) ?
            <div>
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail?.error) ?

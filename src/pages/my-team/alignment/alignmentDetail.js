@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
-import { Spin, Divider, Typography } from 'antd';
+import { Spin, Divider, Typography, AutoComplete, Input } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TableAlignmentDetail from './table-alignmentDetail';
@@ -51,14 +51,79 @@ const options = {
 }
 
 class AlignmentList extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        usersCalibration: [],
+        dataTable: [],
+        autoCompleteDataSource: []
+    }
+    }
     componentDidMount() {
-        const { doGetAlignmentDetail } = this.props;
-        const { match } = this.props;
-        doGetAlignmentDetail(match?.params?.sessionId);
+        this.getData()
     }
 
+    getData= async() => {
+        
+        const { doGetAlignmentDetail } = this.props;
+        const { match } = this.props;
+        await doGetAlignmentDetail(match?.params?.sessionId);
+        const { alignmentReducers } = this.props;
+        const newData = alignmentReducers?.dataDetail?.usersCalibration.map((item, index) => {
+            const kpiScore = item?.kpiAchievementScore < 0 ? 0 : item?.kpiAchievementScore
+            return {
+                ...item,
+                name: item?.firstName+' '+item?.lastName,
+                managerName: item?.managerFirstName+' '+item?.managerLastName,
+                kpiAchievementScore: `${kpiScore}`,
+            }
+        })
+        
+        let autoCompleteDataSource = [
+            ...newData.map(item => item.name),
+            ...newData.map(item => item.managerName),
+            ...newData.map(item => item.userId),
+            ...newData.map(item => item.preAlignment),
+            ...newData.map(item => item.department),
+            ...newData.map(item => item.kpiAchievementScore),
+        ]
+        autoCompleteDataSource = _.uniq(autoCompleteDataSource);
+
+        this.setState({
+            usersCalibration: newData,
+            dataTable: newData,
+            autoCompleteDataBase: autoCompleteDataSource,
+            autoCompleteDataSource: autoCompleteDataSource
+        })
+    }
+
+    search = (keyword) => {
+        const keysearch = keyword ? keyword.toLowerCase() : '';
+        const { usersCalibration, autoCompleteDataBase } = this.state
+        const found = usersCalibration.filter(item => {
+            if (item.name.toLowerCase().includes(keysearch)) {
+                return item
+            } else if (item.managerName.toLowerCase().includes(keysearch)) {
+                return item
+            } else if (item.kpiAchievementScore.toLowerCase().includes(keysearch)) {
+                return item
+            } else if (item.department.toLowerCase().includes(keysearch)) {
+                return item
+            } else if (item.preAlignment.toLowerCase().includes(keysearch)) {
+                return item
+            } else if (item.userId.toLowerCase().includes(keysearch)) {
+                return item
+            }
+        })
+        const searchData = autoCompleteDataBase.filter(item => item.toLowerCase().includes(keysearch))
+        this.setState({
+            dataTable: keyword ? found : usersCalibration,
+            autoCompleteDataSource: keyword ? searchData : autoCompleteDataBase
+        })
+    }
     render() {
         const { alignmentReducers } = this.props;
+        const { usersCalibration, autoCompleteDataSource,dataTable } = this.state;
         const contentChart = {
             ...options,
             series: [{
@@ -81,6 +146,7 @@ class AlignmentList extends Component {
                 color: 'orange'
             }]
         }
+        
         return (
             <div style={globalStyle.contentContainer}>
                 {
@@ -90,8 +156,10 @@ class AlignmentList extends Component {
                                 <Divider />
                                 <Text strong style={{ fontSize: 20 }}>Performance Review Alignment (Callibration) : </Text><br />
                                 <Text strong>Member : </Text>
-                                {alignmentReducers?.dataDetail?.usersCalibration?.map((item) =>
-                                    <Text>{item?.firstName}&nbsp;{item?.lastName}</Text>
+                                {usersCalibration?.map((item, index) =>
+                                    <Text>{item?.firstName}&nbsp;{item?.lastName}
+                                    {(usersCalibration.length > 0 && index < usersCalibration.length-2) && ', '}
+                                    {(usersCalibration.length-2 === index) && ' & '}</Text>
                                 )}
                                 <Divider />
                             </div>
@@ -101,7 +169,14 @@ class AlignmentList extends Component {
                                     options={contentChart}
                                 />
                             </div>
-                            <TableAlignmentDetail team={alignmentReducers?.dataDetail?.usersCalibration ?? []} />
+                            <AutoComplete
+                                dataSource={autoCompleteDataSource}
+                                onChange={keyword => this.search(keyword)}
+                                allowClear
+                            >
+                                <Input.Search size="large" placeholder="Search" />
+                            </AutoComplete>
+                            <TableAlignmentDetail team={dataTable ?? []} />
                         </div> :
                         <center>
                             <Spin />

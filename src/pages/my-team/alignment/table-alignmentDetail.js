@@ -13,54 +13,57 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'userId',
         align: 'center',
         placeholder: 'Employee ID',
-        sorter: {
-          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
-        },
+        sorter: (a, b) => a.userId - b.userId,
       },
       {
         title: 'Employee Name',
-        dataIndex: 'firstName',
+        dataIndex: 'name',
         align: 'center',
         placeholder: 'Employee Name',
-        sorter: {
-          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        sorter: (a, b) => {
+          if(a.name && b.name){
+            return a.name.localeCompare(b.name);
+          }
         },
-        render: (text, record) => {
-          return (
-            <span>{text}&nbsp;{record?.lastName}</span>
-          )
-        }
       },
       {
         title: 'Superior',
-        dataIndex: 'managerFirstName',
+        dataIndex: 'managerName',
         align: 'center',
         placeholder: 'Superior',
-        sorter: {
-          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        sorter: (a, b) => {
+          if(a.managerName && b.managerName){
+            return a.managerName.localeCompare(b.managerName);
+          }
         },
-        render: (text, record) => {
-          return (
-            <span>{text}&nbsp;{record?.managerLastName}</span>
-          )
-        }
       },
       {
         title: 'KPI Achievement Score',
         dataIndex: 'kpiAchievementScore',
         align: 'center',
         placeholder: 'KPI Achievement Score',
-        sorter: {
-          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
-        },
+        sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
       },
       {
         title: 'Pre Alignment',
         dataIndex: 'preAlignment',
         align: 'center',
         placeholder: 'Pre Alignment',
-        sorter: {
-          compare: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        sorter: (a, b) => {
+          if(a.preAlignment && b.preAlignment){
+            return a.preAlignment.localeCompare(b.preAlignment);
+          }
+        },
+      },
+      {
+        title: 'Directorat',
+        dataIndex: 'department',
+        align: 'center',
+        placeholder: 'Pre Alignment',
+        sorter: (a, b) => {
+          if(a.department && b.department){
+            return a.department.localeCompare(b.department);
+          }
         },
       },
       {
