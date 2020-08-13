@@ -13,7 +13,7 @@ COPY . /usr/src/app
 RUN mv /usr/src/app/.env.staging  /usr/src/app/.env
 
 
-RUN npm run build:staging
+RUN npm run build
 
 # production environment
 FROM nginx:1.15.9-alpine
