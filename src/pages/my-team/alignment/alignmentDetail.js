@@ -111,7 +111,7 @@ class AlignmentList extends Component {
             series: [{
                 name: 'Requirements',
                 data: [
-                    alignmentReducers?.dataDetail?.totalRequirementOutstanding * usersCalibration
+                    alignmentReducers?.dataDetail?.totalRequirementOutstanding
                 ],
                 stack: 'Requirements',
                 color: '#324aa8'
