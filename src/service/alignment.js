@@ -15,3 +15,12 @@ export const getAlignmentDetail = (sessionId) => customAxios({
         Authorization: `Bearer ${localStorage.getItem('sfToken')}`
     }
 });
+
+export const postAlignmentDetail = (data) => customAxios({
+    url: `/calibration`,
+    method: 'POST',
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+    },
+    data
+});

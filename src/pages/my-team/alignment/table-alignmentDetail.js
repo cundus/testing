@@ -127,7 +127,7 @@ class TableAlignmentDetail extends Component {
         align: 'center',
         placeholder: 'Post Alignment',
         render: (text, record) => {
-          const { optionRating, form } = this.props;
+          const { dataProposeRating, form, handleChange } = this.props;
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
@@ -139,11 +139,11 @@ class TableAlignmentDetail extends Component {
                     placeholder="Choose Value"
                     // disabled={myStep}
                     // eslint-disable-next-line react/jsx-no-bind
-                    // onChange={() => this.change(record, [`dataGeneral[${record.index}].rating`])}
+                    onChange={(value) => handleChange({...record, postAlignment: value})}
                   >
-                    <Select.Option key={'high'} value='hight'>Need Improvement</Select.Option>
-                    <Select.Option key={'low'} value='low'>Well Done</Select.Option>
-                    <Select.Option key={'mid'} value='mid'>Outstanding</Select.Option>
+                    {dataProposeRating.map((item, index) => {
+                      return <Select.Option key={index} value={item.id}>{item.name}</Select.Option>;
+                    })}
                   </Select>
                 {/* )} */}
               </Form.Item>

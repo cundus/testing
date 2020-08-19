@@ -1,6 +1,6 @@
-import { GET_ALIGNMENTS, GET_ALIGNMENTS_SUCCESS, GET_ALIGNMENTS_FAILED, GET_ALIGNMENTS_DETAIL, GET_ALIGNMENTS_DETAIL_SUCCESS, GET_ALIGNMENTS_DETAIL_FAILED } from "../action.type";
+import { GET_ALIGNMENTS, GET_ALIGNMENTS_SUCCESS, GET_ALIGNMENTS_FAILED, GET_ALIGNMENTS_DETAIL, GET_ALIGNMENTS_DETAIL_SUCCESS, GET_ALIGNMENTS_DETAIL_FAILED, POST_ALIGNMENTS_DETAIL, POST_ALIGNMENTS_DETAIL_SUCCESS, POST_ALIGNMENTS_DETAIL_FAILED } from "../action.type";
 import { Success } from "../status-code-type";
-import { getAlignment, getAlignmentDetail } from "../../service/alignment";
+import { getAlignment, getAlignmentDetail, postAlignmentDetail } from "../../service/alignment";
 
 export const getAlignmentSession = () => async (dispatch) => {
     dispatch({
@@ -105,3 +105,53 @@ export const getAlignmentSessionDetail = (sessionId) => async (dispatch) => {
     }
   };
   
+export const postAlignmentSessionDetail = (sessionId, data) => async (dispatch) => {
+  dispatch({
+    type: POST_ALIGNMENTS_DETAIL,
+    loadingPostDetail: true,
+    statusPostDetail: null,
+    messagePostDetail: null,
+    dataPostDetail: []
+  });
+  try {
+    const payload = await postAlignmentDetail(sessionId, data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: POST_ALIGNMENTS_DETAIL_SUCCESS,
+        loadingPostDetail: false,
+        statusPostDetail: payload?.data?.status_code,
+        messagePostDetail: payload?.data?.status_description,
+        dataPostDetail: payload?.data?.result
+      });
+    } else {
+      dispatch({
+        type: POST_ALIGNMENTS_DETAIL_FAILED,
+        loadingPostDetail: false,
+        statusPostDetail: payload?.data?.status_code,
+        messagePostDetail: payload?.data?.status_description,
+        errorPostDetail: payload,
+        dataPostDetail: []
+      });
+    }
+  } catch (error) {
+    if (error?.response?.data) {
+      dispatch({
+        type: POST_ALIGNMENTS_DETAIL_FAILED,
+        loadingPostDetail: false,
+        statusPostDetail: error?.response?.data?.status,
+        messagePostDetail: error?.response?.data?.error || 'Something wrong',
+        errorPostDetail: error,
+        dataPostDetail: []
+      });
+    } else {
+      dispatch({
+        type: POST_ALIGNMENTS_DETAIL_FAILED,
+        loadingPostDetail: false,
+        statusPostDetail: null,
+        messagePostDetail: 'Something wrong',
+        errorPostDetail: error,
+        dataPostDetail: []
+      });
+    }
+  }
+};
