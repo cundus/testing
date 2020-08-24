@@ -126,15 +126,15 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'postAlignment',
         align: 'center',
         placeholder: 'Post Alignment',
-        render: (text, record) => {
+        render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
-                {/* {form.getFieldDecorator(`dataGeneral[${record.index}].rating`, {
+                {form.getFieldDecorator(`dataGeneral[${index}].postAlignment`, {
                   rules: [{ required: true, message: 'Post Alignment is required' }],
-                  initialValue: text
-                })( */}
+                  initialValue: text ?? undefined
+                })(
                   <Select
                     placeholder="Choose Value"
                     disabled={!isCanEdit}
@@ -142,10 +142,10 @@ class TableAlignmentDetail extends Component {
                     onChange={(value) => handleChange({...record, postAlignment: value})}
                   >
                     {dataProposeRating.map((item, index) => {
-                      return <Select.Option key={index} value={item.id}>{item.name}</Select.Option>;
+                      return <Select.Option key={index} value={parseInt(item.id)}>{item.name}</Select.Option>;
                     })}
                   </Select>
-                {/* )} */}
+                )}
               </Form.Item>
             </Form>
           );

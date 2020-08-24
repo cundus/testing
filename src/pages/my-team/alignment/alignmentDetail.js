@@ -90,10 +90,17 @@ class AlignmentList extends Component {
           managerName: item?.managerFirstName + " " + item?.managerLastName,
           kpiAchievementScore: `${kpiScore}`,
           prePostAlignment: item?.postAlignment,
+          postAlignment: item?.postAlignmentNumeric
         };
       }
     );
 
+    const dataGeneral = this.props.form.getFieldsValue(['dataGeneral']);
+    if (dataGeneral) {
+      this.props.form.setFieldsValue({
+        dataGeneral: newData
+      });
+    }
     this.setState({
       usersCalibration: newData,
       dataTable: newData,
@@ -134,31 +141,35 @@ class AlignmentList extends Component {
       calibration: callibrations,
       sessionId: match?.params?.sessionId
     }
-    if (callibrations.length > 0) {
-      confirm({
-        title: 'Are you sure?',
-        okText: 'Save',
-        onOk: async () => {
-          await saveAlignment(requestBody)
-          const { alignmentReducers } = this.props;
-          if (alignmentReducers?.statusPostDetail === Success) {
-            this.getData()
-            message.success('Success, your Performance Alignment Review has been saved')
-          } else {
-            message.warning(`Sorry, ${alignmentReducers?.messagePostDetail}`)
-          }
-        },
-        onCancel() {}
-      });
-    } else {
-      message.info('Nothing changes')
-    }
+    this.props.form.validateFieldsAndScroll((errors, values) => {
+      if(errors) {
+
+      } else if (callibrations.length > 0) {
+        confirm({
+          title: 'Are you sure?',
+          okText: 'Save',
+          onOk: async () => {
+            await saveAlignment(requestBody)
+            const { alignmentReducers } = this.props;
+            if (alignmentReducers?.statusPostDetail === Success) {
+              this.getData()
+              message.success('Success, your Performance Alignment Review has been saved')
+            } else {
+              message.warning(`Sorry, ${alignmentReducers?.messagePostDetail}`)
+            }
+          },
+          onCancel() {}
+        });
+      } else {
+        message.info('Nothing changes')
+      }
+    })
   }
 
   handleChange = (row) => {
     const { dataTable } = this.state;
     const newData = [...dataTable];
-    const index = newData.findIndex((item) => row.key === item.key);
+    const index = newData.findIndex((item) => row.formDataId === item.formDataId);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
@@ -203,6 +214,7 @@ class AlignmentList extends Component {
         },
       ],
     };
+
     const isCanEdit = alignmentReducers?.dataDetail?.userRole?.isFacilitator ||
     alignmentReducers?.dataDetail?.userRole?.isOwner || false
     return (
