@@ -61,7 +61,8 @@ const MenuList = [
     title: 'Planning',
     parent: 'My Team',
     icon: 'calendar',
-    theme: 'outlined'
+    theme: 'outlined',
+    manager: true
   },
   {
     id: 10,
@@ -71,7 +72,7 @@ const MenuList = [
     parent: 'My Team',
     icon: 'stock',
     theme: 'outlined',
-    disabled: true
+    manager: true
   },
   {
     id: 11,
@@ -81,7 +82,7 @@ const MenuList = [
     parent: 'My Team',
     icon: 'check-square',
     theme: 'outlined',
-    disabled: true
+    manager: true
   },
   {
     id: 12,
@@ -91,7 +92,8 @@ const MenuList = [
     parent: 'My Team',
     icon: 'bar-chart',
     theme: 'outlined',
-    disabled: true
+    disabled: true,
+    employee: true
   }
 ];
 

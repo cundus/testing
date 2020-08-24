@@ -127,7 +127,7 @@ class TableAlignmentDetail extends Component {
         align: 'center',
         placeholder: 'Post Alignment',
         render: (text, record) => {
-          const { dataProposeRating, form, handleChange } = this.props;
+          const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
@@ -137,7 +137,7 @@ class TableAlignmentDetail extends Component {
                 })( */}
                   <Select
                     placeholder="Choose Value"
-                    // disabled={myStep}
+                    disabled={!isCanEdit}
                     // eslint-disable-next-line react/jsx-no-bind
                     onChange={(value) => handleChange({...record, postAlignment: value})}
                   >

@@ -112,13 +112,6 @@ class Dashboard extends React.Component {
     } = this.props;
     let mainRouter = child;
     const isManager = _.get(this.props, 'user.result.user.manager', false);
-    // const isNoEmpleyee = _.get(this.props, 'user.result.user.managerId', null);
-    if (isManager === false) {
-      mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
-    }
-    // if (!isNoEmpleyee) {
-    //   mainRouter = mainRouter.filter((d) => d.title.includes('My Team'));
-    // }
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <IdleTimer

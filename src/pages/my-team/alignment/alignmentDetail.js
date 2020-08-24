@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spin, Divider, Typography, AutoComplete, Input, Button, message, Modal } from "antd";
+import { Spin, Divider, Typography, AutoComplete, Input, Button, message, Modal, Form } from "antd";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import TableAlignmentDetail from "./table-alignmentDetail";
@@ -24,7 +24,7 @@ const options = {
   },
 
   xAxis: {
-    categories: ["Outstanding"],
+    categories: ["Need Improvement", "Well Done", "Outstanding"],
   },
 
   yAxis: {
@@ -89,6 +89,7 @@ class AlignmentList extends Component {
           name: item?.firstName + " " + item?.lastName,
           managerName: item?.managerFirstName + " " + item?.managerLastName,
           kpiAchievementScore: `${kpiScore}`,
+          prePostAlignment: item?.postAlignment,
         };
       }
     );
@@ -120,7 +121,12 @@ class AlignmentList extends Component {
       return {
         formDataId: item?.formDataId,
         userId: item?.userId,
-        rating: item?.postAlignment ? parseInt(item?.postAlignment) : ''
+        rating: (item?.postAlignment
+          && (parseInt(item?.postAlignment)
+            !== parseInt(item?.prePostAlignment))
+            )
+          ? (item?.postAlignment) 
+          : ''
       }
     })
     callibrations = callibrations.filter((item)=>item?.rating)
@@ -128,21 +134,25 @@ class AlignmentList extends Component {
       calibration: callibrations,
       sessionId: match?.params?.sessionId
     }
-    confirm({
-      title: 'Are you sure?',
-      okText: 'Save',
-      onOk: async () => {
-        await saveAlignment(requestBody)
-        const { alignmentReducers } = this.props;
-        if (alignmentReducers?.statusPostDetail === Success) {
-          this.getData()
-          message.success('Success, your Performance Alignment Review has been saved')
-        } else {
-          message.warning(`Sorry, ${alignmentReducers?.messagePostDetail}`)
-        }
-      },
-      onCancel() {}
-    });
+    if (callibrations.length > 0) {
+      confirm({
+        title: 'Are you sure?',
+        okText: 'Save',
+        onOk: async () => {
+          await saveAlignment(requestBody)
+          const { alignmentReducers } = this.props;
+          if (alignmentReducers?.statusPostDetail === Success) {
+            this.getData()
+            message.success('Success, your Performance Alignment Review has been saved')
+          } else {
+            message.warning(`Sorry, ${alignmentReducers?.messagePostDetail}`)
+          }
+        },
+        onCancel() {}
+      });
+    } else {
+      message.info('Nothing changes')
+    }
   }
 
   handleChange = (row) => {
@@ -158,7 +168,7 @@ class AlignmentList extends Component {
   };
 
   render() {
-    const { alignmentReducers, kpiReducers } = this.props;
+    const { alignmentReducers, kpiReducers, form } = this.props;
     const {
       dataProposeRating,
     } = kpiReducers;
@@ -173,18 +183,28 @@ class AlignmentList extends Component {
       series: [
         {
           name: "Requirements",
-          data: [alignmentReducers?.dataDetail?.totalRequirementOutstanding],
+          data: [
+            alignmentReducers?.dataDetail?.totalRequirementNeedImprovement,
+            alignmentReducers?.dataDetail?.totalRequirementWellDone,
+            alignmentReducers?.dataDetail?.totalRequirementOutstanding
+          ],
           stack: "Requirements",
           color: "#324aa8",
         },
         {
           name: "Actual",
-          data: [alignmentReducers?.dataDetail?.totalActualOutstanding],
+          data: [
+            0,
+            0,
+            alignmentReducers?.dataDetail?.totalActualOutstanding
+          ],
           stack: "Actual",
           color: "orange",
         },
       ],
     };
+    const isCanEdit = alignmentReducers?.dataDetail?.userRole?.isFacilitator ||
+    alignmentReducers?.dataDetail?.userRole?.isOwner || false
     return (
       <div style={globalStyle.contentContainer}>
         {!alignmentReducers?.loadingDetail ? (
@@ -214,15 +234,17 @@ class AlignmentList extends Component {
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
             </div>
             <TableAlignmentDetail
+              isCanEdit={isCanEdit}
               handleChange={this.handleChange}
               handleChangeTable={this.handleChangeTable}
               sortedInfo={sortedInfo}
               dataProposeRating={dataProposeRating}
               filteredInfo={filteredInfo}
               dataSource={dataTable ?? []}
+              form={form}
             />
             <div style={{ marginTop: 20, textAlign: "center" }}>
-              <Button onClick={this.handleSave} style={{ marginLeft: 10, marginRight: 10 }}>Save</Button>
+              <Button disabled={!isCanEdit} onClick={this.handleSave} style={{ marginLeft: 10, marginRight: 10 }}>Save</Button>
             </div>
           </div>
         ) : (
@@ -251,4 +273,4 @@ const connectToComponent = connect(
   mapDispatchtoProps
 )(AlignmentList);
 
-export default withRouter(connectToComponent);
+export default Form.create({})(withRouter(connectToComponent));

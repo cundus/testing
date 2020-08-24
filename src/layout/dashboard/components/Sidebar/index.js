@@ -68,7 +68,7 @@ const Sidebar = (props) => {
                   <span className="submenu-title-wrapper">{menu.title}</span>
                 }
               >
-                {childsRoutes.map((menuChild) => {
+                {childsRoutes?.filter((item) => item?.manager === isManager || item?.employee)?.map((menuChild) => {
                 const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
                 const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
                   return (
