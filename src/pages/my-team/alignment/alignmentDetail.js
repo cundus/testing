@@ -184,8 +184,8 @@ class AlignmentList extends Component {
         {
           name: "Requirements",
           data: [
-            alignmentReducers?.dataDetail?.totalRequirementNeedImprovement,
-            alignmentReducers?.dataDetail?.totalRequirementWellDone,
+            0,
+            0,
             alignmentReducers?.dataDetail?.totalRequirementOutstanding
           ],
           stack: "Requirements",
@@ -194,8 +194,8 @@ class AlignmentList extends Component {
         {
           name: "Actual",
           data: [
-            0,
-            0,
+            alignmentReducers?.dataDetail?.totalActualNeedImprovement,
+            alignmentReducers?.dataDetail?.totalActualWellDone,
             alignmentReducers?.dataDetail?.totalActualOutstanding
           ],
           stack: "Actual",

@@ -94,7 +94,25 @@ const MenuList = [
     theme: 'outlined',
     disabled: true,
     employee: true
-  }
+  },
+  {
+    id: 13,
+    path: '/my-team/previous-kpi/',
+    menuLevel: 2,
+    title: 'Previous KPI',
+    parent: 'My Team',
+    icon: 'bar-chart',
+    theme: 'outlined',
+    manager: true
+  },
+  {
+    id: 14,
+    path: '/previous-kpi',
+    menuLevel: 1,
+    title: 'Previous KPI',
+    parent: 'none',
+    theme: 'outlined'
+  },
 ];
 
 export default MenuList;
