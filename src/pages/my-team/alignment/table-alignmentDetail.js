@@ -131,13 +131,14 @@ class TableAlignmentDetail extends Component {
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
-                {form.getFieldDecorator(`dataGeneral[${index}].postAlignment`, {
+                {/* {form.getFieldDecorator(`dataGeneral[${index}].postAlignment`, {
                   // rules: [{ required: true, message: 'Post Alignment is required' }],
                   initialValue: text ?? undefined
-                })(
+                })( */}
                   <Select
                     placeholder="Choose Value"
                     disabled={!isCanEdit}
+                    value={text ?? undefined}
                     // eslint-disable-next-line react/jsx-no-bind
                     onChange={(value) => handleChange({...record, postAlignment: value})}
                   >
@@ -145,7 +146,7 @@ class TableAlignmentDetail extends Component {
                       return <Select.Option key={index} value={parseInt(item.id)}>{item.name}</Select.Option>;
                     })}
                   </Select>
-                )}
+                {/* )} */}
               </Form.Item>
             </Form>
           );
