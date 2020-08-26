@@ -89,7 +89,7 @@ class AlignmentList extends Component {
           name: item?.firstName + " " + item?.lastName,
           managerName: item?.managerFirstName + " " + item?.managerLastName,
           kpiAchievementScore: `${kpiScore}`,
-          prePostAlignment: item?.postAlignment,
+          prePostAlignment: item?.postAlignmentNumeric,
           postAlignment: item?.postAlignmentNumeric
         };
       }

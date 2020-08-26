@@ -22,6 +22,7 @@ import globalStyle from '../../../../styles/globalStyles';
 import kpiSendProcess from '../../../../utils/kpiSendProcess';
 import { kpiGetManagerProcess } from '../../../../utils/kpiGetProcess';
 import { sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
+import Previous from './components/previous';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -340,6 +341,21 @@ class CreateKPI extends Component {
             >
               {!loadingManager ?
                 <Cascade
+                  dataSource={dataManagerKpi}
+                  dataMetrics={dataKpiManagerMetrics}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                /> : <center><Spin /></center>}
+            </TabPane>
+            <TabPane
+              id="copy-previous-tab"
+              tab="Copy From Previous KPI"
+              key="3"
+            >
+              {!loadingManager ?
+                <Previous
                   dataSource={dataManagerKpi}
                   dataMetrics={dataKpiManagerMetrics}
                   dataSelectedCascade={dataSelectedCascade}
