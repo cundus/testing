@@ -90,7 +90,8 @@ class AlignmentList extends Component {
           managerName: item?.managerFirstName + " " + item?.managerLastName,
           kpiAchievementScore: `${kpiScore}`,
           prePostAlignment: item?.postAlignmentNumeric,
-          postAlignment: item?.postAlignmentNumeric
+          postAlignment: item?.postAlignmentNumeric,
+          preAlignment: item?.preAlignment ?? ''
         };
       }
     );
@@ -128,7 +129,7 @@ class AlignmentList extends Component {
       return {
         formDataId: item?.formDataId,
         userId: item?.userId,
-        rating: (item?.postAlignment
+        rating: ((item?.postAlignment === 0 || item?.postAlignment)
           && (parseInt(item?.postAlignment)
             !== parseInt(item?.prePostAlignment))
             )
@@ -136,7 +137,8 @@ class AlignmentList extends Component {
           : ''
       }
     })
-    callibrations = callibrations.filter((item)=>item?.rating)
+    callibrations = callibrations.filter((item)=>
+      item?.rating === 0 || item?.rating)
     const requestBody = {
       calibration: callibrations,
       sessionId: match?.params?.sessionId
@@ -215,8 +217,8 @@ class AlignmentList extends Component {
       ],
     };
 
-    const isCanEdit = alignmentReducers?.dataDetail?.userRole?.isFacilitator ||
-    alignmentReducers?.dataDetail?.userRole?.isOwner || false
+    const isCanEdit = (alignmentReducers?.dataDetail?.userRole?.isFacilitator ||
+    alignmentReducers?.dataDetail?.userRole?.isOwner)
     return (
       <div style={globalStyle.contentContainer}>
         {!alignmentReducers?.loadingDetail ? (

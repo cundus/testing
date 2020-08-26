@@ -5,23 +5,58 @@ const init = {};
 export default (state = init, action) => {
   switch(action.type) {
     case GET_ALIGNMENTS:
-      return action;
+      return {
+        ...state,
+        ...action
+      };
     case GET_ALIGNMENTS_SUCCESS:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case GET_ALIGNMENTS_FAILED:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case GET_ALIGNMENTS_DETAIL:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case GET_ALIGNMENTS_DETAIL_SUCCESS:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case GET_ALIGNMENTS_DETAIL_FAILED:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case POST_ALIGNMENTS_DETAIL:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case POST_ALIGNMENTS_DETAIL_SUCCESS:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     case POST_ALIGNMENTS_DETAIL_FAILED:
-      return action;
+      
+      return {
+        ...state,
+        ...action
+      };
     default:
       // return KpiState;
       return { ...state };

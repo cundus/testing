@@ -128,6 +128,12 @@ class TableAlignmentDetail extends Component {
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
+          const dataOptionRating = [
+            {id: 0, name: 'Unrated'},
+            {id: 1, name: 'Need Improvement'},
+            {id: 2, name: 'Well Done'},
+            {id: 3, name: 'Outstanding'}
+          ]
           return (
             <Form>
               <Form.Item style={{ width: '100%' }}>
@@ -142,7 +148,7 @@ class TableAlignmentDetail extends Component {
                     // eslint-disable-next-line react/jsx-no-bind
                     onChange={(value) => handleChange({...record, postAlignment: value})}
                   >
-                    {dataProposeRating.map((item, index) => {
+                    {dataOptionRating.map((item, index) => {
                       return <Select.Option key={index} value={parseInt(item.id)}>{item.name}</Select.Option>;
                     })}
                   </Select>
