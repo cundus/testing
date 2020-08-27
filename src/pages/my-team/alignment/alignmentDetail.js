@@ -75,37 +75,41 @@ class AlignmentList extends Component {
   }
 
   getData = async () => {
-    const { doGetAlignmentDetail, getProposeRating } = this.props;
+    const { doGetAlignmentDetail, history } = this.props;
     const { match } = this.props;
     await doGetAlignmentDetail(match?.params?.sessionId);
-    getProposeRating();
     const { alignmentReducers } = this.props;
-    const newData = alignmentReducers?.dataDetail?.usersCalibration.map(
-      (item, index) => {
-        const kpiScore =
-          item?.kpiAchievementScore < 0 ? 0 : item?.kpiAchievementScore;
-        return {
-          ...item,
-          name: item?.firstName + " " + item?.lastName,
-          managerName: item?.managerFirstName + " " + item?.managerLastName,
-          kpiAchievementScore: `${kpiScore}`,
-          prePostAlignment: item?.postAlignmentNumeric,
-          postAlignment: item?.postAlignmentNumeric,
-          preAlignment: item?.preAlignment ?? ''
-        };
-      }
-    );
+    if (!alignmentReducers?.dataDetail?.usersCalibration) {
+      history.push('/my-team/performance-review-alignment')
+    } else {
+      const newData = alignmentReducers?.dataDetail?.usersCalibration?.map(
+        (item, index) => {
+          const kpiScore =
+            item?.kpiAchievementScore < 0 ? 0 : item?.kpiAchievementScore;
+          return {
+            ...item,
+            name: item?.firstName + " " + item?.lastName,
+            managerName: item?.managerFirstName + " " + item?.managerLastName,
+            kpiAchievementScore: `${kpiScore}`,
+            userId: item?.userId ?? '',
+            prePostAlignment: item?.postAlignmentNumeric ?? '',
+            postAlignment: item?.postAlignmentNumeric ?? '',
+            preAlignment: item?.preAlignment ?? ''
+          };
+        }
+      );
 
-    const dataGeneral = this.props.form.getFieldsValue(['dataGeneral']);
-    if (dataGeneral) {
-      this.props.form.setFieldsValue({
-        dataGeneral: newData
+      const dataGeneral = this.props.form.getFieldsValue(['dataGeneral']);
+      if (dataGeneral) {
+        this.props.form.setFieldsValue({
+          dataGeneral: newData
+        });
+      }
+      this.setState({
+        usersCalibration: newData,
+        dataTable: newData,
       });
     }
-    this.setState({
-      usersCalibration: newData,
-      dataTable: newData,
-    });
   };
 
   handleChangeTable = (pagination, filters, sorter) => {
