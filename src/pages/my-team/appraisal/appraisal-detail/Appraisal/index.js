@@ -105,7 +105,7 @@ class Appraisal extends Component {
     totalScore = totalScore / data.length
     if (typeof totalScore === 'number') {
       this.setState({
-        scoreTotal: totalScore
+        scoreTotal: totalScore?.toFixed(2)
       });
     }
   }
