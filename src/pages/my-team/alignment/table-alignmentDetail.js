@@ -144,7 +144,7 @@ class TableAlignmentDetail extends Component {
                   <Select
                     placeholder="Choose Value"
                     disabled={!isCanEdit}
-                    value={text ?? undefined}
+                    value={text || undefined}
                     // eslint-disable-next-line react/jsx-no-bind
                     onChange={(value) => handleChange({...record, postAlignment: value})}
                   >
