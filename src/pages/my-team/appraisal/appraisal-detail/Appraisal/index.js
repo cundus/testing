@@ -73,7 +73,6 @@ class Appraisal extends Component {
   }
 
   componentDidMount() {
-    console.log('did')
     const { userReducers, match, step } = this.props;
     const { params } = match;
     const { user } = userReducers.result;
@@ -111,7 +110,6 @@ class Appraisal extends Component {
   }
 
   getData = async (e) => {
-    console.log('data')
     const {
       match,
       getKpiRating,

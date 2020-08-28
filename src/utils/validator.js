@@ -147,7 +147,6 @@ export const weightValidator = (result) => [
 export const achievementScoreValidator = (result) => [
   {
     validator: async (rule,value,callback,source) => {
-      console.log(result)
       const regexPercent = new RegExp(
         /(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g
       );

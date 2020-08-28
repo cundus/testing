@@ -85,7 +85,7 @@ class EditableCell extends React.Component {
     } else {
       type = 'dataGeneral';
     }
-    let valueType = 'Select type"';
+    let valueType = 'Select type';
     if (record.achievementType === 0) {
       valueType = 'Qualitative';
     } else if (record.achievementType === 1) {
