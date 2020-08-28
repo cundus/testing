@@ -92,8 +92,14 @@ class AlignmentList extends Component {
             managerName: item?.managerFirstName + " " + item?.managerLastName,
             kpiAchievementScore: `${kpiScore}`,
             userId: item?.userId ?? '',
-            prePostAlignment: item?.postAlignmentNumeric ?? '',
-            postAlignment: item?.postAlignmentNumeric ?? '',
+            prePostAlignment: (item?.postAlignmentNumeric 
+              && item?.postAlignmentNumeric > 0 
+              && item?.postAlignmentNumeric < 4) ?
+              item?.postAlignmentNumeric : '',
+            postAlignment: (item?.postAlignmentNumeric 
+              && item?.postAlignmentNumeric > 0 
+              && item?.postAlignmentNumeric < 4) ?
+              item?.postAlignmentNumeric : '',
             preAlignment: item?.preAlignment ?? ''
           };
         }

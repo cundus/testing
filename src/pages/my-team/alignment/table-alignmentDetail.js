@@ -103,6 +103,17 @@ class TableAlignmentDetail extends Component {
             return a.preAlignment.localeCompare(b.preAlignment);
           }
         },
+        render: (text) => {
+          if (text) {
+            return(
+              <span>{text}</span>
+            )
+          } else {
+            return(
+              <span style={{color: '#d7d7d7'}}>Unrated</span>
+            )
+          }
+        }
       },
       {
         title: 'Directorate',
@@ -129,7 +140,6 @@ class TableAlignmentDetail extends Component {
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
           const dataOptionRating = [
-            {id: 0, name: 'Unrated'},
             {id: 1, name: 'Need Improvement'},
             {id: 2, name: 'Well Done'},
             {id: 3, name: 'Outstanding'}
@@ -142,7 +152,7 @@ class TableAlignmentDetail extends Component {
                   initialValue: text ?? undefined
                 })( */}
                   <Select
-                    placeholder="Choose Value"
+                    placeholder="Unrated"
                     disabled={!isCanEdit}
                     value={text || undefined}
                     // eslint-disable-next-line react/jsx-no-bind
