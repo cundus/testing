@@ -90,7 +90,7 @@ const MenuList = [
     menuLevel: 2,
     title: 'Performance Review Alignment',
     parent: 'My Team',
-    icon: 'bar-chart',
+    icon: 'pie-chart',
     theme: 'outlined',
     disabled: true,
     employee: true

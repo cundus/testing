@@ -139,16 +139,12 @@ class AlignmentList extends Component {
       return {
         formDataId: item?.formDataId,
         userId: item?.userId,
-        rating: ((item?.postAlignment === 0 || item?.postAlignment)
-          && (parseInt(item?.postAlignment)
-            !== parseInt(item?.prePostAlignment))
-            )
-          ? (item?.postAlignment) 
-          : ''
+        rating: item?.postAlignment ?
+          parseInt(item?.postAlignment) :
+          null
       }
     })
-    callibrations = callibrations.filter((item)=>
-      item?.rating === 0 || item?.rating)
+    callibrations = callibrations.filter((item)=> item?.rating)
     const requestBody = {
       calibration: callibrations,
       sessionId: match?.params?.sessionId
