@@ -100,7 +100,7 @@ class AlignmentList extends Component {
               && item?.postAlignmentNumeric > 0 
               && item?.postAlignmentNumeric < 4) ?
               item?.postAlignmentNumeric : '',
-            preAlignment: item?.preAlignment ?? ''
+            preAlignment: item?.preAlignment ?? 'Unrated'
           };
         }
       );

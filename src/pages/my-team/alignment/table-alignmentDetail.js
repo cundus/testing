@@ -104,7 +104,7 @@ class TableAlignmentDetail extends Component {
           }
         },
         render: (text) => {
-          if (text) {
+          if (text !== 'Unrated') {
             return(
               <span>{text}</span>
             )
