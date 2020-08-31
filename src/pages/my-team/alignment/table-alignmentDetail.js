@@ -152,7 +152,7 @@ class TableAlignmentDetail extends Component {
                   initialValue: text ?? undefined
                 })( */}
                   <Select
-                    placeholder="Unrated"
+                    placeholder="Choose value"
                     disabled={!isCanEdit}
                     value={text || undefined}
                     // eslint-disable-next-line react/jsx-no-bind
