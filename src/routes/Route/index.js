@@ -28,6 +28,7 @@ const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
 const ChatActivityPage = React.lazy(()=> import('../../pages/activity/chat'));
 const AchievementPage = React.lazy(() => import('../../pages/achievement/index'));
 const AppraisalTeamPageDetail = React.lazy(() => import('../../pages/my-team/appraisal/appraisal-detail/Appraisal'));
+const Download = React.lazy(() => import('../../pages/download'));
 
 export const routes = [
   {
@@ -143,6 +144,12 @@ export const routes = [
         component: Lazyload(AlignmentDetail),
         exact: true,
         title: 'My Team - Appraisal'
+      },
+      {
+        path: '/b76607ac',
+        component: Lazyload(Download),
+        exact: true,
+        title: 'Download'
       },
     ]
   }

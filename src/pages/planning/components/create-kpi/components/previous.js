@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Checkbox } from 'antd';
+import { Button, Checkbox, Select } from 'antd';
 import { DataTable } from '../../../../../components';
 
 class Previous extends Component {
@@ -100,6 +100,12 @@ class Previous extends Component {
     const { columns, loading } = this.state;
     return (
       <div>
+        <Select
+          placeholder="Select Performance"
+          style={{minWidth: 300}}
+        >
+          {/* <Select.Option></Select.Option> */}
+        </Select>
         <DataTable
           columns={columns}
           loading={loading}
