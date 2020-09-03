@@ -144,6 +144,7 @@ class AlignmentList extends Component {
           null
       }
     })
+    const outstandings = callibrations.filter((item)=> item?.rating === 3)
     callibrations = callibrations.filter((item)=> item?.rating)
     const requestBody = {
       calibration: callibrations,
@@ -154,7 +155,9 @@ class AlignmentList extends Component {
 
       } else if (callibrations.length > 0) {
         confirm({
-          title: 'Are you sure?',
+          title: outstandings.length > this.props.alignmentReducers?.dataDetail?.totalRequirementOutstanding ?
+            'Out of requirement Quota. Are you sure to save it?':
+            'Are you sure?',
           okText: 'Save',
           onOk: async () => {
             await saveAlignment(requestBody)
