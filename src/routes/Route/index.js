@@ -6,14 +6,16 @@ import Lazyload from '../../components/lazyLoad';
 // Shared layouts
 import { Dashboard as DashboardLayout } from '../../layout';
 import { LazyLoad } from '../../components';
-import AlignmentList from '../../pages/my-team/alignment/alignmentList';
-import AlignmentDetail from '../../pages/my-team/alignment/alignmentDetail';
 // import PlanningPage from '../../pages/planning';
 // import Clear from '../../layout/clear';
 
 // Shared Pages
 const HomePage = React.lazy(() => import('../../pages/home/home'));
 const PlanningPage = React.lazy(() => import('../../pages/planning'));
+const PreviousKPI = React.lazy(() => import('../../pages/previous'));
+const MyTeamPreviousKPI = React.lazy(() => import('../../pages/my-team/previousKPI/alignmentList'));
+const AlignmentList = React.lazy(() => import('../../pages/my-team/alignment/alignmentList'));
+const AlignmentDetail = React.lazy(() => import('../../pages/my-team/alignment/alignmentDetail'));
 // const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
 // const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
 const MyTeamPlaningPage = React.lazy(() => import('../../pages/my-team/planning/planning'));
@@ -150,6 +152,18 @@ export const routes = [
         component: Lazyload(Download),
         exact: true,
         title: 'Download'
+      },
+      {
+        path: '/previous-kpi',
+        component: Lazyload(PreviousKPI),
+        exact: true,
+        title: 'Previous KPI'
+      },
+      {
+        path: '/my-team/previous-kpi',
+        component: Lazyload(MyTeamPreviousKPI),
+        exact: true,
+        title: 'My Team - Appraisal'
       },
     ]
   }
