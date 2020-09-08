@@ -45,7 +45,16 @@ const Header = (props) => {
             onClick={toggle}
           />
         </Col>
-        <Col xs={0} sm={0} md={0} lg={10}>
+        <Col xs={10} sm={10} md={4} lg={4}>
+          <Link to="/">
+            <img
+              src={Logo}
+              alt="logo"
+              style={isDesktopOrLaptop ? {} : styles.logo}
+            />
+          </Link>
+        </Col>
+        <Col xs={0} sm={0} md={12} lg={13} style={{marginLeft: -30}}>
           <Menu
             theme="light"
             mode="horizontal"
@@ -100,15 +109,6 @@ const Header = (props) => {
               }
             })}
           </Menu>
-        </Col>
-        <Col xs={10} sm={10} md={10} lg={8}>
-          <Link to="/">
-            <img
-              src={Logo}
-              alt="logo"
-              style={isDesktopOrLaptop ? {} : styles.logo}
-            />
-          </Link>
         </Col>
         <Col xs={8} sm={8} md={8} lg={4}>
           <Row type="flex" justify="space-between" align="middle">

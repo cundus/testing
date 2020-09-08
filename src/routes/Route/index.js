@@ -52,7 +52,7 @@ export const routes = [
         exact: true
       },
       {
-        path: '/planning/kpi',
+        path: '/planning',
         component: Lazyload(PlanningPage),
         exact: true,
         title: 'Planning'
@@ -165,6 +165,12 @@ export const routes = [
         exact: true,
         title: 'My Team - Appraisal'
       },
+      {
+        path: '/my-team/previous-kpi/:userId',
+        component: Lazyload(PreviousKPI),
+        exact: true,
+        title: 'My Team - Appraisal'
+      }
     ]
   }
 ];

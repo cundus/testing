@@ -24,7 +24,7 @@ class AlignmentList extends Component {
             <div>
                <div>
                 <Divider />
-                <Text strong>Performance Review Alignment</Text>
+                <Text strong>My Team - Previous KPI</Text>
                 <Divider />
               </div>
              <TableAlignment team={alignmentReducers?.data || []} />

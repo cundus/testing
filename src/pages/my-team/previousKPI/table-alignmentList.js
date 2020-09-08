@@ -10,16 +10,18 @@ class TableAlignment extends Component {
     super(props);
     this.columns = [
       {
-        title: 'Session ID',
-        dataIndex: 'sessionId',
+        title: 'Avatar',
         align: 'center',
         placeholder: 'Session ID'
       },
       {
-        title: 'Session Name',
+        title: 'Name',
         dataIndex: 'sessionName',
         align: 'center',
-        placeholder: 'Session Name'
+        placeholder: 'Session Name',
+        render: (text) => (
+          <p>Brooke Brown</p>
+        )
       },
       {
         title: 'Action',
@@ -29,8 +31,8 @@ class TableAlignment extends Component {
         action: true,
         render: (text) => (
           <Button type={'primary'}>
-            <Link to={`/my-team/performance-review-alignment/${text}`}>
-            View Performance
+            <Link to={`/my-team/previous-kpi/${text}`}>
+              View
             </Link>
           </Button>
         )

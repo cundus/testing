@@ -8,29 +8,11 @@ const MenuList = [
   },
   {
     id: 2,
-    path: '/planning/',
+    path: '/planning',
     menuLevel: 1,
     title: 'Planning',
     parent: 'none'
   },
-  {
-    id: 3,
-    path: '/planning/kpi',
-    menuLevel: 2,
-    title: 'Create KPI',
-    parent: 'Planning',
-    icon: 'plus-circle',
-    theme: 'filled'
-  },
-  // {
-  //   id: 4,
-  //   path: '/planning/kpi-planning',
-  //   menuLevel: 2,
-  //   title: 'View My KPI',
-  //   parent: 'Planning',
-  //   icon: 'search',
-  //   theme: 'outlined'
-  // },
   {
     id: 5,
     path: '/monitoring',
