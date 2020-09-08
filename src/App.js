@@ -3,31 +3,30 @@ import React from 'react';
 import { BrowserRouter, Switch } from 'react-router-dom';
 
 import { AzureAD, AuthenticationState } from 'react-aad-msal';
-import { authProvider } from './service/auth/auth';
-
-// import { createBrowserHistory } from 'history';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
 
-// Routes
+import { authProvider } from './service/activeDirectory';
 import routes from './routes/Route';
-
-// Store
 import store from './redux/store';
-
-// Routes
 import { MappedRouter } from './routes/RouteGenerator';
-
 import './styles/global-styles.scss';
-// import 'antd/dist/antd.less';
 
-// Browser history
 const browserHistory = createBrowserHistory();
 
 const App = (props) => {
   return (
-    <AzureAD provider={authProvider} forceLogin={true} reduxStore={store}>
-      {({ login, logout, authenticationState, error }) => {
+    <AzureAD provider={authProvider} forceLogin reduxStore={store}>
+      {(
+        {
+          login,
+          logout,
+          authenticationState,
+          error
+        }
+      // eslint-disable-next-line consistent-return
+      ) => {
         if (authenticationState === AuthenticationState.Authenticated) {
           return (
             <Provider store={store}>
@@ -49,9 +48,11 @@ const App = (props) => {
           authenticationState === AuthenticationState.Unauthenticated
         ) {
           localStorage.clear();
-          return <div></div>;
+          return <div />;
         } else if (error) {
           window.location.reload();
+        } else {
+          return <div />;
         }
       }}
     </AzureAD>

@@ -69,9 +69,9 @@ class Appraisal extends Component {
 
   getData = async (e) => {
     const {
-      userReducers
+      userReducer
     } = this.props;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     this.getOwnKpiList(user.userId);
     this.getOwnValues(user.userId);
   };
@@ -82,15 +82,15 @@ class Appraisal extends Component {
     } = this.props;
     await getKpiList(id);
     getKpiRating(id);
-    const { kpiReducers } = this.props;
+    const { kpiReducer } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep, formStatusId, status
-    } = kpiReducers;
+    } = kpiReducer;
     if (status === Success) {
     if (currentStep === stepKpi[6] || formStatusId === '3') {
       await empAcknowledgeList();
       // eslint-disable-next-line react/destructuring-assignment
-      const dataEmpAcks = this.props.kpiReducers.dataEmpAckList.list.map((ack) => {
+      const dataEmpAcks = this.props.kpiReducer.dataEmpAckList.list.map((ack) => {
         return {
           label: ack.value,
           value: ack.value
@@ -99,7 +99,7 @@ class Appraisal extends Component {
       this.setState({
         dataEmpAckOptions: dataEmpAcks,
         // eslint-disable-next-line react/destructuring-assignment
-        dataEmpAckName: this.props.kpiReducers.dataEmpAckList.name
+        dataEmpAckName: this.props.kpiReducer.dataEmpAckList.name
       });
     }
     const newData = [];
@@ -191,8 +191,8 @@ class Appraisal extends Component {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers } = this.props;
-    const { dataValues, dataRating } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataValues, dataRating } = kpiReducer;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -289,9 +289,9 @@ class Appraisal extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doAssessAll(data);
-            const { kpiReducers, userReducers } = this.props;
-            const { user } = userReducers.result;
-            const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
+            const { kpiReducer, userReducer } = this.props;
+            const { user } = userReducer.result;
+            const { loadingAssess, statusAssess, messageAssess } = kpiReducer;
             if (!loadingAssess) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                 this.setState({
@@ -350,9 +350,9 @@ class Appraisal extends Component {
 
   handleSave = () => {
     const {
-      doSaveValues, userReducers, form
+      doSaveValues, userReducer, form
     } = this.props;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     const {
       dataValueList
     } = this.state;
@@ -375,13 +375,13 @@ class Appraisal extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSaveValues(user.userId, data);
-            const { kpiReducers } = this.props;
-            if (!kpiReducers.loadingSaveValues) {
-              if (kpiReducers.statusSaveValues === Success) {
+            const { kpiReducer } = this.props;
+            if (!kpiReducer.loadingSaveValues) {
+              if (kpiReducer.statusSaveValues === Success) {
                 message.success('Your Values has been saved');
                 this.getOwnValues(user.userId);
               } else {
-                message.warning(`Sorry, ${kpiReducers.messageSaveValues}`);
+                message.warning(`Sorry, ${kpiReducer.messageSaveValues}`);
               }
             }
           },
@@ -394,9 +394,9 @@ class Appraisal extends Component {
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
-      doSaveValues, userReducers, form, doAssessAll, submitNext, getNotifications
+      doSaveValues, userReducer, form, doAssessAll, submitNext, getNotifications
     } = this.props;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     // assessment
     const assessment = [];
     dataKpis.map((item) => {
@@ -449,17 +449,17 @@ class Appraisal extends Component {
               this.setState({
                 loadingKpis: true
               });
-              const { kpiReducers } = this.props;
+              const { kpiReducer } = this.props;
               const {
                 loadingAssess,
                 statusAssess,
                 messageAssess
-              } = kpiReducers;
+              } = kpiReducer;
               const {
                 loadingSaveValues,
                 statusSaveValues,
                 messageSaveValues
-              } = kpiReducers;
+              } = kpiReducer;
               if (!loadingAssess && !loadingSaveValues) {
                 if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                   if (statusSaveValues === Success) {
@@ -514,12 +514,12 @@ class Appraisal extends Component {
       content: '',
       onOk: async () => {
         await empAcknowledge(finalAck);
-        const { kpiReducers } = this.props;
+        const { kpiReducer } = this.props;
         const {
           loadingEmpAck,
           statusEmpAck,
           messageEmpAck
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingEmpAck) {
           if (statusEmpAck === Success) {
             this.setState({
@@ -557,7 +557,7 @@ class Appraisal extends Component {
     } = this.state;
     const {
       form,
-      kpiReducers
+      kpiReducer
     } = this.props;
     const {
       dataKpiMetrics,
@@ -571,7 +571,7 @@ class Appraisal extends Component {
       errMessage,
       statusValues,
       messageValues
-    } = kpiReducers;
+    } = kpiReducer;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingBottom: 10 }}>
@@ -792,8 +792,8 @@ class Appraisal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -818,7 +818,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Appraisal.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
   doSaveValues: PropTypes.func,
   // doAssess: PropTypes.func,
   getRatingList: PropTypes.func,
@@ -829,7 +829,7 @@ Appraisal.propTypes = {
   empAcknowledge: PropTypes.func,
   getNotifications: PropTypes.func,
   empAcknowledgeList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object),
   doAssessAll: PropTypes.func

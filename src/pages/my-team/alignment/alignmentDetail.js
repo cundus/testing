@@ -190,10 +190,10 @@ class AlignmentList extends Component {
   };
 
   render() {
-    const { alignmentReducers, kpiReducers, form } = this.props;
+    const { alignmentReducers, kpiReducer, form } = this.props;
     const {
       dataProposeRating,
-    } = kpiReducers;
+    } = kpiReducer;
     const {
       usersCalibration,
       sortedInfo,
@@ -288,7 +288,7 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
+  kpiReducer: state.kpiReducer,
   alignmentReducers: state.alignmentReducers,
 });
 const connectToComponent = connect(

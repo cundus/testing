@@ -174,7 +174,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Chat.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,

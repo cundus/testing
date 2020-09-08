@@ -10,13 +10,13 @@ import styles from './Sidebar.styles';
 const { Sider } = Layout;
 
 const Sidebar = (props) => {
+  const { authReducer } = props;
   let mainRouter = MenuList.filter((x) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
   const { collapsed, toggle, isMonitoring, isAppraisal, } = props;
-  const isManager = _.get(props, 'user.result.user.manager', false);
-  const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);
+  const isManager = authReducer?.manager;
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
@@ -97,8 +97,8 @@ const Sidebar = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers
+  auth: state.activeDirectoryReducer,
+  authReducer: state.authReducer
 });
 const connectToComponent = connect(mapStateToProps)(Sidebar);
 

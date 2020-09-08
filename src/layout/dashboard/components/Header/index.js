@@ -5,7 +5,6 @@ import {
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
@@ -19,22 +18,18 @@ const { Text } = Typography;
 
 const Header = (props) => {
   const {
-    collapsed, toggle, history, isMonitoring, isAppraisal, logout, notificationReducers
+    collapsed, toggle, history, isMonitoring, isAppraisal, logout, notificationReducer, authReducer
   } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
   const pathlocation = history.location.pathname;
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
-  const uId = _.get(props, 'user.result.user.userId', '');
+  const uId = authReducer?.userId;
   const url = uId && `${apiUrl()}/user/photo/${uId}`;
-  const name = _.get(props, 'user.result.user.firstName', '');
-  const isManager = _.get(props, 'user.result.user.manager', false);
-  const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);
+  const name = authReducer?.firstName;
+  const isManager = authReducer?.manager;
   if (isManager === false) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
-  // if (!isNoEmpleyee) {
-  //   mainRouter = mainRouter.filter((d) => d.title === 'My Team');
-  // }
   return (
     <Layout.Header className="headerContainer">
       <Row justify="space-between" type="flex" className="headerWrapper">
@@ -62,7 +57,6 @@ const Header = (props) => {
             className="menuWrapper"
           >
             {mainRouter.map((menu) => {
-              // check is has child
               const childsRoutes = MenuList.filter((menuChild) => menuChild.parent === menu.title);
               if (childsRoutes.length === 0) {
                 const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
@@ -113,14 +107,13 @@ const Header = (props) => {
         <Col xs={8} sm={8} md={8} lg={4}>
           <Row type="flex" justify="space-between" align="middle">
             <Dropdown
-              overlay={notifMenu(notificationReducers.data, uId)}
+              overlay={notifMenu(notificationReducer.data, uId)}
               trigger={['hover', 'click']}
               placement="bottomCenter"
             >
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a id="account-link" href="#">
                 <div>
-                  <Badge count={notificationReducers.data.length} overflowCount={20}>
+                  <Badge count={notificationReducer.data.length} overflowCount={20}>
                     <Icon style={{ fontSize: 18 }} type="bell" />
                   </Badge>
                 </div>
@@ -130,7 +123,6 @@ const Header = (props) => {
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
             <Dropdown trigger={['hover', 'click']} overlay={accountMenu(logout)} placement="bottomLeft">
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <a id="account-link" href="#">
                 <div className="accountWrapper">
                   {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
@@ -153,10 +145,11 @@ const Header = (props) => {
 
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers,
-  step: state.userKpiStateReducers,
-  notificationReducers: state.notificationReducers
+  auth: state.activeDirectoryReducer,
+  authReducer: state.authReducer,
+  user: state.userReducer,
+  step: state.userKpiStateReducer,
+  notificationReducer: state.notificationReducer
 });
 const connectToComponent = connect(mapStateToProps)(Header);
 
@@ -168,6 +161,7 @@ Header.propTypes = {
   history: PropTypes.instanceOf(Object),
   collapsed: PropTypes.bool,
   toggle: PropTypes.func,
-  notificationReducers: PropTypes.instanceOf(Object),
+  notificationReducer: PropTypes.instanceOf(Object),
+  authReducer: PropTypes.instanceOf(Object),
   logout: PropTypes.func
 };

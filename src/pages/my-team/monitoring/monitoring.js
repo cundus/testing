@@ -46,8 +46,8 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers,
+  auth: state.activeDirectoryReducer,
+  user: state.userReducer,
   myteam: state.myteamReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Monitoring);

@@ -44,15 +44,14 @@ class DraftKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducers, getKpiList, access, setAccess
+      authReducer, getKpiList, access, setAccess
     } = this.props;
-    const { user } = userReducers.result;
     if (access) {
-      await getKpiList(user.userId);
+      await getKpiList(authReducer?.userId);
     }
     setAccess(true);
-    const { ownKpiReducers } = this.props;
-    const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpiFiltered, challenge, isFeedback } = ownkpiReducer;
     this.setState({
       dataSource: dataKpiFiltered,
       isFeedback,
@@ -96,10 +95,9 @@ class DraftKPI extends Component {
 
   handleSubmit = () => {
     const {
-      doSubmitKpi, userReducers, form, ownKpiReducers, stepChange, getNotifications, doSavingKpi
+      doSubmitKpi, authReducer, form, ownkpiReducer, stepChange, getNotifications, doSavingKpi
     } = this.props;
-    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
-    const { user } = userReducers.result;
+    const { dataKpi, dataKpiMetrics } = ownkpiReducer;
     const {
       dataSource,
       kpiErr,
@@ -121,8 +119,8 @@ class DraftKPI extends Component {
           confirm({
             title: 'Are you sure?',
             onOk: async () => {
-              if (user.managerId) {
-                await doSubmitKpi(data, user.userId);
+              if (authReducer?.managerId) {
+                await doSubmitKpi(data, authReducer?.userId);
                 const { submitKpi } = this.props;
                 const { status, statusMessage } = submitKpi;
                 if (status === Success) {
@@ -133,7 +131,7 @@ class DraftKPI extends Component {
                   message.warning(`Sorry, ${statusMessage}`);
                 }
               } else {
-                await doSavingKpi(data, user.userId);
+                await doSavingKpi(data, authReducer?.userId);
                 const { saveKpi } = this.props;
                 const { status, statusMessage } = saveKpi;
                 if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
@@ -205,10 +203,9 @@ class DraftKPI extends Component {
 
   handleSaveDraft = () => {
     const {
-      doSavingKpi, userReducers, form, ownKpiReducers
+      doSavingKpi, authReducer, form, ownkpiReducer
     } = this.props;
-    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
-    const { user } = userReducers.result;
+    const { dataKpi, dataKpiMetrics } = ownkpiReducer;
     const {
       dataSource,
       challengeYour
@@ -223,7 +220,7 @@ class DraftKPI extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSavingKpi(data, user.userId);
+            await doSavingKpi(data, authReducer?.userId);
             const { saveKpi } = this.props;
             const { status, statusMessage } = saveKpi;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
@@ -255,10 +252,9 @@ class DraftKPI extends Component {
       handleError
     } = this;
     const {
-      ownKpiReducers, stepChange, form, userReducers
+      ownkpiReducer, stepChange, form, authReducer
     } = this.props;
-    const { loadingKpi, dataKpiMetrics, generalFeedback } = ownKpiReducers;
-    const { user } = userReducers.result;
+    const { loadingKpi, dataKpiMetrics, generalFeedback } = ownkpiReducer;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -290,7 +286,7 @@ class DraftKPI extends Component {
                 />
                 <Text strong>Challenge yourself :</Text>
                 <TextArea
-                  autoSize={{minRows: 3}}
+                  autoSize={{ minRows: 3 }}
                   placeholder="Challenge yourself"
                   value={challengeYour}
                   onChange={changeChallenge}
@@ -302,7 +298,7 @@ class DraftKPI extends Component {
           <div style={{ ...globalStyle.contentContainer, background: 'rgb(250, 247, 187)', borderRadius: 0 }}>
             <Text strong>General Feedback :</Text>
             <TextArea
-              autoSize={{minRows: 3}}
+              autoSize={{ minRows: 3 }}
               className="challenge-input-disabled"
               value={generalFeedback.comment}
               readOnly
@@ -331,13 +327,14 @@ class DraftKPI extends Component {
           >
             Save as Draft
           </Button>
+          {authReducer?.managerId &&
           <Button
             id="submit-superior"
             onClick={handleSubmit}
             type="primary" style={{ margin: 10 }}
           >
-            {user.managerId ? 'Submit To Superior' : 'Submit'}
-          </Button>
+            Submit To Superior
+          </Button>}
         </div>
       </div>
     );
@@ -345,10 +342,10 @@ class DraftKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ownKpiReducers: state.ownKpi,
-  managerKpiReducers: state.managerKpi,
-  saveKpiReducers: state.saveKpi,
-  userReducers: state.userReducers,
+  ownkpiReducer: state.ownKpi,
+  managerkpiReducer: state.managerKpi,
+  savekpiReducer: state.saveKpi,
+  authReducer: state.authReducer,
   submitKpi: state.submitKpi,
   saveKpi: state.saveKpi
 });
@@ -368,7 +365,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 DraftKPI.propTypes = {
-  ownKpiReducers: PropTypes.instanceOf(Object).isRequired,
+  ownkpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getNotifications: PropTypes.func,
   getKpiList: PropTypes.func,
@@ -377,7 +374,7 @@ DraftKPI.propTypes = {
   access: PropTypes.bool,
   saveKpi: PropTypes.instanceOf(Object),
   submitKpi: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object),
+  authReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };

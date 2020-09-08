@@ -1,7 +1,7 @@
 const MenuList = [
   {
     id: 1,
-    path: '/home',
+    path: '/',
     title: 'Home',
     menuLevel: 1,
     parent: 'none'

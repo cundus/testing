@@ -73,9 +73,9 @@ class Appraisal extends Component {
   }
 
   componentDidMount() {
-    const { userReducers, match, step } = this.props;
+    const { userReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     if (user.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
@@ -128,10 +128,10 @@ class Appraisal extends Component {
       loadingKpis: true
     });
     await getKpiList(id);
-    const { kpiReducers } = this.props;
+    const { kpiReducer } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback, user, status
-    } = kpiReducers;
+    } = kpiReducer;
     if (status === Success) {
       const newData = [];
       // for fetching data metrics API
@@ -227,8 +227,8 @@ class Appraisal extends Component {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers } = this.props;
-    const { dataValues, dataRating, statusValues } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataValues, dataRating, statusValues } = kpiReducer;
     if (statusValues === Success) {
       const newData = [];
       // for fetching data metrics API
@@ -317,9 +317,9 @@ class Appraisal extends Component {
     });
     let rating = form.getFieldValue('proposeRating');
     // eslint-disable-next-line react/destructuring-assignment
-    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
       // eslint-disable-next-line react/destructuring-assignment
-      rating = this.props.kpiReducers.dataKpiRating.id;
+      rating = this.props.kpiReducer.dataKpiRating.id;
     }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
@@ -334,14 +334,14 @@ class Appraisal extends Component {
       onOk: async () => {
         await sendBackAppraisal(params.userId, data);
         const {
-          kpiReducers,
+          kpiReducer,
           history
         } = this.props;
         const {
           loadingSendBackAppraisal,
           statusSendBackAppraisal,
           messageSendBackAppraisal
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingSendBackAppraisal) {
           if (statusSendBackAppraisal === Success) {
             history.push('/my-team/appraisal/');
@@ -381,9 +381,9 @@ class Appraisal extends Component {
     });
     let rating = form.getFieldValue('proposeRating');
     // eslint-disable-next-line react/destructuring-assignment
-    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
       // eslint-disable-next-line react/destructuring-assignment
-      rating = this.props.kpiReducers.dataKpiRating.id;
+      rating = this.props.kpiReducer.dataKpiRating.id;
     }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
@@ -400,13 +400,13 @@ class Appraisal extends Component {
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
-              kpiReducers
+              kpiReducer
             } = this.props;
             const {
               loadingApproveAppraisal,
               statusApproveAppraisal,
               messageApproveAppraisal
-            } = kpiReducers;
+            } = kpiReducer;
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
                 this.getData();
@@ -481,9 +481,9 @@ class Appraisal extends Component {
       okText: 'Approve',
       onOk: async () => {
         await teamAck(data);
-        const { kpiReducers } = this.props;
-        if (!kpiReducers.loadingTeamAck) {
-          if (kpiReducers.statusTeamAck === Success) {
+        const { kpiReducer } = this.props;
+        if (!kpiReducer.loadingTeamAck) {
+          if (kpiReducer.statusTeamAck === Success) {
             this.setState({
               loadingSubmit: true
             });
@@ -491,7 +491,7 @@ class Appraisal extends Component {
             getNotifications();
             message.success(`${teamName}'s Final Result has been sent`);
           } else {
-            message.warning(`Sorry, ${kpiReducers.messageTeamAck}`);
+            message.warning(`Sorry, ${kpiReducer.messageTeamAck}`);
           }
         }
       },
@@ -518,7 +518,7 @@ class Appraisal extends Component {
     } = this.state;
     const {
       form,
-      kpiReducers,
+      kpiReducer,
       history
     } = this.props;
     const {
@@ -531,7 +531,7 @@ class Appraisal extends Component {
       errMessage,
       statusValues,
       messageValues
-    } = kpiReducers;
+    } = kpiReducer;
     return (
       <div>
         <div style={{
@@ -814,8 +814,8 @@ class Appraisal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers,
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer,
   step: state.userKpiStateReducers
 });
 
@@ -842,7 +842,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Appraisal.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
   getRatingList: PropTypes.func,
   getValues: PropTypes.func,
   getKpiList: PropTypes.func,

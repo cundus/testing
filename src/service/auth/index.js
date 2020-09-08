@@ -1,5 +1,10 @@
 import { customAxios } from '../axios';
-const token = localStorage.getItem('sfToken');
+import { loginByADToken, getCurrentStep } from './auth';
+
+export {
+  loginByADToken,
+  getCurrentStep
+};
 
 export const getUserInfo = (token) => customAxios({
   url: '/user/loginByToken',
@@ -72,7 +77,6 @@ export const getMyTeamApraisalDetail = (idUser) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
-
 
 export const getMyTeamDetailKPI = (idUser) => customAxios({
   url: `/user/team/kpi/detail/${idUser}`,

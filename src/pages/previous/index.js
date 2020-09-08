@@ -47,9 +47,9 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducers, getLatestGoalKpi
+      userReducer, getLatestGoalKpi
     } = this.props;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     getLatestGoalKpi();
     this.getOwnKpiList(user.userId);
     this.getManagerKpiList(user.userId);
@@ -61,8 +61,8 @@ class CreateKPI extends Component {
     } = this.props;
     await getKpiList(id);
     
-    const { ownKpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics, dataKpiFiltered } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpi, dataKpiMetrics, dataKpiFiltered } = ownkpiReducer;
     const { dataOwnId } = this.state;
     const newData = [];
     const newSelectedData = [];
@@ -107,10 +107,10 @@ class CreateKPI extends Component {
   getManagerKpiList = async (id) => {
     const { getKpiManagerList } = this.props;
     await getKpiManagerList(id);
-    const { managerKpiReducers } = this.props;
+    const { managerkpiReducer } = this.props;
     const {
       dataFirstManager, dataSecondManager, dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     let newData = [];
     if (dataFirstManager) {
       const newManagerData = kpiGetManagerProcess(dataFirstManager, dataKpiManagerMetrics);
@@ -157,10 +157,10 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducers, stepChange, form, ownKpiReducers
+      doSavingKpi, userReducer, stepChange, form, ownkpiReducer
     } = this.props;
-    const { challenge, dataKpi, dataKpiMetrics } = ownKpiReducers;
-    const { user } = userReducers.result;
+    const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
+    const { user } = userReducer.result;
     const {
       dataOwn,
       dataSelectedCascade
@@ -179,8 +179,8 @@ class CreateKPI extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(data, user.userId);
-            const { saveKpiReducers } = this.props;
-            const { status, statusMessage } = saveKpiReducers;
+            const { savekpiReducer } = this.props;
+            const { status, statusMessage } = savekpiReducer;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
               stepChange(1); // go to draft
@@ -219,8 +219,8 @@ class CreateKPI extends Component {
   };
 
   handleAddRow = () => {
-    const { ownKpiReducers } = this.props;
-    const { dataKpiMetrics } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpiMetrics } = ownkpiReducer;
     const { dataOwnId, dataOwn, dataSelectedCascade } = this.state;
     let dataMetrics = dataKpiMetrics.map((metric) => {
       return `{"${metric.label}":""}`;
@@ -299,13 +299,13 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { ownKpiReducers, form, managerKpiReducers } = this.props;
+    const { ownkpiReducer, form, managerkpiReducer } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics
-    } = ownKpiReducers;
+    } = ownkpiReducer;
     const {
       dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     const { name } = dataGoal;
     return (
       <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -331,11 +331,11 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ownKpiReducers: state.ownKpi,
-  managerKpiReducers: state.managerKpi,
-  saveKpiReducers: state.saveKpi,
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  ownkpiReducer: state.ownKpi,
+  managerkpiReducer: state.managerKpi,
+  savekpiReducer: state.saveKpi,
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -353,16 +353,16 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
-  ownKpiReducers: PropTypes.instanceOf(Object),
-  managerKpiReducers: PropTypes.instanceOf(Object),
+  ownkpiReducer: PropTypes.instanceOf(Object),
+  managerkpiReducer: PropTypes.instanceOf(Object),
   access: PropTypes.bool,
   setAccess: PropTypes.func,
-  saveKpiReducers: PropTypes.instanceOf(Object),
+  savekpiReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,
   getKpiManagerList: PropTypes.func,
   form: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object).isRequired
+  userReducer: PropTypes.instanceOf(Object).isRequired
 };

@@ -56,7 +56,7 @@ class Activity extends Component {
     const {
       GetThreadActivity,
       GetActivityStatus,
-      userReducers,
+      userReducer,
       doGetKpiList,
       match,
       GetMyKpiState
@@ -66,7 +66,7 @@ class Activity extends Component {
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
     GetMyKpiState();
-    const isSuperior = (userId !== userReducers.result.user.userId)
+    const isSuperior = (userId !== userReducer.result.user.userId)
     if(isSuperior) {
       await doGetKpiList(userId);
     }
@@ -155,7 +155,7 @@ class Activity extends Component {
   }
 
   render() {
-    const { activityThread, match, kpiReducers } = this.props;
+    const { activityThread, match, kpiReducer } = this.props;
     const { loadingActivity } = activityThread;
     const {loading } = this.state;
     const { kpiName } = activityThread;
@@ -163,7 +163,7 @@ class Activity extends Component {
     const { userId } = params;
     let stafname = '';
     if (this.state.isSuperior === true) {
-      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
+      stafname = `${kpiReducer.user.firstName} ${kpiReducer.user.lastName}`
     }
     const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]));
     return (
@@ -220,8 +220,8 @@ class Activity extends Component {
 const mapStateToProps = (state) => ({
   activityThread: state.ActivityReducers,
   activityStatus: state.ActivityStatusReducers,
-  userReducers: state.userReducers,
-  kpiReducers: state.kpiReducers,
+  userReducer: state.userReducer,
+  kpiReducer: state.kpiReducer,
   step: state.userKpiStateReducers
 });
 
@@ -242,11 +242,11 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Activity.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };

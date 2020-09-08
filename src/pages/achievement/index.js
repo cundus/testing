@@ -57,14 +57,14 @@ class Achievement extends Component {
       GetListAchivement,
       match,
       doGetKpiList,
-      userReducers
+      userReducer
     } = this.props;
     const { params } = match;
     const { idAchievement, userId } = params;
     await GetListAchivement(idAchievement, userId);
     const activities = this.props.achievementThread.achievements;
     let dataSource = [];
-    const isSuperior = (userId !== userReducers.result.user.userId)
+    const isSuperior = (userId !== userReducer.result.user.userId)
     if (activities?.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
@@ -150,13 +150,13 @@ class Achievement extends Component {
   }
 
   render() {
-    const { achievementThread, kpiReducers } = this.props;
+    const { achievementThread, kpiReducer } = this.props;
     const { loadingActivity } = achievementThread;
     const {loading } = this.state;
     const { kpiName } = achievementThread;
     let stafname = '';
     if (this.state.isSuperior === true) {
-      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`;
+      stafname = `${kpiReducer.user.firstName} ${kpiReducer.user.lastName}`;
     }
     const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]);
     return (
@@ -211,8 +211,8 @@ class Achievement extends Component {
 
 const mapStateToProps = (state) => ({
   achievementThread: state.AchievementReducers,
-  userReducers: state.userReducers,
-  kpiReducers: state.kpiReducers,
+  userReducer: state.userReducer,
+  kpiReducer: state.kpiReducer,
   step: state.userKpiStateReducers
 });
 
@@ -231,11 +231,11 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Achievement.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };

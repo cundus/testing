@@ -38,10 +38,10 @@ class modalAssessment extends Component {
         handleAssesLoading(modalRecord.id);
         showHideModal(0);
         await doAssess(data);
-        const { kpiReducers } = this.props;
+        const { kpiReducer } = this.props;
         const {
           loadingAssessOne, statusAssessOne, messageAssessOne, dataAssessOne
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingAssessOne) {
           if (statusAssessOne === Success) {
             handleChangeAssessment({
@@ -134,8 +134,8 @@ class modalAssessment extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -161,7 +161,7 @@ modalAssessment.propTypes = {
   assessment: PropTypes.string || PropTypes.number,
   doAssess: PropTypes.func,
   getOwnKpiList: PropTypes.func,
-  kpiReducers: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   form: PropTypes.instanceOf(Object)
 };

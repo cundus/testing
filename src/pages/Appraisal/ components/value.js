@@ -381,8 +381,8 @@ class Value extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiR: state.kpiReducers,
-  userR: state.userReducers
+  kpiR: state.kpiReducer,
+  userR: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

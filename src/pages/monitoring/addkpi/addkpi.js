@@ -46,9 +46,9 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducers, getLatestGoalKpi, step
+      userReducer, getLatestGoalKpi, step
     } = this.props;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     if (step.currentStep === stepKpi[2]) {
       getLatestGoalKpi();
       this.getOwnKpiList(user.userId);
@@ -63,8 +63,8 @@ class CreateKPI extends Component {
       getKpiList
     } = this.props;
     await getKpiList(id);
-    const { ownKpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpi, dataKpiMetrics } = ownkpiReducer;
     const { dataOwnId } = this.state;
     const newData = [];
     const newSelectedData = [];
@@ -156,10 +156,10 @@ class CreateKPI extends Component {
   getManagerKpiList = async (id) => {
     const { getKpiManagerList } = this.props;
     await getKpiManagerList(id);
-    const { managerKpiReducers } = this.props;
+    const { managerkpiReducer } = this.props;
     const {
       dataFirstManager, dataSecondManager, dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line no-unused-expressions
@@ -267,11 +267,11 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducers, stepChange, form
+      doSavingKpi, userReducer, stepChange, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
-    const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducers;
-    const { user } = userReducers.result;
+    const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducer;
+    const { user } = userReducer.result;
     const {
       // tab,
       dataOwn,
@@ -337,12 +337,12 @@ class CreateKPI extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doSavingKpi(data, user.userId);
-            const { kpiReducers } = this.props;
-            if (kpiReducers.statusSaveKPI === Success || kpiReducers.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
+            const { kpiReducer } = this.props;
+            if (kpiReducer.statusSaveKPI === Success || kpiReducer.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
               this.props.history.push('/monitoring'); // go to draft
             } else {
-              message.warning(`Sorry, ${kpiReducers.messageSaveKPI}`);
+              message.warning(`Sorry, ${kpiReducer.messageSaveKPI}`);
             }
           },
           onCancel() {}
@@ -376,8 +376,8 @@ class CreateKPI extends Component {
   };
 
   handleAddRow = () => {
-    const { kpiReducers } = this.props;
-    const { dataKpiMetrics } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataKpiMetrics } = kpiReducer;
     const { dataOwnId, dataOwn, dataSelectedCascade } = this.state;
     let dataMetrics = dataKpiMetrics.map((metric) => {
       return `{"${metric.label}":""}`;
@@ -456,13 +456,13 @@ class CreateKPI extends Component {
       handleSelectData,
       handleError
     } = this;
-    const { ownKpiReducers, form, managerKpiReducers } = this.props;
+    const { ownkpiReducer, form, managerkpiReducer } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics
-    } = ownKpiReducers;
+    } = ownkpiReducer;
     const {
       dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     const { name } = dataGoal;
     return (
       <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -522,11 +522,11 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ownKpiReducers: state.ownKpi,
-  managerKpiReducers: state.managerKpi,
-  saveKpiReducers: state.saveKpi,
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers,
+  ownkpiReducer: state.ownKpi,
+  managerkpiReducer: state.managerKpi,
+  savekpiReducer: state.saveKpi,
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer,
   step: state.userKpiStateReducers
 });
 
@@ -545,14 +545,14 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
-  ownKpiReducers: PropTypes.instanceOf(Object),
-  managerKpiReducers: PropTypes.instanceOf(Object),
+  ownkpiReducer: PropTypes.instanceOf(Object),
+  managerkpiReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,
   getKpiManagerList: PropTypes.func,
   form: PropTypes.instanceOf(Object),
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
-  userReducers: PropTypes.instanceOf(Object).isRequired
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
+  userReducer: PropTypes.instanceOf(Object).isRequired
 };

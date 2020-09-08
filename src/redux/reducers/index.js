@@ -1,43 +1,45 @@
 import { combineReducers } from 'redux';
 import authReducer from './auth';
-import userReducers from './users';
-import kpiReducers from './kpi';
-import myteamReducers from './myTeam';
-import myTeamDetailReducers from './myTeamDetail';
-import userDetailReducers from './userDetail';
-import feedbackReducers from './feedback';
-import userKpiStateReducers from './kpiState';
-import ActivityReducers from './activity';
-import ActivityStatusReducers from './statusActivity';
-import ActivityChatReducers from './activityChat';
-import AchievementReducers from './achivement';
-import AppraisalReducers from './appraisal';
-import notificationReducers from './notifications';
-import monitoringReducers from './monitoring';
-import alignmentReducers from './alignment';
+import userReducer from './users';
+import kpiReducer from './kpi';
+import myteamReducer from './myTeam';
+import myTeamDetailReducer from './myTeamDetail';
+import userDetailReducer from './userDetail';
+import feedbackReducer from './feedback';
+import userKpiStateReducer from './kpiState';
+import ActivityReducer from './activity';
+import ActivityStatusReducer from './statusActivity';
+import ActivityChatReducer from './activityChat';
+import AchievementReducer from './achivement';
+import AppraisalReducer from './appraisal';
+import notificationReducer from './notifications';
+import monitoringReducer from './monitoring';
+import alignmentReducer from './alignment';
 import {
   ownKpi, managerKpi, saveKpi, submitKpi
 } from './kpi/';
+import activeDirectoryReducer from './activeDirectory';
 
 export default combineReducers({
   authReducer,
-  userReducers,
-  kpiReducers,
-  myteamReducers,
-  myTeamDetailReducers,
-  userDetailReducers,
-  feedbackReducers,
-  userKpiStateReducers,
-  ActivityReducers,
-  ActivityStatusReducers,
-  ActivityChatReducers,
-  AchievementReducers,
-  AppraisalReducers,
+  userReducer,
+  kpiReducer,
+  myteamReducer,
+  myTeamDetailReducer,
+  userDetailReducer,
+  feedbackReducer,
+  userKpiStateReducer,
+  ActivityReducer,
+  ActivityStatusReducer,
+  ActivityChatReducer,
+  AchievementReducer,
+  AppraisalReducer,
   ownKpi,
   managerKpi,
   saveKpi,
   submitKpi,
-  notificationReducers,
-  monitoringReducers,
-  alignmentReducers
+  notificationReducer,
+  monitoringReducer,
+  alignmentReducer,
+  activeDirectoryReducer
 });

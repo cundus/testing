@@ -1,31 +1,23 @@
-// authProvider.js
-import { MsalAuthProvider, LoginType } from 'react-aad-msal';
-import redirectAadmsurl from '../../utils/redirectAadmsurl';
-// import Axios from 'axios';
-const {
-  REACT_APP_AUTHORITY_AADMS,
-  REACT_APP_CLIENTID_AADMS,
-  REACT_APP_REDIRECT_URI_AADMS
-} = process.env;
-const config = {
-  auth: {
-    clientId: REACT_APP_CLIENTID_AADMS,
-    authority: REACT_APP_AUTHORITY_AADMS,
-    redirectUri: REACT_APP_REDIRECT_URI_AADMS,
-    postLogoutRedirectUri: REACT_APP_REDIRECT_URI_AADMS
+import { customAxios } from '../axios';
+
+export const loginByADToken = (ADToken) => customAxios({
+  url: '/user/loginByToken',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
   },
-  cache: {
-    cacheLocation: 'localStorage',
-    storeAuthStateInCookie: true
+  data: {
+    token: ADToken
   }
-};
+});
 
-const scopesConf = {
-  scopes: ['openid']
-};
-
-export const authProvider = new MsalAuthProvider(
-  config,
-  scopesConf,
-  LoginType.Redirect
-);
+export const getCurrentStep = () => customAxios({
+  url: '/kpi/current-step',
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});

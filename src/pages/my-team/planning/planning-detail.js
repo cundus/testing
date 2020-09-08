@@ -32,9 +32,9 @@ class PlanningDetail extends Component {
   }
 
   async componentDidMount() {
-    const { userReducers, match, step } = this.props;
+    const { userReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     if (user.userId === params.id) {
       this.props.history.push('/planning/kpi');
     } else {
@@ -282,9 +282,9 @@ const mapDispatchtoProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   myteamdetail: state.myTeamDetailReducers,
-  kpi: state.kpiReducers,
+  kpi: state.kpiReducer,
   userDetail: state.userDetailReducers,
-  userReducers: state.userReducers,
+  userReducer: state.userReducer,
   feedback: state.feedbackReducers
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);

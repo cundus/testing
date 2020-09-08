@@ -13,7 +13,7 @@ class TableEditMyKPI extends Component {
   }
 
   getColumns = async () =>{
-    const { kpiReducers, dataMetrics, editableFeedback } = this.props;
+    const { kpiReducer, dataMetrics, editableFeedback } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -80,7 +80,7 @@ class TableEditMyKPI extends Component {
   }
 }
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers
+  kpiReducer: state.kpiReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({});

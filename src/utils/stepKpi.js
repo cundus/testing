@@ -1,47 +1,59 @@
+export const EMP_GOAL_SETTING = 'Emp Goal Setting';
+export const MANAGER_GOAL_REVIEW = 'Manager Goal Review';
+export const PERFORMANCE_REVIEW_EMPLOYEE = 'Performance Review Employee';
+export const PERFORMANCE_REVIEW_MANAGER = 'Performance Review Manager';
+export const MANAGER_ACKNOWLEDMENT = 'Manager Acknowledgement And 1:1 Meeting';
+export const COMPILING_PROCESS = 'Compiling Process';
+export const EMP_ACKNOWLEDGEMENT = 'Emp Acknowledgement';
+export const COMPLETED = 'Completed';
+export const PROGRESS_MONITORING_1 = 'Progress Monitoring 1';
+export const PROGRESS_MONITORING_2 = 'Progress Monitoring 2';
+export const PROGRESS_REVIEW_ALIGNMENT_1 = 'Progress Review Alignment 1';
+export const PROGRESS_REVIEW_ALIGNMENT_2 = 'Progress Review Alignment 2';
+
 const stepKpi = [
-  'Emp Goal Setting',
-  'Manager Goal Review',
-  'Performance Review Employee',
-  'Performance Review Manager',
-  'Compiling Process',
-  'Manager Acknowledgement And 1:1 Meeting',
-  'Emp Acknowledgement',
-  'Completed'
+  EMP_GOAL_SETTING,
+  MANAGER_GOAL_REVIEW,
+  PERFORMANCE_REVIEW_EMPLOYEE,
+  PERFORMANCE_REVIEW_MANAGER,
+  COMPILING_PROCESS,
+  MANAGER_ACKNOWLEDMENT,
+  EMP_ACKNOWLEDGEMENT,
+  COMPLETED
 ];
 
 export const stepKpiMonitoring = [
-  'Progress Monitoring 1',
-  'Progress Monitoring 2'
+  PROGRESS_MONITORING_1,
+  PROGRESS_MONITORING_2
 ];
 
 export const stepKpiAlignment = [
-  'Progress Review Alignment 1',
-  'Progress Review Alignment 2'
+  PROGRESS_REVIEW_ALIGNMENT_1,
+  PROGRESS_REVIEW_ALIGNMENT_2
 ];
 
-
 export const menuMonitoringAllow = [
-  'Progress Monitoring 1',
-  'Progress Monitoring 2',
-  'Performance Review Employee',
-  'Performance Review Manager',
-  'Progress Review Alignment 1',
-  'Progress Review Alignment 2',
-  'Compiling Process',
-  'Manager Acknowledgement And 1:1 Meeting',
-  'Emp Acknowledgement',
-  'Completed'
-]
+  PROGRESS_MONITORING_1,
+  PROGRESS_MONITORING_2,
+  PERFORMANCE_REVIEW_EMPLOYEE,
+  PERFORMANCE_REVIEW_MANAGER,
+  PROGRESS_REVIEW_ALIGNMENT_1,
+  PROGRESS_REVIEW_ALIGNMENT_2,
+  COMPILING_PROCESS,
+  MANAGER_ACKNOWLEDMENT,
+  EMP_ACKNOWLEDGEMENT,
+  COMPLETED
+];
 
 export const menuAppraisalAllow = [
-  'Progress Review Alignment 1',
-  'Progress Review Alignment 2',
-  'Performance Review Employee',
-  'Performance Review Manager',
-  'Compiling Process',
-  'Manager Acknowledgement And 1:1 Meeting',
-  'Emp Acknowledgement',
-  'Completed'
-]
+  PROGRESS_REVIEW_ALIGNMENT_1,
+  PROGRESS_REVIEW_ALIGNMENT_2,
+  PERFORMANCE_REVIEW_EMPLOYEE,
+  PERFORMANCE_REVIEW_MANAGER,
+  COMPILING_PROCESS,
+  MANAGER_ACKNOWLEDMENT,
+  EMP_ACKNOWLEDGEMENT,
+  COMPLETED
+];
 
 export default stepKpi;

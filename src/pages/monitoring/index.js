@@ -42,9 +42,9 @@ class MonitorKPI extends Component {
   }
 
   componentDidMount() {
-    const { userReducers, match, step } = this.props;
+    const { userReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     if (user.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
@@ -59,10 +59,10 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducers, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
+    const { userReducer, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
     const { params } = match;
     const { userId } = params;
-    const { user } = userReducers.result;
+    const { user } = userReducer.result;
     getLatestGoalKpi();
     doGetStep()
     if (userId) {
@@ -77,8 +77,8 @@ class MonitorKPI extends Component {
         isSuperior: false
       })
     }
-    const { kpiReducers } = this.props;
-    const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducer;
     const newData = [];
     if (status === Success) {
     // for fetching data metrics API
@@ -215,12 +215,12 @@ class MonitorKPI extends Component {
   handleRevise = () => {
     const {
       doRevisingKPI,
-      kpiReducers
+      kpiReducer
     } = this.props;
     confirm({
       title: 'Are you sure?',
       onOk: async () => {
-        await doRevisingKPI(kpiReducers?.user?.userId);
+        await doRevisingKPI(kpiReducer?.user?.userId);
         // eslint-disable-next-line react/destructuring-assignment
         if (this.props.monitoring.status === Success) {
           message.success('Your employee KPI has been sent to revise');
@@ -243,8 +243,8 @@ class MonitorKPI extends Component {
       handleDelete,
       handleError
     } = this;
-    const { kpiReducers, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducers;
+    const { kpiReducer, stepChange, form } = this.props;
+    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducer;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
     const stafid = user?.userId;
@@ -325,8 +325,8 @@ class MonitorKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers,
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer,
   step: state.userKpiStateReducers,
   monitoring: state.monitoringReducers
 });
@@ -346,11 +346,11 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 MonitorKPI.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };
