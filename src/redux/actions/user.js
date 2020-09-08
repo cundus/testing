@@ -16,8 +16,8 @@ import {
 import { Success } from '../status-code-type';
 
 import {
-  getUserInfo,
-  errGetUserInfo,
+  GET_USER_INFO,
+  ERR_GET_USER_INFO,
   errGetMyTeam,
   getMyTeam,
   startGetMyTeam,
@@ -44,12 +44,12 @@ export const GetInfoUser = (token) => {
     try {
       const resp = await getUserInfoAction(token);
       dispatch({
-        type: getUserInfo,
+        type: GET_USER_INFO,
         data: resp.data
       });
     } catch (error) {
       dispatch({
-        type: errGetUserInfo,
+        type: ERR_GET_USER_INFO,
         data: {
           error: true,
           errorCode: error.status_code

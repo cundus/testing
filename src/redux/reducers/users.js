@@ -1,12 +1,12 @@
-import { getUserInfo, errGetUserInfo } from '../action.type';
+import { GET_USER_INFO, ERR_GET_USER_INFO } from '../action.type';
 
 const initUsers = {};
 
 export default (state = initUsers, action) => {
   switch(action.type){
-    case getUserInfo:
+    case GET_USER_INFO:
       return action.data;
-    case errGetUserInfo:
+    case ERR_GET_USER_INFO:
       return action.data;
     default:
       // return initUsers;

@@ -68,8 +68,8 @@ export const DELETE_FILE_SUCCESS = 'DELETE_FILE_SUCCESS';
 export const DELETE_FILE_FAILED = 'DELETE_FILE_FAILED';
 
 // AUTH AND USER
-export const getUserInfo = 'GET_USER_INFO';
-export const errGetUserInfo = 'ERR_GET_USER_INFO';
+export const GET_USER_INFO = 'GET_USER_INFO';
+export const ERR_GET_USER_INFO = 'ERR_GET_USER_INFO';
 
 export const getUserDetail = 'GET_USER_DETAIL';
 export const errUserDetail = 'ERR_GET_USER_DETAIL';
@@ -82,7 +82,6 @@ export const startGetMyTeam = 'START_GET_MY_TEAM';
 export const submitFeedback = 'SUBMIT_FEEDBACK';
 export const successFeedback = 'SUCCESS_FEEDBACK';
 export const errSubmitFeedback = 'ERR_SUBMIT_FEEDBACK';
-
 
 export const getMyTeamDetail = 'GET_MY_TEAM_DETAIL';
 export const errGetMyTeamDetail = 'ERR_GET_MY_TEAM_DETAIL';
@@ -99,7 +98,6 @@ export const getActivity = 'GET_ACTIVITY';
 export const successGetActivity = 'SUCCESS_GET_ACTIVITY';
 export const errGetActivity = 'ERR_GET_ACTIVITY';
 
-
 export const getStatusActivity = 'GET_STATUS_ACTIVITY';
 export const successGetStatusActivity = 'SUCCESS_GET_STATUS_ACTIVITY';
 export const errGetStatusActivity = 'ERR_GET_STATUS_ACTIVITY';
@@ -107,7 +105,6 @@ export const errGetStatusActivity = 'ERR_GET_STATUS_ACTIVITY';
 export const getActivityChat = 'GET_ACTIVITY_CHAT';
 export const successGetActivityChat = 'SUCCESS_GET_ACTIVITY_CHAT';
 export const errGetActivityChat = 'ERR_GET_ACTIVITY_CHAT';
-
 
 export const doFeedbackComment = 'DO_FEEDBACK_COMMENT';
 export const successFeedbackComment = 'SUCCESS_FEEDBACK_COMMENT';
@@ -168,7 +165,6 @@ export const POST_ALIGNMENTS_DETAIL_FAILED = 'POST_ALIGNMENTS_DETAIL_FAILED';
 export const GET_ALIGNMENT_DOWNLOAD = 'GET_ALIGNMENT_DOWNLOAD';
 export const GET_ALIGNMENT_DOWNLOAD_SUCCESS = 'GET_ALIGNMENT_DOWNLOAD_SUCCESS';
 export const GET_ALIGNMENT_DOWNLOAD_FAILED = 'GET_ALIGNMENT_DOWNLOAD_FAILED';
-
 
 export const GET_ALIGNMENT_DOWNLOAD_PERMISSION = 'GET_ALIGNMENT_DOWNLOAD_PERMISSION';
 export const GET_ALIGNMENT_DOWNLOAD_PERMISSION_SUCCESS = 'GET_ALIGNMENT_DOWNLOAD_PERMISSION_SUCCESS';
