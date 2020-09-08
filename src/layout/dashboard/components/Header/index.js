@@ -27,7 +27,7 @@ const Header = (props) => {
   const url = uId && `${apiUrl()}/user/photo/${uId}`;
   const name = authReducer?.firstName;
   const isManager = authReducer?.manager;
-  if (isManager === false) {
+  if (!isManager) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
   return (

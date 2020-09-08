@@ -11,13 +11,13 @@ const { Sider } = Layout;
 
 const Sidebar = (props) => {
   const { authReducer } = props;
-  let mainRouter = MenuList.filter((x) => {
+  const mainRouter = MenuList.filter((x) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
   const { collapsed, toggle, isMonitoring, isAppraisal, } = props;
   const isManager = authReducer?.manager;
-  if (isManager === false) {
+  if (!isManager) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
   // if (!isNoEmpleyee) {
