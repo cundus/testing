@@ -3,6 +3,7 @@ export const SUCCESS = 0;
 export const INVALID_LOGIN_TOKEN = 1001;
 export const USER_NOT_FOUND = 1002;
 export const ODATA_RESPONSE_ERROR = 1003;
+export const MULTI_SESSION_NOT_ALLOWED = 1004;
 export const FAILED_SAVE_OR_UPDATE_KPIS = 2001;
 export const FAILED_DELETE_KPIS = 2002;
 export const ATTACHMENT_NOT_FOUND = 2008;
@@ -24,11 +25,23 @@ export const httpHeaders = {
 
 export const errorHandlerCode = (statusCode, statusDesc) => {
   switch (statusCode) {
-    case USER_NOT_FOUND:
+    case INVALID_LOGIN_TOKEN:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
         title: 'Sorry, you are not authorized to access this application.',
-        subTitle: 'Contact the PMGM\'s help desk to get an access'
+        subTitle: `Refresh this page or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+      };
+      case USER_NOT_FOUND:
+        return {
+          status: httpHeaders.NOT_AUTHORIZED,
+          title: 'Sorry, you are not authorized to access this application.',
+          subTitle: `Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+        };
+    case MULTI_SESSION_NOT_ALLOWED:
+      return {
+        status: httpHeaders.NOT_AUTHORIZED,
+        title: 'Sorry, you are unable to access the application right now.',
+        subTitle: `Sign Out from other device/browser or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
       };
     default:
       return {

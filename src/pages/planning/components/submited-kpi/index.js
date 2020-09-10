@@ -36,11 +36,10 @@ class SubmitedKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducer, getKpiList, access, setAccess
+      authReducer, getKpiList, access, setAccess
     } = this.props;
-    const { user } = userReducer.result;
     if (access) {
-      await getKpiList(user.userId);
+      await getKpiList(authReducer.userId);
     }
     setAccess(true);
     const { ownkpiReducer } = this.props;
@@ -164,6 +163,7 @@ class SubmitedKPI extends Component {
 
 const mapStateToProps = (state) => ({
   userReducer: state.userReducer,
+  authReducer: state.authReducer,
   ownkpiReducer: state.ownKpi
 });
 

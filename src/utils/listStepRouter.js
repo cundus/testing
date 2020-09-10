@@ -1,15 +1,43 @@
+import {
+  MANAGER_GOAL_REVIEW,
+  EMP_GOAL_SETTING,
+  PERFORMANCE_REVIEW_MANAGER,
+  COMPILING_PROCESS,
+  MANAGER_ACKNOWLEDMENT,
+  EMP_ACKNOWLEDGEMENT,
+  COMPLETED,
+  PERFORMANCE_REVIEW_EMPLOYEE,
+  PROGRESS_MONITORING_1,
+  PROGRESS_MONITORING_2,
+  PROGRESS_REVIEW_ALIGNMENT_1,
+  PROGRESS_REVIEW_ALIGNMENT_2
+} from './stepKpi'
 const managerRoute = [
   {
-    step: ['Manager Goal Review'],
+    step: [MANAGER_GOAL_REVIEW],
     route: '/my-team/planning/'
   },
   {
     step: [
-      'Performance Review Manager',
-      'Compiling Process',
-      'Manager Acknowledgement And 1:1 Meeting',
-      'Emp Acknowledgement',
-      'Completed'
+      PROGRESS_MONITORING_1,
+      PROGRESS_MONITORING_2
+    ],
+    route: '/my-team/monitoring/'
+  },
+  {
+    step: [
+      PROGRESS_REVIEW_ALIGNMENT_1,
+      PROGRESS_REVIEW_ALIGNMENT_2
+    ],
+    route: '/my-team/performance-review-employee/'
+  },
+  {
+    step: [
+      PERFORMANCE_REVIEW_MANAGER,
+      COMPILING_PROCESS,
+      MANAGER_ACKNOWLEDMENT,
+      EMP_ACKNOWLEDGEMENT,
+      COMPLETED
     ],
     route: '/my-team/appraisal/'
   }
@@ -17,17 +45,24 @@ const managerRoute = [
 
 const empRoute = [
   {
-    step: ['Emp Goal Setting', 'Manager Goal Review'],
-    route: '/planning/kpi'
+    step: [EMP_GOAL_SETTING, MANAGER_GOAL_REVIEW],
+    route: '/planning'
   },
   {
     step: [
-      'Performance Review Employee',
-      'Performance Review Manager',
-      'Compiling Process',
-      'Manager Acknowledgement And 1:1 Meeting',
-      'Emp Acknowledgement',
-      'Completed'
+      PROGRESS_MONITORING_1,
+      PROGRESS_MONITORING_2
+    ],
+    route: '/monitoring'
+  },
+  {
+    step: [
+      PERFORMANCE_REVIEW_EMPLOYEE,
+      PERFORMANCE_REVIEW_MANAGER,
+      COMPILING_PROCESS,
+      MANAGER_ACKNOWLEDMENT,
+      EMP_ACKNOWLEDGEMENT,
+      COMPLETED
     ],
     route: '/appraisal'
   }
