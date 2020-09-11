@@ -78,11 +78,11 @@ class AlignmentList extends Component {
     const { doGetAlignmentDetail, history } = this.props;
     const { match } = this.props;
     await doGetAlignmentDetail(match?.params?.sessionId);
-    const { alignmentReducers } = this.props;
-    if (!alignmentReducers?.dataDetail?.usersCalibration) {
+    const { alignmentReducer } = this.props;
+    if (!alignmentReducer?.dataDetail?.usersCalibration) {
       history.push('/my-team/performance-review-alignment')
     } else {
-      const newData = alignmentReducers?.dataDetail?.usersCalibration?.map(
+      const newData = alignmentReducer?.dataDetail?.usersCalibration?.map(
         (item, index) => {
           const kpiScore =
             item?.kpiAchievementScore < 0 ? 0 : item?.kpiAchievementScore;
@@ -155,18 +155,18 @@ class AlignmentList extends Component {
 
       } else if (callibrations.length > 0) {
         confirm({
-          title: outstandings.length > this.props.alignmentReducers?.dataDetail?.totalRequirementOutstanding ?
+          title: outstandings.length > this.props.alignmentReducer?.dataDetail?.totalRequirementOutstanding ?
             'Out of requirement Quota. Are you sure to save it?':
             'Are you sure?',
           okText: 'Save',
           onOk: async () => {
             await saveAlignment(requestBody)
-            const { alignmentReducers } = this.props;
-            if (alignmentReducers?.statusPostDetail === Success) {
+            const { alignmentReducer } = this.props;
+            if (alignmentReducer?.statusPostDetail === Success) {
               this.getData()
               message.success('Success, your Performance Alignment Review has been saved')
             } else {
-              message.warning(`Sorry, ${alignmentReducers?.messagePostDetail}`)
+              message.warning(`Sorry, ${alignmentReducer?.messagePostDetail}`)
             }
           },
           onCancel() {}
@@ -190,7 +190,7 @@ class AlignmentList extends Component {
   };
 
   render() {
-    const { alignmentReducers, kpiReducer, form } = this.props;
+    const { alignmentReducer, kpiReducer, form } = this.props;
     const {
       dataProposeRating,
     } = kpiReducer;
@@ -208,7 +208,7 @@ class AlignmentList extends Component {
           data: [
             0,
             0,
-            alignmentReducers?.dataDetail?.totalRequirementOutstanding
+            alignmentReducer?.dataDetail?.totalRequirementOutstanding
           ],
           stack: "Requirements",
           color: "#324aa8",
@@ -216,9 +216,9 @@ class AlignmentList extends Component {
         {
           name: "Actual",
           data: [
-            alignmentReducers?.dataDetail?.totalActualNeedImprovement,
-            alignmentReducers?.dataDetail?.totalActualWellDone,
-            alignmentReducers?.dataDetail?.totalActualOutstanding
+            alignmentReducer?.dataDetail?.totalActualNeedImprovement,
+            alignmentReducer?.dataDetail?.totalActualWellDone,
+            alignmentReducer?.dataDetail?.totalActualOutstanding
           ],
           stack: "Actual",
           color: "orange",
@@ -226,11 +226,11 @@ class AlignmentList extends Component {
       ],
     };
 
-    const isCanEdit = (alignmentReducers?.dataDetail?.userRole?.isFacilitator ||
-    alignmentReducers?.dataDetail?.userRole?.isOwner)
+    const isCanEdit = (alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
+    alignmentReducer?.dataDetail?.userRole?.isOwner)
     return (
       <div style={globalStyle.contentContainer}>
-        {!alignmentReducers?.loadingDetail ? (
+        {!alignmentReducer?.loadingDetail ? (
           <div>
             <div>
               <Divider />
@@ -289,7 +289,7 @@ const mapDispatchtoProps = (dispatch) => ({
 
 const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
-  alignmentReducers: state.alignmentReducers,
+  alignmentReducer: state.alignmentReducer,
 });
 const connectToComponent = connect(
   mapStateToProps,

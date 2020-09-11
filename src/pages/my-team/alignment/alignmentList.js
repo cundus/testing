@@ -16,18 +16,18 @@ class AlignmentList extends Component {
   }
 
   render() {
-    const { alignmentReducers } = this.props;
+    const { alignmentReducer } = this.props;
     return(
       <div style={globalStyle.contentContainer}>
         {
-          !alignmentReducers?.loading ?
+          !alignmentReducer?.loading ?
             <div>
                <div>
                 <Divider />
                 <Text strong>Performance Review Alignment</Text>
                 <Divider />
               </div>
-             <TableAlignment team={alignmentReducers?.data || []} />
+             <TableAlignment team={alignmentReducer?.data || []} />
             </div>:
             <center>
               <Spin/>
@@ -43,7 +43,7 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  alignmentReducers: state.alignmentReducers
+  alignmentReducer: state.alignmentReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(AlignmentList);
 

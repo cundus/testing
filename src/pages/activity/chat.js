@@ -155,9 +155,9 @@ class Chat extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers,
-  chat: state.ActivityChatReducers
+  activityThread: state.ActivityReducer,
+  activityStatus: state.ActivityStatusReducer,
+  chat: state.ActivityChatReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

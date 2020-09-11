@@ -6,7 +6,7 @@ const initialState = {
   statusMessage: ''
 };
 
-const feedbackReducers = (state = initialState, action) => {
+const feedbackReducer = (state = initialState, action) => {
   switch (action.type) {
     case successFeedback:
       return {
@@ -27,4 +27,4 @@ const feedbackReducers = (state = initialState, action) => {
   }
 };
 
-export default feedbackReducers;
+export default feedbackReducer;

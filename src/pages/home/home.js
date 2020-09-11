@@ -137,7 +137,7 @@ const mapStateToProps = (state) => ({
   auth: state.activeDirectoryReducer,
   authReducer: state.authReducer,
   user: state.userReducer,
-  step: state.userKpiStateReducers
+  step: state.userKpiStateReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Home);
 

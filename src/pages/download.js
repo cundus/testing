@@ -13,9 +13,9 @@ class Download extends Component {
   async componentDidMount() {
     const { doDownloadAlignmentPermission, history } = this.props;
     await doDownloadAlignmentPermission()
-    const { alignmentReducers } = this.props;
-    if ((alignmentReducers?.statusDownloadPermission === Success) &&
-    alignmentReducers?.dataDownloadPermission) {
+    const { alignmentReducer } = this.props;
+    if ((alignmentReducer?.statusDownloadPermission === Success) &&
+    alignmentReducer?.dataDownloadPermission) {
     } else {
       history.push('/')
     }
@@ -24,18 +24,18 @@ class Download extends Component {
   handleDownloadAlignment = async() => {
     const { doDownloadAlignment } = this.props;
     await doDownloadAlignment()
-    const { alignmentReducers } = this.props;
-    if (alignmentReducers?.statusDownload === Success) {
+    const { alignmentReducer } = this.props;
+    if (alignmentReducer?.statusDownload === Success) {
       message.success('Success, file was downloaded')
     } else {
       message.warning(`Sorry, you're unable to download this file, contact pmgm helpdesk`)
     }
   }
   render() {
-    const { alignmentReducers } = this.props;
+    const { alignmentReducer } = this.props;
     return(
       <div style={globalStyle.contentContainer}>
-        {alignmentReducers?.loadingDownloadPermission ?
+        {alignmentReducer?.loadingDownloadPermission ?
         <div style={{display: 'flex', justifyContent: 'center'}}>
           <Spin />
         </div> :
@@ -45,7 +45,7 @@ class Download extends Component {
           extra={
             <Button
               type="primary"
-              loading={alignmentReducers?.loadingDownload}
+              loading={alignmentReducer?.loadingDownload}
               onClick={this.handleDownloadAlignment}
             >
               Download
@@ -62,7 +62,7 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  alignmentReducers: state.alignmentReducers
+  alignmentReducer: state.alignmentReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Download);
 
