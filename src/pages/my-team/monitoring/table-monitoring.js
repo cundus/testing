@@ -71,10 +71,9 @@ class TableMonitoring extends Component {
 
   getAllData = () => {
     const { team } = this.props;
-    const { result } = team;
     this.setState(
       {
-        dataSource: result,
+        dataSource: team?.result || [],
       }
     );
   }

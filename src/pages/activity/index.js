@@ -18,7 +18,7 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi, { stepKpiMonitoring }  from '../../utils/stepKpi';
+import stepKpi, { PROGRESS_MONITORING_1, stepKpiMonitoring }  from '../../utils/stepKpi';
 import { GetUserKpiState } from '../../redux/actions/user';
 
 const { confirm } = Modal;
@@ -56,7 +56,7 @@ class Activity extends Component {
     const {
       GetThreadActivity,
       GetActivityStatus,
-      userReducer,
+      authReducer,
       doGetKpiList,
       match,
       GetMyKpiState
@@ -66,7 +66,7 @@ class Activity extends Component {
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
     GetMyKpiState();
-    const isSuperior = (userId !== userReducer.result.user.userId)
+    const isSuperior = (userId !== authReducer?.userId)
     if(isSuperior) {
       await doGetKpiList(userId);
     }
@@ -185,7 +185,7 @@ class Activity extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
-              editable={this.props.step.currentStep === stepKpi[2]}
+              editable={this.props.step.currentStep === PROGRESS_MONITORING_1}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               userId={userId}
@@ -218,11 +218,11 @@ class Activity extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers,
-  userReducer: state.userReducer,
+  activityThread: state.ActivityReducer,
+  activityStatus: state.ActivityStatusReducer,
+  authReducer: state.authReducer,
   kpiReducer: state.kpiReducer,
-  step: state.userKpiStateReducers
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

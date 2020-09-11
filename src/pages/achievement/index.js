@@ -57,14 +57,14 @@ class Achievement extends Component {
       GetListAchivement,
       match,
       doGetKpiList,
-      userReducer
+      authReducer
     } = this.props;
     const { params } = match;
     const { idAchievement, userId } = params;
     await GetListAchivement(idAchievement, userId);
     const activities = this.props.achievementThread.achievements;
     let dataSource = [];
-    const isSuperior = (userId !== userReducer.result.user.userId)
+    const isSuperior = (userId !== authReducer?.userId)
     if (activities?.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
@@ -210,10 +210,10 @@ class Achievement extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  achievementThread: state.AchievementReducers,
-  userReducer: state.userReducer,
+  achievementThread: state.AchievementReducer,
+  authReducer: state.authReducer,
   kpiReducer: state.kpiReducer,
-  step: state.userKpiStateReducers
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

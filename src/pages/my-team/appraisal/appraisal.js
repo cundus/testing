@@ -18,10 +18,9 @@ class Appraisal extends Component {
 
   componentDidMount() {
     const {
-      userReducer
+      authReducer
     } = this.props;
-    const { user } = userReducer.result;
-    this.fetchAppraisalTeam(user.userId);
+    this.fetchAppraisalTeam(authReducer?.userId);
   }
 
   fetchAppraisalTeam = async (id) => {
@@ -99,8 +98,8 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  appraisal: state.AppraisalReducers,
-  userReducer: state.userReducer
+  appraisal: state.AppraisalReducer,
+  authReducer: state.authReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Appraisal);
 

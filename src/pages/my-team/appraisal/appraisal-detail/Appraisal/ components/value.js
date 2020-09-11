@@ -193,9 +193,8 @@ class Value extends Component {
       onSuccess, onError, file
     } = options;
     const {
-      attachFile, userR, getOwnValues
+      attachFile, authReducer, getOwnValues
     } = this.props;
-    const { user } = userR.result;
     const fileContent = await file.data;
     const b64 = fileContent.replace(/^data:.+;base64,/, '');
     const data = {
@@ -215,7 +214,7 @@ class Value extends Component {
       if (!kpiR.loadingAttach) {
         if (kpiR.statusAttach === Success) {
           onSuccess(true, file);
-          getOwnValues(user.userId, true);
+          getOwnValues(authReducer?.userId, true);
           message.success(`"${file.name}" has been uploaded`);
         } else {
           message.warning(`Sorry, ${kpiR.messageAttach}`);
@@ -309,7 +308,7 @@ class Value extends Component {
 
 const mapStateToProps = (state) => ({
   kpiR: state.kpiReducer,
-  userR: state.userReducer
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -42,7 +42,7 @@ import {
 import { actionGetNotifications } from '../../../../../redux/actions';
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
-import stepKpi from '../../../../../utils/stepKpi';
+import stepKpi, { PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
 
 const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
@@ -73,10 +73,9 @@ class Appraisal extends Component {
   }
 
   componentDidMount() {
-    const { userReducer, match, step } = this.props;
+    const { authReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducer.result;
-    if (user.userId === params.userId) {
+    if (authReducer.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
       } else {
@@ -588,8 +587,7 @@ class Appraisal extends Component {
                           initialValue: dataKpiRating.rating || undefined
                         })(
                           <Select
-                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                            disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
                             style={{ width: 200 }}
                             placeholder="Propose Rating"
                           >
@@ -641,8 +639,7 @@ class Appraisal extends Component {
                           initialValue: dataKpiRating.rating || undefined
                         })(
                           <Select
-                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                          disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
                             style={{ width: 200 }} placeholder="Propose Rating"
                           >
                             {dataProposeRating.map((item, index) => {
@@ -815,8 +812,8 @@ class Appraisal extends Component {
 
 const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
-  userReducer: state.userReducer,
-  step: state.userKpiStateReducers
+  authReducer: state.authReducer,
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -69,11 +69,10 @@ class Appraisal extends Component {
 
   getData = async (e) => {
     const {
-      userReducer
+      authReducer
     } = this.props;
-    const { user } = userReducer.result;
-    this.getOwnKpiList(user.userId);
-    this.getOwnValues(user.userId);
+    this.getOwnKpiList(authReducer?.userId);
+    this.getOwnValues(authReducer?.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -289,15 +288,14 @@ class Appraisal extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doAssessAll(data);
-            const { kpiReducer, userReducer } = this.props;
-            const { user } = userReducer.result;
+            const { kpiReducer, authReducer } = this.props;
             const { loadingAssess, statusAssess, messageAssess } = kpiReducer;
             if (!loadingAssess) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                 this.setState({
                   loadingKpis: true
                 });
-                this.getOwnKpiList(user.userId);
+                this.getOwnKpiList(authReducer?.userId);
                 message.success('Your Assessment has been saved');
                 if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                   message.warning(`Sorry, ${messageAssess}`);
@@ -350,9 +348,8 @@ class Appraisal extends Component {
 
   handleSave = () => {
     const {
-      doSaveValues, userReducer, form
+      doSaveValues, authReducer, form
     } = this.props;
-    const { user } = userReducer.result;
     const {
       dataValueList
     } = this.state;
@@ -374,12 +371,12 @@ class Appraisal extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSaveValues(user.userId, data);
+            await doSaveValues(authReducer?.userId, data);
             const { kpiReducer } = this.props;
             if (!kpiReducer.loadingSaveValues) {
               if (kpiReducer.statusSaveValues === Success) {
                 message.success('Your Values has been saved');
-                this.getOwnValues(user.userId);
+                this.getOwnValues(authReducer?.userId);
               } else {
                 message.warning(`Sorry, ${kpiReducer.messageSaveValues}`);
               }
@@ -394,9 +391,8 @@ class Appraisal extends Component {
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
-      doSaveValues, userReducer, form, doAssessAll, submitNext, getNotifications
+      doSaveValues, authReducer, form, doAssessAll, submitNext, getNotifications
     } = this.props;
-    const { user } = userReducer.result;
     // assessment
     const assessment = [];
     dataKpis.map((item) => {
@@ -445,7 +441,7 @@ class Appraisal extends Component {
             title: 'Are you sure?',
             onOk: async () => {
               await doAssessAll(dataAssessment);
-              await doSaveValues(user.userId, dataValues);
+              await doSaveValues(authReducer?.userId, dataValues);
               this.setState({
                 loadingKpis: true
               });
@@ -463,7 +459,7 @@ class Appraisal extends Component {
               if (!loadingAssess && !loadingSaveValues) {
                 if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                   if (statusSaveValues === Success) {
-                    await submitNext(user.userId);
+                    await submitNext(authReducer?.userId);
                     this.getData();
                     getNotifications();
                     message.success('Your Appraisal has been sent to your Manager');
@@ -793,7 +789,7 @@ class Appraisal extends Component {
 
 const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
-  userReducer: state.userReducer
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

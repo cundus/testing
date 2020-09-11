@@ -47,12 +47,11 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducer, getLatestGoalKpi
+      authReducer, getLatestGoalKpi
     } = this.props;
-    const { user } = userReducer.result;
     getLatestGoalKpi();
-    this.getOwnKpiList(user.userId);
-    this.getManagerKpiList(user.userId);
+    this.getOwnKpiList(authReducer?.userId);
+    this.getManagerKpiList(authReducer?.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -157,10 +156,9 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducer, stepChange, form, ownkpiReducer
+      doSavingKpi, authReducer, stepChange, form, ownkpiReducer
     } = this.props;
     const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
-    const { user } = userReducer.result;
     const {
       dataOwn,
       dataSelectedCascade
@@ -178,7 +176,7 @@ class CreateKPI extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSavingKpi(data, user.userId);
+            await doSavingKpi(data, authReducer?.userId);
             const { savekpiReducer } = this.props;
             const { status, statusMessage } = savekpiReducer;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
@@ -335,7 +333,8 @@ const mapStateToProps = (state) => ({
   managerkpiReducer: state.managerKpi,
   savekpiReducer: state.saveKpi,
   kpiReducer: state.kpiReducer,
-  userReducer: state.userReducer
+  authReducer: state.authReducer,
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

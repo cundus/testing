@@ -46,13 +46,12 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducer, getLatestGoalKpi, step
+      authReducer, getLatestGoalKpi, step
     } = this.props;
-    const { user } = userReducer.result;
     if (step.currentStep === stepKpi[2]) {
       getLatestGoalKpi();
-      this.getOwnKpiList(user.userId);
-      this.getManagerKpiList(user.userId);
+      this.getOwnKpiList(authReducer?.userId);
+      this.getManagerKpiList(authReducer?.userId);
     } else {
       this.props.history.push('/monitoring');
     }
@@ -267,11 +266,10 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducer, stepChange, form
+      doSavingKpi, authReducer, stepChange, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
     const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducer;
-    const { user } = userReducer.result;
     const {
       // tab,
       dataOwn,
@@ -336,7 +334,7 @@ class CreateKPI extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSavingKpi(data, user.userId);
+            await doSavingKpi(data, authReducer?.userId);
             const { kpiReducer } = this.props;
             if (kpiReducer.statusSaveKPI === Success || kpiReducer.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
               message.success('Your KPI has been saved');
@@ -526,8 +524,8 @@ const mapStateToProps = (state) => ({
   managerkpiReducer: state.managerKpi,
   savekpiReducer: state.saveKpi,
   kpiReducer: state.kpiReducer,
-  userReducer: state.userReducer,
-  step: state.userKpiStateReducers
+  authReducer: state.authReducer,
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

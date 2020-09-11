@@ -42,10 +42,9 @@ class MonitorKPI extends Component {
   }
 
   componentDidMount() {
-    const { userReducer, match, step } = this.props;
+    const { authReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducer.result;
-    if (user.userId === params.userId) {
+    if (authReducer?.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
       } else if(step.currentStep === stepKpi[2]) {
@@ -59,10 +58,9 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { userReducer, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
+    const { authReducer, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
     const { params } = match;
     const { userId } = params;
-    const { user } = userReducer.result;
     getLatestGoalKpi();
     doGetStep()
     if (userId) {
@@ -72,7 +70,7 @@ class MonitorKPI extends Component {
         isSuperior: true
       })
     } else {
-      await getKpiList(user.userId);
+      await getKpiList(authReducer?.userId);
       this.setState({
         isSuperior: false
       })
@@ -122,7 +120,7 @@ class MonitorKPI extends Component {
     });
     this.setState({
       dataSource: newData,
-      userId: user.userId,
+      userId: authReducer?.userId,
       challengeYour: challenge === '----------' ? '' : challenge
     });
     this.liveCount(newData);
@@ -326,9 +324,9 @@ class MonitorKPI extends Component {
 
 const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
-  userReducer: state.userReducer,
-  step: state.userKpiStateReducers,
-  monitoring: state.monitoringReducers
+  authReducer: state.authReducer,
+  step: state.userKpiStateReducer,
+  monitoring: state.monitoringReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
