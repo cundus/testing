@@ -19,3 +19,11 @@ export const getPrevKpiByFormId = (userId, formTemplateId) => customAxios({
     Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   }
 });
+
+export const getMyTeams = () => customAxios({
+  url: `/user/team/me`,
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  }
+});

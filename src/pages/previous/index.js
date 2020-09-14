@@ -61,10 +61,9 @@ class CreateKPI extends Component {
     const { doGetKpiFormId } = this.props;
     await doGetKpiFormId(userId, formId);
     const { previousKpiReducer } = this.props;
-    console.log(previousKpiReducer?.dataKpiByForm)
     const newData = kpiGetProcess(
-      previousKpiReducer?.dataKpiByForm?.kpiList,
-      previousKpiReducer?.dataKpiByForm?.labelList
+      previousKpiReducer?.dataKpiByForm?.kpiList || [],
+      previousKpiReducer?.dataKpiByForm?.labelList || []
     );
     this.setState({
       dataKpiByForm: newData,
@@ -73,8 +72,8 @@ class CreateKPI extends Component {
   };
 
   selectFormTemplate = (value) =>{
-    const { authReducer } = this.props;
-    this.getKpiList(authReducer?.userId, value)
+    const { authReducer, match} = this.props;
+    this.getKpiList(match?.params?.userId || authReducer?.userId, value)
     this.setState({
       selectedForm: value
     })
@@ -110,9 +109,7 @@ class CreateKPI extends Component {
           {!loading ? (
             <Previous
               dataSource={dataKpiByForm}
-              dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList}
-              selectFormTemplate={selectFormTemplate}
-              selectedForm={selectedForm}
+              dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}
             />
           ) : (
             <center>

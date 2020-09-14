@@ -64,9 +64,10 @@ class Previous extends Component {
 
   render() {
     const {
-      dataSource
+      dataSource,
+      loading
     } = this.props;
-    const { columns, loading } = this.state;
+    const { columns } = this.state;
     return (
       <div>
         <DataTable

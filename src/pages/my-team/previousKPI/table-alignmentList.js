@@ -12,20 +12,21 @@ class TableAlignment extends Component {
       {
         title: 'Avatar',
         align: 'center',
-        placeholder: 'Session ID'
+        placeholder: 'userId',
+        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`}/>)
       },
       {
-        title: 'Name',
-        dataIndex: 'sessionName',
+        title: `Employee's Name`,
+        dataIndex: 'firstName',
         align: 'center',
-        placeholder: 'Session Name',
-        render: (text) => (
-          <p>Brooke Brown</p>
+        placeholder: 'Name',
+        render: (text,record) => (
+        <p>{text} {record?.lastName}</p>
         )
       },
       {
         title: 'Action',
-        dataIndex: 'sessionId',
+        dataIndex: 'userId',
         align: 'center',
         placeholder: 'action',
         action: true,
@@ -38,10 +39,6 @@ class TableAlignment extends Component {
         )
       }
     ];
-
-    this.state = {
-      dataSource: []
-    };
   }
 
 
