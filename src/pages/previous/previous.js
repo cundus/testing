@@ -62,36 +62,17 @@ class Previous extends Component {
     });
   }
 
-
-  checkStatus = (record) => {
-    const { dataSelectedCascade } = this.props;
-    const dataChecking = dataSelectedCascade.filter((item) => item.kpi === record.kpi);
-    if (dataChecking.length !== 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   render() {
     const {
-      dataSource, handleSaveDraft, handleError, dataSelectedCascade
+      dataSource
     } = this.props;
     const { columns, loading } = this.state;
     return (
       <div>
-        <Select
-          placeholder="Select Performance"
-          style={{minWidth: 300}}
-        >
-          {/* <Select.Option></Select.Option> */}
-        </Select>
         <DataTable
           columns={columns}
           loading={loading}
           datasource={dataSource}
-          handleerror={handleError}
-          // it (lowercase) handle vdom warn, but another vdom valid function err show
         />
       </div>
     );
