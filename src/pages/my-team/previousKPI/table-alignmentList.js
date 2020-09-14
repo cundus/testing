@@ -12,6 +12,7 @@ class TableAlignment extends Component {
       {
         title: 'Avatar',
         align: 'center',
+        dataIndex: 'userId',
         placeholder: 'userId',
         render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`}/>)
       },

@@ -8,7 +8,7 @@ import {
   message,
   Skeleton,
   Spin,
-  Form
+  Form, Select
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -20,9 +20,10 @@ import Cascade from './components/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 import globalStyle from '../../../../styles/globalStyles';
 import kpiSendProcess from '../../../../utils/kpiSendProcess';
-import { kpiGetManagerProcess } from '../../../../utils/kpiGetProcess';
+import { kpiGetManagerProcess, kpiGetProcess } from '../../../../utils/kpiGetProcess';
 import { sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 import Previous from './components/previous';
+import { actionGetFormTemplates, actionGetPrevKpiByFormId } from '../../../../redux/actions/previousKpi';
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -35,8 +36,10 @@ class CreateKPI extends Component {
       tab: '1',
       dataOwnId: 0,
       dataManagerKpi: [],
+      dataPreviousKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
+      loadingPrevious: true,
       loadingManager: true,
       weightTotal: 0,
       weightTotalErr: true
@@ -49,12 +52,23 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      authReducer, getLatestGoalKpi
+      authReducer, getLatestGoalKpi, doGetFormTemplates
     } = this.props;
     getLatestGoalKpi();
     this.getOwnKpiList(authReducer.userId);
     this.getManagerKpiList(authReducer.userId);
+    await doGetFormTemplates(true);
+    const { previousKpiReducer } = this.props;
+    this.selectFormTemplate(previousKpiReducer?.dataFormTemplates[0]?.formTemplateId)
   };
+
+  selectFormTemplate = (value) =>{
+    const { authReducer, match} = this.props;
+    this.getPreviousKPI(authReducer?.userId, value)
+    this.setState({
+      selectedForm: value
+    })
+  }
 
   getOwnKpiList = async (id) => {
     const {
@@ -128,6 +142,23 @@ class CreateKPI extends Component {
       loadingManager: false
     });
   }
+
+  getPreviousKPI = async (userId, formId) => {
+    this.setState({
+      loadingPrevious: true,
+    });
+    const { doGetKpiFormId } = this.props;
+    await doGetKpiFormId(userId, formId);
+    const { previousKpiReducer } = this.props;
+    const newData = kpiGetProcess(
+      previousKpiReducer?.dataKpiByForm?.kpiList || [],
+      previousKpiReducer?.dataKpiByForm?.labelList || []
+    );
+    this.setState({
+      dataPreviousKpi: newData,
+      loadingPrevious: false,
+    });
+  };
 
   liveCount = (data) => {
     let totalWeight = 0;
@@ -214,7 +245,7 @@ class CreateKPI extends Component {
     } else {
       const newData = [...dataSelectedCascade, record];
       this.setState({
-        dataSelectedCascade: [...dataSelectedCascade, record]
+        dataSelectedCascade: [...dataSelectedCascade, { ...record, id: 0}]
       });
       this.liveCount([...dataOwn, ...newData]);
     }
@@ -291,7 +322,10 @@ class CreateKPI extends Component {
       loadingManager,
       tab,
       weightTotalErr,
-      weightTotal
+      weightTotal,
+      selectedForm,
+      loadingPrevious,
+      dataPreviousKpi
     } = this.state;
     const {
       handleAddRow,
@@ -299,9 +333,10 @@ class CreateKPI extends Component {
       handleDeleteRow,
       handleSaveDraft,
       handleSelectData,
-      handleError
+      handleError,
+      selectFormTemplate
     } = this;
-    const { ownkpiReducer, form, managerkpiReducer } = this.props;
+    const { ownkpiReducer, form, managerkpiReducer, previousKpiReducer } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics
     } = ownkpiReducer;
@@ -352,10 +387,19 @@ class CreateKPI extends Component {
               tab="Copy From Previous KPI"
               key="3"
             >
-              {!loadingManager ?
+              <Select
+                placeholder="Select Performance"
+                style={{minWidth: 500}}
+                value={selectedForm||undefined}
+                onChange={selectFormTemplate}
+              >
+                {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
+                  <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
+              </Select>
+              {!loadingPrevious ?
                 <Previous
-                  dataSource={dataManagerKpi}
-                  dataMetrics={dataKpiManagerMetrics}
+                  dataSource={dataPreviousKpi}
+                  dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}
                   dataSelectedCascade={dataSelectedCascade}
                   handleError={handleError}
                   handleSaveDraft={handleSaveDraft}
@@ -388,14 +432,18 @@ const mapStateToProps = (state) => ({
   savekpiReducer: state.saveKpi,
   kpiReducer: state.kpiReducer,
   userReducer: state.userReducer,
-  authReducer: state.authReducer
+  authReducer: state.authReducer,
+  previousKpiReducer: state.previousKpiReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
   getKpiList: (id) => dispatch(actionGetKPI(id)),
   getKpiManagerList: (id) => dispatch(actionGetManagerKPI(id)),
-  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI())
+  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI()),
+  doGetFormTemplates: (ellgibleToCopy) =>
+    dispatch(actionGetFormTemplates(ellgibleToCopy)),
+  doGetKpiFormId: (userId, formId) => dispatch(actionGetPrevKpiByFormId(userId, formId))
 });
 
 const connectToComponent = connect(

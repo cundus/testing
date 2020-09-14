@@ -9,6 +9,7 @@ import {
   Select,
   Spin,
   Form,
+  Result
 } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -106,7 +107,14 @@ class CreateKPI extends Component {
           {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
             <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
         </Select>
-          {!loading ? (
+          {!loading ? 
+          (previousKpiReducer?.errorKpiByForm ? 
+            <Result 
+              status={'error'}
+              title={previousKpiReducer?.statusKpiByForm}
+              subTitle={"Sorry, "+previousKpiReducer?.messageKpiByForm}
+            />
+            :
             <Previous
               dataSource={dataKpiByForm}
               dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}

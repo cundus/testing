@@ -98,14 +98,9 @@ class Previous extends Component {
       dataSource, handleSaveDraft, handleError, dataSelectedCascade
     } = this.props;
     const { columns, loading } = this.state;
+    const dataSelect = dataSelectedCascade?.filter((item)=>!item?.cascadeType)
     return (
       <div>
-        <Select
-          placeholder="Select Performance"
-          style={{minWidth: 300}}
-        >
-          {/* <Select.Option></Select.Option> */}
-        </Select>
         <DataTable
           columns={columns}
           loading={loading}
@@ -117,7 +112,7 @@ class Previous extends Component {
           <Button
             id="save-draft"
             type="primary"
-            disabled={dataSelectedCascade.length === 0}
+            disabled={dataSelect.length === 0}
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >

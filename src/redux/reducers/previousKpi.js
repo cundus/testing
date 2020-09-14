@@ -1,4 +1,7 @@
 import {
+  GET_ALL_MY_TEAM,
+  GET_ALL_MY_TEAM_FAILED,
+  GET_ALL_MY_TEAM_SUCCESS,
   GET_FORM_TEMPLATES,
   GET_FORM_TEMPLATES_FAILED,
   GET_FORM_TEMPLATES_SUCCESS,
@@ -17,13 +20,11 @@ export default (state = init, action) => {
         ...action
       };
     case GET_FORM_TEMPLATES_SUCCESS:
-      
       return {
         ...state,
         ...action
       };
     case GET_FORM_TEMPLATES_FAILED:
-      
       return {
         ...state,
         ...action
@@ -39,10 +40,23 @@ export default (state = init, action) => {
         ...state,
         ...action
       };
-    case GET_KPI_BY_FORM_ID_FAILED
-    
-    :
+    case GET_KPI_BY_FORM_ID_FAILED:
+      return {
+        ...state,
+        ...action
+      };
+    case GET_ALL_MY_TEAM:
+      return {
+        ...state,
+        ...action
+      };
+    case GET_ALL_MY_TEAM_SUCCESS:
       
+      return {
+        ...state,
+        ...action
+      };
+    case GET_ALL_MY_TEAM_FAILED:
       return {
         ...state,
         ...action

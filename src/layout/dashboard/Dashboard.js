@@ -74,7 +74,6 @@ class Dashboard extends React.Component {
   getDetailUser = async (token) => {
     const { doLoginByADToken, doGetCurrStep } = this.props;
     await doLoginByADToken(token);
-    const { getNotifications } = this.props;
     const { authReducer } = this.props;
     if (authReducer?.statusLoginCode === SUCCESS) {
       await doGetCurrStep();

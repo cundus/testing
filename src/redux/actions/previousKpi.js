@@ -1,5 +1,8 @@
-import { getFormTemplates, getPrevKpiByFormId } from "../../service/previousKpi";
+import { getFormTemplates, getMyTeams, getPrevKpiByFormId } from "../../service/previousKpi";
 import {
+  GET_ALL_MY_TEAM,
+  GET_ALL_MY_TEAM_FAILED,
+  GET_ALL_MY_TEAM_SUCCESS,
   GET_FORM_TEMPLATES,
   GET_FORM_TEMPLATES_FAILED,
   GET_FORM_TEMPLATES_SUCCESS,
@@ -106,6 +109,57 @@ export const actionGetPrevKpiByFormId = (userId, formId) => async (dispatch) => 
         messageKpiByForm: "Something wrong",
         errorKpiByForm: error,
         dataKpiByForm: [],
+      });
+    }
+  }
+};
+
+export const actionGetAllMyTeam = () => async (dispatch) => {
+  dispatch({
+    type: GET_ALL_MY_TEAM,
+    loadingMyTeam: true,
+    statusMyTeam: null,
+    messageMyTeam: null,
+    dataMyTeam: [],
+  });
+  try {
+    const payload = await getMyTeams();
+    if (payload?.data?.status_code === SUCCESS) {
+      dispatch({
+        type: GET_ALL_MY_TEAM_SUCCESS,
+        loadingMyTeam: false,
+        statusMyTeam: payload?.data?.status_code,
+        messageMyTeam: payload?.data?.status_description,
+        dataMyTeam: payload?.data?.result,
+      });
+    } else {
+      dispatch({
+        type: GET_ALL_MY_TEAM_FAILED,
+        loadingMyTeam: false,
+        statusMyTeam: payload?.data?.status_code,
+        messageMyTeam: payload?.data?.status_description,
+        dataMyTeam: [],
+        errorMyTeam: payload,
+      });
+    }
+  } catch (error) {
+    if (error?.response?.data) {
+      dispatch({
+        type: GET_ALL_MY_TEAM_FAILED,
+        loadingMyTeam: false,
+        statusMyTeam: error?.response?.data?.status,
+        messageMyTeam: error?.response?.data?.error || "Something wrong",
+        errorMyTeam: error,
+        dataMyTeam: [],
+      });
+    } else {
+      dispatch({
+        type: GET_ALL_MY_TEAM_FAILED,
+        loadingMyTeam: false,
+        statusMyTeam: null,
+        messageMyTeam: "Something wrong",
+        errorMyTeam: error,
+        dataMyTeam: [],
       });
     }
   }

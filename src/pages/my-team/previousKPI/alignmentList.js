@@ -5,29 +5,29 @@ import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 import TableAlignment from './table-alignmentList';
 import globalStyle from "../../../styles/globalStyles";
-import { getAlignmentSession } from "../../../redux/actions/alignment";
+import { actionGetAllMyTeam } from "../../../redux/actions/previousKpi";
 
 const { Text } = Typography;
 
 class AlignmentList extends Component {
   componentDidMount() {
-    const { doGetAlignment } = this.props;
-    doGetAlignment();
+    const { doGetAllMyTeam } = this.props;
+    doGetAllMyTeam();
   }
 
   render() {
-    const { alignmentReducer } = this.props;
+    const { previousKpiReducer } = this.props;
     return(
       <div style={globalStyle.contentContainer}>
         {
-          !alignmentReducer?.loading ?
+          !previousKpiReducer?.loadingMyTeam ?
             <div>
                <div>
                 <Divider />
                 <Text strong>My Team - Previous KPI</Text>
                 <Divider />
               </div>
-             <TableAlignment team={alignmentReducer?.data || []} />
+             <TableAlignment team={previousKpiReducer?.dataMyTeam || []} />
             </div>:
             <center>
               <Spin/>
@@ -39,11 +39,11 @@ class AlignmentList extends Component {
 }
 
 const mapDispatchtoProps = (dispatch) => ({
-  doGetAlignment: () => dispatch(getAlignmentSession())
+  doGetAllMyTeam: () => dispatch(actionGetAllMyTeam())
 });
 
 const mapStateToProps = (state) => ({
-  alignmentReducer: state.alignmentReducer
+  previousKpiReducer: state.previousKpiReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(AlignmentList);
 

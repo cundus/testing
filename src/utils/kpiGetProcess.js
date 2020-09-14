@@ -64,7 +64,7 @@ const kpiGetProcess = (dataKpi, dataKpiMetrics) => {
     const data = {
       key: itemKpi.id,
       id: itemKpi.id,
-      cascadeType: itemKpi.cascadeType,
+      cascadeType: null,
       cascadeName: itemKpi.cascadeName,
       kpi: itemKpi.name,
       baseline: itemKpi.baseline,
