@@ -198,7 +198,14 @@ class CreateKPI extends Component {
       dataOwn,
       dataSelectedCascade
     } = this.state;
-    const dataSaving = dataOwn.concat(dataSelectedCascade);
+    let dataSaving = []
+    if (dataOwn.length === 1) {
+      if (dataOwn[0]?.kpi) {
+        dataSaving = dataOwn.concat(dataSelectedCascade);
+      } else {
+        dataSaving = dataSelectedCascade;
+      }
+    }
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
       kpiList: newDataKpi,
