@@ -108,14 +108,7 @@ class CreateKPI extends Component {
           {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
             <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
         </Select>
-          {!loading ? 
-          (previousKpiReducer?.statusKpiByForm !== SUCCESS ? 
-            <Result 
-              status={'error'}
-              title={previousKpiReducer?.statusKpiByForm}
-              subTitle={"Sorry, "+previousKpiReducer?.messageKpiByForm}
-            />
-            :
+          {!loading ? (
             <Previous
               dataSource={dataKpiByForm}
               dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}
