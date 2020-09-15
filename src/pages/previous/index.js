@@ -46,7 +46,12 @@ class CreateKPI extends Component {
   }
 
   componentDidMount() {
-    this.fetchAllData();
+    const { authReducer, match, history} = this.props;
+    if((match?.params?.userId === authReducer?.userId) && (history.location.pathname.includes("/my-team/previous-kpi"))) {
+      this.props.history.push('/previous-kpi')
+    } else {
+      this.fetchAllData();
+    }
   }
 
   fetchAllData = async () => {
@@ -90,12 +95,14 @@ class CreateKPI extends Component {
     const {
       selectFormTemplate
     } = this;
-    const { previousKpiReducer } = this.props;
+    const { previousKpiReducer, history } = this.props;
     return (
       <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
         <div>
           <Divider />
-          <Text strong>Previous KPI </Text>
+          {history.location.pathname.includes("/my-team/previous-kpi")?
+          <Text strong>{`Previous KPI ${previousKpiReducer?.dataKpiByForm?.user?.firstName ? "- "+previousKpiReducer?.dataKpiByForm?.user?.firstName : ""} ${previousKpiReducer?.dataKpiByForm?.user?.lastName || ""} `}</Text>:
+          <Text strong>Previous KPI </Text>}
           <Divider />
         </div>
         <div>
