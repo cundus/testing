@@ -23,6 +23,7 @@ import { actionGetFormTemplates, actionGetPrevKpiByFormId } from "../../redux/ac
 import {
   Success,
   FAILED_SAVE_CHALLENGE_YOURSELF,
+  SUCCESS
 } from "../../redux/status-code-type";
 import globalStyle from "../../styles/globalStyles";
 import kpiSendProcess from "../../utils/kpiSendProcess";
@@ -108,7 +109,7 @@ class CreateKPI extends Component {
             <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
         </Select>
           {!loading ? 
-          (previousKpiReducer?.errorKpiByForm ? 
+          (previousKpiReducer?.statusKpiByForm !== SUCCESS ? 
             <Result 
               status={'error'}
               title={previousKpiReducer?.statusKpiByForm}
