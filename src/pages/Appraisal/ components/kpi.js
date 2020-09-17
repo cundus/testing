@@ -145,7 +145,7 @@ class KPI extends Component {
             >
               Assess
             </Button>
-            <ModalAssessment
+            {isModalShow === record.id &&<ModalAssessment
               form={form}
               dataSource={dataSource}
               isModalShow={isModalShow === record.id}
@@ -156,7 +156,7 @@ class KPI extends Component {
               handleAssesLoading={handleAssesLoading}
               getOwnKpiList={getOwnKpiList}
               handleChangeAssessment={handleChangeField}
-            />
+            />}
             <br />
             {error && <Text type="danger">is required</Text>}
           </div>

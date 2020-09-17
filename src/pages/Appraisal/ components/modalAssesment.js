@@ -107,7 +107,7 @@ class modalAssessment extends Component {
                   {
                     validator: async (rule, value, callback, source) => {
                       if (value === 0) {
-                        callback('Value must be not a zero');
+                        callback('Value must be more than 0');
                       }
                     }
                   }
