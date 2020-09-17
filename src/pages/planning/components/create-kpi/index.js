@@ -205,6 +205,8 @@ class CreateKPI extends Component {
       } else {
         dataSaving = dataSelectedCascade;
       }
+    } else {
+      dataSaving = dataOwn.concat(dataSelectedCascade);
     }
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
