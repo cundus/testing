@@ -8,8 +8,8 @@ export const EMP_ACKNOWLEDGEMENT = 'Emp Acknowledgement';
 export const COMPLETED = 'Completed';
 export const PROGRESS_MONITORING_1 = 'Progress Monitoring 1';
 export const PROGRESS_MONITORING_2 = 'Progress Monitoring 2';
-export const PROGRESS_REVIEW_ALIGNMENT_1 = 'Progress Review Alignment 1';
-export const PROGRESS_REVIEW_ALIGNMENT_2 = 'Progress Review Alignment 2';
+export const PROGRESS_REVIEW_ALIGNMENT_1 = 'Performance Review Alignment 1';
+export const PROGRESS_REVIEW_ALIGNMENT_2 = 'Performance Review Alignment 2';
 
 const stepKpi = [
   EMP_GOAL_SETTING,
