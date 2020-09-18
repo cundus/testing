@@ -575,6 +575,7 @@ class Appraisal extends Component {
           <Text strong>Final Appraisal </Text>
           <Divider />
           <center>
+            {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
@@ -585,7 +586,7 @@ class Appraisal extends Component {
                   desc="Your final Rating based on Score"
                 />
               </Col>
-            </Row>
+            </Row>}
           </center>
           <br />
           <div>

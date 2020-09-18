@@ -42,7 +42,8 @@ import {
 import { actionGetNotifications } from '../../../../../redux/actions';
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
-import stepKpi, { PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
+import stepKpi, { COMPLETED, MANAGER_ACKNOWLEDMENT, PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
+import { EMP_ACKNOWLEDGEMENT } from '../../../../../redux/action.type';
 
 const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
@@ -393,8 +394,8 @@ class Appraisal extends Component {
     form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
         confirm({
-          title: 'Are you sure?',
-          content: `Are you sure want to approve ${teamName}'s Appraisal?`,
+          title: `Are you sure want to approve ${teamName}'s Appraisal?`,
+          content: "Make sure you have given feedback on both KPI's & Values before approving it",
           okText: 'Approve',
           onOk: async () => {
             await approveAppraisal(params.userId, data);
@@ -550,16 +551,17 @@ class Appraisal extends Component {
           </Skeleton>
           <Divider />
           <center>
+            {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
                   boxRateColor="inherit"
-                  title="Your Rating"
+                  title={`${teamName && teamName+"'s"} Rating`}
                   rate={dataKpiRating.rating}
-                  desc="Your final Rating based on Score"
+                  desc={`${teamName && teamName+"'s"} final Rating based on Score`}
                 />
               </Col>
-            </Row>
+            </Row>}
           </center>
           <br />
           <div>

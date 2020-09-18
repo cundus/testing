@@ -1,6 +1,7 @@
 import { GET_ALIGNMENTS, GET_ALIGNMENTS_SUCCESS, GET_ALIGNMENTS_FAILED, GET_ALIGNMENTS_DETAIL, GET_ALIGNMENTS_DETAIL_SUCCESS, GET_ALIGNMENTS_DETAIL_FAILED, POST_ALIGNMENTS_DETAIL, POST_ALIGNMENTS_DETAIL_SUCCESS, POST_ALIGNMENTS_DETAIL_FAILED, GET_ALIGNMENT_DOWNLOAD, GET_ALIGNMENT_DOWNLOAD_SUCCESS, GET_ALIGNMENT_DOWNLOAD_FAILED, GET_ALIGNMENT_DOWNLOAD_PERMISSION, GET_ALIGNMENT_DOWNLOAD_PERMISSION_SUCCESS, GET_ALIGNMENT_DOWNLOAD_PERMISSION_FAILED } from "../action.type";
 import { Success } from "../status-code-type";
 import { getAlignment, getAlignmentDetail, postAlignmentDetail, getAlignmentDownloadFile, getAlignmentDownloadPermission } from "../../service/alignment";
+import moment from 'moment'
 
 export const getAlignmentSession = () => async (dispatch) => {
     dispatch({
@@ -165,12 +166,13 @@ export const doGetAlignmentDownload = () => async (dispatch) => {
     dataDownload: {}
   });
   try {
+    const timeStamp = moment().format("YYYY-MM-DD_HH-mm-ss")
     const payload = await getAlignmentDownloadFile()
     if (payload?.status === 200) {
       const url = window.URL.createObjectURL(new Blob([payload.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `calibration_data_${Date.now()}.csv`);
+      link.setAttribute('download', `calibration_data_${timeStamp}.csv`);
       document.body.appendChild(link);
       link.click();
     dispatch({

@@ -90,6 +90,10 @@ class Value extends Component {
             onRemove: this.deleteFile,
             onPreview: this.download,
             onDownload: this.download,
+            showUploadList: {
+              showDownloadIcon: true,
+              showRemoveIcon: false,
+            },
             // eslint-disable-next-line react/destructuring-assignment
             disabled: true,
             accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
