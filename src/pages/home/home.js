@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Modal, List, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import './home-styles.scss';
 import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
@@ -13,7 +13,72 @@ import FileIcon from '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
 import globalStyle from '../../styles/globalStyles';
 
+const myTeamMenus = [
+  {
+    id: 9,
+    path: '/my-team/planning/',
+    menuLevel: 2,
+    title: 'Planning',
+    parent: 'My Team',
+    icon: 'calendar',
+    theme: 'outlined',
+    description: "View My Team KPI Planning status",
+    manager: true
+  },
+  {
+    id: 10,
+    path: '/my-team/monitoring/',
+    menuLevel: 2,
+    title: 'Monitoring',
+    parent: 'My Team',
+    icon: 'stock',
+    theme: 'outlined',
+    description: "Monitoring My Team KPI",
+    manager: true
+  },
+  {
+    id: 11,
+    path: '/my-team/appraisal/',
+    menuLevel: 2,
+    title: 'Appraisal',
+    parent: 'My Team',
+    icon: 'check-square',
+    theme: 'outlined',
+    description: "Appraisal My Team KPI & Non-KPI",
+    manager: true
+  },
+  {
+    id: 12,
+    path: '/my-team/performance-review-alignment/',
+    menuLevel: 2,
+    title: 'Performance Review Alignment',
+    parent: 'My Team',
+    icon: 'pie-chart',
+    theme: 'outlined',
+    disabled: true,
+    description: "View My Team Performance Review Alignment",
+    employee: true
+  },
+  {
+    id: 13,
+    path: '/my-team/previous-kpi/',
+    menuLevel: 2,
+    title: 'Previous KPI',
+    parent: 'My Team',
+    icon: 'bar-chart',
+    theme: 'outlined',
+    description: "View My Team Previous KPI",
+    manager: true
+  },]
+
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModalShow: false,
+    };
+  }
+
   async componentDidMount() {
     // await this.props.GetMyKpiState();
   }
@@ -114,17 +179,45 @@ class Home extends Component {
             />
             <h1>My Team</h1>
             <p className="qoute-text">View your team&apos;s performance</p>
-            <Link to="/my-team/planning">
               <Button
                 className="homeBtn  greenBtn"
                 shape="round"
+                onClick={()=>this.setState({isModalShow: true})}
                 style={{ fontWeight: 'bold' }}
               >
                 View My Team Performance
               </Button>
-            </Link>
           </Col>
         </Row>
+      <Modal
+        title="My Team Performance"
+        visible={this.state.isModalShow}
+        afterClose={()=>this.setState({isModalShow: false})}
+        onCancel={()=>this.setState({isModalShow: false})}
+        footer={null}
+      >
+        <List
+          dataSource={myTeamMenus}
+          renderItem={item =>
+          <List.Item
+            onClick={()=>this.props.history.push(item.path)}
+            style={{cursor: 'pointer', borderBottom: '0px solid #e8e8e8', padding: 10, marginLeft: -10,marginRight:-10}}
+          >
+            <List.Item.Meta
+              // style={{color: '#1890ff'}}
+              avatar={
+                <Icon
+                  style={{color: 'inherit', marginTop: 5}}
+                  type={`${item.icon}`}
+                  theme={`${item.theme}`}
+                  className="dropdownItem"
+                />}
+              title={item.title}
+              description={item.description}
+            />
+          </List.Item>}
+        />
+      </Modal>
       </div>
     );
   }
