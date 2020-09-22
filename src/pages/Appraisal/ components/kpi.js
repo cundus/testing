@@ -117,7 +117,7 @@ class KPI extends Component {
       editable: false,
       width: 100,
       dataIndex: 'action',
-      render: (text, record) => {
+      render: (text, record, index) => {
         const {
           form,
           isModalShow,
@@ -128,8 +128,8 @@ class KPI extends Component {
           getOwnKpiList
         } = this.props;
         let error = false;
-        const field = form.getFieldsError([`dataKpi[${record.index}].assessment`]);
-        if (field.dataKpi[record.index].assessment) {
+        const field = form.getFieldsError([`dataKpi[${index}].assessment`]);
+        if (field.dataKpi[index].assessment) {
           error = true;
         } else {
           error = false;
@@ -145,18 +145,19 @@ class KPI extends Component {
             >
               Assess
             </Button>
-            {isModalShow === record.id &&<ModalAssessment
+            <ModalAssessment
               form={form}
               dataSource={dataSource}
               isModalShow={isModalShow === record.id}
               assessment={record.assessment}
               qualitativeOption={record.qualitativeOption}
               modalRecord={record}
+              modalIndex={index}
               showHideModal={showHideModal}
               handleAssesLoading={handleAssesLoading}
               getOwnKpiList={getOwnKpiList}
               handleChangeAssessment={handleChangeField}
-            />}
+            />
             <br />
             {error && <Text type="danger">is required</Text>}
           </div>

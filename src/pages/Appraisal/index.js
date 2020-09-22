@@ -159,6 +159,9 @@ class Appraisal extends Component {
         assesment: item.assesment
       };
     });
+    form.setFieldsValue({
+      dataKpi: dataGen
+    })
     const dataKpiCheck = form.getFieldsValue(['dataKpi']);
     if (dataKpiCheck) {
       form.setFieldsValue({
