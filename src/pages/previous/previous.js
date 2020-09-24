@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Checkbox, Select } from 'antd';
+import { Button, Checkbox, Select, Typography } from 'antd';
 import { DataTable } from '../../components';
 
 class Previous extends Component {
@@ -56,6 +56,27 @@ class Previous extends Component {
       };
       newColumns.push(data);
     });
+    const result = {
+      title: 'Result',
+      align: 'center',
+      editable: false,
+      width: 100,
+      dataIndex: 'rating',
+      render: (text, record) => {
+        let colorring = 'default';
+        if (text === 'Below') {
+          colorring = '#d1a145';
+        } else if (text === 'Meet') {
+          colorring = '#4ebf37';
+        } else if (text === 'Exceed') {
+          colorring = '#484ef0';
+        }
+        return (
+          <Typography.Text strong style={{ color: colorring }}>{text || ''}</Typography.Text>
+        );
+      }
+    };
+    newColumns.push(result);
     this.setState({
       columns: newColumns,
       loading: false

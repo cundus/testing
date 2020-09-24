@@ -71,6 +71,7 @@ const kpiGetProcess = (dataKpi, dataKpiMetrics) => {
       weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat('0'),
       achievementType: itemKpi.achievementType,
       metrics: dataKpiMetrics,
+      rating: itemKpi.rating,
       ...dataMetrics
     };
     return data;
