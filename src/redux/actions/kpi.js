@@ -75,7 +75,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll, saveAppraisal
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -875,6 +875,55 @@ export const doApproveAppraisal = (id, data) => async (dispatch) => {
   });
   try {
     const payload = await approveAppraisal(id, data);
+    if (payload.data.status_code === Success) {
+      await submitNext(id);
+      dispatch({
+        type: APPROVE_APPRAISAL_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error.response.data) {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: error.response.data.status,
+        message: error.response.data.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doSaveAppraisal = (id, data) => async (dispatch) => {
+  dispatch({
+    type: APPROVE_APPRAISAL,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await saveAppraisal(id, data);
     if (payload.data.status_code === Success) {
       await submitNext(id);
       dispatch({

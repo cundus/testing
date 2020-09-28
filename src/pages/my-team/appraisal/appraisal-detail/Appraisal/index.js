@@ -37,7 +37,7 @@ import {
   doGetProposeRating,
   doApproveAppraisal,
   doSendBackAppraisal,
-  doTeamAcknowledge
+  doTeamAcknowledge, doSaveAppraisal
 } from '../../../../../redux/actions/kpi';
 import { actionGetNotifications } from '../../../../../redux/actions';
 import { Success } from '../../../../../redux/status-code-type';
@@ -356,6 +356,66 @@ class Appraisal extends Component {
     });
   };
 
+  handleSave = () => {
+    const {
+      form, saveAppraisal, match, getNotifications
+    } = this.props;
+    const { params } = match;
+    const {
+      dataKpis, dataValueList, generalFeedbackState, teamName
+    } = this.state;
+    const kpiFeedbacks = dataKpis.map((data, index) => {
+      return {
+        id: data.id,
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
+      };
+    });
+    const valuesFeedbacks = dataValueList.map((data, index) => {
+      return {
+        valueId: data.valueId,
+        rating: data.rating,
+        comment: data.feedback
+      };
+    });
+    let rating = form.getFieldValue('proposeRating');
+    // eslint-disable-next-line react/destructuring-assignment
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
+      // eslint-disable-next-line react/destructuring-assignment
+      rating = this.props.kpiReducer.dataKpiRating.id;
+    }
+    const data = {
+      challengeOthersRatingComments: generalFeedbackState,
+      kpiFeedbacks,
+      rating,
+      valuesFeedbacks
+    };
+    confirm({
+      title: `Are you sure want to save ${teamName}'s Appraisal feedback?`,
+      okText: 'Save',
+      onOk: async () => {
+        await saveAppraisal(params.userId, data, true);
+        const {
+          kpiReducer
+        } = this.props;
+        const {
+          loadingApproveAppraisal,
+          statusApproveAppraisal,
+          messageApproveAppraisal
+        } = kpiReducer;
+        if (!loadingApproveAppraisal) {
+          if (statusApproveAppraisal === Success) {
+            this.getData();
+            message.success(`${teamName}'s Appraisal feedback has been save`);
+            getNotifications();
+          } else {
+            message.warning(`Sorry ${messageApproveAppraisal}`);
+          }
+        }
+      },
+      onCancel() {}
+    });
+  };
 
   handleApprove = () => {
     const {
@@ -780,6 +840,13 @@ class Appraisal extends Component {
                     Send Feedback
                   </Button>
                   <Button
+                    id="save"
+                    onClick={this.handleSave}
+                    style={{ margin: 10 }}
+                  >
+                    Save to draft
+                  </Button>
+                  <Button
                     id="send-manager"
                     type="primary"
                     onClick={this.handleApprove}
@@ -829,6 +896,7 @@ const mapDispatchToProps = (dispatch) => ({
   getProposeRating: () => dispatch(doGetProposeRating()),
   sendBackAppraisal: (id, data) => dispatch(doSendBackAppraisal(id, data)),
   approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data)),
+  saveAppraisal: (id, data) => dispatch(doSaveAppraisal(id, data)),
   teamAck: (data) => dispatch(doTeamAcknowledge(data)),
   getNotifications: () => dispatch(actionGetNotifications())
 });

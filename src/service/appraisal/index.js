@@ -111,6 +111,15 @@ export const approveAppraisal = (userId, data) => customAxios({
   data
 });
 
+export const saveAppraisal = (userId, data) => customAxios({
+  url: `/user/team/appraisal/save-draft/${userId}`,
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
+
 export const teamAcknowledge = (data) => customAxios({
   url: `/kpi/manager-acknowledment/${data.userId}`,
   method: 'GET',
