@@ -925,7 +925,6 @@ export const doSaveAppraisal = (id, data) => async (dispatch) => {
   try {
     const payload = await saveAppraisal(id, data);
     if (payload.data.status_code === Success) {
-      await submitNext(id);
       dispatch({
         type: APPROVE_APPRAISAL_SUCCESS,
         loading: false,
