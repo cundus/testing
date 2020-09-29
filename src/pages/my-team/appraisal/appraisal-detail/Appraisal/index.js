@@ -638,7 +638,7 @@ class Appraisal extends Component {
                       myStep={myStep}
                       handleChangeField={this.handleChangeAssessment}
                     />
-                    <Form>
+                    <Form style={{marginBottom: 10}}>
                       <Text strong>
                         {(currentStep === stepKpi[5] ||
                         currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
@@ -646,7 +646,7 @@ class Appraisal extends Component {
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
-                          initialValue: dataKpiRating.rating || undefined
+                          initialValue: (dataKpiRating.rating && dataKpiRating.id !== '-1972.0') ? dataKpiRating.rating : undefined
                         })(
                           <Select
                             disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
@@ -658,12 +658,13 @@ class Appraisal extends Component {
                             })}
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
-                          <br />
+                          
+                      </Form.Item>
                           <Text strong>
                             SUM of Weighted KPI Score :
                             {` ${this.state.scoreTotal}`}
                           </Text>
-                      </Form.Item>
+                          <br />
                     </Form>
                   </div> :
                   <Result
@@ -690,7 +691,7 @@ class Appraisal extends Component {
                       myStep={myStep}
                       optionRating={optionRating}
                     />
-                    <Form>
+                    <Form style={{marginBottom: 10}}>
                       <Text strong>
                         {(currentStep === stepKpi[5] ||
                         currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
@@ -698,7 +699,7 @@ class Appraisal extends Component {
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
-                          initialValue: dataKpiRating.rating || undefined
+                          initialValue: (dataKpiRating.rating && dataKpiRating.id !== '-1972.0') ? dataKpiRating.rating : undefined
                         })(
                           <Select
                           disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
@@ -709,12 +710,11 @@ class Appraisal extends Component {
                             })}
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
-                          <br />
+                      </Form.Item>
                           <Text strong>
                             SUM of Weighted KPI Score :
                             {` ${this.state.scoreTotal}`}
                           </Text>
-                      </Form.Item>
                     </Form>
                   </div> :
                   <Result
