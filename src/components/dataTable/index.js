@@ -225,6 +225,19 @@ class EditableCell extends React.Component {
         </Form.Item>
       );
     } else if (index === 'kpiScore') {
+      const kpiScorePlaceholder = () =>{
+        console.log(record.rating)
+        switch (record.rating) {
+          case "Below":
+            return "Input range is between >= 1.0 until < 2.0"
+          case "Meet":
+            return "Input range is between >= 2.0 until < 3.0"
+          case "Exceed":
+            return "Input range is between >= 3.0 until <= 4.0"
+          default:
+            return "KPI Achievement Score";
+        }
+      }
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
@@ -233,7 +246,7 @@ class EditableCell extends React.Component {
           })(
             <TextArea
               id={`${title}-${index}`}
-              placeholder={placeholder}
+              placeholder={kpiScorePlaceholder()}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}

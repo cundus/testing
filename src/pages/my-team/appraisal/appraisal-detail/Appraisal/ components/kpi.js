@@ -107,7 +107,6 @@ class KPI extends Component {
     const KPIAchievementScore = {
       title: 'KPI Achievement Score',
       dataIndex: 'kpiScore',
-      placeholder: 'Enter KPI Achievement Score',
       align: 'center',
       width: 130,
       editable: myStep

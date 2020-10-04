@@ -4,7 +4,8 @@ export const metricValidator = (data) => [
     message: `${data.title} is required`
   },
   {
-    validator: async (rule, value, callback, source) => {
+    validator: async (rule, val, callback, source) => {
+      const value = val.trim().toLowerCase()
       const { record } = data;
       let dataMetrics = record.metrics.map((metric) => {
         return `{"${metric.label}":""}`;
@@ -43,10 +44,11 @@ export const metricValidator = (data) => [
           callback('Value is invalid, e.g 12.5');
         } else {
           for (let index = 0; index < datas.length; index++) {
-            if (!dataMetrics[datas[index]]) {
+            const valuePerIndex = dataMetrics[datas[index]].trim().toLowerCase()
+            if (!valuePerIndex) {
               isFilled = false;
               break;
-            } else if (regexNumber.test(dataMetrics[datas[index]])) {
+            } else if (regexNumber.test(valuePerIndex)) {
               isError = true;
               break;
             }
@@ -58,7 +60,7 @@ export const metricValidator = (data) => [
             // eslint-disable-next-line array-callback-return
             data1.filter((a, i) => {
               if (a > 1) {
-                if (data.title === datas[i]) {
+                if (data.title.trim().toLowerCase() === datas[i].trim().toLowerCase()) {
                   callback('Value must be different');
                 }
               }
@@ -66,7 +68,9 @@ export const metricValidator = (data) => [
           }
           if (isFilled && !isError) {
             for (let index = 0; index < datas.length - 1; index++) {
-              if (parseFloat(dataMetrics[datas[index]]) < parseFloat(dataMetrics[datas[index + 1]])) {
+              const valuePerIndex = dataMetrics[datas[index]].trim().toLowerCase()
+              const valuePerIndexPlus1 = dataMetrics[datas[index + 1]].trim().toLowerCase()
+              if (parseFloat(valuePerIndex) < parseFloat(valuePerIndexPlus1)) {
                 isSortedAsc = true;
               } else {
                 isSortedAsc = false;
@@ -74,7 +78,9 @@ export const metricValidator = (data) => [
               }
             }
             for (let index = 0; index < datas.length - 1; index++) {
-              if (parseFloat(dataMetrics[datas[index]]) > parseFloat(dataMetrics[datas[index + 1]])) {
+              const valuePerIndex = dataMetrics[datas[index]].trim().toLowerCase()
+              const valuePerIndexPlus1 = dataMetrics[datas[index + 1]].trim().toLowerCase()
+              if (parseFloat(valuePerIndex) > parseFloat(valuePerIndexPlus1)) {
                 isSortedDesc = true;
               } else {
                 isSortedDesc = false;
@@ -124,21 +130,16 @@ export const kpiValidator = (data) => [
   }
 ];
 
-export const weightValidator = (result) => [
+export const weightValidator = () => [
   {
     validator: async (rule,value,callback,source) => {
       const regexNumber = new RegExp(/[^0-9|.]/g);
-      let score = value;
+      let score = value?.toString()
+      score = score?.trim().toLowerCase();
       if (!score) {
         callback('Weight is required')
       } else if(regexNumber.test(score)){
         callback('Weight\'s value must be decimal, e.g 2.5')
-      } else if (result === "Below" && score < 1 && score > 2) {
-        callback('Out of range! Input range is between >= 1.0 until < 2.0')
-      } else if (result === "Meet" && score < 2 && score > 3) {
-        callback('Out of range! Input range is between >= 2.0 until < 3.0')
-      } else if (result === "Exceed" && score < 3 && score >= 4) {
-        callback('Out of range! Input range is between >= 3.0 until <= 4.0')
       }
     }
   }
@@ -151,11 +152,12 @@ export const achievementScoreValidator = (result) => [
         /(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g
       );
       const regexNumber = new RegExp(/[^0-9|.]/g);
-      let weight = value;
-      let score = parseFloat(value);
+      let score = value?.toString()
+      score = score.trim().toLowerCase();
+      score = parseFloat(score);
       if (!value) {
         callback("Score is required");
-      } else if (regexNumber.test(value)) {
+      } else if (regexNumber.test(score)) {
         callback("Score's value must be decimal, e.g 2.5");
       } else if (result === "Below" && (score < 1 || score > 1.9)) {
         callback(
@@ -169,7 +171,7 @@ export const achievementScoreValidator = (result) => [
         callback(
           "Out of range! Input range is between >= 3.0 until <= 4.0"
         );
-      } else if (!regexPercent.test(weight)) {
+      } else if (!regexPercent.test(score)) {
         callback("Score's value must be decimal, e.g 2.5");
       }
     }
