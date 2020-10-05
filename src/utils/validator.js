@@ -139,7 +139,7 @@ export const weightValidator = () => [
       if (!score) {
         callback('Weight is required')
       } else if(regexNumber.test(score)){
-        callback('Weight\'s value must be decimal, e.g 2.5')
+        callback('Weight\'s value must be decimal, e.g 20.5')
       }
     }
   }
