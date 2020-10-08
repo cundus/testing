@@ -41,7 +41,7 @@ const options = {
         "<b>" +
         this.x +
         "</b><br/>" +
-        ((this.series.name === "Requirements") ? "Maximum" : this.series.name) +
+        this.series.name +
         ": " +
         this.y +
         "<br/>"
@@ -204,13 +204,13 @@ class AlignmentList extends Component {
       ...options,
       series: [
         {
-          name: "Requirements",
+          name: "Maximum",
           data: [
             0,
             0,
             alignmentReducer?.dataDetail?.totalRequirementOutstanding
           ],
-          stack: "Requirements",
+          stack: "Maximum",
           color: "#324aa8",
         },
         {
