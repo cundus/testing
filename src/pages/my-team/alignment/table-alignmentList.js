@@ -30,7 +30,7 @@ class TableAlignment extends Component {
         render: (text) => (
           <Button type={'primary'}>
             <Link to={`/my-team/performance-review-alignment/${text}`}>
-            View Performance
+            View Session
             </Link>
           </Button>
         )

@@ -41,7 +41,7 @@ const options = {
         "<b>" +
         this.x +
         "</b><br/>" +
-        this.series.name +
+        ((this.series.name === "Requirements") ? "Maximum" : this.series.name) +
         ": " +
         this.y +
         "<br/>"
@@ -235,19 +235,8 @@ class AlignmentList extends Component {
             <div>
               <Divider />
               <Text strong style={{ fontSize: 20 }}>
-                Performance Review Alignment (Callibration) :{" "}
+                Performance Review Alignment :{" "}
               </Text>
-              <br />
-              <Text strong>Member : </Text>
-              {usersCalibration?.map((item, index) => (
-                <Text>
-                  {item?.firstName}&nbsp;{item?.lastName}
-                  {usersCalibration.length > 0 &&
-                    index < usersCalibration.length - 2 &&
-                    ", "}
-                  {usersCalibration.length - 2 === index && " & "}
-                </Text>
-              ))}
               <Divider />
             </div>
             <div style={{ width: "50vw", marginBottom: 20 }}>
