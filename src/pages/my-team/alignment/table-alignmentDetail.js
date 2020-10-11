@@ -146,7 +146,7 @@ class TableAlignmentDetail extends Component {
           ]
           return (
             <Form>
-              <Form.Item style={{ width: '100%' }}>
+              <Form.Item style={{ width: '100%', margin: 0 }}>
                 {/* {form.getFieldDecorator(`dataGeneral[${index}].postAlignment`, {
                   // rules: [{ required: true, message: 'Post Alignment is required' }],
                   initialValue: text ?? undefined
