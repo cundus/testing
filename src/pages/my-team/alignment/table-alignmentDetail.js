@@ -31,6 +31,7 @@ class TableAlignmentDetail extends Component {
         title: 'Employee ID',
         dataIndex: 'userId',
         align: 'center',
+        width: 150,
         placeholder: 'Employee ID',
         filters: _.uniqBy(userIds, (e) => {
           return e.text;
@@ -44,6 +45,7 @@ class TableAlignmentDetail extends Component {
         title: 'Employee Name',
         dataIndex: 'name',
         align: 'center',
+        width: 200,
         placeholder: 'Employee Name',
         sortOrder: sortedInfo?.columnKey === 'name' && sortedInfo?.order,
         filters: _.uniqBy(names, (e) => {
@@ -61,6 +63,7 @@ class TableAlignmentDetail extends Component {
         title: 'Superior',
         dataIndex: 'managerName',
         align: 'center',
+        width: 200,
         placeholder: 'Superior',
         sortOrder: sortedInfo?.columnKey === 'managerName' && sortedInfo?.order,
         filters: _.uniqBy(managerNames, (e) => {
@@ -78,6 +81,7 @@ class TableAlignmentDetail extends Component {
         title: 'KPI Achievement Score',
         dataIndex: 'kpiAchievementScore',
         align: 'center',
+        width: 150,
         placeholder: 'KPI Achievement Score',
         sortOrder: sortedInfo?.columnKey === 'kpiAchievementScore' && sortedInfo?.order,
         filters: _.uniqBy(kpiAchievementScores, (e) => {
