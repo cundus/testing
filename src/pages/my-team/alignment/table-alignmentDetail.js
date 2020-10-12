@@ -31,7 +31,7 @@ class TableAlignmentDetail extends Component {
         title: 'Employee ID',
         dataIndex: 'userId',
         align: 'center',
-        width: 150,
+        width: 200,
         placeholder: 'Employee ID',
         filters: _.uniqBy(userIds, (e) => {
           return e.text;
@@ -81,7 +81,7 @@ class TableAlignmentDetail extends Component {
         title: 'KPI Achievement Score',
         dataIndex: 'kpiAchievementScore',
         align: 'center',
-        width: 150,
+        width: 250,
         placeholder: 'KPI Achievement Score',
         sortOrder: sortedInfo?.columnKey === 'kpiAchievementScore' && sortedInfo?.order,
         filters: _.uniqBy(kpiAchievementScores, (e) => {
@@ -95,6 +95,7 @@ class TableAlignmentDetail extends Component {
         title: 'Pre Alignment',
         dataIndex: 'preAlignment',
         align: 'center',
+        width: 200,
         placeholder: 'Pre Alignment',
         sortOrder: sortedInfo?.columnKey === 'preAlignment' && sortedInfo?.order,
         filters: _.uniqBy(preAlignments, (e) => {
@@ -124,6 +125,7 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'department',
         align: 'center',
         placeholder: 'Directorate',
+        width: 250,
         sortOrder: sortedInfo?.columnKey === 'Directorate' && sortedInfo?.order,
         filters: _.uniqBy(departments, (e) => {
           return e.text;
@@ -140,6 +142,7 @@ class TableAlignmentDetail extends Component {
         title: 'Post Alignment',
         dataIndex: 'postAlignment',
         align: 'center',
+        width: 200,
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
