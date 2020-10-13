@@ -93,7 +93,7 @@ class Appraisal extends Component {
     data.map((itemKpi) => {
       if (itemKpi?.kpiScore && itemKpi?.weight) {
         let score = parseFloat(itemKpi.kpiScore);
-        score = parseFloat(itemKpi.weight) * score
+        score = (parseFloat(itemKpi.weight)/100) * score
         if (score) {
           totalScore += score;
         }
@@ -176,7 +176,7 @@ class Appraisal extends Component {
           index,
           achievementType: itemKpi.achievementType,
           kpiScore: itemKpi?.officialRating?.kpiScore <= 0 ? 0 : itemKpi?.officialRating?.kpiScore,
-          assessment: itemKpi.achievementType ? itemKpi.actualAchievement : null,
+          actualAchievement: itemKpi.actualAchievement,
           qualitativeOption: newOption,
           metrics: dataKpiMetrics,
           ...dataMetrics,

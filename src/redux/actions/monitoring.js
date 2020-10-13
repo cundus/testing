@@ -29,7 +29,7 @@ export const doReviseKPI = (id) => async (dispatch) => {
         });
       }
     } catch (error) {
-      if (error.response.data) {
+      if (error?.response) {
         dispatch({
           type: REVISE_KPI_FAILED,
           loading: false,

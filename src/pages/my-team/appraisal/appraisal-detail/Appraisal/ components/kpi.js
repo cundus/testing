@@ -100,8 +100,8 @@ class KPI extends Component {
         }
         return (
           <Skeleton active loading={loadingResult} paragraph={false} title={{ width: 'auto' }}>
-            <Text strong style={{ color: colorring }}>{record.rating}</Text>
-            <span>{record.assesment ? `(${record.assesment})` : ''}</span>
+            <Text strong style={{ color: colorring }}>{record.rating}</Text><br />
+            <span>{record.actualAchievement ? `(${record.actualAchievement})` : ''}</span>
           </Skeleton>
         );
       }

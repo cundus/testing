@@ -391,12 +391,12 @@ export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_APRAISAL_TEAM_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -442,12 +442,12 @@ export const doGetAppraisalTeamDetail = (idUser) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_APRAISAL_TEAM_DETAIL_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {

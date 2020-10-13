@@ -38,8 +38,8 @@ export const actionGetNotifications = () => async (dispatch) => {
       dispatch({
         type: GET_NOTIFICATIONS_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
