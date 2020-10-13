@@ -11,21 +11,26 @@ class TableAlignmentDetail extends Component {
     const userIds = dataSource.map((item)=> {
       return { text: item?.userId, value: item?.userId}
     })
-    const names = dataSource.map((item)=> {
+    let names = dataSource.map((item)=> {
       return { text: item?.name, value: item?.name}
     })
-    const managerNames = dataSource.map((item)=> {
+    names = _.orderBy(names, ['text'],['asc']);
+    let managerNames = dataSource.map((item)=> {
       return { text: item?.managerName, value: item?.managerName}
     })
+    managerNames = _.orderBy(managerNames, ['text'],['asc']);
     const kpiAchievementScores = dataSource.map((item)=> {
       return { text: item?.kpiAchievementScore, value: item?.kpiAchievementScore}
     })
-    const preAlignments = dataSource.map((item)=> {
-      return { text: item?.preAlignment, value: item?.preAlignment}
-    })
-    const departments = dataSource.map((item)=> {
+    const ratings = [
+      { text: 'Need Improvement', value: 'Need Improvement'},
+      { text: 'Well Done', value: 'Well Done'},
+      { text: 'Outstanding', value: 'Outstanding'}
+    ]
+    let departments = dataSource.map((item)=> {
       return { text: item?.department, value: item?.department}
     })
+    departments = _.orderBy(departments, ['text'],['asc']);
     const columns = [
       {
         title: 'Employee ID',
@@ -98,7 +103,7 @@ class TableAlignmentDetail extends Component {
         width: 200,
         placeholder: 'Pre Alignment',
         sortOrder: sortedInfo?.columnKey === 'preAlignment' && sortedInfo?.order,
-        filters: _.uniqBy(preAlignments, (e) => {
+        filters: _.uniqBy(ratings, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.preAlignment ?? null,
@@ -143,6 +148,17 @@ class TableAlignmentDetail extends Component {
         dataIndex: 'postAlignment',
         align: 'center',
         width: 200,
+        sortOrder: sortedInfo?.columnKey === 'postAlignment' && sortedInfo?.order,
+        filters: _.uniqBy(ratings, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.postAlignment ?? null,
+        onFilter: (value, record) => record.postAlignment.includes(value),
+        sorter: (a, b) => {
+          if(a.postAlignment && b.postAlignment){
+            return a.postAlignment.localeCompare(b.postAlignment);
+          }
+        },
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;

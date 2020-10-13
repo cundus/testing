@@ -722,7 +722,7 @@ class Appraisal extends Component {
                 onChange={this.onCheckFinal}
                 checked={checkedFinal}
               >
-                <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
+                <Text strong>I'm fully aware about the final score and rating given from My Supervisor to me</Text>
               </Checkbox>
             </Skeleton>}
           {formStatusId === '3' &&

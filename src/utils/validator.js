@@ -154,7 +154,6 @@ export const achievementScoreValidator = (result) => [
       const regexNumber = new RegExp(/[^0-9|.]/g);
       let score = value?.toString()
       score = score.trim().toLowerCase();
-      score = parseFloat(score);
       if (!value) {
         callback("Score is required");
       } else if (regexNumber.test(score)) {

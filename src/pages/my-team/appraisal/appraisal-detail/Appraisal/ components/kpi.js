@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { DataTable } from '../../../../../../components';
 import ModalAssessment from './modalAssesment';
+import { replace } from 'lodash';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -100,6 +101,7 @@ class KPI extends Component {
         return (
           <Skeleton active loading={loadingResult} paragraph={false} title={{ width: 'auto' }}>
             <Text strong style={{ color: colorring }}>{record.rating}</Text>
+            <span>{record.assesment ? `(${record.assesment})` : ''}</span>
           </Skeleton>
         );
       }

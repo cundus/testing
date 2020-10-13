@@ -91,8 +91,9 @@ class Appraisal extends Component {
     let totalScore = 0;
     // eslint-disable-next-line array-callback-return
     data.map((itemKpi) => {
-      if (itemKpi.weight) {
-        const score = parseFloat(itemKpi.kpiScore);
+      if (itemKpi?.kpiScore && itemKpi?.weight) {
+        let score = parseFloat(itemKpi.kpiScore);
+        score = parseFloat(itemKpi.weight) * score
         if (score) {
           totalScore += score;
         }
@@ -101,7 +102,6 @@ class Appraisal extends Component {
       }
     });
     totalScore = parseFloat(totalScore);
-    totalScore = totalScore / data.length
     if (typeof totalScore === 'number') {
       this.setState({
         scoreTotal: totalScore?.toFixed(2)
@@ -176,7 +176,7 @@ class Appraisal extends Component {
           index,
           achievementType: itemKpi.achievementType,
           kpiScore: itemKpi?.officialRating?.kpiScore <= 0 ? 0 : itemKpi?.officialRating?.kpiScore,
-          assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
+          assessment: itemKpi.achievementType ? itemKpi.actualAchievement : null,
           qualitativeOption: newOption,
           metrics: dataKpiMetrics,
           ...dataMetrics,
@@ -391,7 +391,7 @@ class Appraisal extends Component {
       valuesFeedbacks
     };
     confirm({
-      title: `Are you sure want to save ${teamName}'s Appraisal feedback?`,
+      title: `Are you sure want to save ${teamName}'s Appraisal?`,
       okText: 'Save',
       onOk: async () => {
         await saveAppraisal(params.userId, data, true);
@@ -456,7 +456,6 @@ class Appraisal extends Component {
         confirm({
           title: `Are you sure want to approve ${teamName}'s Appraisal?`,
           content: "Make sure you have given feedback on both KPI's & Values before approving it",
-          okText: 'Approve',
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
@@ -537,8 +536,8 @@ class Appraisal extends Component {
     };
     confirm({
       title: 'Are you sure?',
-      content: `Are you sure want to approve ${teamName}'s Appraisal?`,
-      okText: 'Approve',
+      content: `Are you sure want to send ${teamName}'s Appraisal?`,
+      okText: 'Send',
       onOk: async () => {
         await teamAck(data);
         const { kpiReducer } = this.props;
@@ -640,8 +639,7 @@ class Appraisal extends Component {
                     />
                     <Form style={{marginBottom: 10}}>
                       <Text strong>
-                        {(currentStep === stepKpi[5] ||
-                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      Propose Rating
                       </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
@@ -693,8 +691,7 @@ class Appraisal extends Component {
                     />
                     <Form style={{marginBottom: 10}}>
                       <Text strong>
-                        {(currentStep === stepKpi[5] ||
-                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      Propose Rating
                       </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
@@ -844,7 +841,7 @@ class Appraisal extends Component {
                     onClick={this.handleSave}
                     style={{ margin: 10 }}
                   >
-                    Save to draft
+                    Save
                   </Button>
                   <Button
                     id="send-manager"

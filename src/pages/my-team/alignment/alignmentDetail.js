@@ -156,7 +156,7 @@ class AlignmentList extends Component {
       } else if (callibrations.length > 0) {
         confirm({
           title: outstandings.length > this.props.alignmentReducer?.dataDetail?.totalRequirementOutstanding ?
-            'Out of requirement Quota. Are you sure to save it?':
+            'Outstanding rating allocated is over Quota? Do you want to save?':
             'Are you sure?',
           okText: 'Save',
           onOk: async () => {
