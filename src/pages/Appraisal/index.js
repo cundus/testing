@@ -586,7 +586,6 @@ class Appraisal extends Component {
                   title="Your Rating"
                   loading={!loadingKpiRating && dataKpiRating.rating}
                   rate={(currentStep === stepKpi[6] || formStatusId === '3') ? dataKpiRating.rating : 'N/A'}
-                  desc="Your final Rating based on Score"
                 />
               </Col>
             </Row>}

@@ -22,10 +22,17 @@ class TableAlignmentDetail extends Component {
     const kpiAchievementScores = dataSource.map((item)=> {
       return { text: item?.kpiAchievementScore, value: item?.kpiAchievementScore}
     })
-    const ratings = [
+    const preAlignments = [
+      { text: 'Unrated', value: ''},
       { text: 'Need Improvement', value: 'Need Improvement'},
       { text: 'Well Done', value: 'Well Done'},
       { text: 'Outstanding', value: 'Outstanding'}
+    ]
+    const postAlignments = [
+      { text: 'Unrated', value: '0'},
+      { text: 'Need Improvement', value: '1'},
+      { text: 'Well Done', value: '2'},
+      { text: 'Outstanding', value: '3'}
     ]
     let departments = dataSource.map((item)=> {
       return { text: item?.department, value: item?.department}
@@ -103,7 +110,7 @@ class TableAlignmentDetail extends Component {
         width: 200,
         placeholder: 'Pre Alignment',
         sortOrder: sortedInfo?.columnKey === 'preAlignment' && sortedInfo?.order,
-        filters: _.uniqBy(ratings, (e) => {
+        filters: _.uniqBy(preAlignments, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.preAlignment ?? null,
@@ -149,11 +156,11 @@ class TableAlignmentDetail extends Component {
         align: 'center',
         width: 200,
         sortOrder: sortedInfo?.columnKey === 'postAlignment' && sortedInfo?.order,
-        filters: _.uniqBy(ratings, (e) => {
+        filters: _.uniqBy(postAlignments, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.postAlignment ?? null,
-        onFilter: (value, record) => record.postAlignment.includes(value),
+        onFilter: (value, record) => record?.postAlignment ? record.postAlignment.toString().includes(value) : true,
         sorter: (a, b) => {
           if(a.postAlignment && b.postAlignment){
             return a.postAlignment.localeCompare(b.postAlignment);

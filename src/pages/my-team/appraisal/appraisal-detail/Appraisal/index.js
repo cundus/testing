@@ -617,7 +617,6 @@ class Appraisal extends Component {
                   boxRateColor="inherit"
                   title={`${teamName && teamName+"'s"} Rating`}
                   rate={dataKpiRating.rating}
-                  desc={`${teamName && teamName+"'s"} final Rating based on Score`}
                 />
               </Col>
             </Row>}
@@ -637,6 +636,7 @@ class Appraisal extends Component {
                       myStep={myStep}
                       handleChangeField={this.handleChangeAssessment}
                     />
+                    {!(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
                     <Form style={{marginBottom: 10}}>
                       <Text strong>
                       Propose Rating
@@ -663,7 +663,7 @@ class Appraisal extends Component {
                             {` ${this.state.scoreTotal}`}
                           </Text>
                           <br />
-                    </Form>
+                    </Form>}
                   </div> :
                   <Result
                     status={'error'}
@@ -689,6 +689,7 @@ class Appraisal extends Component {
                       myStep={myStep}
                       optionRating={optionRating}
                     />
+                    {!(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
                     <Form style={{marginBottom: 10}}>
                       <Text strong>
                       Propose Rating
@@ -712,7 +713,7 @@ class Appraisal extends Component {
                             SUM of Weighted KPI Score :
                             {` ${this.state.scoreTotal}`}
                           </Text>
-                    </Form>
+                    </Form>}
                   </div> :
                   <Result
                     status={'error'}
