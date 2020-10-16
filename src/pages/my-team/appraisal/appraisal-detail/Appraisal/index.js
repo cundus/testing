@@ -390,31 +390,37 @@ class Appraisal extends Component {
       rating,
       valuesFeedbacks
     };
-    confirm({
-      title: `Are you sure want to save ${teamName}'s Appraisal?`,
-      okText: 'Save',
-      onOk: async () => {
-        await saveAppraisal(params.userId, data, true);
-        const {
-          kpiReducer
-        } = this.props;
-        const {
-          loadingApproveAppraisal,
-          statusApproveAppraisal,
-          messageApproveAppraisal
-        } = kpiReducer;
-        if (!loadingApproveAppraisal) {
-          if (statusApproveAppraisal === Success) {
-            this.getData();
-            message.success(`${teamName}'s Appraisal feedback has been save`);
-            getNotifications();
-          } else {
-            message.warning(`Sorry ${messageApproveAppraisal}`);
-          }
-        }
-      },
-      onCancel() {}
-    });
+    form.validateFieldsAndScroll((errors, values) => {
+      console.log(errors)
+      const errRequires = errors?.dataKpi ? errors?.dataKpi.filter(er => !er.kpiScore.errors[0].message.includes('required')) : 0
+      if (!errors || (errRequires.length === 0)) {
+        confirm({
+          title: `Are you sure want to save ${teamName}'s Appraisal?`,
+          okText: 'Save',
+          onOk: async () => {
+            await saveAppraisal(params.userId, data, true);
+            const {
+              kpiReducer
+            } = this.props;
+            const {
+              loadingApproveAppraisal,
+              statusApproveAppraisal,
+              messageApproveAppraisal
+            } = kpiReducer;
+            if (!loadingApproveAppraisal) {
+              if (statusApproveAppraisal === Success) {
+                this.getData();
+                message.success(`${teamName}'s Appraisal feedback has been save`);
+                getNotifications();
+              } else {
+                message.warning(`Sorry ${messageApproveAppraisal}`);
+              }
+            }
+          },
+          onCancel() {}
+        });
+      }
+    })
   };
 
   handleApprove = () => {

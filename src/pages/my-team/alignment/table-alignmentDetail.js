@@ -23,7 +23,7 @@ class TableAlignmentDetail extends Component {
       return { text: item?.kpiAchievementScore, value: item?.kpiAchievementScore}
     })
     const preAlignments = [
-      { text: 'Unrated', value: ''},
+      { text: 'Unrated', value: 'Unrated'},
       { text: 'Need Improvement', value: 'Need Improvement'},
       { text: 'Well Done', value: 'Well Done'},
       { text: 'Outstanding', value: 'Outstanding'}
@@ -161,11 +161,7 @@ class TableAlignmentDetail extends Component {
         }),
         filteredValue: filteredInfo?.postAlignment ?? null,
         onFilter: (value, record) => record?.postAlignment ? record.postAlignment.toString().includes(value) : true,
-        sorter: (a, b) => {
-          if(a.postAlignment && b.postAlignment){
-            return a.postAlignment.localeCompare(b.postAlignment);
-          }
-        },
+        sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
