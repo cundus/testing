@@ -161,7 +161,7 @@ class TableAlignmentDetail extends Component {
         }),
         filteredValue: filteredInfo?.postAlignment ?? null,
         onFilter: (value, record) => record?.postAlignment ? record.postAlignment.toString().includes(value) : true,
-        sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
+        sorter: (a, b) => a.postAlignment - b.postAlignment,
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
           const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
