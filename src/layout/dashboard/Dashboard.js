@@ -21,6 +21,8 @@ import actionLoginByADToken from '../../redux/actions/auth/actionLoginByADToken'
 import Logo from '../../assets/xl.png';
 import { SUCCESS, errorHandlerCode } from '../../redux/status-code-type';
 import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // import Stores from '../../redux/store/index';
 const { Content } = Layout;
@@ -121,7 +123,8 @@ class Dashboard extends React.Component {
           justifyContent: 'center',
           backgroundColor: '#fff'
         }}
-        >
+        > 
+          <ToastContainer />
           <img
             src={Logo}
             alt="logo"
@@ -133,6 +136,7 @@ class Dashboard extends React.Component {
     } else if (authReducer?.statusLoginCode === SUCCESS) {
       return (
         <Layout style={{ minHeight: '100vh' }}>
+          <ToastContainer />
           <IdleTimer
             ref={(ref) => {
               this.idleTimer = ref;
@@ -167,6 +171,7 @@ class Dashboard extends React.Component {
       const errors = errorHandlerCode(authReducer?.statusLoginCode, authReducer?.statusLoginDesc);
       return (
         <Layout style={{ minHeight: '100vh' }}>
+          <ToastContainer />
           <Content style={styles.contentContainer}>
             <Result
               // eslint-disable-next-line react/jsx-props-no-spreading

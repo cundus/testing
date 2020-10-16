@@ -38,6 +38,7 @@ import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
 import TextArea from 'antd/lib/input/TextArea';
+import { toast } from 'react-toastify'
 
 const { Text, Paragraph, Title } = Typography;
 const { TabPane } = Tabs;
@@ -299,19 +300,19 @@ class Appraisal extends Component {
                   loadingKpis: true
                 });
                 this.getOwnKpiList(authReducer?.userId);
-                message.success('Your Assessment has been saved');
+                toast.success('Your Assessment has been saved');
                 if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  message.warning(`Sorry, ${messageAssess}`);
+                  toast.warn(`Sorry, ${messageAssess}`);
                 }
               } else {
-                message.warning(`Sorry, ${messageAssess}`);
+                toast.warn(`Sorry, ${messageAssess}`);
               }
             }
           },
           onCancel() {}
         });
       } else {
-        message.warning('Sorry, Please fill out all your assessment');
+        toast.warn('Sorry, Please fill out all your assessment');
       }
     });
   };
@@ -378,10 +379,10 @@ class Appraisal extends Component {
             const { kpiReducer } = this.props;
             if (!kpiReducer.loadingSaveValues) {
               if (kpiReducer.statusSaveValues === Success) {
-                message.success('Your Values has been saved');
+                toast.success('Your Values has been saved');
                 this.getOwnValues(authReducer?.userId);
               } else {
-                message.warning(`Sorry, ${kpiReducer.messageSaveValues}`);
+                toast.warn(`Sorry, ${kpiReducer.messageSaveValues}`);
               }
             }
           },
@@ -436,7 +437,7 @@ class Appraisal extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (valuesErr) {
-          message.warning('You need to fill Values before submiting to the manager');
+          toast.warn('You need to fill Values before submiting to the manager');
           this.changeTab('2');
           form.validateFields(['dataGeneral']);
         } else {
@@ -465,15 +466,15 @@ class Appraisal extends Component {
                     await submitNext(authReducer?.userId);
                     this.getData();
                     getNotifications();
-                    message.success('Your Appraisal has been sent to your Manager');
+                    toast.success('Your Appraisal has been sent to your Manager');
                     if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                      message.warning(`Sorry, ${messageAssess}`);
+                      toast.warn(`Sorry, ${messageAssess}`);
                     }
                   } else {
-                    message.warning(`Sorry, ${messageSaveValues}`);
+                    toast.warn(`Sorry, ${messageSaveValues}`);
                   }
                 } else {
-                  message.warning(`Sorry, ${messageAssess}`);
+                  toast.warn(`Sorry, ${messageAssess}`);
                 }
               }
             },
@@ -481,10 +482,10 @@ class Appraisal extends Component {
           });
         }
       } else if (err.dataKpi) {
-        message.warning('Please fill out your Assessment');
+        toast.warn('Please fill out your Assessment');
         this.changeTab('1');
       } else if (err.dataGeneral) {
-        message.warning('You need to fill Values before submiting to the manager');
+        toast.warn('You need to fill Values before submiting to the manager');
         this.changeTab('2');
       }
     });
@@ -526,9 +527,9 @@ class Appraisal extends Component {
             });
             this.getData();
             getNotifications();
-            message.success('Your Acknowledgement has been sent');
+            toast.success('Your Acknowledgement has been sent');
           } else {
-            message.warning(`Sorry, ${messageEmpAck}`);
+            toast.warn(`Sorry, ${messageEmpAck}`);
           }
         }
       },
@@ -779,7 +780,7 @@ class Appraisal extends Component {
             <Button
               onClick={this.handleSubmitAck}
               type="primary"
-              disabled={finalAck === '' && !checkedFinal}
+              disabled={!finalAck || !checkedFinal}
             >
               Submit
             </Button>

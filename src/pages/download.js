@@ -6,6 +6,7 @@ import _ from 'lodash';
 import globalStyle from "../styles/globalStyles";
 import { doGetAlignmentDownload, doGetAlignmentDownloadPermission } from "../redux/actions/alignment";
 import { Success } from "../redux/status-code-type";
+import { toast } from 'react-toastify'
 
 const { Text } = Typography;
 
@@ -26,9 +27,9 @@ class Download extends Component {
     await doDownloadAlignment()
     const { alignmentReducer } = this.props;
     if (alignmentReducer?.statusDownload === Success) {
-      message.success('Success, file was downloaded')
+      toast.success('Success, file was downloaded')
     } else {
-      message.warning(`Sorry, you're unable to download this file, contact pmgm helpdesk`)
+      toast.warn(`Sorry, you're unable to download this file, contact pmgm helpdesk`)
     }
   }
   render() {

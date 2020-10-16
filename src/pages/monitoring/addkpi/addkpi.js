@@ -20,6 +20,7 @@ import Cascade from './component/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../redux/status-code-type';
 import globalStyle from '../../../styles/globalStyles';
 import stepKpi from '../../../utils/stepKpi';
+import { toast } from 'react-toastify'
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -329,7 +330,7 @@ class CreateKPI extends Component {
     };
     form.validateFieldsAndScroll((err, values) => {
       if (dataSaving.length === 0) {
-        message.warning('You must have at least one KPI');
+        toast.warn('You must have at least one KPI');
       } else if (!err) {
         confirm({
           title: 'Are you sure?',
@@ -337,10 +338,10 @@ class CreateKPI extends Component {
             await doSavingKpi(data, authReducer?.userId);
             const { kpiReducer } = this.props;
             if (kpiReducer.statusSaveKPI === Success || kpiReducer.statusSaveKPI === FAILED_SAVE_CHALLENGE_YOURSELF) {
-              message.success('Your KPI has been saved');
+              toast.success('Your KPI has been saved');
               this.props.history.push('/monitoring'); // go to draft
             } else {
-              message.warning(`Sorry, ${kpiReducer.messageSaveKPI}`);
+              toast.warn(`Sorry, ${kpiReducer.messageSaveKPI}`);
             }
           },
           onCancel() {}

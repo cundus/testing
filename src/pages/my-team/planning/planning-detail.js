@@ -14,6 +14,7 @@ import globalStyle from '../../../styles/globalStyles';
 import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
 import stepKpi from '../../../utils/stepKpi';
 import { Success } from '../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -133,7 +134,7 @@ class PlanningDetail extends Component {
             const { feedback } = this.props;
             const { status, statusMessage } = feedback;
             if (status === Success) {
-              message.success('Success, your feedback has been sent');
+              toast.success('Success, your feedback has been sent');
               this.props.history.push('/my-team/planning');
               getNotifications();
             } else {
@@ -162,7 +163,7 @@ class PlanningDetail extends Component {
         const { feedback } = this.props;
         const { status, statusMessage } = feedback;
         if (status === Success) {
-          message.success('Success, kpi has been approved');
+          toast.success('Success, kpi has been approved');
           this.props.history.push('/my-team/monitoring');
           getNotifications();
         } else {

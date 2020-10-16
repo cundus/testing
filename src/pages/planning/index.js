@@ -12,6 +12,7 @@ import { actionGetKPI } from '../../redux/actions';
 import globalStyle from '../../styles/globalStyles';
 import { EMP_GOAL_SETTING } from '../../utils/stepKpi';
 import { Success } from '../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 class Planning extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Planning extends Component {
     } else {
       // Error
       this.stepChange(null);
-      message.warning(`Sorry, ${errMessage}`);
+      toast.warn(`Sorry, ${errMessage}`);
       this.setState({
         error: true
       });

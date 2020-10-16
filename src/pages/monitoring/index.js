@@ -20,6 +20,7 @@ import globalStyle from '../../styles/globalStyles';
 import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
 import { doReviseKPI } from '../../redux/actions/monitoring';
 import { GetUserKpiState } from '../../redux/actions/user';
+import { toast } from 'react-toastify'
 
 
 const { confirm } = Modal;
@@ -221,10 +222,10 @@ class MonitorKPI extends Component {
         await doRevisingKPI(kpiReducer?.user?.userId);
         // eslint-disable-next-line react/destructuring-assignment
         if (this.props.monitoring.status === Success) {
-          message.success('Your employee KPI has been sent to revise');
+          toast.success('Your employee KPI has been sent to revise');
           this.getAllData();
         } else {
-          message.warning(`Sorry, ${this.props.monitoring.message}`);
+          toast.warn(`Sorry, ${this.props.monitoring.message}`);
         }
       },
       onCancel() {}

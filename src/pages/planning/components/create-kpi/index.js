@@ -24,6 +24,7 @@ import { kpiGetManagerProcess, kpiGetProcess } from '../../../../utils/kpiGetPro
 import { sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 import Previous from './components/previous';
 import { actionGetFormTemplates, actionGetPrevKpiByFormId } from '../../../../redux/actions/previousKpi';
+import { toast } from 'react-toastify'
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -215,7 +216,7 @@ class CreateKPI extends Component {
     };
     form.validateFieldsAndScroll((err, values) => {
       if (dataSaving.length === 0) {
-        message.warning('You must have at least one KPI');
+        toast.warn('You must have at least one KPI');
       } else if (!err) {
         confirm({
           title: 'Are you sure?',
@@ -224,10 +225,10 @@ class CreateKPI extends Component {
             const { savekpiReducer } = this.props;
             const { status, statusMessage } = savekpiReducer;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-              message.success('Your KPI has been saved');
+              toast.success('Your KPI has been saved');
               stepChange(1); // go to draft
             } else {
-              message.warning(`Sorry, ${statusMessage}`);
+              toast.warn(`Sorry, ${statusMessage}`);
             }
           },
           onCancel() {}

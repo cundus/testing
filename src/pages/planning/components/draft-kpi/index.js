@@ -20,6 +20,7 @@ import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/statu
 import globalStyle from '../../../../styles/globalStyles';
 import { getChallengeYourselfChecker, sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 import kpiSendProcess from '../../../../utils/kpiSendProcess';
+import { toast } from 'react-toastify'
 
 const { confirm } = Modal;
 const { Text, Paragraph } = Typography;
@@ -110,9 +111,9 @@ class DraftKPI extends Component {
       challengeYourSelf: sendChallengeYourselfChecker(challengeYour)
     };
     if (newDataKpi.length > 20) {
-      message.warning('Maximum KPI is 20');
+      toast.warn('Maximum KPI is 20');
     } else if (kpiErr) {
-      message.warning(kpiErrMessage);
+      toast.warn(kpiErrMessage);
     } else {
       form.validateFieldsAndScroll((err, values) => {
         if (!err) {
@@ -126,22 +127,22 @@ class DraftKPI extends Component {
                 if (status === Success) {
                   stepChange(2, true); // go to submit page
                   getNotifications();
-                  message.success('Your KPI has been submitted to your superior');
+                  toast.success('Your KPI has been submitted to your superior');
                 } else {
-                  message.warning(`Sorry, ${statusMessage}`);
+                  toast.warn(`Sorry, ${statusMessage}`);
                 }
               } else {
                 await doSavingKpi(data, authReducer?.userId);
                 const { saveKpi } = this.props;
                 const { status, statusMessage } = saveKpi;
                 if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  message.success('Your KPI has been saved');
+                  toast.success('Your KPI has been saved');
                   this.getAllData();
                   if (status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                    message.warning(`Sorry, ${statusMessage}`);
+                    toast.warn(`Sorry, ${statusMessage}`);
                   }
                 } else {
-                  message.warning(`Sorry, ${statusMessage}`);
+                  toast.warn(`Sorry, ${statusMessage}`);
                 }
               }
             },
@@ -224,13 +225,13 @@ class DraftKPI extends Component {
             const { saveKpi } = this.props;
             const { status, statusMessage } = saveKpi;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-              message.success('Your KPI has been saved');
+              toast.success('Your KPI has been saved');
               this.getAllData();
               if (status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                message.warning(`Sorry, ${statusMessage}`);
+                toast.warn(`Sorry, ${statusMessage}`);
               }
             } else {
-              message.warning(`Sorry, ${statusMessage}`);
+              toast.warn(`Sorry, ${statusMessage}`);
             }
           },
           onCancel() {}

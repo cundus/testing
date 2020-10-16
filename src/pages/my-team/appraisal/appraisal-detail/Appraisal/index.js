@@ -44,6 +44,7 @@ import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
 import stepKpi, { COMPLETED, MANAGER_ACKNOWLEDMENT, PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
 import { EMP_ACKNOWLEDGEMENT } from '../../../../../redux/action.type';
+import { toast } from 'react-toastify'
 
 const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
@@ -345,10 +346,10 @@ class Appraisal extends Component {
         if (!loadingSendBackAppraisal) {
           if (statusSendBackAppraisal === Success) {
             history.push('/my-team/appraisal/');
-            message.success(`${teamName}'s Appraisal has given feedback`);
+            toast.success(`${teamName}'s Appraisal has given feedback`);
             getNotifications();
           } else {
-            message.warning(`Sorry ${messageSendBackAppraisal}`);
+            toast.warn(`Sorry ${messageSendBackAppraisal}`);
           }
         }
       },
@@ -391,7 +392,6 @@ class Appraisal extends Component {
       valuesFeedbacks
     };
     form.validateFieldsAndScroll((errors, values) => {
-      console.log(errors)
       const errRequires = errors?.dataKpi ? errors?.dataKpi.filter(er => !er.kpiScore.errors[0].message.includes('required')) : 0
       if (!errors || (errRequires.length === 0)) {
         confirm({
@@ -410,15 +410,17 @@ class Appraisal extends Component {
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
                 this.getData();
-                message.success(`${teamName}'s Appraisal feedback has been save`);
+                toast.success(`${teamName}'s Appraisal feedback has been save`);
                 getNotifications();
               } else {
-                message.warning(`Sorry ${messageApproveAppraisal}`);
+                toast.warn(`Sorry ${messageApproveAppraisal}`);
               }
             }
           },
           onCancel() {}
         });
+      } else if(errors.dataKpi) {
+        toast.warn('Please, correctly fill the KPI Achievement Score', 200);
       }
     })
   };
@@ -475,19 +477,19 @@ class Appraisal extends Component {
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
                 this.getData();
-                message.success(`${teamName}'s Appraisal has been send to system`);
+                toast.success(`${teamName}'s Appraisal has been send to system`);
                 getNotifications();
               } else {
-                message.warning(`Sorry ${messageApproveAppraisal}`);
+                toast.warn(`Sorry ${messageApproveAppraisal}`);
               }
             }
           },
           onCancel() {}
         });
       } else if (errors.proposeRating) {
-        message.warning('Please, give your Propose Rating');
+        toast.warn('Please, give your Propose Rating');
       } else if(errors.dataKpi) {
-        message.warning('Please, fill your KPI Achievement Score');
+        toast.warn('Please, fill your KPI Achievement Score');
       }
     });
   };
@@ -554,9 +556,9 @@ class Appraisal extends Component {
             });
             this.getData();
             getNotifications();
-            message.success(`${teamName}'s Final Result has been sent`);
+            toast.success(`${teamName}'s Final Result has been sent`);
           } else {
-            message.warning(`Sorry, ${kpiReducer.messageTeamAck}`);
+            toast.warn(`Sorry, ${kpiReducer.messageTeamAck}`);
           }
         }
       },

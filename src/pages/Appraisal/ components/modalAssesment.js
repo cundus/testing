@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { doAssessment } from '../../../redux/actions/kpi';
 import { FAILED_SAVE_CHALLENGE_YOURSELF, Success } from '../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -57,7 +58,7 @@ class modalAssessment extends Component {
               ...item
             });
             handleAssesLoading(0);
-            message.warning(`Sorry, ${messageAssessOne}`);
+            toast.warn(`Sorry, ${messageAssessOne}`);
           }
         }
       }

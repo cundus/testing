@@ -10,6 +10,7 @@ import {
 } from '../../../../../../redux/actions/kpi';
 import mimeType from '../../../../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -140,15 +141,15 @@ class Value extends Component {
             } = this.props;
             if (!kpiR.loadingDeleteFile) {
               if (kpiR.statusDeleteFile === Success) {
-                message.success(`"${file.name}" has been deleted`);
+                toast.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
                 resolve(true);
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
-                message.success(`"${file.name}" has been deleted`);
+                toast.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
                 resolve(true);
               } else {
-                message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
+                toast.warn(`Sorry, ${kpiR.messageDeleteFile}`);
               }
             }
           },
@@ -187,7 +188,7 @@ class Value extends Component {
         downloadLink.download = fileName;
         downloadLink.click();
       } else {
-        message.warning(`Sorry, ${messageDownload}`);
+        toast.warn(`Sorry, ${messageDownload}`);
       }
     }
   }
@@ -208,7 +209,7 @@ class Value extends Component {
       fileContent: b64
     };
     if (file.file.size > 5242880) {
-      message.warning('Sorry, Maximum file is 5MB');
+      toast.warn('Sorry, Maximum file is 5MB');
       onError(false, file);
     } else {
       await attachFile(data);
@@ -219,9 +220,9 @@ class Value extends Component {
         if (kpiR.statusAttach === Success) {
           onSuccess(true, file);
           getOwnValues(authReducer?.userId, true);
-          message.success(`"${file.name}" has been uploaded`);
+          toast.success(`"${file.name}" has been uploaded`);
         } else {
-          message.warning(`Sorry, ${kpiR.messageAttach}`);
+          toast.warn(`Sorry, ${kpiR.messageAttach}`);
           onError(false, file);
         }
       }

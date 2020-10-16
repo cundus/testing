@@ -10,6 +10,8 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { doGetProposeRating } from "../../../redux/actions/kpi";
 import { Success } from "../../../redux/status-code-type";
+import { toast } from 'react-toastify'
+
 const { confirm } = Modal;
 
 const { Text } = Typography;
@@ -164,9 +166,9 @@ class AlignmentList extends Component {
             const { alignmentReducer } = this.props;
             if (alignmentReducer?.statusPostDetail === Success) {
               this.getData()
-              message.success('Success, your Performance Alignment Review has been saved')
+              toast.success('Success, your Performance Alignment Review has been saved')
             } else {
-              message.warning(`Sorry, ${alignmentReducer?.messagePostDetail}`)
+              toast.warn(`Sorry, ${alignmentReducer?.messagePostDetail}`)
             }
           },
           onCancel() {}
