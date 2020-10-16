@@ -233,7 +233,8 @@ class CreateKPI extends Component {
           },
           onCancel() {}
         });
-      } else {
+      } else if (err.dataKpi) {
+        toast.warn(`Please correctly fill your KPI`);
         this.changeTab('2');
       }
     });

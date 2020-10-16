@@ -236,6 +236,8 @@ class DraftKPI extends Component {
           },
           onCancel() {}
         });
+      } else if (err.dataKpi) {
+        toast.warn(`Please correctly fill your KPI`);
       }
     });
   };
