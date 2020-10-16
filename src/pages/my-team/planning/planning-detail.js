@@ -138,7 +138,7 @@ class PlanningDetail extends Component {
               this.props.history.push('/my-team/planning');
               getNotifications();
             } else {
-              message.error(`Sorry, ${statusMessage}`);
+              toast.error(`Sorry, ${statusMessage}`);
             }
 
           },
@@ -167,7 +167,7 @@ class PlanningDetail extends Component {
           this.props.history.push('/my-team/monitoring');
           getNotifications();
         } else {
-          message.error(`Sorry, ${statusMessage}`);
+          toast.error(`Sorry, ${statusMessage}`);
         }
       },
       onCancel() {}
