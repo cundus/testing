@@ -86,13 +86,11 @@ class AlignmentList extends Component {
     } else {
       const newData = alignmentReducer?.dataDetail?.usersCalibration?.map(
         (item, index) => {
-          const kpiScore =
-            item?.kpiAchievementScore < 0 ? 0 : item?.kpiAchievementScore;
           return {
             ...item,
             name: item?.firstName + " " + item?.lastName,
             managerName: item?.managerFirstName + " " + item?.managerLastName,
-            kpiAchievementScore: `${kpiScore}`,
+            kpiAchievementScore: item?.kpiAchievementScore,
             userId: item?.userId ?? '',
             prePostAlignment: (item?.postAlignmentNumeric 
               && item?.postAlignmentNumeric > 0 

@@ -19,9 +19,10 @@ class TableAlignmentDetail extends Component {
       return { text: item?.managerName, value: item?.managerName}
     })
     managerNames = _.orderBy(managerNames, ['text'],['asc']);
-    const kpiAchievementScores = dataSource.map((item)=> {
+    let kpiAchievementScores = dataSource.map((item)=> {
       return { text: item?.kpiAchievementScore, value: item?.kpiAchievementScore}
     })
+    kpiAchievementScores = _.orderBy(kpiAchievementScores, ['text'],['asc']);
     const preAlignments = [
       { text: 'Unrated', value: 'Unrated'},
       { text: 'Need Improvement', value: 'Need Improvement'},
