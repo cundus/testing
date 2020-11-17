@@ -10,7 +10,7 @@ RUN npm install react-scripts@3.2.0 -g --silent
 COPY . /usr/src/app
 
 #sed  configuration
-RUN mv /usr/src/app/.env.staging  /usr/src/app/.env
+RUN mv /usr/src/app/.env.prod  /usr/src/app/.env
 
 
 RUN npm run build
