@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { doAssessment } from '../../../redux/actions/kpi';
 import { FAILED_SAVE_CHALLENGE_YOURSELF, Success } from '../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -24,11 +25,12 @@ class modalAssessment extends Component {
       form,
       showHideModal,
       handleAssesLoading,
-      doAssess
+      doAssess,
+      modalIndex
     } = this.props;
-    form.validateFields([`dataKpi[${modalRecord.index}].assessment`], async (errors, values) => {
+    form.validateFields([`dataKpi[${modalIndex}].assessment`], async (errors, values) => {
       if (!errors) {
-        const item = values.dataKpi[modalRecord.index];
+        const item = values.dataKpi[modalIndex];
         const data = {
           achievementType: modalRecord.achievementType,
           actualAchievementText: modalRecord.achievementType === 0 ? item.assessment : '',
@@ -38,10 +40,10 @@ class modalAssessment extends Component {
         handleAssesLoading(modalRecord.id);
         showHideModal(0);
         await doAssess(data);
-        const { kpiReducers } = this.props;
+        const { kpiReducer } = this.props;
         const {
           loadingAssessOne, statusAssessOne, messageAssessOne, dataAssessOne
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingAssessOne) {
           if (statusAssessOne === Success) {
             handleChangeAssessment({
@@ -56,7 +58,7 @@ class modalAssessment extends Component {
               ...item
             });
             handleAssesLoading(0);
-            message.warning(`Sorry, ${messageAssessOne}`);
+            toast.warn(`Sorry, ${messageAssessOne}`);
           }
         }
       }
@@ -81,7 +83,7 @@ class modalAssessment extends Component {
 
   render() {
     const {
-      assessment, form, isModalShow, modalRecord, qualitativeOption
+      assessment, form, isModalShow, modalRecord, qualitativeOption, modalIndex
     } = this.props;
     return (
       <Modal
@@ -100,14 +102,14 @@ class modalAssessment extends Component {
         <Form>
           {modalRecord.achievementType === 1 ?
             <Form.Item label="Value">
-              {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
+              {form.getFieldDecorator(`dataKpi[${modalIndex}].assessment`, {
                 rules: [
                   { required: true, message: 'Value is required' },
                   { type: 'number', message: 'Value must be a number' },
                   {
                     validator: async (rule, value, callback, source) => {
                       if (value === 0) {
-                        callback('Value must be not a zero');
+                        callback('Value must be more than 0');
                       }
                     }
                   }
@@ -116,7 +118,7 @@ class modalAssessment extends Component {
               })(<InputNumber size="large" style={{ width: '100%' }} />)}
             </Form.Item> :
             <Form.Item label="Value">
-              {form.getFieldDecorator(`dataKpi[${modalRecord.index}].assessment`, {
+              {form.getFieldDecorator(`dataKpi[${modalIndex}].assessment`, {
                 rules: [{ required: true, message: 'Value is required' }],
                 initialValue: assessment || undefined
               })(
@@ -134,8 +136,8 @@ class modalAssessment extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -161,7 +163,7 @@ modalAssessment.propTypes = {
   assessment: PropTypes.string || PropTypes.number,
   doAssess: PropTypes.func,
   getOwnKpiList: PropTypes.func,
-  kpiReducers: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   form: PropTypes.instanceOf(Object)
 };

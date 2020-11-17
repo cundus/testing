@@ -13,6 +13,8 @@ import TablePlanningDetails from './table-detail-plan-kpi';
 import globalStyle from '../../../styles/globalStyles';
 import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChecker';
 import stepKpi from '../../../utils/stepKpi';
+import { Success } from '../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -26,15 +28,14 @@ class PlanningDetail extends Component {
       globalfeedback: '',
       currentStep: '',
       labelList: [],
-      loading: false
+      loading: true
     };
   }
 
   async componentDidMount() {
-    const { userReducers, match, step } = this.props;
+    const { authReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducers.result;
-    if (user.userId === params.id) {
+    if (authReducer?.userId === params.id) {
       this.props.history.push('/planning/kpi');
     } else {
       this.getAllData();
@@ -42,9 +43,6 @@ class PlanningDetail extends Component {
   }
 
   async getAllData() {
-    this.setState({
-      loading: true
-    });
     const newData = [];
     await this.props.getLatestGoalKpi();
     await this.props.getTeamDetailKPI(this.props.match.params.id);
@@ -102,6 +100,9 @@ class PlanningDetail extends Component {
         labelList: this.props.myteamdetail.labelList
       });
     }
+    this.setState({
+      loading: false
+    });
   }
 
 
@@ -123,20 +124,21 @@ class PlanningDetail extends Component {
     this.state.dataSource.map((item) => {
       kpiList.find((d) => d.id === item.key).othersRatingComments.comment = item.feedback;
     });
-    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
+    myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback || '';
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         confirm({
-          title: 'Are you sure to send Feedbacks ?',
+          title: 'Are you sure to want to send your feedback ?',
           onOk: async () => {
             await giveFeedbackKpi(userId, myteamdetail);
-            if (this.props.feedback.error === true) {
-              message.error(this.props.feedback.message);
-            }
-            if (this.props.feedback.success === true) {
-              message.success('Feedback  Send');
+            const { feedback } = this.props;
+            const { status, statusMessage } = feedback;
+            if (status === Success) {
+              toast.success('Success, your feedback has been sent');
               this.props.history.push('/my-team/planning');
               getNotifications();
+            } else {
+              toast.error(`Sorry, ${statusMessage}`);
             }
 
           },
@@ -158,15 +160,15 @@ class PlanningDetail extends Component {
       title: 'Are you sure to Approve ?',
       onOk: async () => {
         await approveKpi(userId, myteamdetail);
-        if (this.props.feedback.error === true) {
-          message.error(this.props.feedback.message);
-        }
-        if (this.props.feedback.success === true) {
-          message.success('Approved Kpi');
-          this.props.history.push('/my-team/planning');
+        const { feedback } = this.props;
+        const { status, statusMessage } = feedback;
+        if (status === Success) {
+          toast.success('Success, kpi has been approved');
+          this.props.history.push('/my-team/monitoring');
           getNotifications();
+        } else {
+          toast.error(`Sorry, ${statusMessage}`);
         }
-
       },
       onCancel() {}
     });
@@ -177,19 +179,19 @@ class PlanningDetail extends Component {
   };
 
   render() {
-    if(!this.props.myteamdetail.error) {
+    if(!this.props.myteamdetail?.error) {
     return (
       <div style={globalStyle.contentContainer}>
         {
-         (this.state.dataSource.length > 0 ) ?
+         (!this.state.loading) ?
            <div>
              {
-              (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
+              (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail?.error) ?
                 <div>
                   <Divider />
                   <Text strong>View KPI </Text>
                   <Text>
-                    {`View KPI of ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}
+                    {`View KPI of ${this.props.userDetail?.firstName} ${this.props.userDetail?.lastName} `}
                   </Text>
                   <Divider />
                 </div> :
@@ -198,7 +200,7 @@ class PlanningDetail extends Component {
              {
               (Object.keys(this.props.userDetail).length > 0 && !this.props.userDetail.error) ?
                 <div style={{ textAlign: 'center' }}>
-                  <Title level={4}>{`Performance Management - ${this.props.kpi.dataGoal.name || ''} for ${this.props.userDetail.firstName} ${this.props.userDetail.lastName} `}</Title>
+                  <Title level={4}>{`Performance Management - ${this.props.kpi?.dataGoal?.name || ''} for ${this.props.userDetail?.firstName} ${this.props.userDetail?.lastName} `}</Title>
                 </div> :
                 <div />
             }
@@ -238,10 +240,9 @@ class PlanningDetail extends Component {
              {this.state.currentStep === stepKpi[1] &&
              <center>
                <Button
-                 style={{ 'background-color': 'orange', color: 'white' }}
                  onClick={this.handleFeedback}
                >
-                Send Feedbacks
+                Send Feedback
                </Button>
                &nbsp;&nbsp;
                <Button onClick={this.handleApprove} type="primary">Approve</Button>
@@ -258,10 +259,10 @@ class PlanningDetail extends Component {
         <div style={globalStyle.contentContainer}>
         <Result
           status={'error'}
-          title={this.props.myteamdetail.errorDetail.status_code}
-          subTitle={`Sorry, ${this.props.myteamdetail.errorDetail.status_description || this.props.myteamdetail.errorDetail}`}
+          title={this.props.myteamdetail.errorDetail?.status_code}
+          subTitle={`Sorry, ${this.props.myteamdetail?.errorDetail?.status_description || this.props.myteamdetail?.errorDetail}`}
           extra={[
-            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
+            <Button key="back" onClick={() => this.props.history.push('/my-team/planning/')}>Back</Button>,
           ]}
         />
         </div>
@@ -280,11 +281,11 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  myteamdetail: state.myTeamDetailReducers,
-  kpi: state.kpiReducers,
-  userDetail: state.userDetailReducers,
-  userReducers: state.userReducers,
-  feedback: state.feedbackReducers
+  myteamdetail: state.myTeamDetailReducer,
+  kpi: state.kpiReducer,
+  userDetail: state.userDetailReducer,
+  authReducer: state.authReducer,
+  feedback: state.feedbackReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PlanningDetail);
 

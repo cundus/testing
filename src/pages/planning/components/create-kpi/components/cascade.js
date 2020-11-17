@@ -106,6 +106,7 @@ class Cascade extends Component {
       dataSource, handleSaveDraft, handleError, dataSelectedCascade
     } = this.props;
     const { columns, loading } = this.state;
+    const dataSelect = dataSelectedCascade?.filter((item)=>item?.cascadeType)
     return (
       <div>
         <DataTable
@@ -119,7 +120,7 @@ class Cascade extends Component {
           <Button
             id="save-draft"
             type="primary"
-            disabled={dataSelectedCascade.length === 0}
+            disabled={dataSelect.length === 0}
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
           >

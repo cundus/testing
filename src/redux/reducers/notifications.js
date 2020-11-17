@@ -11,7 +11,7 @@ const initialState = {
   data: []
 };
 
-const kpiReducers = (state = initialState, action) => {
+const kpiReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_NOTIFICATIONS:
       return {
@@ -38,4 +38,4 @@ const kpiReducers = (state = initialState, action) => {
   }
 };
 
-export default kpiReducers;
+export default kpiReducer;

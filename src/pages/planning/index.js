@@ -10,8 +10,9 @@ import {
 } from './components';
 import { actionGetKPI } from '../../redux/actions';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi from '../../utils/stepKpi';
+import { EMP_GOAL_SETTING } from '../../utils/stepKpi';
 import { Success } from '../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 class Planning extends Component {
   constructor(props) {
@@ -27,17 +28,16 @@ class Planning extends Component {
 
   getKpi = async () => {
     const {
-      userReducers
+      authReducer
     } = this.props;
-    const { user } = userReducers.result;
     const { getKpiList } = this.props;
-    await getKpiList(user.userId);
-    const { kpiReducers } = this.props;
+    await getKpiList(authReducer?.userId);
+    const { kpiReducer } = this.props;
     const {
       errMessage, dataKpi, status, currentStep
-    } = kpiReducers;
+    } = kpiReducer;
     if (status === Success) {
-      if (currentStep === stepKpi[0]) {
+      if (currentStep === EMP_GOAL_SETTING) {
         if (dataKpi.length === 0) {
           // Fill KPI Form
           this.stepChange(0);
@@ -52,7 +52,7 @@ class Planning extends Component {
     } else {
       // Error
       this.stepChange(null);
-      message.warning(`Sorry, ${errMessage}`);
+      toast.warn(`Sorry, ${errMessage}`);
       this.setState({
         error: true
       });
@@ -79,10 +79,10 @@ class Planning extends Component {
       step, loading, error, access
     } = this.state;
     const { stepChange, setAccess } = this;
-    const { kpiReducers, history } = this.props;
+    const { kpiReducer, history } = this.props;
     const {
       errMessage, status
-    } = kpiReducers;
+    } = kpiReducer;
     if (!error) {
       if (step === 0) {
         return (
@@ -119,7 +119,7 @@ class Planning extends Component {
       return (
         <div style={globalStyle.contentContainer}>
           <Result
-            status={'error'}
+            status="error"
             title={status}
             subTitle={`Sorry, ${errMessage}`}
             // eslint-disable-next-line react/jsx-no-bind
@@ -132,8 +132,9 @@ class Planning extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer,
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -148,8 +149,8 @@ const connectToComponent = connect(
 export default withRouter(connectToComponent);
 
 Planning.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
+  authReducer: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object),
   getKpiList: PropTypes.func
 };

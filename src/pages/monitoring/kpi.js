@@ -31,7 +31,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         width: 200,
         className: 'td-top',
-        editable: (!isSuperior && isEditable)
+        editable: false
       },
       {
         title: 'Baseline',
@@ -40,7 +40,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 200,
-        editable: (!isSuperior && isEditable)
+        editable: false
       },
       {
         title: 'Weight (%)',
@@ -50,7 +50,7 @@ class TableMonitorKPI extends Component {
         className: 'td-top',
         type: 'number',
         width: 90,
-        editable: (!isSuperior && isEditable)
+        editable: false
       }
     ];
     // eslint-disable-next-line array-callback-return
@@ -62,7 +62,7 @@ class TableMonitorKPI extends Component {
         align: 'center',
         className: 'td-top',
         width: 150,
-        editable: (!isSuperior && isEditable)
+        editable: false
       };
       newColumns.push(data);
     });
@@ -88,18 +88,6 @@ class TableMonitorKPI extends Component {
                   Achievement
                 </Link>
               </Button>
-              {(!isSuperior) ?
-                <Popconfirm
-                  title="Sure to delete?"
-                  // eslint-disable-next-line react/jsx-no-bind
-                  onConfirm={() => handleDelete(record.key)}
-                >
-                  <Tooltip placement="bottomRight" title="delete">
-                    <Button type="danger" ghost>
-                      <Icon type="delete" />
-                    </Button>
-                  </Tooltip>
-                </Popconfirm> : <div />}
             </div>
           ) : null
         );

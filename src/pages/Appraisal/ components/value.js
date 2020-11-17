@@ -10,6 +10,7 @@ import {
 } from '../../../redux/actions/kpi';
 import mimeType from '../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -179,16 +180,16 @@ class Value extends Component {
                       ...record,
                       attachments: [...newFiles]
                     });
-                    message.success(`"${file.name}" has been deleted`);
+                    toast.success(`"${file.name}" has been deleted`);
                     resolve(true);
                   }
                 }
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
-                message.success(`"${file.name}" has been deleted`);
+                toast.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
                 resolve(true);
               } else {
-                message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
+                toast.warn(`Sorry, ${kpiR.messageDeleteFile}`);
               }
             }
           },
@@ -227,7 +228,7 @@ class Value extends Component {
         downloadLink.download = fileName;
         downloadLink.click();
       } else {
-        message.warning(`Sorry, ${messageDownload}`);
+        toast.warn(`Sorry, ${messageDownload}`);
       }
     }
   }
@@ -248,7 +249,7 @@ class Value extends Component {
       fileContent: b64
     };
     if (file.file.size > 5242880) {
-      message.warning('Sorry, Maximum file is 5MB');
+      toast.warn('Sorry, Maximum file is 5MB');
       onError(false, file);
     } else {
       await attachFile(data);
@@ -281,12 +282,12 @@ class Value extends Component {
                 ...record,
                 attachments: [...newFiles]
               });
-              message.success(`"${file.name}" has been uploaded`);
+              toast.success(`"${file.name}" has been uploaded`);
               onSuccess(true, file);
             }
           }
         } else {
-          message.warning(`Sorry, ${kpiR.messageAttach}`);
+          toast.warn(`Sorry, ${kpiR.messageAttach}`);
           onError(false, file);
         }
       }
@@ -358,7 +359,6 @@ class Value extends Component {
       dataSource,
       handleChangeField,
       form,
-      goToMonitoring,
       handleSave,
       loading,
       handleSubmit,
@@ -382,8 +382,8 @@ class Value extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiR: state.kpiReducers,
-  userR: state.userReducers
+  kpiR: state.kpiReducer,
+  userR: state.userReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -407,7 +407,6 @@ Value.propTypes = {
   deleteFiles: PropTypes.func,
   getOwnValues: PropTypes.func,
   handleSave: PropTypes.func,
-  goToMonitoring: PropTypes.func,
   handleSubmit: PropTypes.func,
   userR: PropTypes.instanceOf(Object),
   kpiR: PropTypes.instanceOf(Object),

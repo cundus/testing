@@ -75,7 +75,7 @@ import {
   getLatestGoalKpi, getKpiList, saveKpi, getKpiManagerList, getMetrics, submitNext, submitToPreviousStep
  } from '../../service/kpiPlanning';
 import {
-  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll
+  doAssess, getValues, getRating, saveValues, attachFile, deleteFile, getKpiRating, getProposeRating, sendFeedbackAppraisal, approveAppraisal, teamAcknowledge, empAcknowledgeList, empAcknowledge, getAttachId, downloadFiles, doAssessAll, saveAppraisal
 } from '../../service/appraisal';
 
 export const doGetLatestGoalKpi = () => async (dispatch) => {
@@ -110,8 +110,8 @@ export const doGetLatestGoalKpi = () => async (dispatch) => {
       dispatch({
         type: GET_LATEST_GOAL_KPI_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -156,8 +156,8 @@ export const doSaveKpi = (data, id) => async (dispatch) => {
       dispatch({
         type: SAVE_KPI_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -210,12 +210,12 @@ export const doGetKpiList = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_KPI_LIST_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -259,12 +259,12 @@ export const doGetKpiManagerList = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_KPI_MANAGER_LIST_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -307,12 +307,12 @@ export const doGetMetrics = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_METRICS_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -354,12 +354,12 @@ export const doSubmitNext = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: SUBMIT_NEXT_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -402,12 +402,12 @@ export const doAssessment = (data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: DO_ASSESSMENT_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -449,12 +449,12 @@ export const doAssessmentAll = (data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: DO_ASSESSMENT_FAILED_ALL,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -496,12 +496,12 @@ export const getValueList = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_VALUES_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -544,12 +544,12 @@ export const getRatings = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_RATING_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -592,12 +592,12 @@ export const saveValueList = (id, data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: SAVE_VALUES_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -641,12 +641,12 @@ export const doAttachFile = (data) => async (dispatch) => {
     }
   } catch (error) {
     if (error.response) {
-      if (error.response.data) {
+      if (error?.response) {
         dispatch({
           type: ATTACHMENT_FILE_FAILED,
           loading: false,
-          status: error.response.data.status,
-          message: error.response.data.error,
+          status: error?.response.status,
+          message: error?.response.error,
           error
         });
       } else {
@@ -700,12 +700,12 @@ export const doDeleteFiles = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: DELETE_FILE_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -748,12 +748,12 @@ export const doGetKpiRating = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_KPI_RATING_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -796,12 +796,12 @@ export const doGetProposeRating = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_PROPOSE_RATING_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -845,12 +845,12 @@ export const doSendBackAppraisal = (id, data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: SEND_FEEDBACK_APPRAISAL_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -894,12 +894,60 @@ export const doApproveAppraisal = (id, data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: APPROVE_APPRAISAL_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
+        error
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: null,
+        message: 'Something wrong',
+        error
+      });
+    }
+  }
+};
+
+export const doSaveAppraisal = (id, data) => async (dispatch) => {
+  dispatch({
+    type: APPROVE_APPRAISAL,
+    loading: true,
+    status: null,
+    message: null,
+    data: {}
+  });
+  try {
+    const payload = await saveAppraisal(id, data);
+    if (payload.data.status_code === Success) {
+      dispatch({
+        type: APPROVE_APPRAISAL_SUCCESS,
+        loading: false,
+        data: payload.data.result,
+        status: payload.data.status_code,
+        message: payload.data.status_description
+      });
+    } else {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: payload.data.status_code,
+        message: payload.data.status_description,
+        error: payload
+      });
+    }
+  } catch (error) {
+    if (error?.response) {
+      dispatch({
+        type: APPROVE_APPRAISAL_FAILED,
+        loading: false,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -942,12 +990,12 @@ export const doTeamAcknowledge = (data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: TEAM_ACKNOWLEDGEMENT_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -990,12 +1038,12 @@ export const doEmpAcknowledgeList = () => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: EMP_ACKNOWLEDGEMENT_LIST_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -1038,12 +1086,12 @@ export const doEmpAcknowledge = (data) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: EMP_ACKNOWLEDGEMENT_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -1086,12 +1134,12 @@ export const getAttachment = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: GET_ATTACHMENT_FILE_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {
@@ -1134,12 +1182,12 @@ export const doDownloadFile = (attachId) => async (dispatch) => {
       });
     }
   } catch (error) {
-    if (error.response.data) {
+    if (error?.response) {
       dispatch({
         type: DOWNLOAD_FILE_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response.status,
+        message: error?.response.error,
         error
       });
     } else {

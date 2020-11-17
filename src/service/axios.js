@@ -9,10 +9,11 @@ export const customAxios = axios.create({
   baseURL: REACT_APP_API_URL
 });
 
-customAxios.interceptors.request.use(async(config) => {
+customAxios.interceptors.request.use(async (config) => {
   config.baseURL = await apiUrl();
   config.headers = Object.assign(config.headers, {
-    'X-Requested-With': `${uuidv1()}-${new Date().getTime()}`
+    'X-Requested-With': `${uuidv1()}-${new Date().getTime()}`,
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
   });
   return config;
 });

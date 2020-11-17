@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { DataTable } from '../../../../../../components';
 import ModalAssessment from './modalAssesment';
+import { replace } from 'lodash';
 
 const { Text } = Typography;
 const { Option } = Select;
@@ -99,10 +100,18 @@ class KPI extends Component {
         }
         return (
           <Skeleton active loading={loadingResult} paragraph={false} title={{ width: 'auto' }}>
-            <Text strong style={{ color: colorring }}>{record.rating}</Text>
+            <Text strong style={{ color: colorring }}>{record.rating}</Text><br />
+            <span>{record.actualAchievement ? `(${record.actualAchievement})` : ''}</span>
           </Skeleton>
         );
       }
+    };
+    const KPIAchievementScore = {
+      title: 'KPI Achievement Score',
+      dataIndex: 'kpiScore',
+      align: 'center',
+      width: 130,
+      editable: myStep
     };
     const Feedback = {
       title: 'Feedback',
@@ -114,6 +123,7 @@ class KPI extends Component {
       editable: myStep
     };
     await newColumns.push(result);
+    await newColumns.push(KPIAchievementScore);
     // await newColumns.push(action);
     await newColumns.push(Feedback);
     this.setState({

@@ -10,6 +10,7 @@ import {
 } from '../../../../../../redux/actions/kpi';
 import mimeType from '../../../../../../utils/mimeType';
 import { Success, ATTACHMENT_NOT_FOUND } from '../../../../../../redux/status-code-type';
+import { toast } from 'react-toastify'
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -90,6 +91,10 @@ class Value extends Component {
             onRemove: this.deleteFile,
             onPreview: this.download,
             onDownload: this.download,
+            showUploadList: {
+              showDownloadIcon: true,
+              showRemoveIcon: false,
+            },
             // eslint-disable-next-line react/destructuring-assignment
             disabled: true,
             accept: '.doc,.docx,.pdf,.mle,.ppt,.pptx,.xlsx,.gif,.png,.jpg,.jpeg,.html,.rtf,.bmp,.txt,.csv,.htm'
@@ -136,15 +141,15 @@ class Value extends Component {
             } = this.props;
             if (!kpiR.loadingDeleteFile) {
               if (kpiR.statusDeleteFile === Success) {
-                message.success(`"${file.name}" has been deleted`);
+                toast.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
                 resolve(true);
               } else if (kpiR.statusDeleteFile === ATTACHMENT_NOT_FOUND) {
-                message.success(`"${file.name}" has been deleted`);
+                toast.success(`"${file.name}" has been deleted`);
                 // getOwnValues(user.userId, true);
                 resolve(true);
               } else {
-                message.warning(`Sorry, ${kpiR.messageDeleteFile}`);
+                toast.warn(`Sorry, ${kpiR.messageDeleteFile}`);
               }
             }
           },
@@ -183,7 +188,7 @@ class Value extends Component {
         downloadLink.download = fileName;
         downloadLink.click();
       } else {
-        message.warning(`Sorry, ${messageDownload}`);
+        toast.warn(`Sorry, ${messageDownload}`);
       }
     }
   }
@@ -193,9 +198,8 @@ class Value extends Component {
       onSuccess, onError, file
     } = options;
     const {
-      attachFile, userR, getOwnValues
+      attachFile, authReducer, getOwnValues
     } = this.props;
-    const { user } = userR.result;
     const fileContent = await file.data;
     const b64 = fileContent.replace(/^data:.+;base64,/, '');
     const data = {
@@ -205,7 +209,7 @@ class Value extends Component {
       fileContent: b64
     };
     if (file.file.size > 5242880) {
-      message.warning('Sorry, Maximum file is 5MB');
+      toast.warn('Sorry, Maximum file is 5MB');
       onError(false, file);
     } else {
       await attachFile(data);
@@ -215,10 +219,10 @@ class Value extends Component {
       if (!kpiR.loadingAttach) {
         if (kpiR.statusAttach === Success) {
           onSuccess(true, file);
-          getOwnValues(user.userId, true);
-          message.success(`"${file.name}" has been uploaded`);
+          getOwnValues(authReducer?.userId, true);
+          toast.success(`"${file.name}" has been uploaded`);
         } else {
-          message.warning(`Sorry, ${kpiR.messageAttach}`);
+          toast.warn(`Sorry, ${kpiR.messageAttach}`);
           onError(false, file);
         }
       }
@@ -308,8 +312,8 @@ class Value extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiR: state.kpiReducers,
-  userR: state.userReducers
+  kpiR: state.kpiReducer,
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({

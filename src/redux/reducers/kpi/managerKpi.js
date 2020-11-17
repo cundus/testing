@@ -13,7 +13,7 @@ const initialState = {
   dataKpiManagerMetrics: []
 };
 
-const kpiReducers = (state = initialState, action) => {
+const kpiReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_KPI_MANAGER_LIST:
       return {
@@ -45,4 +45,4 @@ const kpiReducers = (state = initialState, action) => {
   }
 };
 
-export default kpiReducers;
+export default kpiReducer;

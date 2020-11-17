@@ -10,14 +10,14 @@ import styles from './Sidebar.styles';
 const { Sider } = Layout;
 
 const Sidebar = (props) => {
-  let mainRouter = MenuList.filter((x) => {
+  const { authReducer } = props;
+  const mainRouter = MenuList.filter((x) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
-  const { collapsed, toggle, isAllowToMonitor } = props;
-  const isManager = _.get(props, 'user.result.user.manager', false);
-  const isNoEmpleyee = _.get(props, 'user.result.user.managerId', null);
-  if (isManager === false) {
+  const { collapsed, toggle, isMonitoring, isAppraisal, } = props;
+  const isManager = authReducer?.manager;
+  if (!isManager) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
   }
   // if (!isNoEmpleyee) {
@@ -50,11 +50,12 @@ const Sidebar = (props) => {
             (menuChild) => menuChild.parent === menu.title
           );
           if (childsRoutes.length === 0) {
-            const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+            const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+            const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
             return (
               <Menu.Item
                 key={`${menu.path}`}
-                disabled={isDisabled}
+                disabled={isMonDisabled || isApDisabled}
               >
                 <Link to={menu.path} onClick={toggle}>{menu.title}</Link>
               </Menu.Item>
@@ -67,12 +68,13 @@ const Sidebar = (props) => {
                   <span className="submenu-title-wrapper">{menu.title}</span>
                 }
               >
-                {childsRoutes.map((menuChild) => {
-                  const isDisabled = isAllowToMonitor && (menu.title === 'Monitoring' || menu.title === 'Appraisal');
+                {childsRoutes?.filter((item) => item?.manager === isManager || item?.employee)?.map((menuChild) => {
+                const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
+                const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
                   return (
                     <Menu.Item
                       key={`${menuChild.path}`}
-                      disabled={isDisabled}
+                      disabled={isMonDisabled || isApDisabled}
                     >
                       <Link to={menuChild.path} onClick={toggle}>
                         <Icon
@@ -95,8 +97,8 @@ const Sidebar = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers
+  auth: state.activeDirectoryReducer,
+  authReducer: state.authReducer
 });
 const connectToComponent = connect(mapStateToProps)(Sidebar);
 
@@ -104,6 +106,5 @@ export default connectToComponent;
 
 Sidebar.propTypes = {
   collapsed: PropTypes.bool,
-  toggle: PropTypes.func,
-  isAllowToMonitor: PropTypes.bool
+  toggle: PropTypes.func
 };

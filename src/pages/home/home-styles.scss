@@ -26,6 +26,14 @@
     color: #ffffff;  
 }
 
+.ant-list-item:hover {
+    background-color: #f7f7f7;
+    color: #1890ff;
+    align-items: center;
+}
+.ant-list-item-meta-title {
+    color: inherit;
+}
 
 .purple {
     color: #591df1;

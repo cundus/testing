@@ -1,55 +1,64 @@
-import { AuthenticationActions, AuthenticationState } from 'react-aad-msal';
+import {
+  GET_USER_SUCCESS,
+  LOGIN_BY_AD_TOKEN_SUCCESS,
+  LOGIN_BY_AD_TOKEN,
+  LOGIN_BY_AD_TOKEN_FAILED,
+  GET_CURRENT_STEP,
+  GET_CURRENT_STEP_SUCCESS,
+  GET_CURRENT_STEP_FAILED
+} from '../action.type';
 
 const initialState = {
-  initializing: false,
-  initialized: false,
-  idToken: null,
-  accessToken: null,
-  state: AuthenticationState.Unauthenticated,
+  cellPhone: null,
+  email: '',
+  empId: '',
+  firstName: '',
+  lastName: '',
+  manager: null,
+  managerId: null,
+  userId: '',
+  userName: '',
+  statusLoginCode: null,
+  statusLoginDesc: null,
+  loadingLogin: true
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case AuthenticationActions.Initializing:
+    case LOGIN_BY_AD_TOKEN:
       return {
         ...state,
-        initializing: true,
-        initialized: false,
+        ...action
       };
-    case AuthenticationActions.Initialized:
+    case LOGIN_BY_AD_TOKEN_SUCCESS:
       return {
         ...state,
-        initializing: false,
-        initialized: true,
+        ...action
       };
-    case AuthenticationActions.AcquiredIdTokenSuccess:
+    case GET_USER_SUCCESS:
       return {
         ...state,
-        idToken: action.payload,
+        ...action?.data
       };
-    case AuthenticationActions.AcquiredAccessTokenSuccess:
+    case LOGIN_BY_AD_TOKEN_FAILED:
       return {
         ...state,
-        accessToken: action.payload,
+        ...action
       };
-    case AuthenticationActions.AcquiredAccessTokenError:
+    case GET_CURRENT_STEP:
       return {
         ...state,
-        accessToken: null,
+        ...action
       };
-    case AuthenticationActions.LoginSuccess:
+    case GET_CURRENT_STEP_SUCCESS:
       return {
         ...state,
-        account: action.payload.account,
+        ...action
       };
-    case AuthenticationActions.LoginError:
-    case AuthenticationActions.AcquiredIdTokenError:
-    case AuthenticationActions.LogoutSuccess:
-      return { ...state, idToken: null, accessToken: null, account: null };
-    case AuthenticationActions.AuthenticatedStateChanged:
+    case GET_CURRENT_STEP_FAILED:
       return {
         ...state,
-        state: action.payload,
+        ...action
       };
     default:
       return state;

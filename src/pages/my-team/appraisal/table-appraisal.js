@@ -78,15 +78,15 @@ class TableAppraisal extends Component {
         align: 'center',
         render: (text, record) => {
           let color = '';
-          if (text === 6) {
+          if (text === 8) {
             color = '#4CAF50';
-          } else if (text === 5) {
+          } else if (text === 7) {
             color = '#FFA000';
-          } else if (text === 4) {
+          } else if (text === 6) {
             color = '#8BC34A';
-          } else if (text === 3) {
+          } else if (text === 4) {
             color = '#FFEB3B';
-          } else if (text === 2) {
+          } else if (text === 3) {
             color = '#607D8B';
           } else {
             color = '#ccc';
@@ -107,16 +107,8 @@ class TableAppraisal extends Component {
         action: true,
         render: (text, record) => {
           let access = false;
-          if (record.statusNumber === 6) {
+          if (record.statusNumber !== 1 && record.statusNumber !== 2 && record.statusNumber !== 3 && record.statusNumber !== 5) {
             access = true;
-          } else if (record.statusNumber === 5) {
-            access = true;
-          } else if (record.statusNumber === 4) {
-            access = true;
-          } else if (record.statusNumber === 3) {
-            access = true;
-          } else if (record.statusNumber === 1 || record.statusNumber === 2) {
-            access = false;
           } else {
             access = false;
           }

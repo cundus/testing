@@ -18,7 +18,7 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi from '../../utils/stepKpi';
+import stepKpi, { PROGRESS_MONITORING_1, stepKpiMonitoring }  from '../../utils/stepKpi';
 import { GetUserKpiState } from '../../redux/actions/user';
 
 const { confirm } = Modal;
@@ -56,7 +56,7 @@ class Activity extends Component {
     const {
       GetThreadActivity,
       GetActivityStatus,
-      userReducers,
+      authReducer,
       doGetKpiList,
       match,
       GetMyKpiState
@@ -66,14 +66,9 @@ class Activity extends Component {
     await GetActivityStatus();
     await GetThreadActivity(idActivity, userId);
     GetMyKpiState();
-    const isSuperior = (userId !== userReducers.result.user.userId)
+    const isSuperior = (userId !== authReducer?.userId)
     if(isSuperior) {
       await doGetKpiList(userId);
-      if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
-        this.props.history.push('/my-team/monitoring');
-      }
-    } else if (this.props.step.currentStep !== stepKpi[2]){
-      this.props.history.push('/monitoring');
     }
     const activities = this.props.activityThread.activities;
     let dataSource = [];
@@ -160,7 +155,7 @@ class Activity extends Component {
   }
 
   render() {
-    const { activityThread, match, kpiReducers } = this.props;
+    const { activityThread, match, kpiReducer } = this.props;
     const { loadingActivity } = activityThread;
     const {loading } = this.state;
     const { kpiName } = activityThread;
@@ -168,9 +163,9 @@ class Activity extends Component {
     const { userId } = params;
     let stafname = '';
     if (this.state.isSuperior === true) {
-      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`
+      stafname = `${kpiReducer.user.firstName} ${kpiReducer.user.lastName}`
     }
-    const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]));
+    const isCanAdd = (!this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]));
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -190,7 +185,7 @@ class Activity extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
-              editable={this.props.step.currentStep === stepKpi[2]}
+              editable={this.props.step.currentStep === PROGRESS_MONITORING_1}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               userId={userId}
@@ -223,11 +218,11 @@ class Activity extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers,
-  userReducers: state.userReducers,
-  kpiReducers: state.kpiReducers,
-  step: state.userKpiStateReducers
+  activityThread: state.ActivityReducer,
+  activityStatus: state.ActivityStatusReducer,
+  authReducer: state.authReducer,
+  kpiReducer: state.kpiReducer,
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -247,11 +242,11 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Activity.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };

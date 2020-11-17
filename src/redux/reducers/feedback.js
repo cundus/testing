@@ -1,20 +1,30 @@
 import { errSubmitFeedback, successFeedback } from '../action.type';
 
-const initMyteam = {
-  error: true,
-  success: false
+const initialState = {
+  loading: false,
+  status: NaN,
+  statusMessage: ''
 };
 
-export default (state = initMyteam, action) => {
+const feedbackReducer = (state = initialState, action) => {
   switch (action.type) {
-    case errSubmitFeedback:
-      return action.data;
     case successFeedback:
       return {
-        error: false,
-        success: true
+        ...state,
+        loading: action.loading,
+        status: action.status,
+        statusMessage: action.message
+      };
+    case errSubmitFeedback:
+      return {
+        ...state,
+        loading: action.loading,
+        status: action.status,
+        statusMessage: action.message
       };
     default:
       return { ...state };
   }
 };
+
+export default feedbackReducer;

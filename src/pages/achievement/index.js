@@ -18,7 +18,7 @@ import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi from '../../utils/stepKpi';
+import stepKpi, { stepKpiMonitoring }  from '../../utils/stepKpi';
 
 
 const { confirm } = Modal;
@@ -57,23 +57,15 @@ class Achievement extends Component {
       GetListAchivement,
       match,
       doGetKpiList,
-      userReducers
+      authReducer
     } = this.props;
     const { params } = match;
     const { idAchievement, userId } = params;
     await GetListAchivement(idAchievement, userId);
     const activities = this.props.achievementThread.achievements;
     let dataSource = [];
-    const isSuperior = (userId !== userReducers.result.user.userId)
-    if(isSuperior) {
-       await doGetKpiList(userId);
-       if(this.props.kpiReducers.currentStep !== stepKpi[2]) {
-        this.props.history.push('/my-team/monitoring');
-       }
-    } else if (this.props.step.currentStep !== stepKpi[2]){
-      this.props.history.push('/monitoring');
-    }
-    if (activities.length > 0 && idAchievement) {
+    const isSuperior = (userId !== authReducer?.userId)
+    if (activities?.length > 0 && idAchievement) {
       dataSource = activities.map((d => {
         return {
           key: d.id,
@@ -158,15 +150,15 @@ class Achievement extends Component {
   }
 
   render() {
-    const { achievementThread, kpiReducers } = this.props;
+    const { achievementThread, kpiReducer } = this.props;
     const { loadingActivity } = achievementThread;
     const {loading } = this.state;
     const { kpiName } = achievementThread;
     let stafname = '';
     if (this.state.isSuperior === true) {
-      stafname = `${kpiReducers.user.firstName} ${kpiReducers.user.lastName}`;
+      stafname = `${kpiReducer.user.firstName} ${kpiReducer.user.lastName}`;
     }
-    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpi[2]);
+    const isCanAdd = !this.state.isSuperior && (this.props.step.currentStep === stepKpiMonitoring[0]);
     return (
       <div style={globalStyle.contentContainer}>
         <div>
@@ -186,7 +178,7 @@ class Achievement extends Component {
             <TableActivity
               dataSource={this.state.dataSource}
               loading={false}
-              editable={this.props.step.currentStep === stepKpi[2]}
+              editable={this.props.step.currentStep === stepKpiMonitoring[0]}
               showModalForm={this.showModalForm}
               statusActivity={this.state.activityStatus}
               isSuperior={this.state.isSuperior}
@@ -218,10 +210,10 @@ class Achievement extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  achievementThread: state.AchievementReducers,
-  userReducers: state.userReducers,
-  kpiReducers: state.kpiReducers,
-  step: state.userKpiStateReducers
+  achievementThread: state.AchievementReducer,
+  authReducer: state.authReducer,
+  kpiReducer: state.kpiReducer,
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -239,11 +231,11 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Achievement.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   form: PropTypes.instanceOf(Object)
 };

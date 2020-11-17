@@ -36,15 +36,14 @@ class SubmitedKPI extends Component {
 
   getAllData = async () => {
     const {
-      userReducers, getKpiList, access, setAccess
+      authReducer, getKpiList, access, setAccess
     } = this.props;
-    const { user } = userReducers.result;
     if (access) {
-      await getKpiList(user.userId);
+      await getKpiList(authReducer.userId);
     }
     setAccess(true);
-    const { ownKpiReducers } = this.props;
-    const { dataKpiFiltered, challenge, isFeedback } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpiFiltered, challenge, isFeedback } = ownkpiReducer;
     this.setState({
       dataSource: dataKpiFiltered,
       isFeedback,
@@ -86,10 +85,10 @@ class SubmitedKPI extends Component {
     const {
       dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback
     } = this.state;
-    const { ownKpiReducers } = this.props;
+    const { ownkpiReducer } = this.props;
     const {
       loadingKpi, dataKpiMetrics, generalFeedback, currentStep
-    } = ownKpiReducers;
+    } = ownkpiReducer;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -163,8 +162,9 @@ class SubmitedKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  userReducers: state.userReducers,
-  ownKpiReducers: state.ownKpi
+  userReducer: state.userReducer,
+  authReducer: state.authReducer,
+  ownkpiReducer: state.ownKpi
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -180,8 +180,8 @@ export default withRouter(connectToComponent);
 
 SubmitedKPI.propTypes = {
   getKpiList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
-  ownKpiReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
+  ownkpiReducer: PropTypes.instanceOf(Object),
   access: PropTypes.bool,
   setAccess: PropTypes.func
 };

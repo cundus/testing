@@ -37,12 +37,14 @@ import {
   doGetProposeRating,
   doApproveAppraisal,
   doSendBackAppraisal,
-  doTeamAcknowledge
+  doTeamAcknowledge, doSaveAppraisal
 } from '../../../../../redux/actions/kpi';
 import { actionGetNotifications } from '../../../../../redux/actions';
 import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
-import stepKpi from '../../../../../utils/stepKpi';
+import stepKpi, { COMPLETED, MANAGER_ACKNOWLEDMENT, PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
+import { EMP_ACKNOWLEDGEMENT } from '../../../../../redux/action.type';
+import { toast } from 'react-toastify'
 
 const { Text, Paragraph, Title } = Typography;
 const { TextArea } = Input;
@@ -67,15 +69,15 @@ class Appraisal extends Component {
       generalFeedbackState: '',
       checkedFinal: false,
       acknowledgement: '',
-      loadingSubmit: false
+      loadingSubmit: false,
+      scoreTotal: 0
     };
   }
 
   componentDidMount() {
-    const { userReducers, match, step } = this.props;
+    const { authReducer, match, step } = this.props;
     const { params } = match;
-    const { user } = userReducers.result;
-    if (user.userId === params.userId) {
+    if (authReducer.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
       } else {
@@ -83,6 +85,28 @@ class Appraisal extends Component {
       }
     } else {
       this.getData();
+    }
+  }
+
+  liveSUMkpiCount = (data) => {
+    let totalScore = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi?.kpiScore && itemKpi?.weight) {
+        let score = parseFloat(itemKpi.kpiScore);
+        score = (parseFloat(itemKpi.weight)/100) * score
+        if (score) {
+          totalScore += score;
+        }
+      } else {
+        totalScore += 0;
+      }
+    });
+    totalScore = parseFloat(totalScore);
+    if (typeof totalScore === 'number') {
+      this.setState({
+        scoreTotal: totalScore?.toFixed(2)
+      });
     }
   }
 
@@ -105,10 +129,10 @@ class Appraisal extends Component {
       loadingKpis: true
     });
     await getKpiList(id);
-    const { kpiReducers } = this.props;
+    const { kpiReducer } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep, generalFeedback, user, status
-    } = kpiReducers;
+    } = kpiReducer;
     if (status === Success) {
       const newData = [];
       // for fetching data metrics API
@@ -152,7 +176,8 @@ class Appraisal extends Component {
           rating: itemKpi.rating,
           index,
           achievementType: itemKpi.achievementType,
-          assessment: itemKpi.achievementType ? itemKpi.actualAchievement : itemKpi.actualAchievementText,
+          kpiScore: itemKpi?.officialRating?.kpiScore <= 0 ? 0 : itemKpi?.officialRating?.kpiScore,
+          actualAchievement: itemKpi.actualAchievement,
           qualitativeOption: newOption,
           metrics: dataKpiMetrics,
           ...dataMetrics,
@@ -183,6 +208,7 @@ class Appraisal extends Component {
         acknowledgement: `I have had feedback session with ${`${user.firstName} ${user.lastName}`} on his/her Performance Review Result.`,
         teamName: `${user.firstName} ${user.lastName}`
       });
+      this.liveSUMkpiCount(dataOrdered)
     }
     this.setState({
       loadingKpis: false
@@ -202,8 +228,8 @@ class Appraisal extends Component {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers } = this.props;
-    const { dataValues, dataRating, statusValues } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataValues, dataRating, statusValues } = kpiReducer;
     if (statusValues === Success) {
       const newData = [];
       // for fetching data metrics API
@@ -280,7 +306,8 @@ class Appraisal extends Component {
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
-        comment: data.feedback
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
       };
     });
     const valuesFeedbacks = dataValueList.map((data, index) => {
@@ -291,9 +318,9 @@ class Appraisal extends Component {
     });
     let rating = form.getFieldValue('proposeRating');
     // eslint-disable-next-line react/destructuring-assignment
-    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
       // eslint-disable-next-line react/destructuring-assignment
-      rating = this.props.kpiReducers.dataKpiRating.id;
+      rating = this.props.kpiReducer.dataKpiRating.id;
     }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
@@ -308,21 +335,21 @@ class Appraisal extends Component {
       onOk: async () => {
         await sendBackAppraisal(params.userId, data);
         const {
-          kpiReducers,
+          kpiReducer,
           history
         } = this.props;
         const {
           loadingSendBackAppraisal,
           statusSendBackAppraisal,
           messageSendBackAppraisal
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingSendBackAppraisal) {
           if (statusSendBackAppraisal === Success) {
             history.push('/my-team/appraisal/');
-            message.success(`${teamName}'s Appraisal has given feedback`);
+            toast.success(`${teamName}'s Appraisal has given feedback`);
             getNotifications();
           } else {
-            message.warning(`Sorry ${messageSendBackAppraisal}`);
+            toast.warn(`Sorry ${messageSendBackAppraisal}`);
           }
         }
       },
@@ -330,6 +357,73 @@ class Appraisal extends Component {
     });
   };
 
+  handleSave = () => {
+    const {
+      form, saveAppraisal, match, getNotifications
+    } = this.props;
+    const { params } = match;
+    const {
+      dataKpis, dataValueList, generalFeedbackState, teamName
+    } = this.state;
+    const kpiFeedbacks = dataKpis.map((data, index) => {
+      return {
+        id: data.id,
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
+      };
+    });
+    const valuesFeedbacks = dataValueList.map((data, index) => {
+      return {
+        valueId: data.valueId,
+        rating: data.rating,
+        comment: data.feedback
+      };
+    });
+    let rating = form.getFieldValue('proposeRating');
+    // eslint-disable-next-line react/destructuring-assignment
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
+      // eslint-disable-next-line react/destructuring-assignment
+      rating = this.props.kpiReducer.dataKpiRating.id;
+    }
+    const data = {
+      challengeOthersRatingComments: generalFeedbackState,
+      kpiFeedbacks,
+      rating,
+      valuesFeedbacks
+    };
+    form.validateFieldsAndScroll((errors, values) => {
+      const errRequires = errors?.dataKpi ? errors?.dataKpi.filter(er => !er.kpiScore.errors[0].message.includes('required')) : 0
+      if (!errors || (errRequires.length === 0)) {
+        confirm({
+          title: `Are you sure want to save ${teamName}'s Appraisal?`,
+          okText: 'Save',
+          onOk: async () => {
+            await saveAppraisal(params.userId, data, true);
+            const {
+              kpiReducer
+            } = this.props;
+            const {
+              loadingApproveAppraisal,
+              statusApproveAppraisal,
+              messageApproveAppraisal
+            } = kpiReducer;
+            if (!loadingApproveAppraisal) {
+              if (statusApproveAppraisal === Success) {
+                this.getData();
+                toast.success(`${teamName}'s Appraisal feedback has been save`);
+                getNotifications();
+              } else {
+                toast.warn(`Sorry ${messageApproveAppraisal}`);
+              }
+            }
+          },
+          onCancel() {}
+        });
+      } else if(errors.dataKpi) {
+        toast.warn('Please, correctly fill the KPI Achievement Score', 200);
+      }
+    })
+  };
 
   handleApprove = () => {
     const {
@@ -342,7 +436,8 @@ class Appraisal extends Component {
     const kpiFeedbacks = dataKpis.map((data, index) => {
       return {
         id: data.id,
-        comment: data.feedback
+        comment: data.feedback,
+        kpiScore: data?.kpiScore ? parseFloat(data?.kpiScore) : 0
       };
     });
     const valuesFeedbacks = dataValueList.map((data, index) => {
@@ -354,9 +449,9 @@ class Appraisal extends Component {
     });
     let rating = form.getFieldValue('proposeRating');
     // eslint-disable-next-line react/destructuring-assignment
-    if (rating === this.props.kpiReducers.dataKpiRating.rating) {
+    if (rating === this.props.kpiReducer.dataKpiRating.rating) {
       // eslint-disable-next-line react/destructuring-assignment
-      rating = this.props.kpiReducers.dataKpiRating.id;
+      rating = this.props.kpiReducer.dataKpiRating.id;
     }
     const data = {
       challengeOthersRatingComments: generalFeedbackState,
@@ -364,36 +459,37 @@ class Appraisal extends Component {
       rating,
       valuesFeedbacks
     };
-    form.validateFieldsAndScroll(['proposeRating'], (errors, values) => {
+    form.validateFieldsAndScroll((errors, values) => {
       if (!errors) {
         confirm({
-          title: 'Are you sure?',
-          content: `Are you sure want to approve ${teamName}'s Appraisal?`,
-          okText: 'Approve',
+          title: `Are you sure want to approve ${teamName}'s Appraisal?`,
+          content: "Make sure you have given feedback on both KPI's & Values before approving it",
           onOk: async () => {
             await approveAppraisal(params.userId, data);
             const {
-              kpiReducers
+              kpiReducer
             } = this.props;
             const {
               loadingApproveAppraisal,
               statusApproveAppraisal,
               messageApproveAppraisal
-            } = kpiReducers;
+            } = kpiReducer;
             if (!loadingApproveAppraisal) {
               if (statusApproveAppraisal === Success) {
                 this.getData();
-                message.success(`${teamName}'s Appraisal has been send to system`);
+                toast.success(`${teamName}'s Appraisal has been send to system`);
                 getNotifications();
               } else {
-                message.warning(`Sorry ${messageApproveAppraisal}`);
+                toast.warn(`Sorry ${messageApproveAppraisal}`);
               }
             }
           },
           onCancel() {}
         });
-      } else {
-        message.warning('Please, give your Propose Rating');
+      } else if (errors.proposeRating) {
+        toast.warn('Please, give your Propose Rating');
+      } else if(errors.dataKpi) {
+        toast.warn('Please, fill your KPI Achievement Score');
       }
     });
   };
@@ -416,6 +512,7 @@ class Appraisal extends Component {
       ...row
     });
     this.setState({ dataKpis: newData });
+    this.liveSUMkpiCount(newData)
   };
 
   handleChangeValues = (row) => {
@@ -447,21 +544,21 @@ class Appraisal extends Component {
     };
     confirm({
       title: 'Are you sure?',
-      content: `Are you sure want to approve ${teamName}'s Appraisal?`,
-      okText: 'Approve',
+      content: `Are you sure want to send ${teamName}'s Appraisal?`,
+      okText: 'Send',
       onOk: async () => {
         await teamAck(data);
-        const { kpiReducers } = this.props;
-        if (!kpiReducers.loadingTeamAck) {
-          if (kpiReducers.statusTeamAck === Success) {
+        const { kpiReducer } = this.props;
+        if (!kpiReducer.loadingTeamAck) {
+          if (kpiReducer.statusTeamAck === Success) {
             this.setState({
               loadingSubmit: true
             });
             this.getData();
             getNotifications();
-            message.success(`${teamName}'s Final Result has been sent`);
+            toast.success(`${teamName}'s Final Result has been sent`);
           } else {
-            message.warning(`Sorry, ${kpiReducers.messageTeamAck}`);
+            toast.warn(`Sorry, ${kpiReducer.messageTeamAck}`);
           }
         }
       },
@@ -488,7 +585,7 @@ class Appraisal extends Component {
     } = this.state;
     const {
       form,
-      kpiReducers,
+      kpiReducer,
       history
     } = this.props;
     const {
@@ -501,7 +598,7 @@ class Appraisal extends Component {
       errMessage,
       statusValues,
       messageValues
-    } = kpiReducers;
+    } = kpiReducer;
     return (
       <div>
         <div style={{
@@ -521,16 +618,16 @@ class Appraisal extends Component {
           </Skeleton>
           <Divider />
           <center>
+            {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
                   boxRateColor="inherit"
-                  title="Your Rating"
+                  title={`${teamName && teamName+"'s"} Rating`}
                   rate={dataKpiRating.rating}
-                  desc="Your final Rating based on Score"
                 />
               </Col>
-            </Row>
+            </Row>}
           </center>
           <br />
           <div>
@@ -547,19 +644,18 @@ class Appraisal extends Component {
                       myStep={myStep}
                       handleChangeField={this.handleChangeAssessment}
                     />
-                    <Form>
+                    {!(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
+                    <Form style={{marginBottom: 10}}>
                       <Text strong>
-                        {(currentStep === stepKpi[5] ||
-                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      Propose Rating
                       </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
-                          initialValue: dataKpiRating.rating || undefined
+                          initialValue: (dataKpiRating.rating && dataKpiRating.id !== '-1972.0') ? dataKpiRating.rating : undefined
                         })(
                           <Select
-                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                            disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
                             style={{ width: 200 }}
                             placeholder="Propose Rating"
                           >
@@ -568,8 +664,14 @@ class Appraisal extends Component {
                             })}
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
+                          
                       </Form.Item>
-                    </Form>
+                          <Text strong>
+                            SUM of Weighted KPI Score :
+                            {` ${this.state.scoreTotal}`}
+                          </Text>
+                          <br />
+                    </Form>}
                   </div> :
                   <Result
                     status={'error'}
@@ -595,19 +697,18 @@ class Appraisal extends Component {
                       myStep={myStep}
                       optionRating={optionRating}
                     />
-                    <Form>
+                    {!(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
+                    <Form style={{marginBottom: 10}}>
                       <Text strong>
-                        {(currentStep === stepKpi[5] ||
-                        currentStep === stepKpi[6] || formStatusId === '3') ? 'Final Rating : ' : 'Propose Rating : '}
+                      Propose Rating
                       </Text>
                       <Form.Item>
                         {dataKpiRating.rating ? form.getFieldDecorator('proposeRating', {
                           rules: [{ required: true, message: 'Propose Rating is required' }],
-                          initialValue: dataKpiRating.rating || undefined
+                          initialValue: (dataKpiRating.rating && dataKpiRating.id !== '-1972.0') ? dataKpiRating.rating : undefined
                         })(
                           <Select
-                            disabled={(currentStep === stepKpi[4] || currentStep === stepKpi[5] ||
-                              currentStep === stepKpi[6]) || formStatusId === '3'}
+                          disabled={(currentStep !== PERFORMANCE_REVIEW_MANAGER)}
                             style={{ width: 200 }} placeholder="Propose Rating"
                           >
                             {dataProposeRating.map((item, index) => {
@@ -616,7 +717,11 @@ class Appraisal extends Component {
                           </Select>
                           ) : <Skeleton active title={{ width: 200 }} paragraph={false} />}
                       </Form.Item>
-                    </Form>
+                          <Text strong>
+                            SUM of Weighted KPI Score :
+                            {` ${this.state.scoreTotal}`}
+                          </Text>
+                    </Form>}
                   </div> :
                   <Result
                     status={'error'}
@@ -741,6 +846,13 @@ class Appraisal extends Component {
                     Send Feedback
                   </Button>
                   <Button
+                    id="save"
+                    onClick={this.handleSave}
+                    style={{ margin: 10 }}
+                  >
+                    Save
+                  </Button>
+                  <Button
                     id="send-manager"
                     type="primary"
                     onClick={this.handleApprove}
@@ -774,9 +886,9 @@ class Appraisal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers,
-  step: state.userKpiStateReducers
+  kpiReducer: state.kpiReducer,
+  authReducer: state.authReducer,
+  step: state.userKpiStateReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -790,6 +902,7 @@ const mapDispatchToProps = (dispatch) => ({
   getProposeRating: () => dispatch(doGetProposeRating()),
   sendBackAppraisal: (id, data) => dispatch(doSendBackAppraisal(id, data)),
   approveAppraisal: (id, data) => dispatch(doApproveAppraisal(id, data)),
+  saveAppraisal: (id, data) => dispatch(doSaveAppraisal(id, data)),
   teamAck: (data) => dispatch(doTeamAcknowledge(data)),
   getNotifications: () => dispatch(actionGetNotifications())
 });
@@ -802,7 +915,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Appraisal.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
   getRatingList: PropTypes.func,
   getValues: PropTypes.func,
   getKpiList: PropTypes.func,

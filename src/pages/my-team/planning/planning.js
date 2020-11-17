@@ -19,10 +19,10 @@ class Planning extends Component {
   }
 
   async componentDidMount() {
-    const { getMyTeamKPI } = this.props;
+    const { getMyTeamKPI, authReducer } = this.props;
     this.setState({loading:true});
-    await getMyTeamKPI(_.get(this, 'props.user.result.user.userId', []));
-    const newData = this.props.myteam.result.map( d => {
+    await getMyTeamKPI(authReducer?.userId);
+    const newData = this.props.myteam?.result.map( d => {
       d.costumAction = {
         idUser: d.userId,
         status: d.status
@@ -64,9 +64,9 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers,
-  myteam: state.myteamReducers
+  auth: state.activeDirectoryReducer,
+  authReducer: state.authReducer,
+  myteam: state.myteamReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Planning);
 

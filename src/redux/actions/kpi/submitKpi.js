@@ -15,42 +15,42 @@ export const actionSubmitKpi = (data, id) => async (dispatch) => {
   });
   try {
     const payloadSave = await saveKpi(data, id);
-    if (payloadSave.data.status_code === Success || payloadSave.data.status_code === FAILED_SAVE_CHALLENGE_YOURSELF) {
+    if (payloadSave?.data?.status_code === Success || payloadSave?.data?.status_code === FAILED_SAVE_CHALLENGE_YOURSELF) {
       const payloadSubmit = await submitNext(id);
-      if (payloadSubmit.data.status_code === Success) {
+      if (payloadSubmit?.data?.status_code === Success) {
         dispatch({
           type: SUBMIT_KPI_PLANNING_SUCCESS,
           loading: false,
-          status: payloadSubmit.data.status_code,
-          message: payloadSubmit.data.status_description,
-          payloadSave: payloadSave.data,
-          payloadSubmit: payloadSubmit.data
+          status: payloadSubmit?.data?.status_code,
+          message: payloadSubmit?.data?.status_description,
+          payloadSave: payloadSave?.data,
+          payloadSubmit: payloadSubmit?.data
         });
       } else {
         dispatch({
           type: SUBMIT_KPI_PLANNING_FAILED,
           loading: false,
-          status: payloadSubmit.data.status_code,
-          message: payloadSubmit.data.status_description,
-          error: payloadSubmit.data
+          status: payloadSubmit?.data?.status_code,
+          message: payloadSubmit?.data?.status_description,
+          error: payloadSubmit?.data
         });
       }
     } else {
       dispatch({
         type: SUBMIT_KPI_PLANNING_FAILED,
         loading: false,
-        status: payloadSave.data.status_code,
-        message: payloadSave.data.status_description,
+        status: payloadSave?.data?.status_code,
+        message: payloadSave?.data?.status_description,
         error: payloadSave
       });
     }
   } catch (error) {
-    if (error.response) {
+    if (error?.response) {
       dispatch({
         type: SUBMIT_KPI_PLANNING_FAILED,
         loading: false,
-        status: error.response.data.status,
-        message: error.response.data.error,
+        status: error?.response?.data?.status,
+        message: error?.response?.data?.error,
         error
       });
     } else {

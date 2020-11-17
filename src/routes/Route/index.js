@@ -12,6 +12,10 @@ import { LazyLoad } from '../../components';
 // Shared Pages
 const HomePage = React.lazy(() => import('../../pages/home/home'));
 const PlanningPage = React.lazy(() => import('../../pages/planning'));
+const PreviousKPI = React.lazy(() => import('../../pages/previous'));
+const MyTeamPreviousKPI = React.lazy(() => import('../../pages/my-team/previousKPI/alignmentList'));
+const AlignmentList = React.lazy(() => import('../../pages/my-team/alignment/alignmentList'));
+const AlignmentDetail = React.lazy(() => import('../../pages/my-team/alignment/alignmentDetail'));
 // const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
 // const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
 const MyTeamPlaningPage = React.lazy(() => import('../../pages/my-team/planning/planning'));
@@ -26,6 +30,7 @@ const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
 const ChatActivityPage = React.lazy(()=> import('../../pages/activity/chat'));
 const AchievementPage = React.lazy(() => import('../../pages/achievement/index'));
 const AppraisalTeamPageDetail = React.lazy(() => import('../../pages/my-team/appraisal/appraisal-detail/Appraisal'));
+const Download = React.lazy(() => import('../../pages/download'));
 
 export const routes = [
   {
@@ -47,7 +52,7 @@ export const routes = [
         exact: true
       },
       {
-        path: '/planning/kpi',
+        path: '/planning',
         component: Lazyload(PlanningPage),
         exact: true,
         title: 'Planning'
@@ -129,6 +134,42 @@ export const routes = [
         component: Lazyload(Error500Page),
         exact: true,
         title: 'Error 500'
+      },
+      {
+        path: '/my-team/performance-review-alignment/',
+        component: Lazyload(AlignmentList),
+        exact: true,
+        title: 'My Team - Appraisal'
+      },
+      {
+        path: '/my-team/performance-review-alignment/:sessionId',
+        component: Lazyload(AlignmentDetail),
+        exact: true,
+        title: 'My Team - Appraisal'
+      },
+      {
+        path: '/b76607ac',
+        component: Lazyload(Download),
+        exact: true,
+        title: 'Download'
+      },
+      {
+        path: '/previous-kpi',
+        component: Lazyload(PreviousKPI),
+        exact: true,
+        title: 'Previous KPI'
+      },
+      {
+        path: '/my-team/previous-kpi',
+        component: Lazyload(MyTeamPreviousKPI),
+        exact: true,
+        title: 'My Team - Appraisal'
+      },
+      {
+        path: '/my-team/previous-kpi/:userId',
+        component: Lazyload(PreviousKPI),
+        exact: true,
+        title: 'My Team - Appraisal'
       }
     ]
   }

@@ -10,7 +10,7 @@ import {
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import {
-  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator
+  metricValidator, validator, weightValidator, metricValidatorText, kpiValidator, achievementScoreValidator
 } from '../../utils/validator';
 
 const { Option } = Select;
@@ -85,7 +85,7 @@ class EditableCell extends React.Component {
     } else {
       type = 'dataGeneral';
     }
-    let valueType = 'Select type"';
+    let valueType = 'Select type';
     if (record.achievementType === 0) {
       valueType = 'Qualitative';
     } else if (record.achievementType === 1) {
@@ -218,6 +218,37 @@ class EditableCell extends React.Component {
               placeholder={placeholder}
               // eslint-disable-next-line react/jsx-no-bind
               onChange={() => this.change(indexarr, field)}
+              autoSize={{ minRows: 3, maxRows: 5 }}
+              disabled={!editable}
+            />
+          )}
+        </Form.Item>
+      );
+    } else if (index === 'kpiScore') {
+      const kpiScorePlaceholder = () =>{
+        console.log(record.rating)
+        switch (record.rating) {
+          case "Below":
+            return "Input range is between >= 1.0 until < 2.0"
+          case "Meet":
+            return "Input range is between >= 2.0 until < 3.0"
+          case "Exceed":
+            return "Input range is between >= 3.0 until <= 4.0"
+          default:
+            return "KPI Achievement Score";
+        }
+      }
+      return (
+        <Form.Item style={{ margin: 0 }}>
+          { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
+            rules: achievementScoreValidator(record.rating),
+            initialValue: record[index]
+          })(
+            <TextArea
+              id={`${title}-${index}`}
+              placeholder={kpiScorePlaceholder()}
+              // eslint-disable-next-line react/jsx-no-bind
+              onChange={() => this.change(indexarr, [`${type}[${indexarr}].${index}`])}
               autoSize={{ minRows: 3, maxRows: 5 }}
               disabled={!editable}
             />
@@ -357,7 +388,8 @@ const DataTable = (props) => {
       columns,
       loading,
       form,
-      emptytext
+      emptytext,
+      handleChangeTable
     } = props;
 
   const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -403,6 +435,7 @@ const DataTable = (props) => {
         }}
         rowClassName="editable-row"
         bordered
+        onChange={handleChangeTable}
         dataSource={datasource}
         columns={columnList}
         scroll={isDesktopOrLaptop ? { x: false } : { x: true }}

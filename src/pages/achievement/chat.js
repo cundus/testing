@@ -154,9 +154,9 @@ class Chat extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  activityThread: state.ActivityReducers,
-  activityStatus: state.ActivityStatusReducers,
-  chat: state.ActivityChatReducers
+  activityThread: state.ActivityReducer,
+  activityStatus: state.ActivityStatusReducer,
+  chat: state.ActivityChatReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -174,7 +174,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Chat.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object).isRequired,
+  kpiReducer: PropTypes.instanceOf(Object).isRequired,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   submitNext: PropTypes.func,

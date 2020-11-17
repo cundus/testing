@@ -10,9 +10,11 @@ import globalStyle from "../../../styles/globalStyles";
 const { Text } = Typography;
 
 class Monitoring extends Component {
-  componentDidMount() {
-    const { getMyTeamKPIMonitoring } = this.props;
-    getMyTeamKPIMonitoring(_.get(this, 'props.user.result.user.userId', []));
+  async componentDidMount() {
+    this.setState({loading: true})
+    const { getMyTeamKPIMonitoring, authReducer } = this.props;
+    await getMyTeamKPIMonitoring(authReducer?.userId);
+    this.setState({loading:false})
   }
 
   render() {
@@ -20,7 +22,7 @@ class Monitoring extends Component {
     return(
       <div style={globalStyle.contentContainer}>
         {
-          (Object.keys(myteam).length)?
+          !this.state?.loading?
             <div>
                <div>
                 <Divider />
@@ -46,9 +48,9 @@ const mapDispatchtoProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => ({
-  auth: state.authReducer,
-  user: state.userReducers,
-  myteam: state.myteamReducers
+  auth: state.activeDirectoryReducer,
+  authReducer: state.authReducer,
+  myteam: state.myteamReducer
 });
 const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Monitoring);
 

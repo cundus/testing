@@ -10,7 +10,7 @@ const initialState = {
   statusMessage: ''
 };
 
-const kpiReducers = (state = initialState, action) => {
+const kpiReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_KPI:
       return {
@@ -36,4 +36,4 @@ const kpiReducers = (state = initialState, action) => {
   }
 };
 
-export default kpiReducers;
+export default kpiReducer;

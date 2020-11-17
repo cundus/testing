@@ -38,6 +38,7 @@ import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
 import TextArea from 'antd/lib/input/TextArea';
+import { toast } from 'react-toastify'
 
 const { Text, Paragraph, Title } = Typography;
 const { TabPane } = Tabs;
@@ -69,11 +70,10 @@ class Appraisal extends Component {
 
   getData = async (e) => {
     const {
-      userReducers
+      authReducer
     } = this.props;
-    const { user } = userReducers.result;
-    this.getOwnKpiList(user.userId);
-    this.getOwnValues(user.userId);
+    this.getOwnKpiList(authReducer?.userId);
+    this.getOwnValues(authReducer?.userId);
   };
 
   getOwnKpiList = async (id) => {
@@ -82,15 +82,15 @@ class Appraisal extends Component {
     } = this.props;
     await getKpiList(id);
     getKpiRating(id);
-    const { kpiReducers } = this.props;
+    const { kpiReducer } = this.props;
     const {
       dataKpi, dataKpiMetrics, challenge, currentStep, formStatusId, status
-    } = kpiReducers;
+    } = kpiReducer;
     if (status === Success) {
     if (currentStep === stepKpi[6] || formStatusId === '3') {
       await empAcknowledgeList();
       // eslint-disable-next-line react/destructuring-assignment
-      const dataEmpAcks = this.props.kpiReducers.dataEmpAckList.list.map((ack) => {
+      const dataEmpAcks = this.props.kpiReducer.dataEmpAckList.list.map((ack) => {
         return {
           label: ack.value,
           value: ack.value
@@ -99,7 +99,7 @@ class Appraisal extends Component {
       this.setState({
         dataEmpAckOptions: dataEmpAcks,
         // eslint-disable-next-line react/destructuring-assignment
-        dataEmpAckName: this.props.kpiReducers.dataEmpAckList.name
+        dataEmpAckName: this.props.kpiReducer.dataEmpAckList.name
       });
     }
     const newData = [];
@@ -160,6 +160,9 @@ class Appraisal extends Component {
         assesment: item.assesment
       };
     });
+    form.setFieldsValue({
+      dataKpi: dataGen
+    })
     const dataKpiCheck = form.getFieldsValue(['dataKpi']);
     if (dataKpiCheck) {
       form.setFieldsValue({
@@ -191,8 +194,8 @@ class Appraisal extends Component {
       await getRatingList();
     }
     await getValues(id);
-    const { kpiReducers } = this.props;
-    const { dataValues, dataRating } = kpiReducers;
+    const { kpiReducer } = this.props;
+    const { dataValues, dataRating } = kpiReducer;
     const newData = [];
     // for fetching data metrics API
     // eslint-disable-next-line array-callback-return
@@ -289,28 +292,27 @@ class Appraisal extends Component {
           title: 'Are you sure?',
           onOk: async () => {
             await doAssessAll(data);
-            const { kpiReducers, userReducers } = this.props;
-            const { user } = userReducers.result;
-            const { loadingAssess, statusAssess, messageAssess } = kpiReducers;
+            const { kpiReducer, authReducer } = this.props;
+            const { loadingAssess, statusAssess, messageAssess } = kpiReducer;
             if (!loadingAssess) {
               if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                 this.setState({
                   loadingKpis: true
                 });
-                this.getOwnKpiList(user.userId);
-                message.success('Your Assessment has been saved');
+                this.getOwnKpiList(authReducer?.userId);
+                toast.success('Your Assessment has been saved');
                 if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  message.warning(`Sorry, ${messageAssess}`);
+                  toast.warn(`Sorry, ${messageAssess}`);
                 }
               } else {
-                message.warning(`Sorry, ${messageAssess}`);
+                toast.warn(`Sorry, ${messageAssess}`);
               }
             }
           },
           onCancel() {}
         });
       } else {
-        message.warning('Sorry, Please fill out all your assessment');
+        toast.warn('Sorry, Please fill out all your assessment');
       }
     });
   };
@@ -328,11 +330,6 @@ class Appraisal extends Component {
   feedShow = (status) => {
     this.setState({ isFeedback: status });
   };
-
-  goToMonitoring = () => {
-    const { history } = this.props;
-    history.push('/monitoring');
-  }
 
   handleChange = (row) => {
     const { dataValueList } = this.state;
@@ -355,9 +352,8 @@ class Appraisal extends Component {
 
   handleSave = () => {
     const {
-      doSaveValues, userReducers, form
+      doSaveValues, authReducer, form
     } = this.props;
-    const { user } = userReducers.result;
     const {
       dataValueList
     } = this.state;
@@ -379,14 +375,14 @@ class Appraisal extends Component {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSaveValues(user.userId, data);
-            const { kpiReducers } = this.props;
-            if (!kpiReducers.loadingSaveValues) {
-              if (kpiReducers.statusSaveValues === Success) {
-                message.success('Your Values has been saved');
-                this.getOwnValues(user.userId);
+            await doSaveValues(authReducer?.userId, data);
+            const { kpiReducer } = this.props;
+            if (!kpiReducer.loadingSaveValues) {
+              if (kpiReducer.statusSaveValues === Success) {
+                toast.success('Your Values has been saved');
+                this.getOwnValues(authReducer?.userId);
               } else {
-                message.warning(`Sorry, ${kpiReducers.messageSaveValues}`);
+                toast.warn(`Sorry, ${kpiReducer.messageSaveValues}`);
               }
             }
           },
@@ -399,9 +395,8 @@ class Appraisal extends Component {
   handleSubmit = async () => {
     const { dataKpis, challengeYour } = this.state;
     const {
-      doSaveValues, userReducers, form, doAssessAll, submitNext, getNotifications
+      doSaveValues, authReducer, form, doAssessAll, submitNext, getNotifications
     } = this.props;
-    const { user } = userReducers.result;
     // assessment
     const assessment = [];
     dataKpis.map((item) => {
@@ -442,7 +437,7 @@ class Appraisal extends Component {
     form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (valuesErr) {
-          message.warning('You need to fill Values before submiting to the manager');
+          toast.warn('You need to fill Values before submiting to the manager');
           this.changeTab('2');
           form.validateFields(['dataGeneral']);
         } else {
@@ -450,36 +445,36 @@ class Appraisal extends Component {
             title: 'Are you sure?',
             onOk: async () => {
               await doAssessAll(dataAssessment);
-              await doSaveValues(user.userId, dataValues);
+              await doSaveValues(authReducer?.userId, dataValues);
               this.setState({
                 loadingKpis: true
               });
-              const { kpiReducers } = this.props;
+              const { kpiReducer } = this.props;
               const {
                 loadingAssess,
                 statusAssess,
                 messageAssess
-              } = kpiReducers;
+              } = kpiReducer;
               const {
                 loadingSaveValues,
                 statusSaveValues,
                 messageSaveValues
-              } = kpiReducers;
+              } = kpiReducer;
               if (!loadingAssess && !loadingSaveValues) {
                 if (statusAssess === Success || statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
                   if (statusSaveValues === Success) {
-                    await submitNext(user.userId);
+                    await submitNext(authReducer?.userId);
                     this.getData();
                     getNotifications();
-                    message.success('Your Appraisal has been sent to your Manager');
+                    toast.success('Your Appraisal has been sent to your Manager');
                     if (statusAssess === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                      message.warning(`Sorry, ${messageAssess}`);
+                      toast.warn(`Sorry, ${messageAssess}`);
                     }
                   } else {
-                    message.warning(`Sorry, ${messageSaveValues}`);
+                    toast.warn(`Sorry, ${messageSaveValues}`);
                   }
                 } else {
-                  message.warning(`Sorry, ${messageAssess}`);
+                  toast.warn(`Sorry, ${messageAssess}`);
                 }
               }
             },
@@ -487,10 +482,10 @@ class Appraisal extends Component {
           });
         }
       } else if (err.dataKpi) {
-        message.warning('Please fill out your Assessment');
+        toast.warn('Please fill out your Assessment');
         this.changeTab('1');
       } else if (err.dataGeneral) {
-        message.warning('You need to fill Values before submiting to the manager');
+        toast.warn('You need to fill Values before submiting to the manager');
         this.changeTab('2');
       }
     });
@@ -519,12 +514,12 @@ class Appraisal extends Component {
       content: '',
       onOk: async () => {
         await empAcknowledge(finalAck);
-        const { kpiReducers } = this.props;
+        const { kpiReducer } = this.props;
         const {
           loadingEmpAck,
           statusEmpAck,
           messageEmpAck
-        } = kpiReducers;
+        } = kpiReducer;
         if (!loadingEmpAck) {
           if (statusEmpAck === Success) {
             this.setState({
@@ -532,9 +527,9 @@ class Appraisal extends Component {
             });
             this.getData();
             getNotifications();
-            message.success('Your Acknowledgement has been sent');
+            toast.success('Your Acknowledgement has been sent');
           } else {
-            message.warning(`Sorry, ${messageEmpAck}`);
+            toast.warn(`Sorry, ${messageEmpAck}`);
           }
         }
       },
@@ -562,7 +557,7 @@ class Appraisal extends Component {
     } = this.state;
     const {
       form,
-      kpiReducers
+      kpiReducer
     } = this.props;
     const {
       dataKpiMetrics,
@@ -576,7 +571,7 @@ class Appraisal extends Component {
       errMessage,
       statusValues,
       messageValues
-    } = kpiReducers;
+    } = kpiReducer;
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingBottom: 10 }}>
@@ -584,6 +579,7 @@ class Appraisal extends Component {
           <Text strong>Final Appraisal </Text>
           <Divider />
           <center>
+            {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
             <Row>
               <Col xl={24} md={24} xs={24}>
                 <CardRating
@@ -591,10 +587,9 @@ class Appraisal extends Component {
                   title="Your Rating"
                   loading={!loadingKpiRating && dataKpiRating.rating}
                   rate={(currentStep === stepKpi[6] || formStatusId === '3') ? dataKpiRating.rating : 'N/A'}
-                  desc="Your final Rating based on Score"
                 />
               </Col>
-            </Row>
+            </Row>}
           </center>
           <br />
           <div>
@@ -606,7 +601,6 @@ class Appraisal extends Component {
                     form={form}
                     loading={loadingKpis}
                     isModalShow={isModalShow}
-                    goToMonitoring={this.goToMonitoring}
                     handleSubmit={this.handleSubmit}
                     changeChallenge={this.changeChallenge}
                     challengeYour={challengeYour}
@@ -644,7 +638,6 @@ class Appraisal extends Component {
                   getOwnValues={this.getOwnValues}
                   handleChangeField={this.handleChange}
                   handleSubmit={this.handleSubmit}
-                  goToMonitoring={this.goToMonitoring}
                   handleSave={this.handleSave}
                   currentStep={currentStep}
                   myStep={myStep}
@@ -697,13 +690,6 @@ class Appraisal extends Component {
                     </Title>}
                 </div> :
                 <div style={{ textAlign: 'center' }}>
-                  <Button
-                    id="go-monitoring"
-                    onClick={this.goToMonitoring}
-                    style={{ margin: 10 }}
-                  >
-                    Go To Monitoring
-                  </Button>
                   {tab === '1' ?
                     <Button
                       id="save-assessment"
@@ -736,7 +722,7 @@ class Appraisal extends Component {
                 onChange={this.onCheckFinal}
                 checked={checkedFinal}
               >
-                <Text strong>I fully aware about the final score and rating given from My Supervisor to me</Text>
+                <Text strong>I'm fully aware about the final score and rating given from My Supervisor to me</Text>
               </Checkbox>
             </Skeleton>}
           {formStatusId === '3' &&
@@ -794,7 +780,7 @@ class Appraisal extends Component {
             <Button
               onClick={this.handleSubmitAck}
               type="primary"
-              disabled={finalAck === '' && !checkedFinal}
+              disabled={!finalAck || !checkedFinal}
             >
               Submit
             </Button>
@@ -806,8 +792,8 @@ class Appraisal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  kpiReducer: state.kpiReducer,
+  authReducer: state.authReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -832,7 +818,7 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 Appraisal.propTypes = {
-  kpiReducers: PropTypes.instanceOf(Object),
+  kpiReducer: PropTypes.instanceOf(Object),
   doSaveValues: PropTypes.func,
   // doAssess: PropTypes.func,
   getRatingList: PropTypes.func,
@@ -843,7 +829,7 @@ Appraisal.propTypes = {
   empAcknowledge: PropTypes.func,
   getNotifications: PropTypes.func,
   empAcknowledgeList: PropTypes.func,
-  userReducers: PropTypes.instanceOf(Object),
+  userReducer: PropTypes.instanceOf(Object),
   history: PropTypes.instanceOf(Object).isRequired,
   form: PropTypes.instanceOf(Object),
   doAssessAll: PropTypes.func

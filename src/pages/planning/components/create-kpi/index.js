@@ -8,7 +8,7 @@ import {
   message,
   Skeleton,
   Spin,
-  Form
+  Form, Select
 } from 'antd';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -20,8 +20,11 @@ import Cascade from './components/cascade';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../../../redux/status-code-type';
 import globalStyle from '../../../../styles/globalStyles';
 import kpiSendProcess from '../../../../utils/kpiSendProcess';
-import { kpiGetManagerProcess } from '../../../../utils/kpiGetProcess';
+import { kpiGetManagerProcess, kpiGetProcess } from '../../../../utils/kpiGetProcess';
 import { sendChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
+import Previous from './components/previous';
+import { actionGetFormTemplates, actionGetPrevKpiByFormId } from '../../../../redux/actions/previousKpi';
+import { toast } from 'react-toastify'
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -34,8 +37,10 @@ class CreateKPI extends Component {
       tab: '1',
       dataOwnId: 0,
       dataManagerKpi: [],
+      dataPreviousKpi: [],
       dataSelectedCascade: [],
       loadingOwn: true,
+      loadingPrevious: true,
       loadingManager: true,
       weightTotal: 0,
       weightTotalErr: true
@@ -48,13 +53,23 @@ class CreateKPI extends Component {
 
   fetchAllData = async () => {
     const {
-      userReducers, getLatestGoalKpi
+      authReducer, getLatestGoalKpi, doGetFormTemplates
     } = this.props;
-    const { user } = userReducers.result;
     getLatestGoalKpi();
-    this.getOwnKpiList(user.userId);
-    this.getManagerKpiList(user.userId);
+    this.getOwnKpiList(authReducer.userId);
+    this.getManagerKpiList(authReducer.userId);
+    await doGetFormTemplates(true);
+    const { previousKpiReducer } = this.props;
+    this.selectFormTemplate(previousKpiReducer?.dataFormTemplates[0]?.formTemplateId)
   };
+
+  selectFormTemplate = (value) =>{
+    const { authReducer, match} = this.props;
+    this.getPreviousKPI(authReducer?.userId, value)
+    this.setState({
+      selectedForm: value
+    })
+  }
 
   getOwnKpiList = async (id) => {
     const {
@@ -64,8 +79,8 @@ class CreateKPI extends Component {
       await getKpiList(id);
     }
     setAccess(true);
-    const { ownKpiReducers } = this.props;
-    const { dataKpi, dataKpiMetrics, dataKpiFiltered } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpi, dataKpiMetrics, dataKpiFiltered } = ownkpiReducer;
     const { dataOwnId } = this.state;
     const newData = [];
     const newSelectedData = [];
@@ -110,10 +125,10 @@ class CreateKPI extends Component {
   getManagerKpiList = async (id) => {
     const { getKpiManagerList } = this.props;
     await getKpiManagerList(id);
-    const { managerKpiReducers } = this.props;
+    const { managerkpiReducer } = this.props;
     const {
       dataFirstManager, dataSecondManager, dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     let newData = [];
     if (dataFirstManager) {
       const newManagerData = kpiGetManagerProcess(dataFirstManager, dataKpiManagerMetrics);
@@ -128,6 +143,23 @@ class CreateKPI extends Component {
       loadingManager: false
     });
   }
+
+  getPreviousKPI = async (userId, formId) => {
+    this.setState({
+      loadingPrevious: true,
+    });
+    const { doGetKpiFormId } = this.props;
+    await doGetKpiFormId(userId, formId);
+    const { previousKpiReducer } = this.props;
+    const newData = kpiGetProcess(
+      previousKpiReducer?.dataKpiByForm?.kpiList || [],
+      previousKpiReducer?.dataKpiByForm?.labelList || []
+    );
+    this.setState({
+      dataPreviousKpi: newData,
+      loadingPrevious: false,
+    });
+  };
 
   liveCount = (data) => {
     let totalWeight = 0;
@@ -160,15 +192,23 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, userReducers, stepChange, form, ownKpiReducers
+      doSavingKpi, authReducer, stepChange, form, ownkpiReducer
     } = this.props;
-    const { challenge, dataKpi, dataKpiMetrics } = ownKpiReducers;
-    const { user } = userReducers.result;
+    const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
     const {
       dataOwn,
       dataSelectedCascade
     } = this.state;
-    const dataSaving = dataOwn.concat(dataSelectedCascade);
+    let dataSaving = []
+    if (dataOwn.length === 1) {
+      if (dataOwn[0]?.kpi) {
+        dataSaving = dataOwn.concat(dataSelectedCascade);
+      } else {
+        dataSaving = dataSelectedCascade;
+      }
+    } else {
+      dataSaving = dataOwn.concat(dataSelectedCascade);
+    }
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
       kpiList: newDataKpi,
@@ -176,24 +216,25 @@ class CreateKPI extends Component {
     };
     form.validateFieldsAndScroll((err, values) => {
       if (dataSaving.length === 0) {
-        message.warning('You must have at least one KPI');
+        toast.warn('You must have at least one KPI');
       } else if (!err) {
         confirm({
           title: 'Are you sure?',
           onOk: async () => {
-            await doSavingKpi(data, user.userId);
-            const { saveKpiReducers } = this.props;
-            const { status, statusMessage } = saveKpiReducers;
+            await doSavingKpi(data, authReducer.userId);
+            const { savekpiReducer } = this.props;
+            const { status, statusMessage } = savekpiReducer;
             if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-              message.success('Your KPI has been saved');
+              toast.success('Your KPI has been saved');
               stepChange(1); // go to draft
             } else {
-              message.warning(`Sorry, ${statusMessage}`);
+              toast.warn(`Sorry, ${statusMessage}`);
             }
           },
           onCancel() {}
         });
-      } else {
+      } else if (err.dataKpi) {
+        toast.warn(`Please correctly fill your KPI`);
         this.changeTab('2');
       }
     });
@@ -215,15 +256,15 @@ class CreateKPI extends Component {
     } else {
       const newData = [...dataSelectedCascade, record];
       this.setState({
-        dataSelectedCascade: [...dataSelectedCascade, record]
+        dataSelectedCascade: [...dataSelectedCascade, { ...record, id: 0}]
       });
       this.liveCount([...dataOwn, ...newData]);
     }
   };
 
   handleAddRow = () => {
-    const { ownKpiReducers } = this.props;
-    const { dataKpiMetrics } = ownKpiReducers;
+    const { ownkpiReducer } = this.props;
+    const { dataKpiMetrics } = ownkpiReducer;
     const { dataOwnId, dataOwn, dataSelectedCascade } = this.state;
     let dataMetrics = dataKpiMetrics.map((metric) => {
       return `{"${metric.label}":""}`;
@@ -292,7 +333,10 @@ class CreateKPI extends Component {
       loadingManager,
       tab,
       weightTotalErr,
-      weightTotal
+      weightTotal,
+      selectedForm,
+      loadingPrevious,
+      dataPreviousKpi
     } = this.state;
     const {
       handleAddRow,
@@ -300,15 +344,16 @@ class CreateKPI extends Component {
       handleDeleteRow,
       handleSaveDraft,
       handleSelectData,
-      handleError
+      handleError,
+      selectFormTemplate
     } = this;
-    const { ownKpiReducers, form, managerKpiReducers } = this.props;
+    const { ownkpiReducer, form, managerkpiReducer, previousKpiReducer } = this.props;
     const {
       dataGoal, loadingGoal, dataKpiMetrics
-    } = ownKpiReducers;
+    } = ownkpiReducer;
     const {
       dataKpiManagerMetrics
-    } = managerKpiReducers;
+    } = managerkpiReducer;
     const { name } = dataGoal;
     return (
       <div style={{ ...globalStyle.contentContainer, borderRadius: 0 }}>
@@ -348,6 +393,30 @@ class CreateKPI extends Component {
                   handleSelectData={handleSelectData}
                 /> : <center><Spin /></center>}
             </TabPane>
+            <TabPane
+              id="copy-previous-tab"
+              tab="Copy From Previous KPI"
+              key="3"
+            >
+              <Select
+                placeholder="Select Performance"
+                style={{minWidth: 500}}
+                value={selectedForm||undefined}
+                onChange={selectFormTemplate}
+              >
+                {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
+                  <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
+              </Select>
+              {!loadingPrevious ?
+                <Previous
+                  dataSource={dataPreviousKpi}
+                  dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}
+                  dataSelectedCascade={dataSelectedCascade}
+                  handleError={handleError}
+                  handleSaveDraft={handleSaveDraft}
+                  handleSelectData={handleSelectData}
+                /> : <center><Spin /></center>}
+            </TabPane>
             <TabPane id="create-own-tab" tab="Create Own KPI" key="2">
               {!loadingOwn ?
                 <CreateOwn
@@ -369,18 +438,23 @@ class CreateKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  ownKpiReducers: state.ownKpi,
-  managerKpiReducers: state.managerKpi,
-  saveKpiReducers: state.saveKpi,
-  kpiReducers: state.kpiReducers,
-  userReducers: state.userReducers
+  ownkpiReducer: state.ownKpi,
+  managerkpiReducer: state.managerKpi,
+  savekpiReducer: state.saveKpi,
+  kpiReducer: state.kpiReducer,
+  userReducer: state.userReducer,
+  authReducer: state.authReducer,
+  previousKpiReducer: state.previousKpiReducer
 });
 
 const mapDispatchToProps = (dispatch) => ({
   doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
   getKpiList: (id) => dispatch(actionGetKPI(id)),
   getKpiManagerList: (id) => dispatch(actionGetManagerKPI(id)),
-  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI())
+  getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI()),
+  doGetFormTemplates: (ellgibleToCopy) =>
+    dispatch(actionGetFormTemplates(ellgibleToCopy)),
+  doGetKpiFormId: (userId, formId) => dispatch(actionGetPrevKpiByFormId(userId, formId))
 });
 
 const connectToComponent = connect(
@@ -391,16 +465,16 @@ const connectToComponent = connect(
 export default Form.create({})(withRouter(connectToComponent));
 
 CreateKPI.propTypes = {
-  ownKpiReducers: PropTypes.instanceOf(Object),
-  managerKpiReducers: PropTypes.instanceOf(Object),
+  ownkpiReducer: PropTypes.instanceOf(Object),
+  managerkpiReducer: PropTypes.instanceOf(Object),
   access: PropTypes.bool,
   setAccess: PropTypes.func,
-  saveKpiReducers: PropTypes.instanceOf(Object),
+  savekpiReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
   doSavingKpi: PropTypes.func,
   getKpiList: PropTypes.func,
   getLatestGoalKpi: PropTypes.func,
   getKpiManagerList: PropTypes.func,
   form: PropTypes.instanceOf(Object),
-  userReducers: PropTypes.instanceOf(Object).isRequired
+  userReducer: PropTypes.instanceOf(Object).isRequired
 };
