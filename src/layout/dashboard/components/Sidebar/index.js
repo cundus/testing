@@ -11,7 +11,7 @@ const { Sider } = Layout;
 
 const Sidebar = (props) => {
   const { authReducer } = props;
-  const mainRouter = MenuList.filter((x) => {
+  let mainRouter = MenuList.filter((x) => {
     return x.menuLevel === 1;
   });
   const pathlocation = window.location.pathname;
