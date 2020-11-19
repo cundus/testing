@@ -12,6 +12,7 @@ import CustomerIcon from '../../assets/icons/customer.svg';
 import FileIcon from '../../assets/icons/file.svg';
 import UsersIcon from '../../assets/icons/users.svg';
 import globalStyle from '../../styles/globalStyles';
+import { menuAppraisalAllow, menuMonitoringAllow } from '../../utils/stepKpi';
 
 const myTeamMenus = [
   {
@@ -85,9 +86,8 @@ class Home extends Component {
 
   render() {
     const { authReducer } = this.props;
-    const step = authReducer?.currentStep;
-    const isAllowToMonitor =
-      step === 'Manager Goal Review' || step === 'Emp Goal Setting';
+    const isMonitoring = menuMonitoringAllow.includes(authReducer?.currentStep);
+    const isAppraisal = menuAppraisalAllow.includes(authReducer?.currentStep);
     const isManager = authReducer?.manager;
     let size = 6;
     if (!isManager) {
@@ -132,7 +132,7 @@ class Home extends Component {
               <Button
                 shape="round"
                 className="homeBtn  pinkBtn"
-                disabled={isAllowToMonitor}
+                disabled={!isMonitoring}
                 style={{ fontWeight: 'bold' }}
               >
                 View Feedback Session
@@ -154,7 +154,7 @@ class Home extends Component {
               <Button
                 shape="round"
                 className="homeBtn  yellowBtn"
-                disabled={isAllowToMonitor}
+                disabled={!isAppraisal}
                 style={{ fontWeight: 'bold' }}
               >
                 View My Final Performance
