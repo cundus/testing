@@ -209,16 +209,6 @@ class KPI extends Component {
               // loading={loading}
               datasource={dataSource}
             />
-            {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
-            <div>
-              <Text>
-                Propose Rating :
-              </Text>
-              <br />
-              <Text strong>{proposeRating}</Text>
-              <br />
-              <br />
-            </div>}
             <Text strong>Challenge yourself :</Text>
             {!(myStep) ?
             <TextArea
