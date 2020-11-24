@@ -5,7 +5,6 @@ import {
   Modal,
   Typography,
   Divider,
-  message,
   Skeleton,
   Spin,
   Form, Select
@@ -64,7 +63,7 @@ class CreateKPI extends Component {
   };
 
   selectFormTemplate = (value) =>{
-    const { authReducer, match} = this.props;
+    const { authReducer} = this.props;
     this.getPreviousKPI(authReducer?.userId, value)
     this.setState({
       selectedForm: value

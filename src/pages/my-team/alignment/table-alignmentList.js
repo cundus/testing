@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Avatar, Button } from 'antd';
+import { Button } from 'antd';
 import DataTable from '../../../components/dataTable/index';
 import  { Link } from 'react-router-dom';
-import apiUrl from '../../../utils/apiUrl';
 
 
 class TableAlignment extends Component {

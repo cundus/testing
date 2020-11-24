@@ -111,20 +111,17 @@ const Header = (props) => {
               trigger={['hover', 'click']}
               placement="bottomCenter"
             >
-              <a id="account-link" href="#">
-                <div>
+                <div style={{cursor: 'pointer'}}>
                   <Badge count={notificationReducer.data.length} overflowCount={20}>
                     <Icon style={{ fontSize: 18 }} type="bell" />
                   </Badge>
                 </div>
-              </a>
             </Dropdown>
             <Dropdown overlay={langMenu} placement="bottomCenter">
               <img src={Indonesia} alt="flag" className="flagIcon" />
             </Dropdown>
             <Dropdown trigger={['hover', 'click']} overlay={accountMenu(logout)} placement="bottomLeft">
-              <a id="account-link" href="#">
-                <div className="accountWrapper">
+                <div className="accountWrapper"  style={{cursor: 'pointer'}}>
                   {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
                   <Avatar
                     shape="square"
@@ -134,7 +131,6 @@ const Header = (props) => {
                     className="avatar"
                   />
                 </div>
-              </a>
             </Dropdown>
           </Row>
         </Col>

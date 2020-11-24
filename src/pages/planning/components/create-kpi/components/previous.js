@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Checkbox, Select, Typography } from 'antd';
+import { Button, Checkbox, Typography } from 'antd';
 import { DataTable } from '../../../../../components';
 
 class Previous extends Component {

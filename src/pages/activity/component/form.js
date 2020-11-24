@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Modal, Button, Form, Select, Input
+  Modal, Form, Select, Input
 } from 'antd';
 
 const { Option } = Select;
@@ -24,7 +24,7 @@ class form extends Component {
 
   render() {
     const {
-      statusActivity, form, dataModal, handleModalChangeForm
+      statusActivity, form, dataModal
     } = this.props;
     return (
       <Modal

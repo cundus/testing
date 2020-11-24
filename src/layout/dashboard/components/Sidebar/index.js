@@ -2,7 +2,6 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import MenuList from '../../../../routes/MenuList';
 import styles from './Sidebar.styles';

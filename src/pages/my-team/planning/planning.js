@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Spin, Divider, Typography, Form } from 'antd';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 import TablePlanning from './table-plan';
 import { GetMyTeamKPI } from '../../../redux/actions/user';
 import globalStyle from '../../../styles/globalStyles';
+import actionGetCurrStep from '../../../redux/actions/auth/actionGetCurrentStep';
 
 const { Text } = Typography;
 
@@ -21,6 +21,7 @@ class Planning extends Component {
   async componentDidMount() {
     const { getMyTeamKPI, authReducer } = this.props;
     this.setState({loading:true});
+    this.props.doGetCurrStep()
     await getMyTeamKPI(authReducer?.userId);
     const newData = this.props.myteam?.result.map( d => {
       d.costumAction = {
@@ -33,7 +34,6 @@ class Planning extends Component {
   }
 
   render() {
-    const { myteam } = this.props;
     const { dataSource, form } = this.state;
     return(
       <div style={globalStyle.contentContainer}>
@@ -60,7 +60,8 @@ class Planning extends Component {
 }
 
 const mapDispatchtoProps = (dispatch) => ({
-  getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser))
+  getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser)),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

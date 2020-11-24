@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { doGetAppraisalTeam, doGetAppraisalTeamDetail } from '../../../redux/actions/user';
 import TableAppraisal from './table-appraisal';
 import globalStyle from '../../../styles/globalStyles';
+import actionGetCurrStep from '../../../redux/actions/auth/actionGetCurrentStep';
 
 const { Text } = Typography;
 
@@ -21,6 +22,7 @@ class Appraisal extends Component {
       authReducer
     } = this.props;
     this.fetchAppraisalTeam(authReducer?.userId);
+    this.props.doGetCurrStep()
   }
 
   fetchAppraisalTeam = async (id) => {
@@ -94,7 +96,8 @@ class Appraisal extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   getAppraisalTeam: (idUser) => dispatch(doGetAppraisalTeam(idUser)),
-  getAppraisalTeamDetail: (idUser) => dispatch(doGetAppraisalTeamDetail(idUser))
+  getAppraisalTeamDetail: (idUser) => dispatch(doGetAppraisalTeamDetail(idUser)),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

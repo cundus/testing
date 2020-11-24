@@ -165,7 +165,7 @@ class TableAlignmentDetail extends Component {
         sorter: (a, b) => a.postAlignment - b.postAlignment,
         placeholder: 'Post Alignment',
         render: (text, record, index) => {
-          const { dataProposeRating, isCanEdit, form, handleChange } = this.props;
+          const { isCanEdit, handleChange } = this.props;
           const dataOptionRating = [
             {id: 1, name: 'Need Improvement'},
             {id: 2, name: 'Well Done'},
