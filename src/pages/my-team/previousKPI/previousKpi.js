@@ -3,13 +3,13 @@ import  { connect } from 'react-redux';
 import  { Spin, Divider, Typography } from 'antd';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
-import TableAlignment from './table-alignmentList';
+import TablePrevious from './table-previousKpi';
 import globalStyle from "../../../styles/globalStyles";
 import { actionGetAllMyTeam } from "../../../redux/actions/previousKpi";
 
 const { Text } = Typography;
 
-class AlignmentList extends Component {
+class PreviousKpi extends Component {
   componentDidMount() {
     const { doGetAllMyTeam } = this.props;
     doGetAllMyTeam();
@@ -27,7 +27,7 @@ class AlignmentList extends Component {
                 <Text strong>My Team - Previous KPI</Text>
                 <Divider />
               </div>
-             <TableAlignment team={previousKpiReducer?.dataMyTeam || []} />
+             <TablePrevious team={previousKpiReducer?.dataMyTeam || []} />
             </div>:
             <center>
               <Spin/>
@@ -45,6 +45,6 @@ const mapDispatchtoProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
   previousKpiReducer: state.previousKpiReducer
 });
-const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(AlignmentList);
+const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(PreviousKpi);
 
 export default withRouter(connectToComponent);

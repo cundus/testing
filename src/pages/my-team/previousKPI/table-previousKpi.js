@@ -5,7 +5,7 @@ import  { Link } from 'react-router-dom';
 import apiUrl from '../../../utils/apiUrl';
 
 
-class TableAlignment extends Component {
+class TablePrevious extends Component {
   constructor(props) {
     super(props);
     this.columns = [
@@ -59,4 +59,4 @@ class TableAlignment extends Component {
   }
 }
 
-export default TableAlignment;
+export default TablePrevious;

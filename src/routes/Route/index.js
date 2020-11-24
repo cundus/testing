@@ -13,12 +13,6 @@ import { LazyLoad } from '../../components';
 const HomePage = React.lazy(() => import('../../pages/home/home'));
 const PlanningPage = React.lazy(() => import('../../pages/planning'));
 const PreviousKPI = React.lazy(() => import('../../pages/previous'));
-const MyTeamPreviousKPI = React.lazy(() => import('../../pages/my-team/previousKPI/alignmentList'));
-const AlignmentList = React.lazy(() => import('../../pages/my-team/alignment/alignmentList'));
-const AlignmentDetail = React.lazy(() => import('../../pages/my-team/alignment/alignmentDetail'));
-// const MyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/my-kpi'));
-// const EditMyKpiPage = React.lazy(() => import('../../pages/planning/my-kpi/edit-my-kpi'));
-const MyTeamPlaningPage = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const MyTeamPlaningDetailPage = React.lazy(() => import('../../pages/my-team/planning/planning-detail'));
 const MonitoringPage = React.lazy(() => import('../../pages/monitoring/index'));
 const AppraisalPage = React.lazy(() => import('../../pages/Appraisal/index'));
@@ -30,6 +24,10 @@ const ActivityPage = React.lazy(()=> import('../../pages/activity/index'));
 const ChatActivityPage = React.lazy(()=> import('../../pages/activity/chat'));
 const AchievementPage = React.lazy(() => import('../../pages/achievement/index'));
 const AppraisalTeamPageDetail = React.lazy(() => import('../../pages/my-team/appraisal/appraisal-detail/Appraisal'));
+const MyTeamPreviousKPI = React.lazy(() => import('../../pages/my-team/previousKPI/previousKpi'));
+const AlignmentList = React.lazy(() => import('../../pages/my-team/alignment/alignmentList'));
+const AlignmentDetail = React.lazy(() => import('../../pages/my-team/alignment/alignmentDetail'));
+const MyTeamPlaningPage = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const Download = React.lazy(() => import('../../pages/download'));
 
 export const routes = [
