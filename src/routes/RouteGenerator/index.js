@@ -2,7 +2,6 @@ import React from 'react';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
-import { Redirect } from 'react-router-dom';
 // import {GetInfoUser } from  '../../redux/actions/user';
 // Stores Redux
 // import Stores from '../../redux/store/index';

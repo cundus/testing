@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Form, Upload, Button, Icon, Typography, message, Modal
+  Select, Form, Upload, Button, Icon, Typography, Modal
 } from 'antd';
 import DataTable from '../../../components/dataTable';
 import {
@@ -160,7 +160,6 @@ class Value extends Component {
                 const {
                   loadingAttachment,
                   statusAttachment,
-                  messageAttachment,
                   dataAttachment
                 // eslint-disable-next-line react/destructuring-assignment
                 } = this.props.kpiR;
@@ -262,7 +261,6 @@ class Value extends Component {
           const {
             loadingAttachment,
             statusAttachment,
-            messageAttachment,
             dataAttachment
           // eslint-disable-next-line react/destructuring-assignment
           } = this.props.kpiR;
@@ -359,11 +357,7 @@ class Value extends Component {
       dataSource,
       handleChangeField,
       form,
-      handleSave,
       loading,
-      handleSubmit,
-      myStep,
-      currentStep
     } = this.props;
     return (
       <div>

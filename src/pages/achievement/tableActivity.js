@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import { DataTable } from '../../components';
 import { Button } from  'antd';
-import FormSend from './component/form';
-import  { Link } from  'react-router-dom';
 
 class TableActivity extends Component {
   constructor(props) {

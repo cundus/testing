@@ -4,7 +4,6 @@ import {
   Modal,
   Typography,
   Divider,
-  message,
   Input,
   Spin,
   Form
@@ -23,7 +22,7 @@ import kpiSendProcess from '../../../../utils/kpiSendProcess';
 import { toast } from 'react-toastify'
 
 const { confirm } = Modal;
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 const { TextArea } = Input;
 
 class DraftKPI extends Component {

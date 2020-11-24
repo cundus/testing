@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spin, Divider, Typography, AutoComplete, Input, Button, message, Modal, Form } from "antd";
+import { Spin, Divider, Typography, Button, message, Modal, Form } from "antd";
 import { withRouter } from "react-router-dom";
-import _ from "lodash";
 import TableAlignmentDetail from "./table-alignmentDetail";
 import globalStyle from "../../../styles/globalStyles";
 import { getAlignmentSessionDetail, postAlignmentSessionDetail } from "../../../redux/actions/alignment";
@@ -11,6 +10,7 @@ import HighchartsReact from "highcharts-react-official";
 import { doGetProposeRating } from "../../../redux/actions/kpi";
 import { Success } from "../../../redux/status-code-type";
 import { toast } from 'react-toastify'
+import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
 
 const { confirm } = Modal;
 
@@ -74,6 +74,7 @@ class AlignmentList extends Component {
   }
   componentDidMount() {
     this.getData();
+    this.props.doGetCurrStep()
   }
 
   getData = async () => {
@@ -195,7 +196,6 @@ class AlignmentList extends Component {
       dataProposeRating,
     } = kpiReducer;
     const {
-      usersCalibration,
       sortedInfo,
       filteredInfo,
       dataTable,
@@ -274,6 +274,7 @@ const mapDispatchtoProps = (dispatch) => ({
   saveAlignment: (data) => dispatch(postAlignmentSessionDetail(data)),
   doGetAlignmentDetail: (sessionId) =>
     dispatch(getAlignmentSessionDetail(sessionId)),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

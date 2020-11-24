@@ -5,7 +5,6 @@ import {
   Modal,
   Typography,
   Divider,
-  message,
   Skeleton,
   Spin,
   Form
@@ -267,7 +266,7 @@ class CreateKPI extends Component {
 
   handleSaveDraft = async () => {
     const {
-      doSavingKpi, authReducer, stepChange, form
+      doSavingKpi, authReducer, form
     } = this.props;
     // eslint-disable-next-line react/destructuring-assignment
     const { challenge, dataKpi, dataKpiMetrics } = this.props.kpiReducer;

@@ -21,7 +21,7 @@ import actionLoginByADToken from '../../redux/actions/auth/actionLoginByADToken'
 import Logo from '../../assets/xl.png';
 import { SUCCESS, errorHandlerCode } from '../../redux/status-code-type';
 import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // import Stores from '../../redux/store/index';

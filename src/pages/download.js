@@ -1,18 +1,17 @@
 import React, { Component } from "react";
 import  { connect } from 'react-redux';
-import  { Result, Button, Typography, Icon, message, Spin } from 'antd';
+import  { Result, Button, Icon, Spin } from 'antd';
 import { withRouter } from 'react-router-dom';
-import _ from 'lodash';
 import globalStyle from "../styles/globalStyles";
 import { doGetAlignmentDownload, doGetAlignmentDownloadPermission } from "../redux/actions/alignment";
 import { Success } from "../redux/status-code-type";
 import { toast } from 'react-toastify'
-
-const { Text } = Typography;
+import actionGetCurrStep from "../redux/actions/auth/actionGetCurrentStep";
 
 class Download extends Component {
   async componentDidMount() {
     const { doDownloadAlignmentPermission, history } = this.props;
+    this.props.doGetCurrStep()
     await doDownloadAlignmentPermission()
     const { alignmentReducer } = this.props;
     if ((alignmentReducer?.statusDownloadPermission === Success) &&
@@ -59,7 +58,8 @@ class Download extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   doDownloadAlignment: () => dispatch(doGetAlignmentDownload()),
-  doDownloadAlignmentPermission: () => dispatch(doGetAlignmentDownloadPermission())
+  doDownloadAlignmentPermission: () => dispatch(doGetAlignmentDownloadPermission()),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

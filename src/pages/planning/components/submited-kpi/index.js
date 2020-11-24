@@ -16,7 +16,7 @@ import globalStyle from '../../../../styles/globalStyles';
 import stepKpi from '../../../../utils/stepKpi';
 import { getChallengeYourselfChecker } from '../../../../utils/challengeYourselfChecker';
 
-const { Text, Paragraph } = Typography;
+const { Text } = Typography;
 const { TextArea } = Input;
 
 class SubmitedKPI extends Component {

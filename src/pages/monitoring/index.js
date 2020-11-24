@@ -4,7 +4,6 @@ import {
   Modal,
   Typography,
   Divider,
-  message,
   Input,
   Spin,
   Form,
@@ -14,17 +13,17 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableKPI from './kpi';
-import { doSaveKpi, doGetKpiList, doSubmitNext, doGetLatestGoalKpi } from '../../redux/actions/kpi';
+import { doGetKpiList, doGetLatestGoalKpi } from '../../redux/actions/kpi';
 import { Success } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
 import { doReviseKPI } from '../../redux/actions/monitoring';
-import { GetUserKpiState } from '../../redux/actions/user';
 import { toast } from 'react-toastify'
+import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
 
 
 const { confirm } = Modal;
-const { Text, Title, Paragraph } = Typography;
+const { Text, Title } = Typography;
 const { TextArea } = Input;
 
 class MonitorKPI extends Component {
@@ -59,11 +58,11 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { authReducer, getKpiList, getLatestGoalKpi, match,doGetStep } = this.props;
+    const { authReducer, getKpiList, getLatestGoalKpi, match, doGetCurrStep } = this.props;
     const { params } = match;
     const { userId } = params;
     getLatestGoalKpi();
-    doGetStep()
+    doGetCurrStep()
     if (userId) {
       await getKpiList(userId);
       await
@@ -162,7 +161,6 @@ class MonitorKPI extends Component {
   }
 
   handleChange = (row) => {
-    const { form } = this.props;
     const { dataSource } = this.state;
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -242,8 +240,8 @@ class MonitorKPI extends Component {
       handleDelete,
       handleError
     } = this;
-    const { kpiReducer, stepChange, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, holderUserId, status, errMessage } = kpiReducer;
+    const { kpiReducer, form } = this.props;
+    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, status, errMessage } = kpiReducer;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
     const stafid = user?.userId;
@@ -334,7 +332,7 @@ const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
-  doGetStep: (id) => dispatch(GetUserKpiState(id))
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton, Input, Spin, Checkbox
+ Button, Typography, Skeleton, Input, Spin
 } from 'antd';
 import { DataTable } from '../../../components';
 import ModalAssessment from './modalAssesment';
 import stepKpi from '../../../utils/stepKpi';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { TextArea } = Input;
 
 class KPI extends Component {
@@ -192,9 +192,7 @@ class KPI extends Component {
       form,
       challengeYour,
       myStep,
-      handleSubmit,
       changeChallenge,
-      handleSaveAssessment,
       currentStep,
       formStatusId,
       proposeRating

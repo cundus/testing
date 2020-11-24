@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Modal,
   Typography,
   Divider,
-  message,
-  Input,
   Spin,
   Form
 } from 'antd';
@@ -18,12 +15,10 @@ import { doGetKpiList } from '../../redux/actions/kpi';
 import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi, { PROGRESS_MONITORING_1, stepKpiMonitoring }  from '../../utils/stepKpi';
+import { PROGRESS_MONITORING_1, stepKpiMonitoring }  from '../../utils/stepKpi';
 import { GetUserKpiState } from '../../redux/actions/user';
 
-const { confirm } = Modal;
 const { Text, Title } = Typography;
-const { TextArea } = Input;
 
 class Activity extends Component {
   constructor(props) {
@@ -92,8 +87,6 @@ class Activity extends Component {
 
   showModalForm = (key) => {
     const {
-      GetThreadActivity,
-      GetActivityStatus,
       match
     } = this.props;
     const { params } = match;
@@ -156,7 +149,6 @@ class Activity extends Component {
 
   render() {
     const { activityThread, match, kpiReducer } = this.props;
-    const { loadingActivity } = activityThread;
     const {loading } = this.state;
     const { kpiName } = activityThread;
     const { params } =  match;

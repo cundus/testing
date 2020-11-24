@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Modal, Button, Form, DatePicker, Input
+  Modal, Form, DatePicker, Input
 } from 'antd';
 
 
@@ -22,7 +22,7 @@ class form extends Component {
 
   render() {
     const {
-      statusActivity, form, dataModal, handleModalChangeForm
+      form, dataModal
     } = this.props;
     return (
       <Modal
