@@ -94,7 +94,7 @@ class Home extends Component {
       size = 8;
     }
     return (
-      <div style={{ ...globalStyle.contentContainer, textAlign: 'center' }}>
+      <div style={{ ...globalStyle.contentContainer, textAlign: 'center', minHeight: '80vh' }}>
         <Row style={{ paddingTop: 50, paddingBottom: 50 }}>
           <Col xl={size} lg={size} md={size} xs={24} className="grid">
             <br />
