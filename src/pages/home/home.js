@@ -81,7 +81,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.actionGetCurrStep();
+    this.props.doGetCurrStep();
   }
 
   render() {
