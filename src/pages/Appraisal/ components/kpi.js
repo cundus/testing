@@ -5,7 +5,6 @@ import {
 } from 'antd';
 import { DataTable } from '../../../components';
 import ModalAssessment from './modalAssesment';
-import stepKpi from '../../../utils/stepKpi';
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -193,9 +192,6 @@ class KPI extends Component {
       challengeYour,
       myStep,
       changeChallenge,
-      currentStep,
-      formStatusId,
-      proposeRating
     } = this.props;
     return (
       <div>
