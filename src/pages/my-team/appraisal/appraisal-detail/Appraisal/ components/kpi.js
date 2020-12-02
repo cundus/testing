@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Typography, Skeleton, Form, Select
+ Typography, Skeleton
 } from 'antd';
 import { DataTable } from '../../../../../../components';
-import ModalAssessment from './modalAssesment';
-import { replace } from 'lodash';
 
 const { Text } = Typography;
-const { Option } = Select;
 
 class KPI extends Component {
   constructor(props) {

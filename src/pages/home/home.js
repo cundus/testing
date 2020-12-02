@@ -4,7 +4,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, List, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import './home-styles.scss';
-import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
+import actionGetCurrStep from "../../redux/actions/auth/actionGetCurrentStep"
 
 // icons list
 import collaborationIcon from '../../assets/icons/collaboration.svg';
@@ -80,8 +80,8 @@ class Home extends Component {
     };
   }
 
-  async componentDidMount() {
-    // await this.props.GetMyKpiState();
+  componentDidMount() {
+    this.props.doGetCurrStep();
   }
 
   render() {
@@ -94,7 +94,7 @@ class Home extends Component {
       size = 8;
     }
     return (
-      <div style={{ ...globalStyle.contentContainer, textAlign: 'center' }}>
+      <div style={{ ...globalStyle.contentContainer, textAlign: 'center', minHeight: '80vh' }}>
         <Row style={{ paddingTop: 50, paddingBottom: 50 }}>
           <Col xl={size} lg={size} md={size} xs={24} className="grid">
             <br />
@@ -223,8 +223,7 @@ class Home extends Component {
   }
 }
 const mapDispatchtoProps = (dispatch) => ({
-  GetInfoUser: (token) => dispatch(GetInfoUser(token)),
-  GetMyKpiState: () => dispatch(GetUserKpiState())
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 const mapStateToProps = (state) => ({
   auth: state.activeDirectoryReducer,

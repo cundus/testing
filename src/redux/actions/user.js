@@ -79,6 +79,7 @@ export const GetMyTeamKPI = (idUser) => {
         d.title = d.kpiTitle;
         d.status = d.userStatus;
         d.Key = d.userId;
+        return d
       });
 
       resp.data.result = arayTeam;
@@ -118,6 +119,7 @@ export const GetMyTeamKPIMonitoring = (idUser) => {
         d.title = d.kpiTitle;
         d.status = d.userStatus;
         d.Key = d.userId;
+        return d
       });
 
       resp.data.result = arayTeam;

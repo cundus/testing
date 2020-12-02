@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Popconfirm, Tooltip, Icon
+ Button
 } from 'antd';
 import { DataTable } from '../../components';
 import { Link } from  'react-router-dom';
@@ -22,7 +22,7 @@ class TableMonitorKPI extends Component {
   getColumns = async () => {
      // the async await on this function would leaking memory (showing warn)
      // but i have to async await for making it table
-    const { dataMetrics, isFeedback, userId, isSuperior, isEditable, stafid } = this.props;
+    const { dataMetrics, userId, isSuperior, isEditable, stafid } = this.props;
     const newColumns = [
       {
         title: 'KPI Subject',
@@ -74,7 +74,7 @@ class TableMonitorKPI extends Component {
       width: 250,
       dataIndex: 'action',
       render: (text, record) => {
-        const { dataSource, handleDelete } = this.props;
+        const { dataSource } = this.props;
         return (
           dataSource.length >= 1 ? (
             <div>

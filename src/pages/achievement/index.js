@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Modal,
   Typography,
   Divider,
-  message,
-  Input,
   Spin,
   Form
 } from 'antd';
@@ -18,12 +15,10 @@ import TableActivity from './tableActivity';
 import FormSend from './component/form';
 import { doGetKpiList } from '../../redux/actions/kpi';
 import globalStyle from '../../styles/globalStyles';
-import stepKpi, { stepKpiMonitoring }  from '../../utils/stepKpi';
+import { stepKpiMonitoring }  from '../../utils/stepKpi';
 
 
-const { confirm } = Modal;
 const { Text, Title } = Typography;
-const { TextArea } = Input;
 
 class Achievement extends Component {
   constructor(props) {
@@ -56,7 +51,6 @@ class Achievement extends Component {
     const {
       GetListAchivement,
       match,
-      doGetKpiList,
       authReducer
     } = this.props;
     const { params } = match;
@@ -82,8 +76,6 @@ class Achievement extends Component {
 
   showModalForm = (key) => {
     const {
-      GetThreadActivity,
-      GetActivityStatus,
       match
     } = this.props;
     const { params } = match;
@@ -151,7 +143,6 @@ class Achievement extends Component {
 
   render() {
     const { achievementThread, kpiReducer } = this.props;
-    const { loadingActivity } = achievementThread;
     const {loading } = this.state;
     const { kpiName } = achievementThread;
     let stafname = '';

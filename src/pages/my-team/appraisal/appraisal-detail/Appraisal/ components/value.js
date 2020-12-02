@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  Select, Upload, message, Modal
+  Select, Upload, Modal
 } from 'antd';
 import DataTable from '../../../../../../components/dataTable';
 import {

@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {
-  Tabs,
-  Modal,
   Typography,
   Divider,
-  message,
   Select,
   Spin,
   Form,
@@ -21,19 +18,14 @@ import {
 } from "../../redux/actions";
 import { actionGetFormTemplates, actionGetPrevKpiByFormId } from "../../redux/actions/previousKpi";
 import {
-  Success,
-  FAILED_SAVE_CHALLENGE_YOURSELF,
   SUCCESS
 } from "../../redux/status-code-type";
 import globalStyle from "../../styles/globalStyles";
-import kpiSendProcess from "../../utils/kpiSendProcess";
 import { kpiGetProcess } from "../../utils/kpiGetProcess";
-import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import Previous from "./previous";
+import actionGetCurrStep from "../../redux/actions/auth/actionGetCurrentStep";
 
-const { Title, Text } = Typography;
-const { TabPane } = Tabs;
-const { confirm } = Modal;
+const { Text } = Typography;
 
 class CreateKPI extends Component {
   constructor(props) {
@@ -47,6 +39,7 @@ class CreateKPI extends Component {
 
   componentDidMount() {
     const { authReducer, match, history} = this.props;
+    this.props.doGetCurrStep()
     if((match?.params?.userId === authReducer?.userId) && (history.location.pathname.includes("/my-team/previous-kpi"))) {
       this.props.history.push('/previous-kpi')
     } else {
@@ -158,7 +151,8 @@ const mapDispatchToProps = (dispatch) => ({
   getLatestGoalKpi: () => dispatch(actionGetLatestGoalKPI()),
   doGetFormTemplates: (ellgibleToCopy) =>
     dispatch(actionGetFormTemplates(ellgibleToCopy)),
-  doGetKpiFormId: (userId, formId) => dispatch(actionGetPrevKpiByFormId(userId, formId))
+  doGetKpiFormId: (userId, formId) => dispatch(actionGetPrevKpiByFormId(userId, formId)),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(

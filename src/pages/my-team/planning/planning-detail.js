@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
- Spin, Input, Button, Divider, Typography, Modal, message, Form, Result
+ Spin, Input, Button, Divider, Typography, Modal, Form, Result
 } from 'antd';
 import {
   GetMyTeamKPIDetail, GetUserDetail, GiveFeedbackKpi, ApproveKPI
@@ -15,6 +15,7 @@ import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChe
 import stepKpi from '../../../utils/stepKpi';
 import { Success } from '../../../redux/status-code-type';
 import { toast } from 'react-toastify'
+import actionGetCurrStep from '../../../redux/actions/auth/actionGetCurrentStep';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -33,8 +34,9 @@ class PlanningDetail extends Component {
   }
 
   async componentDidMount() {
-    const { authReducer, match, step } = this.props;
+    const { authReducer, match } = this.props;
     const { params } = match;
+    this.props.doGetCurrStep()
     if (authReducer?.userId === params.id) {
       this.props.history.push('/planning/kpi');
     } else {
@@ -123,6 +125,7 @@ class PlanningDetail extends Component {
     const { kpiList } = myteamdetail;
     this.state.dataSource.map((item) => {
       kpiList.find((d) => d.id === item.key).othersRatingComments.comment = item.feedback;
+      return item
     });
     myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback || '';
     form.validateFieldsAndScroll((err, values) => {
@@ -154,6 +157,7 @@ class PlanningDetail extends Component {
     const { kpiList } = myteamdetail;
     this.state.dataSource.map((item)=>{
       kpiList.find(d => d.id === item.key).othersRatingComments.comment = item.feedback;
+      return item
     });
     myteamdetail.challengeOthersRatingComments.comment = this.state.globalfeedback;
     confirm({
@@ -277,7 +281,8 @@ const mapDispatchtoProps = (dispatch) => ({
   getUserDetail: (idUser) => dispatch(GetUserDetail(idUser)),
   giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data)),
   approveKpi: (idUser, data) => dispatch(ApproveKPI(idUser, data)),
-  getNotifications: () => dispatch(actionGetNotifications())
+  getNotifications: () => dispatch(actionGetNotifications()),
+  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

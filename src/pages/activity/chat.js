@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
   Button,
-  Modal,
   Typography,
   Divider,
-  message,
   Input,
   Spin,
   Form,
@@ -15,12 +13,9 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { getListActivity, getActivityStatus, getActivityThreadChat, createChat } from '../../redux/actions/activity';
-import TableActivity from './tableActivity';
-import FormSend from './component/form';
 import globalStyle from '../../styles/globalStyles';
 import apiUrl from '../../utils/apiUrl';
 
-const { confirm } = Modal;
 const { Text, Title } = Typography;
 const { TextArea } = Input;
 
@@ -43,7 +38,6 @@ class Chat extends Component {
   getAllData = async () => {
     const {
       GetThreadActivity,
-      GetActivityStatus,
       GetActivityThreadChat,
       match
     } = this.props;
@@ -58,7 +52,7 @@ class Chat extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { form, match, doFeedback, chat } = this.props;
+    const { form, match, doFeedback } = this.props;
     const { params } = match;
     const { idThread } = params;
     const { validateFields } = form;
@@ -78,7 +72,6 @@ class Chat extends Component {
     const { activityThread, chat, form } = this.props;
     const { getFieldDecorator } = form;
     const { loadingActivity } = activityThread;
-    const { loadingActivityChat } = chat;
     const { kpiName } = activityThread;
     const { name: chatName, fullName, feedbacks, userId } = chat;
     return (
