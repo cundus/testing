@@ -225,9 +225,9 @@ class EditableCell extends React.Component {
         </Form.Item>
       );
     } else if (index === 'kpiScore') {
+      const result = record?.rating || ""
       const kpiScorePlaceholder = () =>{
-        console.log(record.rating)
-        switch (record.rating) {
+        switch (result) {
           case "Below":
             return "Input range is between >= 1.0 until < 2.0"
           case "Meet":
@@ -241,7 +241,7 @@ class EditableCell extends React.Component {
       return (
         <Form.Item style={{ margin: 0 }}>
           { form.getFieldDecorator(`${type}[${indexarr}].${index}`, {
-            rules: achievementScoreValidator(record.rating),
+            rules: achievementScoreValidator(result),
             initialValue: record[index]
           })(
             <TextArea

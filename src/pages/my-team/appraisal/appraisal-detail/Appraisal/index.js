@@ -1,4 +1,4 @@
-
+﻿
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -393,7 +393,9 @@ class Appraisal extends Component {
     };
     form.validateFieldsAndScroll((errors, values) => {
       const errRequires = errors?.dataKpi ? errors?.dataKpi.filter(er => !er.kpiScore.errors[0].message.includes('required')) : 0
-      if (!errors || (errRequires.length === 0)) {
+      if (!dataKpis[0]?.rating) {
+        toast.warn(`Sorry, Result's assesment is empty, please send back to ${teamName}​​​​​​​​ first before saving it`);
+      }else if (!errors || (errRequires.length === 0)) {
         confirm({
           title: `Are you sure want to save ${teamName}'s Appraisal?`,
           okText: 'Save',
@@ -417,7 +419,7 @@ class Appraisal extends Component {
               }
             }
           },
-          onCancel() {}
+          onCancel() { }
         });
       } else if(errors.dataKpi) {
         toast.warn('Please, correctly fill the KPI Achievement Score', 200);
@@ -486,6 +488,8 @@ class Appraisal extends Component {
           },
           onCancel() {}
         });
+      } else if (!dataKpis[0]?.rating) {
+        toast.warn(`Sorry, Result's assesment is empty, please send back to ${teamName} first before saving it`);
       } else if (errors.proposeRating) {
         toast.warn('Please, give your Propose Rating');
       } else if(errors.dataKpi) {

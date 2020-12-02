@@ -170,9 +170,11 @@ export const achievementScoreValidator = (result) => [
         callback(
           "Out of range! Input range is between >= 3.0 until <= 4.0"
         );
+      } else if (!result) {
+        callback("Result's field is empty");
       } else if (!regexPercent.test(score)) {
         callback("Score's value must be decimal, e.g 2.5");
-      }
+      } 
     }
   }
 ];
