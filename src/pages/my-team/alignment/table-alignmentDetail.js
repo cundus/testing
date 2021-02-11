@@ -90,7 +90,7 @@ class TableAlignmentDetail extends Component {
           }
         },
       },
-      {
+/*      {
         title: 'KPI Achievement Score',
         dataIndex: 'kpiAchievementScore',
         align: 'center',
@@ -103,7 +103,7 @@ class TableAlignmentDetail extends Component {
         filteredValue: filteredInfo?.kpiAchievementScore ?? null,
         onFilter: (value, record) => record.kpiAchievementScore.includes(value),
         sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
-      },
+      }, */
       {
         title: 'Pre Alignment',
         dataIndex: 'preAlignment',
@@ -133,7 +133,7 @@ class TableAlignmentDetail extends Component {
           }
         }
       },
-      {
+/*      {
         title: 'Directorate',
         dataIndex: 'department',
         align: 'center',
@@ -150,7 +150,7 @@ class TableAlignmentDetail extends Component {
             return a.department.localeCompare(b.department);
           }
         },
-      },
+      }, */
       {
         title: 'Post Alignment',
         dataIndex: 'postAlignment',
