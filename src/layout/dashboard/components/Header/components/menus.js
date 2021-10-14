@@ -1,6 +1,6 @@
 import React from 'react';
 import {
- Menu, Typography, Divider, Empty
+  Menu, Typography, Divider, Empty
 } from 'antd';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -13,7 +13,7 @@ export const accountMenu = (logout) => () => (
       <a href="#" onClick={logout}>Logout</a>
     </Menu.Item>
   </Menu>
-  );
+);
 
 export const langMenu = (
   <Menu>
@@ -24,7 +24,7 @@ export const langMenu = (
       {/* English */}
     </Menu.Item>
   </Menu>
- );
+);
 
 export const notifMenu = (data, userId) => () => {
   const navigate = (item) => () => {
@@ -61,8 +61,8 @@ export const notifMenu = (data, userId) => () => {
   };
 
   return (
-    <Menu style={{ width: 300, maxHeight: '100vh' }}>
-      <div style={{
+    <Menu style={{ width: 300, maxHeight: '400px', overflowY: 'scroll' }}>
+    <div style={{
         backgroundColor: '#F9FAFE',
         paddingTop: 20,
         paddingBottom: 20,
@@ -72,19 +72,19 @@ export const notifMenu = (data, userId) => () => {
         <Typography.Text strong style={{ fontSize: 18 }}>User Notifications</Typography.Text>
       </div>
       <Divider style={{ margin: 0 }} />
-      {data.length !== 0 ? data.map((item, index) => (
-        <Menu.Item key={index} style={{ whiteSpace: 'break-spaces' }}>
-          <Link to={navigate(item)}>
-            <Typography.Paragraph style={{ marginBottom: 0 }}>{item.name}</Typography.Paragraph>
-            <Typography.Text style={{ marginTop: 0, fontSize: 10 }}>{dateToday(item.lastUpdate)}</Typography.Text>
-          </Link>
-        </Menu.Item>
-      )) :
-      <div>
-        <Empty
-          description="There's no notifications for you"
-        />
-      </div>}
+        {data.length !== 0 ? data.map((item, index) => (
+          <Menu.Item key={index} style={{ whiteSpace: 'break-spaces' }}>
+            <Link to={navigate(item)}>
+              <Typography.Paragraph style={{ marginBottom: 0 }}>{item.name}</Typography.Paragraph>
+              <Typography.Text style={{ marginTop: 0, fontSize: 10 }}>{dateToday(item.lastUpdate)}</Typography.Text>
+            </Link>
+          </Menu.Item>
+        )) :
+          <div>
+            <Empty
+              description="There's no notifications for you"
+            />
+          </div>}
     </Menu>
   );
 };
