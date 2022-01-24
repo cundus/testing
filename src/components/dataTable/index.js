@@ -425,6 +425,7 @@ const DataTable = (props) => {
     <div>
       <Table
         form={form}
+        size='small'
         loading={loading}
         components={components}
         locale={{
