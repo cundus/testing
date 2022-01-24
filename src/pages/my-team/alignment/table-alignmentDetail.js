@@ -35,10 +35,10 @@ class TableAlignmentDetail extends Component {
       { text: 'Well Done', value: '2'},
       { text: 'Outstanding', value: '3'}
     ]
-    let departments = dataSource.map((item)=> {
-      return { text: item?.department, value: item?.department}
-    })
-    departments = _.orderBy(departments, ['text'],['asc']);
+    // let departments = dataSource.map((item)=> {
+    //   return { text: item?.department, value: item?.department}
+    // })
+    // departments = _.orderBy(departments, ['text'],['asc']);
     const columns = [
       {
         title: 'Employee ID',
