@@ -221,6 +221,7 @@ class TableAlignmentDetail extends Component {
         },
       },
     ];
+
     return (
       <div>
         {/* <Layout> */}

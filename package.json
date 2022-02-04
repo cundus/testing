@@ -9,6 +9,7 @@
     "env-cmd": "^10.1.0",
     "highcharts": "^8.1.2",
     "highcharts-react-official": "^3.0.0",
+    "json-as-xlsx": "^2.3.10",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "node-sass": "^4.13.0",

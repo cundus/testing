@@ -14,6 +14,8 @@ import { doGetProposeRating } from "../../../redux/actions/kpi";
 import { Success } from "../../../redux/status-code-type";
 import { toast } from "react-toastify";
 import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
+import JSONtoXLSX from "json-as-xlsx";
+import moment from "moment";
 
 const { confirm } = Modal;
 
@@ -204,7 +206,73 @@ class AlignmentList extends Component {
       ...item,
       ...row,
     });
-    this.setState({ dataTable: newData });
+    this.setState({ dataTable: newData, hasChange: true });
+  };
+
+  exportToXLSX = async () => {
+    const { dataTable } = this.state;
+    const timeStamp = moment().format("YYYY-MM-DD HH-mm-ss");
+    let settings = {
+      fileName: `performance_review_alignment ${timeStamp}`,
+      extraLength: 3,
+      writeOptions: {},
+    };
+
+    await JSONtoXLSX(
+      [
+        {
+          sheet: "Sheets 1",
+          columns: [
+            {
+              label: "No",
+              value: "number",
+            },
+            {
+              label: "Employee ID",
+              value: "userId",
+            },
+            {
+              label: "Employee Name",
+              value: "name",
+            },
+            {
+              label: "Superior",
+              value: "managerName",
+            },
+            {
+              label: "KPI Achievement Score",
+              value: "kpiAchievementScore",
+            },
+            {
+              label: "Pre Alignment",
+              value: "preAlignment",
+            },
+            {
+              label: "Directorate",
+              value: "directorate",
+            },
+            {
+              label: "Post Alignment",
+              value: (row) => {
+                const postAlignment = row?.postAlignment;
+                switch (postAlignment) {
+                  case 1:
+                    return "Need Improvement";
+                  case 2:
+                    return "Well Done";
+                  case 3:
+                    return "Outstanding";
+                  default:
+                    return "Unrated";
+                }
+              },
+            },
+          ],
+          content: dataTable,
+        },
+      ],
+      settings
+    );
   };
 
   render() {
@@ -260,20 +328,43 @@ class AlignmentList extends Component {
                 marginBottom: 10,
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "space-between",
               }}
             >
-              <Button onClick={this.clearAll}>Clear filters and sorters</Button>
-              <Text style={{ marginLeft: 10 }}>
-                Total Data : {totalData || 0} records
-              </Text>
-              {totalFiltered && (
+              <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
+                <Button onClick={this.clearAll}>
+                  Clear filters and sorters
+                </Button>
                 <Text style={{ marginLeft: 10 }}>
-                  <span>|</span>
-                  <span style={{ marginLeft: 10 }}>
-                    Filtered Data : {totalFiltered} records
-                  </span>
+                  Total Data : {totalData || 0} records
                 </Text>
-              )}
+                {totalFiltered && (
+                  <Text style={{ marginLeft: 10 }}>
+                    <span>|</span>
+                    <span style={{ marginLeft: 10 }}>
+                      Filtered Data : {totalFiltered} records
+                    </span>
+                  </Text>
+                )}
+              </div>
+              <Button
+                onClick={() => {
+                  if (this.state.hasChange) {
+                    confirm({
+                      title: "Please make sure you have save all data",
+                      okText: "Yes, Export it",
+                      onOk: async () => {
+                        this.exportToXLSX();
+                      },
+                      onCancel() {},
+                    });
+                  } else {
+                    this.exportToXLSX();
+                  }
+                }}
+              >
+                Export
+              </Button>
             </div>
             <TableAlignmentDetail
               isCanEdit={isCanEdit}
