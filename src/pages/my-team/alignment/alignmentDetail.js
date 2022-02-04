@@ -4,12 +4,15 @@ import { Spin, Divider, Typography, Button, message, Modal, Form } from "antd";
 import { withRouter } from "react-router-dom";
 import TableAlignmentDetail from "./table-alignmentDetail";
 import globalStyle from "../../../styles/globalStyles";
-import { getAlignmentSessionDetail, postAlignmentSessionDetail } from "../../../redux/actions/alignment";
+import {
+  getAlignmentSessionDetail,
+  postAlignmentSessionDetail,
+} from "../../../redux/actions/alignment";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { doGetProposeRating } from "../../../redux/actions/kpi";
 import { Success } from "../../../redux/status-code-type";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
 
 const { confirm } = Modal;
@@ -74,7 +77,7 @@ class AlignmentList extends Component {
   }
   componentDidMount() {
     this.getData();
-    this.props.doGetCurrStep()
+    this.props.doGetCurrStep();
   }
 
   getData = async () => {
@@ -83,46 +86,57 @@ class AlignmentList extends Component {
     await doGetAlignmentDetail(match?.params?.sessionId);
     const { alignmentReducer } = this.props;
     if (!alignmentReducer?.dataDetail?.usersCalibration) {
-      history.push('/my-team/performance-review-alignment')
+      history.push("/my-team/performance-review-alignment");
     } else {
       const newData = alignmentReducer?.dataDetail?.usersCalibration?.map(
         (item, index) => {
           return {
             ...item,
+            directorate: item?.directorate || "",
+            number: index + 1,
             name: item?.firstName + " " + item?.lastName,
             managerName: item?.managerFirstName + " " + item?.managerLastName,
             kpiAchievementScore: item?.kpiAchievementScore,
-            userId: item?.userId ?? '',
-            prePostAlignment: (item?.postAlignmentNumeric 
-              && item?.postAlignmentNumeric > 0 
-              && item?.postAlignmentNumeric < 4) ?
-              item?.postAlignmentNumeric : '',
-            postAlignment: (item?.postAlignmentNumeric 
-              && item?.postAlignmentNumeric > 0 
-              && item?.postAlignmentNumeric < 4) ?
-              item?.postAlignmentNumeric : '',
-            preAlignment: item?.preAlignment ?? 'Unrated'
+            userId: item?.userId ?? "",
+            prePostAlignment:
+              item?.postAlignmentNumeric &&
+              item?.postAlignmentNumeric > 0 &&
+              item?.postAlignmentNumeric < 4
+                ? item?.postAlignmentNumeric
+                : "",
+            postAlignment:
+              item?.postAlignmentNumeric &&
+              item?.postAlignmentNumeric > 0 &&
+              item?.postAlignmentNumeric < 4
+                ? item?.postAlignmentNumeric
+                : "",
+            preAlignment: item?.preAlignment ?? "Unrated",
           };
         }
       );
 
-      const dataGeneral = this.props.form.getFieldsValue(['dataGeneral']);
+      const dataGeneral = this.props.form.getFieldsValue(["dataGeneral"]);
       if (dataGeneral) {
         this.props.form.setFieldsValue({
-          dataGeneral: newData
+          dataGeneral: newData,
         });
       }
       this.setState({
         usersCalibration: newData,
         dataTable: newData,
+        totalData: newData.length,
       });
     }
   };
 
-  handleChangeTable = (pagination, filters, sorter) => {
+  handleChangeTable = (pagination, filters, sorter, extra) => {
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
+      totalFiltered:
+        extra.currentDataSource.length === this.state.totalData
+          ? null
+          : extra.currentDataSource.length,
     });
   };
 
@@ -140,66 +154,64 @@ class AlignmentList extends Component {
       return {
         formDataId: item?.formDataId,
         userId: item?.userId,
-        rating: item?.postAlignment ?
-          parseInt(item?.postAlignment) :
-          null
-      }
-    })
-    const outstandings = callibrations.filter((item)=> item?.rating === 3)
-    callibrations = callibrations.filter((item)=> item?.rating)
+        rating: item?.postAlignment ? parseInt(item?.postAlignment) : 0,
+      };
+    });
+    const outstandings = callibrations.filter((item) => item?.rating === 3);
+    // callibrations = callibrations.filter((item)=> item?.rating)
     const requestBody = {
       calibration: callibrations,
-      sessionId: match?.params?.sessionId
-    }
+      sessionId: match?.params?.sessionId,
+    };
     this.props.form.validateFieldsAndScroll((errors, values) => {
-      if(errors) {
-
+      if (errors) {
       } else if (callibrations.length > 0) {
         confirm({
-          title: outstandings.length > this.props.alignmentReducer?.dataDetail?.totalRequirementOutstanding ?
-            'Outstanding rating allocated is over Quota? Do you want to save?':
-            'Are you sure?',
-          okText: 'Save',
+          title:
+            outstandings.length >
+            this.props.alignmentReducer?.dataDetail?.totalRequirementOutstanding
+              ? "Outstanding rating allocated is over Quota? Do you want to save?"
+              : "Are you sure?",
+          okText: "Save",
           onOk: async () => {
-            await saveAlignment(requestBody)
+            await saveAlignment(requestBody);
             const { alignmentReducer } = this.props;
             if (alignmentReducer?.statusPostDetail === Success) {
-              this.getData()
-              toast.success('Success, your Performance Alignment Review has been saved')
+              this.getData();
+              toast.success(
+                "Success, your Performance Alignment Review has been saved"
+              );
             } else {
-              toast.warn(`Sorry, ${alignmentReducer?.messagePostDetail}`)
+              toast.warn(`Sorry, ${alignmentReducer?.messagePostDetail}`);
             }
           },
-          onCancel() {}
+          onCancel() {},
         });
       } else {
-        message.info('Nothing changes')
+        message.info("Nothing changes");
       }
-    })
-  }
+    });
+  };
 
   handleChange = (row) => {
     const { dataTable } = this.state;
     const newData = [...dataTable];
-    const index = newData.findIndex((item) => row.formDataId === item.formDataId);
+    const index = newData.findIndex(
+      (item) => row.formDataId === item.formDataId
+    );
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
-      ...row
+      ...row,
     });
     this.setState({ dataTable: newData });
   };
 
   render() {
     const { alignmentReducer, kpiReducer, form } = this.props;
-    const {
-      dataProposeRating,
-    } = kpiReducer;
-    const {
-      sortedInfo,
-      filteredInfo,
-      dataTable,
-    } = this.state;
+    const { dataProposeRating } = kpiReducer;
+    const { sortedInfo, filteredInfo, dataTable, totalData, totalFiltered } =
+      this.state;
     const contentChart = {
       ...options,
       series: [
@@ -208,7 +220,7 @@ class AlignmentList extends Component {
           data: [
             0,
             0,
-            alignmentReducer?.dataDetail?.totalRequirementOutstanding
+            alignmentReducer?.dataDetail?.totalRequirementOutstanding,
           ],
           stack: "Maximum",
           color: "#324aa8",
@@ -218,7 +230,7 @@ class AlignmentList extends Component {
           data: [
             alignmentReducer?.dataDetail?.totalActualNeedImprovement,
             alignmentReducer?.dataDetail?.totalActualWellDone,
-            alignmentReducer?.dataDetail?.totalActualOutstanding
+            alignmentReducer?.dataDetail?.totalActualOutstanding,
           ],
           stack: "Actual",
           color: "orange",
@@ -226,8 +238,9 @@ class AlignmentList extends Component {
       ],
     };
 
-    const isCanEdit = (alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
-    alignmentReducer?.dataDetail?.userRole?.isOwner)
+    const isCanEdit =
+      alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
+      alignmentReducer?.dataDetail?.userRole?.isOwner;
     return (
       <div style={globalStyle.contentContainer}>
         {!alignmentReducer?.loadingDetail ? (
@@ -242,8 +255,25 @@ class AlignmentList extends Component {
             <div style={{ width: "50vw", marginBottom: 20 }}>
               <HighchartsReact highcharts={Highcharts} options={contentChart} />
             </div>
-            <div style={{ marginBottom: 10 }}>
+            <div
+              style={{
+                marginBottom: 10,
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+              <Text style={{ marginLeft: 10 }}>
+                Total Data : {totalData || 0}
+              </Text>
+              {totalFiltered && (
+                <Text style={{ marginLeft: 10 }}>
+                  <span>|</span>
+                  <span style={{ marginLeft: 10 }}>
+                    Total Filtered : {totalFiltered}
+                  </span>
+                </Text>
+              )}
             </div>
             <TableAlignmentDetail
               isCanEdit={isCanEdit}
@@ -256,7 +286,13 @@ class AlignmentList extends Component {
               form={form}
             />
             <div style={{ marginTop: 20, textAlign: "center" }}>
-              <Button disabled={!isCanEdit} onClick={this.handleSave} style={{ marginLeft: 10, marginRight: 10 }}>Save</Button>
+              <Button
+                disabled={!isCanEdit}
+                onClick={this.handleSave}
+                style={{ marginLeft: 10, marginRight: 10 }}
+              >
+                Save
+              </Button>
             </div>
           </div>
         ) : (
@@ -274,7 +310,7 @@ const mapDispatchtoProps = (dispatch) => ({
   saveAlignment: (data) => dispatch(postAlignmentSessionDetail(data)),
   doGetAlignmentDetail: (sessionId) =>
     dispatch(getAlignmentSessionDetail(sessionId)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
+  doGetCurrStep: () => dispatch(actionGetCurrStep()),
 });
 
 const mapStateToProps = (state) => ({
