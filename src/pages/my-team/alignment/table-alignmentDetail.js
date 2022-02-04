@@ -5,7 +5,7 @@ import _ from "lodash";
 
 class TableAlignmentDetail extends Component {
   render() {
-    const { dataSource, filteredInfo, sortedInfo, handleChangeTable } =
+    const { dataSource, filteredInfo, sortedInfo, handleChangeTable, form } =
       this.props;
     const userIds = dataSource.map((item) => {
       return { text: item?.userId, value: item?.userId };
@@ -14,6 +14,10 @@ class TableAlignmentDetail extends Component {
       return { text: item?.name, value: item?.name };
     });
     names = _.orderBy(names, ["text"], ["asc"]);
+    let rankings = dataSource.map((item) => {
+      return { text: item?.ranking, value: item?.ranking };
+    });
+    rankings = _.orderBy(rankings, ["text"], ["asc"]);
     let managerNames = dataSource.map((item) => {
       return { text: item?.managerName, value: item?.managerName };
     });
@@ -53,6 +57,9 @@ class TableAlignmentDetail extends Component {
         width: 70,
         sortOrder: sortedInfo?.columnKey === "number" && sortedInfo?.order,
         sorter: (a, b) => a.number - b.number,
+        render: (text, record, index) => {
+          return index + 1;
+        },
       },
       {
         title: "Employee ID",
@@ -79,7 +86,7 @@ class TableAlignmentDetail extends Component {
           return e.text;
         }),
         filteredValue: filteredInfo?.name ?? null,
-        onFilter: (value, record) => record.name.includes(value),
+        onFilter: (value, record) => record.name === value,
         sorter: (a, b) => {
           if (a.name && b.name) {
             return a.name.localeCompare(b.name);
@@ -97,7 +104,7 @@ class TableAlignmentDetail extends Component {
           return e.text;
         }),
         filteredValue: filteredInfo?.managerName ?? null,
-        onFilter: (value, record) => record.managerName.includes(value),
+        onFilter: (value, record) => record.managerName === value,
         sorter: (a, b) => {
           if (a.managerName && b.managerName) {
             return a.managerName.localeCompare(b.managerName);
@@ -203,7 +210,10 @@ class TableAlignmentDetail extends Component {
                   value={text}
                   // eslint-disable-next-line react/jsx-no-bind
                   onChange={(value) =>
-                    handleChange({ ...record, postAlignment: value })
+                    handleChange(
+                      { ...record, postAlignment: value },
+                      "postAlignment"
+                    )
                   }
                 >
                   {dataOptionRating.map((item, index) => {
@@ -215,6 +225,69 @@ class TableAlignmentDetail extends Component {
                   })}
                 </Select>
                 {/* )} */}
+              </Form.Item>
+            </Form>
+          );
+        },
+      },
+      {
+        title: "Ranking",
+        dataIndex: "ranking",
+        align: "left",
+        width: 170,
+        placeholder: "Ranking",
+        sortOrder: sortedInfo?.columnKey === "ranking" && sortedInfo?.order,
+        filters: _.uniqBy(rankings, (e) => {
+          return e.text;
+        }),
+        filteredValue: filteredInfo?.ranking ?? null,
+        onFilter: (value, record) => record.ranking === value,
+        sorter: (a, b) => a.ranking - b.ranking,
+        render: (text, record, index) => {
+          const { isCanEdit, handleChange } = this.props;
+          const dataOptions = dataSource.filter((item) => {
+            return item?.postAlignment === record?.postAlignment;
+          });
+          return (
+            <Form>
+              <Form.Item style={{ width: "100%", margin: 0 }}>
+                {form.getFieldDecorator(
+                  `dataGeneral[${record?.number - 1}].ranking`,
+                  {
+                    rules: [
+                      {
+                        required: record?.postAlignment === 3,
+                        message: "Ranking for Outstanding is required",
+                      },
+                    ],
+                    initialValue: text !== " " ? text : "",
+                  }
+                )(
+                  <Select
+                    placeholder="Choose value"
+                    disabled={!isCanEdit}
+                    style={{
+                      cursor: !isCanEdit ? "not-allowed" : "pointer",
+                    }}
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onChange={(value) =>
+                      handleChange(
+                        { ...record, ranking: value },
+                        "ranking",
+                        `dataGeneral[${record?.number - 1}].ranking`,
+                        value
+                      )
+                    }
+                  >
+                    {dataOptions.map((item, index) => {
+                      return (
+                        <Select.Option key={index} value={parseInt(index + 1)}>
+                          {index + 1}
+                        </Select.Option>
+                      );
+                    })}
+                  </Select>
+                )}
               </Form.Item>
             </Form>
           );

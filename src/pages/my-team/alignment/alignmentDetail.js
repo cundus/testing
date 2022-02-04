@@ -94,6 +94,7 @@ class AlignmentList extends Component {
         (item, index) => {
           return {
             ...item,
+            ranking: " ",
             directorate: item?.directorate || "",
             number: index + 1,
             name: item?.firstName + " " + item?.lastName,
@@ -195,17 +196,49 @@ class AlignmentList extends Component {
     });
   };
 
-  handleChange = (row) => {
+  handleChange = (row, update, id, value) => {
     const { dataTable } = this.state;
     const newData = [...dataTable];
+    if (update === "ranking") {
+      const indexRanking = newData.findIndex(
+        (item) =>
+          parseInt(row?.ranking || 0) === parseInt(item?.ranking || 0) &&
+          row?.postAlignment === item?.postAlignment
+      );
+      const itemRanking = newData?.[indexRanking];
+      if (itemRanking) {
+        newData.splice(indexRanking, 1, {
+          ...itemRanking,
+          ranking: "",
+        });
+      }
+      if (indexRanking >= 0) {
+        this.props.form.setFieldsValue({
+          [`dataGeneral[${indexRanking}].ranking`]: "",
+        });
+      }
+    }
     const index = newData.findIndex(
       (item) => row.formDataId === item.formDataId
     );
     const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...row,
-    });
+    if (update === "postAlignment") {
+      newData.splice(index, 1, {
+        ...item,
+        ...row,
+        ranking: "",
+      });
+    } else {
+      newData.splice(index, 1, {
+        ...item,
+        ...row,
+      });
+    }
+    if (id) {
+      this.props.form.setFieldsValue({
+        [`${id}`]: value,
+      });
+    }
     this.setState({ dataTable: newData, hasChange: true });
   };
 
