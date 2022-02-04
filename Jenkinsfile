@@ -26,7 +26,10 @@ pipeline {
 
                     if (env.BRANCH_NAME == 'phase3-development') {
                         echo 'Deploying on Branch : ' + env.BRANCH_NAME
-                       // sh 'docker run -t -u $(id -u ${USER}):$(id -g ${USER}) -w /app -e MAVEN_CONFIG=/var/maven/.m2 -v "$HOME/.m2":/var/maven/.m2 -v "$PWD":/app maven:3.8.4-amazoncorretto-11 mvn -Duser.home=/var/maven clean test -Dmaven.test.failure.ignore=true package -DURL_TEST="http://10.23.52.86" -DURL_PORT_TEST=8080 -DUSER_ID_TEST="bbbb"'
+                        echo 'Build Docker Image'
+                        sh 'docker build --build-arg HTTP_PROXY=http://172.30.221.21:80 . -t 10.23.51.253/pmgm-fe-stg:latest -f Dockerfile'
+                        echo 'Push Docker Image'
+                        sh 'docker push 10.23.51.253/pmgm-fe-stg:latest'
                     } else 
 
                     if (env.BRANCH_NAME == 'master') {                        
