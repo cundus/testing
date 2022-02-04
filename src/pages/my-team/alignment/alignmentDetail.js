@@ -213,7 +213,7 @@ class AlignmentList extends Component {
     const { dataTable } = this.state;
     const timeStamp = moment().format("YYYY-MM-DD HH-mm-ss");
     let settings = {
-      fileName: `performance_review_alignment ${timeStamp}`,
+      fileName: `PRA_${this.props.match?.params?.sessionId}_${timeStamp}`,
       extraLength: 3,
       writeOptions: {},
     };
