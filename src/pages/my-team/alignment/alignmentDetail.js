@@ -264,13 +264,13 @@ class AlignmentList extends Component {
             >
               <Button onClick={this.clearAll}>Clear filters and sorters</Button>
               <Text style={{ marginLeft: 10 }}>
-                Total Data : {totalData || 0}
+                Total Data : {totalData || 0} records
               </Text>
               {totalFiltered && (
                 <Text style={{ marginLeft: 10 }}>
                   <span>|</span>
                   <span style={{ marginLeft: 10 }}>
-                    Total Filtered : {totalFiltered}
+                    Filtered Data : {totalFiltered} records
                   </span>
                 </Text>
               )}
