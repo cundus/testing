@@ -72,7 +72,7 @@ class TableAlignmentDetail extends Component {
         }),
         filteredValue: filteredInfo?.userId || null,
         sortOrder: sortedInfo?.columnKey === "userId" && sortedInfo?.order,
-        onFilter: (value, record) => record.userId.includes(value),
+        onFilter: (value, record) => record.userId === value,
         sorter: (a, b) => a.userId - b.userId,
       },
       {
@@ -123,7 +123,7 @@ class TableAlignmentDetail extends Component {
           return e.text;
         }),
         filteredValue: filteredInfo?.kpiAchievementScore ?? null,
-        onFilter: (value, record) => record.kpiAchievementScore.includes(value),
+        onFilter: (value, record) => record.kpiAchievementScore === value,
         sorter: (a, b) => a.kpiAchievementScore - b.kpiAchievementScore,
       },
       {
@@ -138,7 +138,7 @@ class TableAlignmentDetail extends Component {
           return e.text;
         }),
         filteredValue: filteredInfo?.preAlignment ?? null,
-        onFilter: (value, record) => record.preAlignment.includes(value),
+        onFilter: (value, record) => record.preAlignment === value,
         sorter: (a, b) => {
           if (a.preAlignment && b.preAlignment) {
             return a.preAlignment.localeCompare(b.preAlignment);
@@ -163,7 +163,7 @@ class TableAlignmentDetail extends Component {
           return e.text;
         }),
         filteredValue: filteredInfo?.directorate ?? null,
-        onFilter: (value, record) => record.directorate.includes(value),
+        onFilter: (value, record) => record.directorate === value,
         sorter: (a, b) => {
           if (a.directorate && b.directorate) {
             return a.directorate.localeCompare(b.directorate);

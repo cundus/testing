@@ -95,12 +95,12 @@ class AlignmentList extends Component {
           return {
             ...item,
             ranking: " ",
-            directorate: item?.directorate || "",
+            directorate: item?.directorate || " ",
             number: index + 1,
             name: item?.firstName + " " + item?.lastName,
             managerName: item?.managerFirstName + " " + item?.managerLastName,
             kpiAchievementScore: item?.kpiAchievementScore,
-            userId: item?.userId ?? "",
+            userId: item?.userId ?? " ",
             prePostAlignment:
               item?.postAlignmentNumeric &&
               item?.postAlignmentNumeric > 0 &&
