@@ -57,7 +57,7 @@ pipeline {
 
                     if (env.BRANCH_NAME == 'phase3-development') {
                         echo "Copy dan Running di Server Staging "
-                        // sh 'ssh $userssh@$stgsvr  ./pmgm-docker.sh'
+                        sh 'ssh $userssh@$stgsvr  ./pmgm-docker-fe.sh'
                     } else 
                     
                     if (env.BRANCH_NAME == 'master') {
