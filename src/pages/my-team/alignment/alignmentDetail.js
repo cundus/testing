@@ -117,26 +117,42 @@ class AlignmentList extends Component {
         usersCalibration: newData,
         dataTable: newData,
         totalData: newData.length,
+
+        totalNeedImprovement:
+          alignmentReducer?.dataDetail?.totalActualNeedImprovement,
+        totalWellDone: alignmentReducer?.dataDetail?.totalActualWellDone,
+        totalOutstanding: alignmentReducer?.dataDetail?.totalActualOutstanding,
       });
     }
   };
 
   handleChangeTable = (pagination, filters, sorter, extra) => {
+    const totalData = Array.from(extra?.currentDataSource || []);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
+      totalNeedImprovement: totalData.filter((item) => item.postAlignment === 1)
+        .length,
+      totalWellDone: totalData.filter((item) => item.postAlignment === 2)
+        .length,
+      totalOutstanding: totalData.filter((item) => item.postAlignment === 3)
+        .length,
       totalFiltered:
-        extra.currentDataSource.length === this.state.totalData
-          ? null
-          : extra.currentDataSource.length,
+        totalData.length === this.state.totalData ? null : totalData.length,
     });
   };
 
   clearAll = () => {
+    const { alignmentReducer } = this.props;
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
       totalFiltered: null,
+
+      totalNeedImprovement:
+        alignmentReducer?.dataDetail?.totalActualNeedImprovement,
+      totalWellDone: alignmentReducer?.dataDetail?.totalActualWellDone,
+      totalOutstanding: alignmentReducer?.dataDetail?.totalActualOutstanding,
     });
   };
 
@@ -166,7 +182,7 @@ class AlignmentList extends Component {
         userId: callibrationsInitData?.[index]?.userId,
 
         postAlignmentNumeric: item?.postAlignment
-          ? parseFloat(item?.postAlignment).toFixed(1)
+          ? parseInt(item?.postAlignment)
           : null,
         postAlignment: this.getAlignmentItemText(item?.postAlignment),
         postRanking:
@@ -180,7 +196,9 @@ class AlignmentList extends Component {
       delete callibration.number;
       return callibration;
     });
-    const outstandings = callibrations.filter((item) => item?.rating === 3);
+    const outstandings = callibrations.filter(
+      (item) => item?.postAlignmentNumeric === 3
+    );
     // callibrations = callibrations.filter((item)=> item?.rating)
     const requestBody = {
       calibration: callibrations,
@@ -334,8 +352,16 @@ class AlignmentList extends Component {
   render() {
     const { alignmentReducer, kpiReducer, form } = this.props;
     const { dataProposeRating } = kpiReducer;
-    const { sortedInfo, filteredInfo, dataTable, totalData, totalFiltered } =
-      this.state;
+    const {
+      sortedInfo,
+      filteredInfo,
+      dataTable,
+      totalData,
+      totalFiltered,
+      totalNeedImprovement,
+      totalWellDone,
+      totalOutstanding,
+    } = this.state;
     const contentChart = {
       ...options,
       series: [
@@ -351,11 +377,7 @@ class AlignmentList extends Component {
         },
         {
           name: "Actual",
-          data: [
-            alignmentReducer?.dataDetail?.totalActualNeedImprovement,
-            alignmentReducer?.dataDetail?.totalActualWellDone,
-            alignmentReducer?.dataDetail?.totalActualOutstanding,
-          ],
+          data: [totalNeedImprovement, totalWellDone, totalOutstanding],
           stack: "Actual",
           color: "orange",
         },
@@ -439,19 +461,6 @@ class AlignmentList extends Component {
                 >
                   Export
                 </Button>
-                <Button
-                  icon="save"
-                  disabled={!isCanEdit}
-                  onClick={this.handleSave}
-                  style={{
-                    marginLeft: 10,
-                    color: isCanEdit ? "#52c41a" : undefined,
-                    borderColor: isCanEdit ? "#52c41a" : undefined,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Save
-                </Button>
               </div>
               <TableAlignmentDetail
                 isCanEdit={isCanEdit}
@@ -463,6 +472,22 @@ class AlignmentList extends Component {
                 dataSource={dataTable ?? []}
                 form={form}
               />
+              <div style={{ marginTop: 20, textAlign: "center" }}>
+                <Button
+                  icon="save"
+                  disabled={!isCanEdit}
+                  onClick={this.handleSave}
+                  style={{
+                    paddingLeft: 15,
+                    paddingRight: 15,
+                    color: isCanEdit ? "#52c41a" : undefined,
+                    borderColor: isCanEdit ? "#52c41a" : undefined,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Save Changes
+                </Button>
+              </div>
             </>
           </Spin>
         </div>
