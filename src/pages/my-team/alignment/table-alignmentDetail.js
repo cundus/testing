@@ -182,7 +182,7 @@ class TableAlignmentDetail extends Component {
         }),
         filteredValue: filteredInfo?.postAlignment ?? null,
         onFilter: (value, record) =>
-          record?.postAlignment
+          record?.postAlignment || record?.postAlignment === 0
             ? record.postAlignment.toString().includes(value)
             : true,
         sorter: (a, b) => a.postAlignment - b.postAlignment,
@@ -190,6 +190,7 @@ class TableAlignmentDetail extends Component {
         render: (text, record, index) => {
           const { isCanEdit, handleChange } = this.props;
           const dataOptionRating = [
+            { id: 0, name: "Unrated" },
             { id: 1, name: "Need Improvement" },
             { id: 2, name: "Well Done" },
             { id: 3, name: "Outstanding" },
@@ -248,49 +249,56 @@ class TableAlignmentDetail extends Component {
           const dataOptions = dataSource.filter((item) => {
             return item?.postAlignment === record?.postAlignment;
           });
-          return (
-            <Form>
-              <Form.Item style={{ width: "100%", margin: 0 }}>
-                {form.getFieldDecorator(
-                  `dataGeneral[${record?.number - 1}].ranking`,
-                  {
-                    rules: [
-                      {
-                        required: record?.postAlignment === 3,
-                        message: "Ranking for Outstanding is required",
-                      },
-                    ],
-                    initialValue: text !== " " ? text : "",
-                  }
-                )(
-                  <Select
-                    placeholder="Choose value"
-                    disabled={!isCanEdit}
-                    style={{
-                      cursor: !isCanEdit ? "not-allowed" : "pointer",
-                    }}
-                    // eslint-disable-next-line react/jsx-no-bind
-                    onChange={(value) =>
-                      handleChange(
-                        { ...record, ranking: value },
-                        "ranking",
-                        `dataGeneral[${record?.number - 1}].ranking`,
-                        value
-                      )
+          if (!record?.postAlignment) {
+            return <span></span>;
+          } else {
+            return (
+              <Form>
+                <Form.Item style={{ width: "100%", margin: 0 }}>
+                  {form.getFieldDecorator(
+                    `dataGeneral[${record?.number - 1}].ranking`,
+                    {
+                      rules: [
+                        {
+                          required: record?.postAlignment === 3,
+                          message: "Ranking for Outstanding is required",
+                        },
+                      ],
+                      initialValue: text !== " " ? text : "",
                     }
-                  >
-                    {dataOptions.map((item, index) => {
-                      return (
-                        <Select.Option key={index} value={parseInt(index + 1)}>
-                          {index + 1}
-                        </Select.Option>
-                      );
-                    })}
-                  </Select>
-                )}
-              </Form.Item>
-            </Form>
-          );
+                  )(
+                    <Select
+                      placeholder="Choose value"
+                      disabled={!isCanEdit}
+                      style={{
+                        cursor: !isCanEdit ? "not-allowed" : "pointer",
+                      }}
+                      // eslint-disable-next-line react/jsx-no-bind
+                      onChange={(value) =>
+                        handleChange(
+                          { ...record, ranking: value },
+                          "ranking",
+                          `dataGeneral[${record?.number - 1}].ranking`,
+                          value
+                        )
+                      }
+                    >
+                      {dataOptions.map((item, index) => {
+                        return (
+                          <Select.Option
+                            key={index}
+                            value={parseInt(index + 1)}
+                          >
+                            {index + 1}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
+                  )}
+                </Form.Item>
+              </Form>
+            );
+          }
         },
       },
     ];

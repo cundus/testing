@@ -94,25 +94,14 @@ class AlignmentList extends Component {
         (item, index) => {
           return {
             ...item,
-            ranking: " ",
+            ranking: item?.postRanking || " ",
             directorate: item?.directorate || " ",
             number: index + 1,
             name: item?.firstName + " " + item?.lastName,
             managerName: item?.managerFirstName + " " + item?.managerLastName,
             kpiAchievementScore: item?.kpiAchievementScore,
             userId: item?.userId ?? " ",
-            prePostAlignment:
-              item?.postAlignmentNumeric &&
-              item?.postAlignmentNumeric > 0 &&
-              item?.postAlignmentNumeric < 4
-                ? item?.postAlignmentNumeric
-                : "",
-            postAlignment:
-              item?.postAlignmentNumeric &&
-              item?.postAlignmentNumeric > 0 &&
-              item?.postAlignmentNumeric < 4
-                ? item?.postAlignmentNumeric
-                : "",
+            postAlignment: parseInt(item?.postAlignmentNumeric || 0),
             preAlignment: item?.preAlignment ?? "Unrated",
           };
         }
@@ -147,18 +136,49 @@ class AlignmentList extends Component {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
+      totalFiltered: null,
     });
+  };
+
+  getAlignmentItemText = (i) => {
+    if (i) {
+      const fields = [
+        { id: 0, name: "Unrated" },
+        { id: 1, name: "Need Improvement" },
+        { id: 2, name: "Well Done" },
+        { id: 3, name: "Outstanding" },
+      ];
+      return fields.filter((item) => item.id === i)?.[0]?.name || "";
+    }
+    return "";
   };
 
   handleSave = () => {
     const { dataTable } = this.state;
     const { match, saveAlignment } = this.props;
-    let callibrations = dataTable.map((item) => {
-      return {
-        formDataId: item?.formDataId,
-        userId: item?.userId,
-        rating: item?.postAlignment ? parseInt(item?.postAlignment) : 0,
+    const callibrationsInitData =
+      this.props.alignmentReducer?.dataDetail?.usersCalibration;
+    let callibrations = dataTable.map((item, index) => {
+      let callibration = {
+        ...item,
+        preAlignment: callibrationsInitData?.[index]?.preAlignment,
+        directorate: callibrationsInitData?.[index]?.directorate,
+        userId: callibrationsInitData?.[index]?.userId,
+
+        postAlignmentNumeric: item?.postAlignment
+          ? parseFloat(item?.postAlignment).toFixed(1)
+          : null,
+        postAlignment: this.getAlignmentItemText(item?.postAlignment),
+        postRanking:
+          item?.ranking && item?.ranking !== " "
+            ? parseInt(item?.ranking)
+            : null,
       };
+      delete callibration.name;
+      delete callibration.ranking;
+      delete callibration.managerName;
+      delete callibration.number;
+      return callibration;
     });
     const outstandings = callibrations.filter((item) => item?.rating === 3);
     // callibrations = callibrations.filter((item)=> item?.rating)
@@ -227,6 +247,9 @@ class AlignmentList extends Component {
         ...item,
         ...row,
         ranking: "",
+      });
+      this.props.form.setFieldsValue({
+        [`dataGeneral[${index}].ranking`]: "",
       });
     } else {
       newData.splice(index, 1, {
@@ -344,86 +367,105 @@ class AlignmentList extends Component {
       alignmentReducer?.dataDetail?.userRole?.isOwner;
     return (
       <div style={globalStyle.contentContainer}>
-        {!alignmentReducer?.loadingDetail ? (
+        <div>
           <div>
-            <div>
-              <Divider />
-              <Text strong style={{ fontSize: 20 }}>
-                Performance Review Alignment :{" "}
-              </Text>
-              <Divider />
-            </div>
-            <div style={{ width: "50vw", marginBottom: 20 }}>
-              <HighchartsReact highcharts={Highcharts} options={contentChart} />
-            </div>
-            <div
-              style={{
-                marginBottom: 10,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
-                <Button onClick={this.clearAll}>
-                  Clear filters and sorters
-                </Button>
-                <Text style={{ marginLeft: 10 }}>
-                  Total Data : {totalData || 0} records
-                </Text>
-                {totalFiltered && (
-                  <Text style={{ marginLeft: 10 }}>
-                    <span>|</span>
-                    <span style={{ marginLeft: 10 }}>
-                      Filtered Data : {totalFiltered} records
-                    </span>
-                  </Text>
-                )}
-              </div>
-              <Button
-                onClick={() => {
-                  if (this.state.hasChange) {
-                    confirm({
-                      title: "Please make sure you have save all data",
-                      okText: "Yes, Export it",
-                      onOk: async () => {
-                        this.exportToXLSX();
-                      },
-                      onCancel() {},
-                    });
-                  } else {
-                    this.exportToXLSX();
-                  }
+            <Divider />
+            <Text strong style={{ fontSize: 20 }}>
+              Performance Review Alignment :
+            </Text>
+            <Divider />
+          </div>
+          <Spin spinning={alignmentReducer?.loadingDetail}>
+            <>
+              {alignmentReducer?.dataDetail?.totalRequirementOutstanding && (
+                <div style={{ width: "40vw", marginBottom: 20 }}>
+                  <HighchartsReact
+                    containerProps={{ style: { height: "250px" } }}
+                    highcharts={Highcharts}
+                    options={contentChart}
+                  />
+                </div>
+              )}
+              <div
+                style={{
+                  marginBottom: 10,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
                 }}
               >
-                Export
-              </Button>
-            </div>
-            <TableAlignmentDetail
-              isCanEdit={isCanEdit}
-              handleChange={this.handleChange}
-              handleChangeTable={this.handleChangeTable}
-              sortedInfo={sortedInfo}
-              dataProposeRating={dataProposeRating}
-              filteredInfo={filteredInfo}
-              dataSource={dataTable ?? []}
-              form={form}
-            />
-            <div style={{ marginTop: 20, textAlign: "center" }}>
-              <Button
-                disabled={!isCanEdit}
-                onClick={this.handleSave}
-                style={{ marginLeft: 10, marginRight: 10 }}
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <center>
-            <Spin />
-          </center>
-        )}
+                <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
+                  <Button
+                    style={{
+                      fontWeight: "500",
+                    }}
+                    onClick={this.clearAll}
+                  >
+                    Clear filters and sorters
+                  </Button>
+                  <Text style={{ marginLeft: 10 }}>
+                    Total Data : {totalData || 0} records
+                  </Text>
+                  {totalFiltered && (
+                    <Text style={{ marginLeft: 10 }}>
+                      <span>|</span>
+                      <span style={{ marginLeft: 10 }}>
+                        Filtered Data : {totalFiltered} records
+                      </span>
+                    </Text>
+                  )}
+                </div>
+                <Button
+                  icon="download"
+                  style={{
+                    borderColor: "#40a9ff",
+                    color: "#40a9ff",
+                    fontWeight: "bold",
+                  }}
+                  onClick={() => {
+                    if (this.state.hasChange) {
+                      confirm({
+                        title: "Please make sure you have save all data",
+                        okText: "Yes, Export it",
+                        onOk: async () => {
+                          this.exportToXLSX();
+                        },
+                        onCancel() {},
+                      });
+                    } else {
+                      this.exportToXLSX();
+                    }
+                  }}
+                >
+                  Export
+                </Button>
+                <Button
+                  icon="save"
+                  disabled={!isCanEdit}
+                  onClick={this.handleSave}
+                  style={{
+                    marginLeft: 10,
+                    color: isCanEdit ? "#52c41a" : undefined,
+                    borderColor: isCanEdit ? "#52c41a" : undefined,
+                    fontWeight: "bold",
+                  }}
+                >
+                  Save
+                </Button>
+              </div>
+              <TableAlignmentDetail
+                isCanEdit={isCanEdit}
+                handleChange={this.handleChange}
+                handleChangeTable={this.handleChangeTable}
+                sortedInfo={sortedInfo}
+                dataProposeRating={dataProposeRating}
+                filteredInfo={filteredInfo}
+                dataSource={dataTable ?? []}
+                form={form}
+              />
+            </>
+          </Spin>
+        </div>
       </div>
     );
   }
