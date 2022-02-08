@@ -443,18 +443,15 @@ class AlignmentList extends Component {
                     fontWeight: "bold",
                   }}
                   onClick={() => {
-                    if (this.state.hasChange) {
-                      confirm({
-                        title: "Please make sure you have save all data",
-                        okText: "Yes, Export it",
-                        onOk: async () => {
-                          this.exportToXLSX();
-                        },
-                        onCancel() {},
-                      });
-                    } else {
-                      this.exportToXLSX();
-                    }
+                    confirm({
+                      title: "Please make sure you have save all data",
+                      okText: "Yes",
+                      cancelText: "No",
+                      onOk: async () => {
+                        this.exportToXLSX();
+                      },
+                      onCancel() {},
+                    });
                   }}
                 >
                   Export
