@@ -20,7 +20,7 @@ export const httpHeaders = {
   NOT_FOUND: 404,
   BAD_REQUEST: 400,
   NOT_AUTHORIZED: 403,
-  ERR_SERVER: 500,
+  ERR_SERVER: 500
 };
 
 export const errorHandlerCode = (statusCode, statusDesc) => {
@@ -28,26 +28,26 @@ export const errorHandlerCode = (statusCode, statusDesc) => {
     case INVALID_LOGIN_TOKEN:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
-        title: "Sorry, you are not authorized to access this application.",
-        subTitle: `Refresh this page or Login again`,
+        title: 'Sorry, you are not authorized to access this application.',
+        subTitle: `Refresh this page or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
       };
-    case USER_NOT_FOUND:
-      return {
-        status: httpHeaders.NOT_AUTHORIZED,
-        title: "Sorry, you are not authorized to access this application.",
-        subTitle: `Refresh this page or Login again`,
-      };
+      case USER_NOT_FOUND:
+        return {
+          status: httpHeaders.NOT_AUTHORIZED,
+          title: 'Sorry, you are not authorized to access this application.',
+          subTitle: `Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+        };
     case MULTI_SESSION_NOT_ALLOWED:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
-        title: "Sorry, you are unable to access the application right now.",
-        subTitle: `Sign Out from other device/browser`,
+        title: 'Sorry, you are unable to access the application right now.',
+        subTitle: `Sign Out from other device/browser or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
       };
     default:
       return {
         status: httpHeaders.ERR_SERVER,
-        title: "Sorry, Something went wrong with the server.",
-        subTitle: ``,
+        title: 'Sorry, Something went wrong with the server.',
+        subTitle: `Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
       };
   }
 };
