@@ -36,7 +36,7 @@ class TableAlignmentDetail extends Component {
       { text: "Outstanding", value: "Outstanding" },
     ];
     const postAlignments = [
-      { text: "Unrated", value: "0" },
+      { text: "", value: "0" },
       { text: "Need Improvement", value: "1" },
       { text: "Well Done", value: "2" },
       { text: "Outstanding", value: "3" },
@@ -190,7 +190,7 @@ class TableAlignmentDetail extends Component {
         render: (text, record, index) => {
           const { isCanEdit, handleChange } = this.props;
           const dataOptionRating = [
-            { id: 0, name: "Unrated" },
+            { id: 0, name: "" },
             { id: 1, name: "Need Improvement" },
             { id: 2, name: "Well Done" },
             { id: 3, name: "Outstanding" },
@@ -219,7 +219,7 @@ class TableAlignmentDetail extends Component {
                 >
                   {dataOptionRating.map((item, index) => {
                     return (
-                      <Select.Option key={index} value={parseInt(item.id)}>
+                      <Select.Option key={index} value={parseInt(item.id)} style={{height: 30}}>
                         {item.name}
                       </Select.Option>
                     );

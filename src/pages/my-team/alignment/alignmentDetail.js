@@ -159,7 +159,7 @@ class AlignmentList extends Component {
   getAlignmentItemText = (i) => {
     if (i) {
       const fields = [
-        { id: 0, name: "Unrated" },
+        { id: 0, name: "" },
         { id: 1, name: "Need Improvement" },
         { id: 2, name: "Well Done" },
         { id: 3, name: "Outstanding" },
@@ -335,7 +335,7 @@ class AlignmentList extends Component {
                   case 3:
                     return "Outstanding";
                   default:
-                    return "Unrated";
+                    return "";
                 }
               },
             },
