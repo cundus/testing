@@ -127,13 +127,11 @@ class AlignmentList extends Component {
   };
 
   handleChangeTable = (pagination, filters, sorter, extra) => {
-    console.log(filters);
     const totalData = Array.from(this.state.dataTable || []).filter((item) =>
       filters?.managerName && filters.managerName.length !== 0
         ? filters.managerName.includes(item.managerName)
         : true
     );
-    console.log(totalData);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
