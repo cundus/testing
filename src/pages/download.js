@@ -27,8 +27,10 @@ class Download extends Component {
     const { alignmentReducer } = this.props;
     if (alignmentReducer?.statusDownload === Success) {
       toast.success('Success, file was downloaded')
+    } else if (alignmentReducer?.statusDownload === 2026) {
+      toast.warn(`Sorry, you're unable to download this file. Please contact your administrator`)
     } else {
-      toast.warn(`Sorry, you're unable to download this file`)
+      toast.warn(`Sorry, ${alignmentReducer?.messageDownloadPermission}`)
     }
   }
   render() {
