@@ -28,7 +28,7 @@ class Download extends Component {
     if (alignmentReducer?.statusDownload === Success) {
       toast.success('Success, file was downloaded')
     } else {
-      toast.warn(`Sorry, you're unable to download this file, contact pmgm helpdesk`)
+      toast.warn(`Sorry, you're unable to download this file`)
     }
   }
   render() {
