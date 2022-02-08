@@ -183,12 +183,10 @@ class AlignmentList extends Component {
 
         postAlignmentNumeric: item?.postAlignment
           ? parseInt(item?.postAlignment)
-          : null,
+          : 0,
         postAlignment: this.getAlignmentItemText(item?.postAlignment),
         postRanking:
-          item?.ranking && item?.ranking !== " "
-            ? parseInt(item?.ranking)
-            : null,
+          item?.ranking && item?.ranking !== " " ? parseInt(item?.ranking) : 0,
       };
       delete callibration.name;
       delete callibration.ranking;
@@ -247,12 +245,12 @@ class AlignmentList extends Component {
       if (itemRanking) {
         newData.splice(indexRanking, 1, {
           ...itemRanking,
-          ranking: "",
+          ranking: " ",
         });
       }
       if (indexRanking >= 0) {
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: "",
+          [`dataGeneral[${indexRanking}].ranking`]: " ",
         });
       }
     }
@@ -264,7 +262,7 @@ class AlignmentList extends Component {
       newData.splice(index, 1, {
         ...item,
         ...row,
-        ranking: "",
+        ranking: " ",
       });
       this.props.form.setFieldsValue({
         [`dataGeneral[${index}].ranking`]: "",
