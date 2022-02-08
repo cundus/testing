@@ -339,6 +339,10 @@ class AlignmentList extends Component {
                 }
               },
             },
+            {
+              label: "Ranking",
+              value: "ranking",
+            },
           ],
           content: dataTable,
         },
