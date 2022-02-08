@@ -335,7 +335,7 @@ class AlignmentList extends Component {
                   case 3:
                     return "Outstanding";
                   default:
-                    return "Unrated";
+                    return "";
                 }
               },
             },
