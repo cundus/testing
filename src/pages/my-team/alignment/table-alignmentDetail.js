@@ -36,7 +36,7 @@ class TableAlignmentDetail extends Component {
       { text: "Outstanding", value: "Outstanding" },
     ];
     const postAlignments = [
-      { text: "Unrated", value: "0" },
+      { text: "", value: "0" },
       { text: "Need Improvement", value: "1" },
       { text: "Well Done", value: "2" },
       { text: "Outstanding", value: "3" },
