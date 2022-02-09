@@ -3,22 +3,29 @@ import { getCurrentStep } from '../../../service/auth';
 import { SUCCESS } from '../../status-code-type';
 
 const actionGetCurrStep = (ADToken) => async (dispatch) => {
-  dispatch({
-    type: GET_CURRENT_STEP,
+  const init = JSON.parse(localStorage.getItem("currStep") || JSON.stringify({
     loadingGetCurrStep: true,
     statusGetCurrStepCode: null,
     statusGetCurrStepDesc: null
+  }))
+  dispatch({
+    type: GET_CURRENT_STEP,
+    ...init
   });
   try {
     const payload = await getCurrentStep(ADToken);
     if (payload?.data?.status_code === SUCCESS) {
       if (payload?.data?.result) {
-        dispatch({
-          type: GET_CURRENT_STEP_SUCCESS,
+        const success = {
           statusGetCurrStepCode: payload?.data?.status_code,
           statusGetCurrStepDesc: payload?.data?.status_description,
           loadingGetCurrStep: false,
           ...payload?.data?.result
+        }
+        localStorage.setItem("currStep", JSON.stringify(success))
+        dispatch({
+          type: GET_CURRENT_STEP_SUCCESS,
+          ...success
         });
       } else {
         dispatch({

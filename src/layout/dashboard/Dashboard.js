@@ -44,7 +44,7 @@ class Dashboard extends React.Component {
       localStorage.clear();
     });
     // // refresh token
-    const { auth, getNotifications } = this.props;
+    const { auth } = this.props;
     const { accessToken } = auth;
     const { expiresOn } = accessToken;
     if (accessToken) {
@@ -55,8 +55,6 @@ class Dashboard extends React.Component {
         await this.callAndStore();
       }, refresh);
     }
-    getNotifications();
-    setInterval(() => getNotifications(), 180000);
   }
 
   getToken = async () => {
@@ -78,7 +76,12 @@ class Dashboard extends React.Component {
     await doLoginByADToken(token);
     const { authReducer } = this.props;
     if (authReducer?.statusLoginCode === SUCCESS) {
-      await doGetCurrStep();
+      if (localStorage.getItem('sfToken')) {
+      doGetCurrStep();
+      } else {
+        await doGetCurrStep();
+
+      }
     }
   };
 
@@ -87,6 +90,10 @@ class Dashboard extends React.Component {
     await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
+    if (localStorage.getItem('sfToken')) {
+      this.props.getNotifications();
+      setInterval(() => this.props.getNotifications(), 180000);
+    }
     this.setState({ loading: false });
   };
 
