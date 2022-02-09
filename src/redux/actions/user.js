@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
   getUserInfo as getUserInfoAction,
   getMyTeam as getMyTeamAction,
@@ -159,12 +158,12 @@ export const GetMyTeamKPIApraisal = (idUser) => {
         const Team = myT;
         let Kpi = await getMyKPIAction(myT.userId);
         Kpi = Kpi.data.result;
-        Team.title = _.get(Kpi, 'kpiTitle', 'none');
-        Team.score = _.get(Kpi, 'kpiScore', '-');
-        Team.ratting = _.get(Kpi, 'kpiRating', '-');
-        Team.status = _.get(Kpi, 'userStatus', '-');
-        Team.result = _.get(Kpi, 'nonKpiresult', '-');
-        Team.Key = _.get(Kpi, 'userId', '-');
+        Team.title = Kpi?.kpiTitle || "none";
+        Team.score = Kpi?.kpiScore || "-";
+        Team.ratting =  Kpi?.kpiRating || "-";
+        Team.status = Kpi?.userStatus || "-";
+        Team.result = Kpi?.nonKpiresult || "-";
+        Team.Key = Kpi?.userId || "-";
         return Team;
       }));
 

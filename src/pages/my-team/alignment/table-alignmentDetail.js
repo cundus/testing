@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Select, Form } from "antd";
 import DataTable from "../../../components/dataTable/index";
-import _ from "lodash";
+import { orderBy, uniqBy } from "../../../utils/lodash";
 
 class TableAlignmentDetail extends Component {
   render() {
@@ -13,22 +13,22 @@ class TableAlignmentDetail extends Component {
     let names = dataSource.map((item) => {
       return { text: item?.name, value: item?.name };
     });
-    names = _.orderBy(names, ["text"], ["asc"]);
+    names = orderBy(names, ["text"], ["asc"]);
     let rankings = dataSource.map((item) => {
       return { text: item?.ranking, value: item?.ranking };
     });
-    rankings = _.orderBy(rankings, ["text"], ["asc"]);
+    rankings = orderBy(rankings, ["text"], ["asc"]);
     let managerNames = dataSource.map((item) => {
       return { text: item?.managerName, value: item?.managerName };
     });
-    managerNames = _.orderBy(managerNames, ["text"], ["asc"]);
+    managerNames = orderBy(managerNames, ["text"], ["asc"]);
     let kpiAchievementScores = dataSource.map((item) => {
       return {
         text: item?.kpiAchievementScore,
         value: item?.kpiAchievementScore,
       };
     });
-    kpiAchievementScores = _.orderBy(kpiAchievementScores, ["text"], ["asc"]);
+    kpiAchievementScores = orderBy(kpiAchievementScores, ["text"], ["asc"]);
     const preAlignments = [
       { text: "Unrated", value: "Unrated" },
       { text: "Need Improvement", value: "Need Improvement" },
@@ -44,11 +44,11 @@ class TableAlignmentDetail extends Component {
     // let departments = dataSource.map((item) => {
     //   return { text: item?.department, value: item?.department };
     // });
-    // departments = _.orderBy(departments, ["text"], ["asc"]);
+    // departments = orderBy(departments, ["text"], ["asc"]);
     let directorates = dataSource.map((item) => {
       return { text: item?.directorate, value: item?.directorate };
     });
-    directorates = _.orderBy(directorates, ["text"], ["asc"]);
+    directorates = orderBy(directorates, ["text"], ["asc"]);
     const columns = [
       {
         title: "No",
@@ -67,7 +67,7 @@ class TableAlignmentDetail extends Component {
         align: "left",
         width: 150,
         placeholder: "Employee ID",
-        filters: _.uniqBy(userIds, (e) => {
+        filters: uniqBy(userIds, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.userId || null,
@@ -82,7 +82,7 @@ class TableAlignmentDetail extends Component {
         width: 200,
         placeholder: "Employee Name",
         sortOrder: sortedInfo?.columnKey === "name" && sortedInfo?.order,
-        filters: _.uniqBy(names, (e) => {
+        filters: uniqBy(names, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.name ?? null,
@@ -100,7 +100,7 @@ class TableAlignmentDetail extends Component {
         width: 200,
         placeholder: "Superior",
         sortOrder: sortedInfo?.columnKey === "managerName" && sortedInfo?.order,
-        filters: _.uniqBy(managerNames, (e) => {
+        filters: uniqBy(managerNames, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.managerName ?? null,
@@ -119,7 +119,7 @@ class TableAlignmentDetail extends Component {
         placeholder: "KPI Achievement Score",
         sortOrder:
           sortedInfo?.columnKey === "kpiAchievementScore" && sortedInfo?.order,
-        filters: _.uniqBy(kpiAchievementScores, (e) => {
+        filters: uniqBy(kpiAchievementScores, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.kpiAchievementScore ?? null,
@@ -134,7 +134,7 @@ class TableAlignmentDetail extends Component {
         placeholder: "Pre Alignment",
         sortOrder:
           sortedInfo?.columnKey === "preAlignment" && sortedInfo?.order,
-        filters: _.uniqBy(preAlignments, (e) => {
+        filters: uniqBy(preAlignments, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.preAlignment ?? null,
@@ -159,7 +159,7 @@ class TableAlignmentDetail extends Component {
         placeholder: "Directorate",
         width: 170,
         sortOrder: sortedInfo?.columnKey === "Directorate" && sortedInfo?.order,
-        filters: _.uniqBy(directorates, (e) => {
+        filters: uniqBy(directorates, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.directorate ?? null,
@@ -177,7 +177,7 @@ class TableAlignmentDetail extends Component {
         width: 170,
         sortOrder:
           sortedInfo?.columnKey === "postAlignment" && sortedInfo?.order,
-        filters: _.uniqBy(postAlignments, (e) => {
+        filters: uniqBy(postAlignments, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.postAlignment ?? null,
@@ -238,7 +238,7 @@ class TableAlignmentDetail extends Component {
         width: 170,
         placeholder: "Ranking",
         sortOrder: sortedInfo?.columnKey === "ranking" && sortedInfo?.order,
-        filters: _.uniqBy(rankings, (e) => {
+        filters: uniqBy(rankings, (e) => {
           return e.text;
         }),
         filteredValue: filteredInfo?.ranking ?? null,
