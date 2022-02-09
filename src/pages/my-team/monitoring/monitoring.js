@@ -5,13 +5,11 @@ import { withRouter } from 'react-router-dom';
 import { GetMyTeamKPIMonitoring } from '../../../redux/actions/user';
 import TableMonitoring from './table-monitoring';
 import globalStyle from "../../../styles/globalStyles";
-import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
 
 const { Text } = Typography;
 
 class Monitoring extends Component {
   async componentDidMount() {
-    this.props.doGetCurrStep()
     this.setState({loading: true})
     const { getMyTeamKPIMonitoring, authReducer } = this.props;
     await getMyTeamKPIMonitoring(authReducer?.userId);
@@ -46,7 +44,6 @@ class Monitoring extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   getMyTeamKPIMonitoring: (idUser) => dispatch(GetMyTeamKPIMonitoring(idUser)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

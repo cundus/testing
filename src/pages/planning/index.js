@@ -13,7 +13,6 @@ import globalStyle from '../../styles/globalStyles';
 import { EMP_GOAL_SETTING } from '../../utils/stepKpi';
 import { Success } from '../../redux/status-code-type';
 import { toast } from 'react-toastify'
-import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
 
 class Planning extends Component {
   constructor(props) {
@@ -25,7 +24,6 @@ class Planning extends Component {
       access: false
     };
     this.getKpi();
-    this.props.doGetCurrStep()
   }
 
   getKpi = async () => {
@@ -141,7 +139,6 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(actionGetKPI(id)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(

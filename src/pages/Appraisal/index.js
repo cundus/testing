@@ -38,7 +38,6 @@ import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
 import TextArea from 'antd/lib/input/TextArea';
 import { toast } from 'react-toastify'
-import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
 
 const { Text, Title } = Typography;
 const { TabPane } = Tabs;
@@ -72,7 +71,6 @@ class Appraisal extends Component {
     const {
       authReducer
     } = this.props;
-    this.props.doGetCurrStep()
     this.getOwnKpiList(authReducer?.userId);
     this.getOwnValues(authReducer?.userId);
   };
@@ -809,7 +807,6 @@ const mapDispatchToProps = (dispatch) => ({
   submitNext: (id) => dispatch(doSubmitNext(id)),
   empAcknowledge: (data) => dispatch(doEmpAcknowledge(data)),
   empAcknowledgeList: () => dispatch(doEmpAcknowledgeList()),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(
