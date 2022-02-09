@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Provider } from 'react-redux';
 import { BrowserRouter, Switch } from 'react-router-dom';
 
 import { AzureAD, AuthenticationState } from 'react-aad-msal';
@@ -12,11 +11,13 @@ import routes from './routes/Route';
 import store from './redux/store';
 import { MappedRouter } from './routes/RouteGenerator';
 import './styles/global-styles.scss';
+import Loading from './components/loading';
 
 const browserHistory = createBrowserHistory();
 
 const App = (props) => {
   return (
+    <React.Suspense fallback={<Loading />}>
     <AzureAD provider={authProvider} forceLogin reduxStore={store}>
       {(
         {
@@ -56,6 +57,7 @@ const App = (props) => {
         }
       }}
     </AzureAD>
+    </React.Suspense>
   );
 };
 
