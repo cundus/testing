@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import TablePlanning from './table-plan';
 import { GetMyTeamKPI } from '../../../redux/actions/user';
 import globalStyle from '../../../styles/globalStyles';
-import actionGetCurrStep from '../../../redux/actions/auth/actionGetCurrentStep';
 
 const { Text } = Typography;
 
@@ -21,7 +20,6 @@ class Planning extends Component {
   async componentDidMount() {
     const { getMyTeamKPI, authReducer } = this.props;
     this.setState({loading:true});
-    this.props.doGetCurrStep()
     await getMyTeamKPI(authReducer?.userId);
     const newData = this.props.myteam?.result.map( d => {
       d.costumAction = {
@@ -61,7 +59,6 @@ class Planning extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   getMyTeamKPI: (idUser) => dispatch(GetMyTeamKPI(idUser)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

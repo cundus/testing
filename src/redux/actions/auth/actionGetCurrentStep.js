@@ -2,7 +2,7 @@ import { GET_CURRENT_STEP, GET_CURRENT_STEP_SUCCESS, GET_CURRENT_STEP_FAILED } f
 import { getCurrentStep } from '../../../service/auth';
 import { SUCCESS } from '../../status-code-type';
 
-const actionGetCurrStep = (ADToken) => async (dispatch) => {
+const actionGetCurrStep = () => async (dispatch) => {
   dispatch({
     type: GET_CURRENT_STEP,
     loadingGetCurrStep: true,
@@ -10,7 +10,7 @@ const actionGetCurrStep = (ADToken) => async (dispatch) => {
     statusGetCurrStepDesc: null
   });
   try {
-    const payload = await getCurrentStep(ADToken);
+    const payload = await getCurrentStep();
     if (payload?.data?.status_code === SUCCESS) {
       if (payload?.data?.result) {
         dispatch({

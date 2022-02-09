@@ -43,6 +43,13 @@ class Dashboard extends React.Component {
     window.addEventListener('onbeforeunload', () => {
       localStorage.clear();
     });
+    // listen when route change
+    this.unlisten = this.props.history.listen(async () => {
+      const { authReducer, doGetCurrStep } = this.props;
+      if (authReducer?.statusLoginCode === SUCCESS) {
+        await doGetCurrStep();
+      }
+    });
     // // refresh token
     const { auth, getNotifications } = this.props;
     const { accessToken } = auth;
@@ -57,6 +64,10 @@ class Dashboard extends React.Component {
     }
     getNotifications();
     setInterval(() => getNotifications(), 180000);
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
   }
 
   getToken = async () => {

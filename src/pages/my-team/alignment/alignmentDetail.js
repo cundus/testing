@@ -13,7 +13,6 @@ import HighchartsReact from "highcharts-react-official";
 import { doGetProposeRating } from "../../../redux/actions/kpi";
 import { Success } from "../../../redux/status-code-type";
 import { toast } from "react-toastify";
-import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
 import JSONtoXLSX from "json-as-xlsx";
 import moment from "moment";
 
@@ -79,7 +78,6 @@ class AlignmentList extends Component {
   }
   componentDidMount() {
     this.getData();
-    this.props.doGetCurrStep();
   }
 
   getData = async () => {
@@ -500,7 +498,6 @@ const mapDispatchtoProps = (dispatch) => ({
   saveAlignment: (data) => dispatch(postAlignmentSessionDetail(data)),
   doGetAlignmentDetail: (sessionId) =>
     dispatch(getAlignmentSessionDetail(sessionId)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep()),
 });
 
 const mapStateToProps = (state) => ({

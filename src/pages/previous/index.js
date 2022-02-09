@@ -23,7 +23,6 @@ import {
 import globalStyle from "../../styles/globalStyles";
 import { kpiGetProcess } from "../../utils/kpiGetProcess";
 import Previous from "./previous";
-import actionGetCurrStep from "../../redux/actions/auth/actionGetCurrentStep";
 
 const { Text } = Typography;
 
@@ -39,7 +38,6 @@ class CreateKPI extends Component {
 
   componentDidMount() {
     const { authReducer, match, history} = this.props;
-    this.props.doGetCurrStep()
     if((match?.params?.userId === authReducer?.userId) && (history.location.pathname.includes("/my-team/previous-kpi"))) {
       this.props.history.push('/previous-kpi')
     } else {
@@ -152,7 +150,6 @@ const mapDispatchToProps = (dispatch) => ({
   doGetFormTemplates: (ellgibleToCopy) =>
     dispatch(actionGetFormTemplates(ellgibleToCopy)),
   doGetKpiFormId: (userId, formId) => dispatch(actionGetPrevKpiByFormId(userId, formId)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(

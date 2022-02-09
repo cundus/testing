@@ -41,7 +41,6 @@ import { Success } from '../../../../../redux/status-code-type';
 import globalStyle from '../../../../../styles/globalStyles';
 import stepKpi, { PERFORMANCE_REVIEW_MANAGER } from '../../../../../utils/stepKpi';
 import { toast } from 'react-toastify'
-import actionGetCurrStep from '../../../../../redux/actions/auth/actionGetCurrentStep';
 
 const { Text, Title } = Typography;
 const { TextArea } = Input;
@@ -74,7 +73,6 @@ class Appraisal extends Component {
   componentDidMount() {
     const { authReducer, match, step } = this.props;
     const { params } = match;
-    this.props.doGetCurrStep()
     if (authReducer.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
         this.props.history.push('/planning/kpi');
@@ -907,7 +905,6 @@ const mapDispatchToProps = (dispatch) => ({
   saveAppraisal: (id, data) => dispatch(doSaveAppraisal(id, data)),
   teamAck: (data) => dispatch(doTeamAcknowledge(data)),
   getNotifications: () => dispatch(actionGetNotifications()),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(
