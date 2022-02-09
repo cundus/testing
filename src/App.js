@@ -11,13 +11,13 @@ import routes from './routes/Route';
 import store from './redux/store';
 import { MappedRouter } from './routes/RouteGenerator';
 import './styles/global-styles.scss';
-import Loading from './components/loading';
+import { LoadingSplash } from './components/loading';
 
 const browserHistory = createBrowserHistory();
 
 const App = (props) => {
   return (
-    <React.Suspense fallback={<Loading />}>
+    <React.Suspense fallback={<LoadingSplash />}>
     <AzureAD provider={authProvider} forceLogin reduxStore={store}>
       {(
         {
