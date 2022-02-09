@@ -19,7 +19,6 @@ import globalStyle from '../../styles/globalStyles';
 import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
 import { doReviseKPI } from '../../redux/actions/monitoring';
 import { toast } from 'react-toastify'
-import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
 
 
 const { confirm } = Modal;
@@ -58,11 +57,10 @@ class MonitorKPI extends Component {
   }
 
   getAllData = async () => {
-    const { authReducer, getKpiList, getLatestGoalKpi, match, doGetCurrStep } = this.props;
+    const { authReducer, getKpiList, getLatestGoalKpi, match } = this.props;
     const { params } = match;
     const { userId } = params;
     getLatestGoalKpi();
-    doGetCurrStep()
     if (userId) {
       await getKpiList(userId);
       await
@@ -332,7 +330,6 @@ const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const connectToComponent = connect(

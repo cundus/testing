@@ -4,7 +4,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { Row, Col, Button, Modal, List, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import './home-styles.scss';
-import actionGetCurrStep from "../../redux/actions/auth/actionGetCurrentStep"
 
 // icons list
 import collaborationIcon from '../../assets/icons/collaboration.svg';
@@ -78,10 +77,6 @@ class Home extends Component {
     this.state = {
       isModalShow: false,
     };
-  }
-
-  componentDidMount() {
-    this.props.doGetCurrStep();
   }
 
   render() {
@@ -222,16 +217,13 @@ class Home extends Component {
     );
   }
 }
-const mapDispatchtoProps = (dispatch) => ({
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
-});
 const mapStateToProps = (state) => ({
   auth: state.activeDirectoryReducer,
   authReducer: state.authReducer,
   user: state.userReducer,
   step: state.userKpiStateReducer
 });
-const connectToComponent = connect(mapStateToProps, mapDispatchtoProps)(Home);
+const connectToComponent = connect(mapStateToProps, null)(Home);
 
 export default withRouter(connectToComponent);
 

@@ -15,7 +15,6 @@ import { getChallengeYourselfChecker } from '../../../utils/challengeYourselfChe
 import stepKpi from '../../../utils/stepKpi';
 import { Success } from '../../../redux/status-code-type';
 import { toast } from 'react-toastify'
-import actionGetCurrStep from '../../../redux/actions/auth/actionGetCurrentStep';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -36,7 +35,6 @@ class PlanningDetail extends Component {
   async componentDidMount() {
     const { authReducer, match } = this.props;
     const { params } = match;
-    this.props.doGetCurrStep()
     if (authReducer?.userId === params.id) {
       this.props.history.push('/planning/kpi');
     } else {
@@ -282,7 +280,6 @@ const mapDispatchtoProps = (dispatch) => ({
   giveFeedbackKpi: (idUser, data) => dispatch(GiveFeedbackKpi(idUser, data)),
   approveKpi: (idUser, data) => dispatch(ApproveKPI(idUser, data)),
   getNotifications: () => dispatch(actionGetNotifications()),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({

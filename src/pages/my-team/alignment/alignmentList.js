@@ -5,15 +5,13 @@ import { withRouter } from 'react-router-dom';
 import TableAlignment from './table-alignmentList';
 import globalStyle from "../../../styles/globalStyles";
 import { getAlignmentSession } from "../../../redux/actions/alignment";
-import actionGetCurrStep from "../../../redux/actions/auth/actionGetCurrentStep";
 
 const { Text } = Typography;
 
 class AlignmentList extends Component {
   componentDidMount() {
-    const { doGetAlignment, doGetCurrStep } = this.props;
+    const { doGetAlignment } = this.props;
     doGetAlignment();
-    doGetCurrStep()
   }
 
   render() {
@@ -41,7 +39,6 @@ class AlignmentList extends Component {
 
 const mapDispatchtoProps = (dispatch) => ({
   doGetAlignment: () => dispatch(getAlignmentSession()),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
 });
 
 const mapStateToProps = (state) => ({
