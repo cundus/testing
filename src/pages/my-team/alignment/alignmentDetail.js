@@ -304,6 +304,22 @@ class AlignmentList extends Component {
       writeOptions: {},
     };
 
+    const newData = alignmentReducer?.dataDetail?.usersCalibration?.map(
+      (item, index) => {
+        return {
+          ...item,
+          ranking: item?.postRanking || " ",
+          directorate: item?.directorate || " ",
+          number: index + 1,
+          name: item?.firstName + " " + item?.lastName,
+          managerName: item?.managerFirstName + " " + item?.managerLastName,
+          kpiAchievementScore: item?.kpiAchievementScore,
+          userId: item?.userId ?? " ",
+          postAlignment: parseInt(item?.postAlignmentNumeric || 0),
+          preAlignment: item?.preAlignment ?? "Unrated",
+        };
+      }
+    );
     await JSONtoXLSX(
       [
         {
@@ -358,7 +374,7 @@ class AlignmentList extends Component {
               value: "ranking",
             },
           ],
-          content: dataTable,
+          content: newData,
         },
       ],
       settings
