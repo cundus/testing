@@ -29,7 +29,7 @@ export const errorHandlerCode = (statusCode, statusDesc) => {
       return {
         status: httpHeaders.NOT_AUTHORIZED,
         title: 'Sorry, you are not authorized to access this application.',
-        subTitle: `Refresh this page or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+        subTitle: `Refresh this page or try relogin again`
       };
       case USER_NOT_FOUND:
         return {
@@ -42,6 +42,12 @@ export const errorHandlerCode = (statusCode, statusDesc) => {
         status: httpHeaders.NOT_AUTHORIZED,
         title: 'Sorry, you are unable to access the application right now.',
         subTitle: `Sign Out from other device/browser or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+      };
+    case NOT_AUTHORIZED:
+      return {
+        status: httpHeaders.NOT_AUTHORIZED,
+        title: 'Sorry, you are not authorized to access this application.',
+        subTitle: `Refresh this page or try relogin again`
       };
     default:
       return {
