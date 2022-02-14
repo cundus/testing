@@ -296,7 +296,7 @@ class AlignmentList extends Component {
   };
 
   exportToXLSX = async () => {
-    const { dataTable } = this.state;
+    const { alignmentReducer } = this.props;
     const timeStamp = moment().format("YYYY-MM-DD HH-mm-ss");
     let settings = {
       fileName: `PRA_${this.props.match?.params?.sessionId}_${timeStamp}`,
