@@ -120,16 +120,22 @@ class AlignmentList extends Component {
           alignmentReducer?.dataDetail?.totalActualNeedImprovement,
         totalWellDone: alignmentReducer?.dataDetail?.totalActualWellDone,
         totalOutstanding: alignmentReducer?.dataDetail?.totalActualOutstanding,
+
+        totalMaximumOutstanding:
+          alignmentReducer?.dataDetail?.totalRequirementOutstanding,
       });
     }
   };
 
   handleChangeTable = (pagination, filters, sorter, extra) => {
+    const { alignmentReducer } = this.props;
     const totalData = Array.from(this.state.dataTable || []).filter((item) =>
       filters?.managerName && filters.managerName.length !== 0
         ? filters.managerName.includes(item.managerName)
         : true
     );
+    const totalMaximumOutstanding =
+      Math.round(parseFloat(alignmentReducer?.dataDetail?.outstandingPercentage) * (totalData.length / 100));
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
@@ -141,11 +147,14 @@ class AlignmentList extends Component {
         .length,
       totalFiltered:
         totalData.length === this.state.totalData ? null : totalData.length,
+
+      totalMaximumOutstanding: totalMaximumOutstanding,
     });
   };
 
   clearAll = () => {
     const { alignmentReducer } = this.props;
+
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
@@ -155,6 +164,9 @@ class AlignmentList extends Component {
         alignmentReducer?.dataDetail?.totalActualNeedImprovement,
       totalWellDone: alignmentReducer?.dataDetail?.totalActualWellDone,
       totalOutstanding: alignmentReducer?.dataDetail?.totalActualOutstanding,
+
+      totalMaximumOutstanding:
+        alignmentReducer?.dataDetail?.totalRequirementOutstanding,
     });
   };
 
@@ -365,17 +377,14 @@ class AlignmentList extends Component {
       totalNeedImprovement,
       totalWellDone,
       totalOutstanding,
+      totalMaximumOutstanding,
     } = this.state;
     const contentChart = {
       ...options,
       series: [
         {
           name: "Maximum",
-          data: [
-            0,
-            0,
-            alignmentReducer?.dataDetail?.totalRequirementOutstanding,
-          ],
+          data: [0, 0, totalMaximumOutstanding],
           stack: "Maximum",
           color: "#324aa8",
         },
@@ -403,7 +412,7 @@ class AlignmentList extends Component {
           </div>
           <Spin spinning={alignmentReducer?.loadingDetail}>
             <>
-              {alignmentReducer?.dataDetail?.totalRequirementOutstanding && (
+              {alignmentReducer?.dataDetail && (
                 <div style={{ width: "40vw", marginBottom: 20 }}>
                   <HighchartsReact
                     containerProps={{ style: { height: "250px" } }}
