@@ -129,24 +129,26 @@ class AlignmentList extends Component {
 
   handleChangeTable = (pagination, filters, sorter, extra) => {
     const { alignmentReducer } = this.props;
-    const totalData = Array.from(this.state.dataTable || []).filter((item) =>
+    const data = extra?.currentDataSource || [];
+    const dataGraph = Array.from(this.state.dataTable || []).filter((item) =>
       filters?.managerName && filters.managerName.length !== 0
         ? filters.managerName.includes(item.managerName)
         : true
     );
-    const totalMaximumOutstanding =
-      Math.round(parseFloat(alignmentReducer?.dataDetail?.outstandingPercentage) * (totalData.length / 100));
+    const totalMaximumOutstanding = Math.round(
+      parseFloat(alignmentReducer?.dataDetail?.outstandingPercentage) *
+        (dataGraph.length / 100)
+    );
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
-      totalNeedImprovement: totalData.filter((item) => item.postAlignment === 1)
+      totalNeedImprovement: dataGraph.filter((item) => item.postAlignment === 1)
         .length,
-      totalWellDone: totalData.filter((item) => item.postAlignment === 2)
+      totalWellDone: dataGraph.filter((item) => item.postAlignment === 2)
         .length,
-      totalOutstanding: totalData.filter((item) => item.postAlignment === 3)
+      totalOutstanding: dataGraph.filter((item) => item.postAlignment === 3)
         .length,
-      totalFiltered:
-        totalData.length === this.state.totalData ? null : totalData.length,
+      totalFiltered: data.length === this.state.totalData ? null : data.length,
 
       totalMaximumOutstanding: totalMaximumOutstanding,
     });
@@ -457,7 +459,7 @@ class AlignmentList extends Component {
                   <Text style={{ marginLeft: 10 }}>
                     Total Data : {totalData || 0} records
                   </Text>
-                  {totalFiltered && (
+                  {Boolean(totalFiltered || totalFiltered === 0) && (
                     <Text style={{ marginLeft: 10 }}>
                       <span>|</span>
                       <span style={{ marginLeft: 10 }}>
