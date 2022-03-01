@@ -6,7 +6,9 @@ import {
   Select,
   Spin,
   Form,
-  Result
+  Result,
+  Row,
+  Col
 } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
@@ -24,7 +26,7 @@ import globalStyle from "../../styles/globalStyles";
 import { kpiGetProcess } from "../../utils/kpiGetProcess";
 import Previous from "./previous";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 class CreateKPI extends Component {
   constructor(props) {
@@ -97,15 +99,31 @@ class CreateKPI extends Component {
           <Divider />
         </div>
         <div>
-        <Select
-          placeholder="Select Performance"
-          style={{minWidth: 500}}
-          value={selectedForm||undefined}
-          onChange={selectFormTemplate}
-        >
-          {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
-            <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
-        </Select>
+
+        <div>
+          <Select
+            placeholder="Select Performance"
+            style={{minWidth: 500}}
+            value={selectedForm||undefined}
+            onChange={selectFormTemplate}
+          >
+            {previousKpiReducer?.dataFormTemplates && previousKpiReducer?.dataFormTemplates.map((item, index) =>(
+              <Select.Option value={item?.formTemplateId}>{item?.formTemplateName}</Select.Option>))}
+          </Select>
+        </div>
+
+        <Row>
+          <Col
+            xs={{ span: 12, offset: 12 }}
+            md={{ span: 15, offset: 15 }}>
+            <Text strong>Final KPI Rating</Text>
+            <Title level={4}
+              className="mt-0">
+                {previousKpiReducer?.dataKpiByForm?.kpiRating}
+              </Title>
+          </Col>
+        </Row>
+
           {!loading ? 
           (previousKpiReducer?.statusKpiByForm !== SUCCESS ? 
             <div style={{marginTop: 40, marginBottom: 40}}>
