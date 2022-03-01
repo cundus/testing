@@ -8,6 +8,7 @@ const { REACT_APP_API_URL, REACT_APP_API_TIMEOUT, REACT_APP_MAX_REQUESTS_COUNT} 
 const MAX_REQUESTS_COUNT = parseInt(REACT_APP_MAX_REQUESTS_COUNT);
 const INTERVAL_MS = 10;
 let PENDING_REQUESTS = 0;
+let REFRESH_TOKEN = 0;
 
 const uuidv1 = require("uuid/v1");
 
@@ -44,14 +45,13 @@ customAxios.interceptors.request.use(async (config) => {
 customAxios.interceptors.response.use(async function (response) {
   PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1)
   // console.log(response)
-  if (response?.data?.status_code === NOT_AUTHORIZED || response?.data?.status_code === INVALID_LOGIN_TOKEN) {
+  if (REFRESH_TOKEN <= 2 && (response?.data?.status_code === NOT_AUTHORIZED || response?.data?.status_code === INVALID_LOGIN_TOKEN)) {
     const originalRequest = response.config;
     const token = await authProvider.getAccessToken();
-    console.log(localStorage.getItem('token'))
-    console.log(token?.accessToken)
     try {
       const res = await loginByADToken(token?.accessToken)
       if (res?.data?.status_code === 0) {
+        REFRESH_TOKEN++;
         const result = res?.data?.result;
         await localStorage.setItem('sfToken', result?.accessToken);
         customAxios.defaults.headers.common['Authorization'] = result?.accessToken
@@ -63,6 +63,7 @@ customAxios.interceptors.response.use(async function (response) {
       Promise.reject(error)
     }
   } else {
+    REFRESH_TOKEN = 0;
     return Promise.resolve(response)
   }
 }, function (error) {
