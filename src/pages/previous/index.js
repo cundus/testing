@@ -112,17 +112,6 @@ class CreateKPI extends Component {
           </Select>
         </div>
 
-        <Row>
-          <Col
-            xs={{ span: 12, offset: 12 }}
-            md={{ span: 15, offset: 15 }}>
-            <Text strong>Final KPI Rating</Text>
-            <Title level={4}
-              className="mt-0">
-                {previousKpiReducer?.dataKpiByForm?.kpiRating}
-              </Title>
-          </Col>
-        </Row>
 
           {!loading ? 
           (previousKpiReducer?.statusKpiByForm !== SUCCESS ? 
@@ -134,10 +123,23 @@ class CreateKPI extends Component {
               />
             </div>
             :
+            <>
+            <Row style={{marginTop: 20, marginBottom: 20}}>
+              <Col
+                xs={{ span: 12, offset: 12 }}
+                md={{ span: 15, offset: 15 }}>
+                <Text strong>Final KPI Rating :</Text>
+                <Title level={4}
+                  className="mt-0">
+                    {previousKpiReducer?.dataKpiByForm?.kpiRating === "Select a rating..." ? "N/A" : previousKpiReducer?.dataKpiByForm?.kpiRating}
+                  </Title>
+              </Col>
+            </Row>
             <Previous
               dataSource={dataKpiByForm}
               dataMetrics={previousKpiReducer?.dataKpiByForm?.labelList || []}
             />
+            </>
           ) : (
             <div style={{marginTop: 40, marginBottom: 40}}>
             <center>
