@@ -50,10 +50,10 @@ class TablePlan extends Component {
       //   placeholder: 'Non-KPI Result'
       // },
       {
-        title: "Status",
-        dataIndex: "status",
-        align: "center",
-        placeholder: "Status",
+        title: 'Status',
+        dataIndex: 'statusNumber',
+        align: 'center',
+        placeholder: 'Status',
         action: true,
         render: (text) => {
           let status;
