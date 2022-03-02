@@ -9,10 +9,10 @@ import {
   getUserDetail as getUserDetailAction,
   feedbackUserKpi as feedbackUserKpiAction,
   approveUserKpi as approveUserKpiAction,
-  getKPIstate as getKPIstateAction
-} from '../../service/auth/index';
+  getKPIstate as getKPIstateAction,
+} from "../../service/auth/index";
 
-import { Success } from '../status-code-type';
+import { Success } from "../status-code-type";
 
 import {
   GET_USER_INFO,
@@ -35,8 +35,8 @@ import {
   GET_APRAISAL_TEAM_FAILED,
   GET_APRAISAL_TEAM_DETAIL,
   GET_APRAISAL_TEAM_DETAIL_SUCCESS,
-  GET_APRAISAL_TEAM_DETAIL_FAILED
-} from '../action.type';
+  GET_APRAISAL_TEAM_DETAIL_FAILED,
+} from "../action.type";
 
 export const GetInfoUser = (token) => {
   return async (dispatch) => {
@@ -44,167 +44,172 @@ export const GetInfoUser = (token) => {
       const resp = await getUserInfoAction(token);
       dispatch({
         type: GET_USER_INFO,
-        data: resp.data
+        data: resp.data,
       });
     } catch (error) {
       dispatch({
         type: ERR_GET_USER_INFO,
         data: {
           error: true,
-          errorCode: error.status_code
-        }
+          errorCode: error.status_code,
+        },
       });
     }
   };
 };
 
-
 export const GetMyTeamKPI = (idUser) => {
   return async (dispatch) => {
     dispatch({
       type: startGetMyTeam,
-      data: []
+      data: [],
     });
     try {
       const resp = await getMyTeamAction(idUser);
       if (resp.status_code !== Success) {
         dispatch({
           type: errGetMyTeam,
-          data: []
+          data: [],
         });
       }
       const arayTeam = resp.data.result;
-      arayTeam.map(d => {
+      console.log("My team", arayTeam);
+      arayTeam.map((d) => {
         d.title = d.kpiTitle;
         d.status = d.userStatus;
         d.Key = d.userId;
-        return d
+        return d;
       });
 
       resp.data.result = arayTeam;
       dispatch({
         type: getMyTeam,
-        data: resp.data
+        data: resp.data,
       });
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
-        data: [{
-          error: true,
-          errorCode: error.response.status
-        }]
+        data: [
+          {
+            error: true,
+            errorCode: error.response.status,
+          },
+        ],
       });
     }
   };
 };
 
-
 export const GetMyTeamKPIMonitoring = (idUser) => {
   return async (dispatch) => {
     dispatch({
       type: startGetMyTeam,
-      data: []
+      data: [],
     });
     try {
       const resp = await getMyTeamMonitoringAction(idUser);
       if (resp.status_code !== Success) {
         dispatch({
           type: errGetMyTeam,
-          data: []
+          data: [],
         });
       }
       const arayTeam = resp.data.result;
-      arayTeam.map(d => {
+      arayTeam.map((d) => {
         d.title = d.kpiTitle;
         d.status = d.userStatus;
         d.Key = d.userId;
-        return d
+        return d;
       });
 
       resp.data.result = arayTeam;
       dispatch({
         type: getMyTeam,
-        data: resp.data
+        data: resp.data,
       });
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
-        data: [{
-          error: true,
-          errorCode: error.status_code
-        }]
+        data: [
+          {
+            error: true,
+            errorCode: error.status_code,
+          },
+        ],
       });
     }
   };
 };
 
-
 export const GetMyTeamKPIApraisal = (idUser) => {
   return async (dispatch) => {
     dispatch({
       type: startGetMyTeam,
-      data: []
+      data: [],
     });
     try {
       const resp = await getMyTeamApraisalAction(idUser);
       if (resp.status_code !== Success) {
         dispatch({
           type: errGetMyTeam,
-          data: []
+          data: [],
         });
       }
       let arayTeam = resp.data.result;
-      arayTeam = await Promise.all(arayTeam.map( async (myT) => {
-        const Team = myT;
-        let Kpi = await getMyKPIAction(myT.userId);
-        Kpi = Kpi.data.result;
-        Team.title = Kpi?.kpiTitle || "none";
-        Team.score = Kpi?.kpiScore || "-";
-        Team.ratting =  Kpi?.kpiRating || "-";
-        Team.status = Kpi?.userStatus || "-";
-        Team.result = Kpi?.nonKpiresult || "-";
-        Team.Key = Kpi?.userId || "-";
-        return Team;
-      }));
+      arayTeam = await Promise.all(
+        arayTeam.map(async (myT) => {
+          const Team = myT;
+          let Kpi = await getMyKPIAction(myT.userId);
+          Kpi = Kpi.data.result;
+          Team.title = Kpi?.kpiTitle || "none";
+          Team.score = Kpi?.kpiScore || "-";
+          Team.ratting = Kpi?.kpiRating || "-";
+          Team.status = Kpi?.userStatus || "-";
+          Team.result = Kpi?.nonKpiresult || "-";
+          Team.Key = Kpi?.userId || "-";
+          return Team;
+        })
+      );
 
       resp.data.result = arayTeam;
       dispatch({
         type: getMyTeam,
-        data: resp.data
+        data: resp.data,
       });
     } catch (error) {
       dispatch({
         type: errGetMyTeam,
-        data: [{
-          error: true,
-          errorCode: error.status_code
-        }]
+        data: [
+          {
+            error: true,
+            errorCode: error.status_code,
+          },
+        ],
       });
     }
   };
 };
 
-
 export const GetMyTeamKPIDetail = (idUser) => {
   return async (dispatch) => {
     dispatch({
       type: startGetMyTeamDetail,
-      data: []
+      data: [],
     });
     try {
       const resp = await getMyTeamDetailKPIAction(idUser);
       if (resp.data.status_code === 0) {
         dispatch({
           type: getMyTeamDetail,
-          data: resp.data.result
+          data: resp.data.result,
         });
       } else {
         dispatch({
           type: errGetMyTeamDetail,
           data: {
             error: true,
-            errorDetail: resp.data
-          }
+            errorDetail: resp.data,
+          },
         });
       }
     } catch (error) {
@@ -212,8 +217,8 @@ export const GetMyTeamKPIDetail = (idUser) => {
         type: errGetMyTeamDetail,
         data: {
           error: true,
-          errorDetail: error
-        }
+          errorDetail: error,
+        },
       });
     }
   };
@@ -228,7 +233,7 @@ export const GiveFeedbackKpi = (idUser, data) => {
           type: successFeedback,
           loading: false,
           status: payload?.data?.status_code,
-          message: payload?.data?.status_description
+          message: payload?.data?.status_description,
         });
       } else {
         dispatch({
@@ -236,7 +241,7 @@ export const GiveFeedbackKpi = (idUser, data) => {
           loading: false,
           status: payload?.data?.status_code,
           message: payload?.data?.status_description,
-          error: payload
+          error: payload,
         });
       }
     } catch (error) {
@@ -246,20 +251,20 @@ export const GiveFeedbackKpi = (idUser, data) => {
           loading: false,
           status: error?.response?.data?.status,
           message: error?.response?.data?.error,
-          error
+          error,
         });
       } else {
         dispatch({
           type: errSubmitFeedback,
           loading: false,
           status: null,
-          message: 'Something wrong',
-          error
+          message: "Something wrong",
+          error,
         });
       }
     }
-  }
-}
+  };
+};
 
 export const ApproveKPI = (idUser, data) => {
   return async (dispatch) => {
@@ -270,7 +275,7 @@ export const ApproveKPI = (idUser, data) => {
           type: successFeedback,
           loading: false,
           status: payload?.data?.status_code,
-          message: payload?.data?.status_description
+          message: payload?.data?.status_description,
         });
       } else {
         dispatch({
@@ -278,7 +283,7 @@ export const ApproveKPI = (idUser, data) => {
           loading: false,
           status: payload?.data?.status_code,
           message: payload?.data?.status_description,
-          error: payload
+          error: payload,
         });
       }
     } catch (error) {
@@ -288,26 +293,26 @@ export const ApproveKPI = (idUser, data) => {
           loading: false,
           status: error?.response?.data?.status,
           message: error?.response?.data?.error,
-          error
+          error,
         });
       } else {
         dispatch({
           type: errSubmitFeedback,
           loading: false,
           status: null,
-          message: 'Something wrong',
-          error
+          message: "Something wrong",
+          error,
         });
       }
     }
-  }
-}
+  };
+};
 
 export const GetUserDetail = (idUser) => {
   return async (dispatch) => {
     dispatch({
       type: startUserDetail,
-      data: {}
+      data: {},
     });
     try {
       const resp = await getUserDetailAction(idUser);
@@ -315,21 +320,21 @@ export const GetUserDetail = (idUser) => {
         dispatch({
           type: errUserDetail,
           data: {
-            error: true
-          }
+            error: true,
+          },
         });
       }
       dispatch({
         type: getUserDetail,
-        data: resp.data.result
+        data: resp.data.result,
       });
     } catch (error) {
       dispatch({
         type: errUserDetail,
         data: {
           error: true,
-          errorCode: error.response.status
-        }
+          errorCode: error.response.status,
+        },
       });
     }
   };
@@ -343,26 +348,25 @@ export const GetUserKpiState = () => {
         dispatch({
           type: errGetUserKpiState,
           data: {
-            error: true
-          }
+            error: true,
+          },
         });
       }
       dispatch({
         type: getUserKpiState,
-        data: resp.data.result
+        data: resp.data.result,
       });
     } catch (error) {
       dispatch({
         type: errGetUserKpiState,
         data: {
           error: true,
-          errorCode: error?.response?.status
-        }
+          errorCode: error?.response?.status,
+        },
       });
     }
   };
 };
-
 
 export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
   dispatch({
@@ -370,7 +374,7 @@ export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
     loading: true,
     status: null,
     message: null,
-    data: []
+    data: [],
   });
   try {
     const payload = await getMyTeamApraisalAction(idUser);
@@ -380,7 +384,7 @@ export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
         loading: false,
         data: payload.data.result,
         status: payload.data.status_code,
-        message: payload.data.status_description
+        message: payload.data.status_description,
       });
     } else {
       dispatch({
@@ -388,7 +392,7 @@ export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
         loading: false,
         status: payload.data.status_code,
         message: payload.data.status_description,
-        error: payload
+        error: payload,
       });
     }
   } catch (error) {
@@ -398,15 +402,15 @@ export const doGetAppraisalTeam = (idUser) => async (dispatch) => {
         loading: false,
         status: error?.response.status,
         message: error?.response.error,
-        error
+        error,
       });
     } else {
       dispatch({
         type: GET_APRAISAL_TEAM_FAILED,
         loading: false,
         status: null,
-        message: 'Something wrong',
-        error
+        message: "Something wrong",
+        error,
       });
     }
   }
@@ -418,7 +422,7 @@ export const doGetAppraisalTeamDetail = (idUser) => async (dispatch) => {
     loading: true,
     status: null,
     message: null,
-    data: {}
+    data: {},
   });
   try {
     const payload = await getMyTeamApraisalDetail(idUser);
@@ -428,10 +432,10 @@ export const doGetAppraisalTeamDetail = (idUser) => async (dispatch) => {
         loading: false,
         data: {
           ...payload.data.result,
-          id: idUser
+          id: idUser,
         },
         status: payload.data.status_code,
-        message: payload.data.status_description
+        message: payload.data.status_description,
       });
     } else {
       dispatch({
@@ -439,7 +443,7 @@ export const doGetAppraisalTeamDetail = (idUser) => async (dispatch) => {
         loading: false,
         status: payload.data.status_code,
         message: payload.data.status_description,
-        error: payload
+        error: payload,
       });
     }
   } catch (error) {
@@ -449,15 +453,15 @@ export const doGetAppraisalTeamDetail = (idUser) => async (dispatch) => {
         loading: false,
         status: error?.response.status,
         message: error?.response.error,
-        error
+        error,
       });
     } else {
       dispatch({
         type: GET_APRAISAL_TEAM_DETAIL_FAILED,
         loading: false,
         status: null,
-        message: 'Something wrong',
-        error
+        message: "Something wrong",
+        error,
       });
     }
   }
