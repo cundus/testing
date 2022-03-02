@@ -45,7 +45,7 @@ class TablePlan extends Component {
       // },
       {
         title: 'Status',
-        dataIndex: 'status',
+        dataIndex: 'statusNumber',
         align: 'center',
         placeholder: 'Status',
         action: true,
