@@ -54,7 +54,7 @@ class TableAlignmentDetail extends Component {
         title: "No",
         dataIndex: "number",
         align: "center",
-        width: 70,
+        width: 50,
         sortOrder: sortedInfo?.columnKey === "number" && sortedInfo?.order,
         sorter: (a, b) => a.number - b.number,
         render: (text, record, index) => {
@@ -65,7 +65,7 @@ class TableAlignmentDetail extends Component {
         title: "Employee ID",
         dataIndex: "userId",
         align: "left",
-        width: 150,
+        width: 100,
         placeholder: "Employee ID",
         filters: uniqBy(userIds, (e) => {
           return e.text;
@@ -79,7 +79,7 @@ class TableAlignmentDetail extends Component {
         title: "Employee Name",
         dataIndex: "name",
         align: "left",
-        width: 200,
+        width: 130,
         placeholder: "Employee Name",
         sortOrder: sortedInfo?.columnKey === "name" && sortedInfo?.order,
         filters: uniqBy(names, (e) => {
@@ -97,7 +97,7 @@ class TableAlignmentDetail extends Component {
         title: "Superior",
         dataIndex: "managerName",
         align: "left",
-        width: 200,
+        width: 130,
         placeholder: "Superior",
         sortOrder: sortedInfo?.columnKey === "managerName" && sortedInfo?.order,
         filters: uniqBy(managerNames, (e) => {
@@ -115,7 +115,7 @@ class TableAlignmentDetail extends Component {
         title: "KPI Achievement Score",
         dataIndex: "kpiAchievementScore",
         align: "left",
-        width: 170,
+        width: 130,
         placeholder: "KPI Achievement Score",
         sortOrder:
           sortedInfo?.columnKey === "kpiAchievementScore" && sortedInfo?.order,
@@ -130,7 +130,7 @@ class TableAlignmentDetail extends Component {
         title: "Pre Alignment",
         dataIndex: "preAlignment",
         align: "left",
-        width: 170,
+        width: 110,
         placeholder: "Pre Alignment",
         sortOrder:
           sortedInfo?.columnKey === "preAlignment" && sortedInfo?.order,
@@ -157,7 +157,7 @@ class TableAlignmentDetail extends Component {
         dataIndex: "directorate",
         align: "left",
         placeholder: "Directorate",
-        width: 170,
+        width: 110,
         sortOrder: sortedInfo?.columnKey === "Directorate" && sortedInfo?.order,
         filters: uniqBy(directorates, (e) => {
           return e.text;
@@ -174,7 +174,7 @@ class TableAlignmentDetail extends Component {
         title: "Post Alignment",
         dataIndex: "postAlignment",
         align: "left",
-        width: 170,
+        width: 100,
         sortOrder:
           sortedInfo?.columnKey === "postAlignment" && sortedInfo?.order,
         filters: uniqBy(postAlignments, (e) => {
@@ -235,7 +235,7 @@ class TableAlignmentDetail extends Component {
         title: "Ranking",
         dataIndex: "ranking",
         align: "left",
-        width: 170,
+        width: 100,
         placeholder: "Ranking",
         sortOrder: sortedInfo?.columnKey === "ranking" && sortedInfo?.order,
         filters: uniqBy(rankings, (e) => {
@@ -304,7 +304,7 @@ class TableAlignmentDetail extends Component {
     ];
 
     return (
-      <div>
+      <div id="table-alignment">
         {/* <Layout> */}
         <DataTable
           columns={columns}
