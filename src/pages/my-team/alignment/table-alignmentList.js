@@ -1,46 +1,50 @@
-import React, { Component } from 'react';
-import { Button } from 'antd';
-import DataTable from '../../../components/dataTable/index';
-import  { Link } from 'react-router-dom';
-
+import React, { Component } from "react";
+import { Button } from "antd";
+import DataTable from "../../../components/dataTable/index";
+import { Link } from "react-router-dom";
 
 class TableAlignment extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: 'Session ID',
-        dataIndex: 'sessionId',
-        align: 'center',
-        placeholder: 'Session ID'
+        title: "Session ID",
+        dataIndex: "sessionId",
+        align: "center",
+        placeholder: "Session ID",
+        sorter: (a, b) => {
+          return a.sessionId - b.sessionId;
+        },
       },
       {
-        title: 'Session Name',
-        dataIndex: 'sessionName',
-        align: 'center',
-        placeholder: 'Session Name'
+        title: "Session Name",
+        dataIndex: "sessionName",
+        align: "center",
+        placeholder: "Session Name",
+        sorter: (a, b) => {
+          return a.sessionName.localeCompare(b.sessionName);
+        },
       },
       {
-        title: 'Action',
-        dataIndex: 'sessionId',
-        align: 'center',
-        placeholder: 'action',
+        title: "Action",
+        dataIndex: "sessionId",
+        align: "center",
+        placeholder: "action",
         action: true,
         render: (text) => (
-          <Button type={'primary'}>
+          <Button type={"primary"}>
             <Link to={`/my-team/performance-review-alignment/${text}`}>
-            View Session
+              View Session
             </Link>
           </Button>
-        )
-      }
+        ),
+      },
     ];
 
     this.state = {
-      dataSource: []
+      dataSource: [],
     };
   }
-
 
   render() {
     const { team } = this.props;
@@ -48,10 +52,7 @@ class TableAlignment extends Component {
     return (
       <div>
         {/* <Layout> */}
-        <DataTable
-          columns={columns}
-          datasource={team}
-        />
+        <DataTable columns={columns} datasource={team} />
         {/* </Layout> */}
       </div>
     );

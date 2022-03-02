@@ -1,32 +1,38 @@
-import React, { Component } from 'react';
-import {Avatar, Tag, Button } from 'antd';
-import { Link } from 'react-router-dom';
-import DataTable from '../../../components/dataTable/index';
-import apiUrl from '../../../utils/apiUrl';
+import React, { Component } from "react";
+import { Avatar, Tag, Button } from "antd";
+import { Link } from "react-router-dom";
+import DataTable from "../../../components/dataTable/index";
+import apiUrl from "../../../utils/apiUrl";
 
 class TablePlan extends Component {
   constructor(props) {
     super(props);
     this.columns = [
       {
-        title: 'Profile Pic',
-        dataIndex: 'userId',
-        align: 'center',
-        placeholder: 'Profile',
+        title: "Profile Pic",
+        dataIndex: "userId",
+        align: "center",
+        placeholder: "Profile",
         action: true,
-        render: (text) => (<Avatar src={`${apiUrl()}/user/photo/${text}`} />)
+        render: (text) => <Avatar src={`${apiUrl()}/user/photo/${text}`} />,
       },
       {
-        title: 'Name',
-        dataIndex: 'firstName',
-        align: 'center',
-        placeholder: 'name'
+        title: "Name",
+        dataIndex: "firstName",
+        align: "center",
+        placeholder: "name",
+        sorter: (a, b) => {
+          return a.firstName.localeCompare(b.firstName);
+        },
       },
       {
-        title: 'KPI Title',
-        dataIndex: 'title',
-        align: 'center',
-        placeholder: 'KPI Title'
+        title: "KPI Title",
+        dataIndex: "title",
+        align: "center",
+        placeholder: "KPI Title",
+        sorter: (a, b) => {
+          return a.title.localeCompare(b.title);
+        },
       },
       // {
       //   title: 'KPI Score',
@@ -44,51 +50,53 @@ class TablePlan extends Component {
       //   placeholder: 'Non-KPI Result'
       // },
       {
-        title: 'Status',
-        dataIndex: 'status',
-        align: 'center',
-        placeholder: 'Status',
+        title: "Status",
+        dataIndex: "status",
+        align: "center",
+        placeholder: "Status",
         action: true,
         render: (text) => {
           let status;
           let color;
           if (text === 0) {
-            status = 'On Progress';
-            color = '#ffb822';
+            status = "On Progress";
+            color = "#ffb822";
           } else if (text === 1) {
-            status = 'Submitted';
-            color = '#fd27eb';
+            status = "Submitted";
+            color = "#fd27eb";
           } else if (text === 2) {
-            status = 'Completed';
-            color = '#1dc9b7';
+            status = "Completed";
+            color = "#1dc9b7";
           } else {
-            status = 'N/A';
-            color = '#ccc';
+            status = "N/A";
+            color = "#ccc";
           }
           // else if (text === 3) {
           //   status = 'Review';
           //   color = 'blue';
           // }
-          return (<Tag color={color}>{status}</Tag>);
-        }
+          return <Tag color={color}>{status}</Tag>;
+        },
       },
       {
-        title: 'Action',
-        dataIndex: 'costumAction',
-        align: 'center',
-        placeholder: 'action',
+        title: "Action",
+        dataIndex: "costumAction",
+        align: "center",
+        placeholder: "action",
         action: true,
         render: (text) => (
-          <Button type="primary" disabled={isNaN(text.status) || text.status !== 1}>
-            <Link to={`/my-team/planning/${text.idUser}`}>
-              View
-            </Link>
-          </Button>)
-      }
+          <Button
+            type="primary"
+            disabled={isNaN(text.status) || text.status !== 1}
+          >
+            <Link to={`/my-team/planning/${text.idUser}`}>View</Link>
+          </Button>
+        ),
+      },
     ];
 
     this.state = {
-      dataSource: []
+      dataSource: [],
     };
   }
 
@@ -98,12 +106,10 @@ class TablePlan extends Component {
 
   getAllData = () => {
     const { team } = this.props;
-    this.setState(
-      {
-        dataSource: team,
-      }
-    );
-  }
+    this.setState({
+      dataSource: team,
+    });
+  };
 
   render() {
     const { dataSource } = this.state;
