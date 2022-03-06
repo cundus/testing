@@ -148,3 +148,15 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
 .mt-0 {
   margin-top: 0 !important;
 }
+
+
+.ant-table-small > .ant-table-content > .ant-table-body {
+  margin: 0px 0px;
+}
+
+#table-ssr {
+    th {
+        background-color: #1890FF;
+        color: #fff;
+    }
+}

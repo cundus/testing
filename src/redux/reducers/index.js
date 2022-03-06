@@ -20,6 +20,7 @@ import {
 } from './kpi/';
 import activeDirectoryReducer from './activeDirectory';
 import previousKpiReducer from './previousKpi';
+import onBehalf from './onBehalf';
 
 export default combineReducers({
   authReducer,
@@ -43,5 +44,6 @@ export default combineReducers({
   monitoringReducer,
   alignmentReducer,
   activeDirectoryReducer,
-  previousKpiReducer
+  previousKpiReducer,
+  onBehalf
 });

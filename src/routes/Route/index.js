@@ -29,6 +29,7 @@ const AlignmentList = React.lazy(() => import('../../pages/my-team/alignment/ali
 const AlignmentDetail = React.lazy(() => import('../../pages/my-team/alignment/alignmentDetail'));
 const MyTeamPlaningPage = React.lazy(() => import('../../pages/my-team/planning/planning'));
 const Download = React.lazy(() => import('../../pages/download'));
+const OnBehalf = React.lazy(() => import("../../pages/on-behalf"));
 
 export const routes = [
   {
@@ -168,7 +169,13 @@ export const routes = [
         component: Lazyload(PreviousKPI),
         exact: true,
         title: 'My Team - Appraisal'
-      }
+      },
+      {
+        path: '/on-behalf',
+        component: Lazyload(OnBehalf),
+        title: 'On Behalf',
+        exact:  true
+      },
     ]
   }
 ];
