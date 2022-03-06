@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import FilterTableSSR from "../../../components/dataTable/ssrTableFilter";
 import {
     doChooseFormOnBehalf, doGetFormsBehalf
 } from "../../../redux/actions/onBehalf";
@@ -14,16 +15,43 @@ export const initGetDataParams = {
   filters: {},
 };
 
+
 class LandingFormBehalf extends Component {
   componentDidMount() {
-    this.props.getFormsBehalf(initGetDataParams);
+    this.fetchData({ ...initGetDataParams, resetFilter: true });
   }
+
+  fetchData = (p) => {
+    const { onBehalf } = this.props;
+    if (p?.resetFilter) {
+      this.props.getFormsBehalf({ ...p, filters: {} });
+    } else {
+      this.props.getFormsBehalf({
+        ...p,
+        filters: p?.filters || onBehalf?.filterUsersBehalf || {},
+      });
+    }
+  };
 
   render() {
     const { onBehalf } = this.props;
     const data = onBehalf?.dataFormsBehalf?.result;
     const loading = onBehalf?.loadingFormsBehalf;
 
+    const filters = [
+      {name: "Form Title", value: "title", type: "FREE_TEXT"},
+
+      {name: "Step", value: "step", type: "DROPDOWN"},
+
+      {name: "Date Assigned", value: "DateAssigned", type: "RANGE_DATE"},
+      {name: "Step Due Date", value: "StepDueDate", type: "RANGE_DATE"},
+ 
+      {name: "Form Start Date", value: "FormReviewStartDate", type: "RANGE_DATE"},
+      {name: "Form End Date", value: "FormReviewEndDate", type: "RANGE_DATE"},
+      {name: "Form Due Date", value: "FormReviewDueDate", type: "RANGE_DATE"},
+
+      {name: "Last Modified", value: "FormLastModifiedDate", type: "RANGE_DATE"},
+    ]
     return (
       <>
         <div
@@ -37,11 +65,19 @@ class LandingFormBehalf extends Component {
         <div
           style={{
             ...globalStyle.contentContainer,
-            textAlign: "center",
             marginTop: 15,
           }}
         >
-          SEARCH
+          <FilterTableSSR
+            onFilter={(p) => this.fetchData({ ...initGetDataParams, filters: p })}
+            value={this.state?.filterField}
+            onChange={(filterField) => {
+              this.setState({
+                filterField
+              })
+            }}
+            filters={filters}
+          />
         </div>
         <div
           style={{
@@ -53,7 +89,7 @@ class LandingFormBehalf extends Component {
             dataSource={data?.content || []}
             loading={loading}
             onChoose={this.props.chooseFormOnBehalf}
-            fetchData={this.props.getFormsBehalf}
+            fetchData={this.fetchData}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,

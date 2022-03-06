@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import { doChooseUserOnBehalf, doGetUsersBehalf } from "../../../redux/actions/onBehalf";
+import FilterTableSSR from "../../../components/dataTable/ssrTableFilter";
+import {
+  doChooseUserOnBehalf,
+  doGetUsersBehalf,
+} from "../../../redux/actions/onBehalf";
 import globalStyle from "../../../styles/globalStyles";
 import "../onbehalf-styles.scss";
 import TableLandingUserOnBehalf from "./table-landing-user";
@@ -12,16 +16,39 @@ export const initGetDataParams = {
   filters: {},
 };
 
+
 class LandingUserBehalf extends Component {
   componentDidMount() {
-    this.props.getUsersBehalf(initGetDataParams);
+    this.fetchData({ ...initGetDataParams, resetFilter: true });
   }
+
+  fetchData = (p) => {
+    const { onBehalf } = this.props;
+    if (p?.resetFilter) {
+      this.props.getUsersBehalf({ ...p, filters: {} });
+    } else {
+      this.props.getUsersBehalf({
+        ...p,
+        filters: p?.filters || onBehalf?.filterUsersBehalf || {},
+      });
+    }
+  };
 
   render() {
     const { onBehalf } = this.props;
     const data = onBehalf?.dataUsersBehalf?.result;
     const loading = onBehalf?.loadingUsersBehalf;
 
+    const filters = [
+      {name: "User ID", value: "userId", type: "FREE_TEXT"},
+      {name: "First Name", value: "firstName", type: "FREE_TEXT"},
+      {name: "Last Name", value: "lastName", type: "FREE_TEXT"},
+      {name: "Email", value: "email", type: "FREE_TEXT"},
+      {name: "Manager ID", value: "managerId", type: "FREE_TEXT"},
+
+      {name: "Directorate", value: "directorate", type: "DROPDOWN", data: []},
+      {name: "Department", value: "department", type: "DROPDOWN", data: []},
+    ]
     return (
       <>
         <div
@@ -35,11 +62,19 @@ class LandingUserBehalf extends Component {
         <div
           style={{
             ...globalStyle.contentContainer,
-            textAlign: "center",
             marginTop: 15,
           }}
         >
-          SEARCH
+          <FilterTableSSR
+            onFilter={(p) => this.fetchData({ ...initGetDataParams, filters: p })}
+            value={this.state?.filterField}
+            onChange={(filterField) => {
+              this.setState({
+                filterField
+              })
+            }}
+            filters={filters}
+          />
         </div>
         <div
           style={{
@@ -51,7 +86,7 @@ class LandingUserBehalf extends Component {
             dataSource={data?.content || []}
             loading={loading}
             onChoose={this.props.chooseUserOnBehalf}
-            fetchData={this.props.getUsersBehalf}
+            fetchData={this.fetchData}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,
@@ -69,7 +104,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   getUsersBehalf: ({ page, size, filters, sort, order }) =>
     dispatch(doGetUsersBehalf({ page, size, filters, sort, order })),
-    chooseUserOnBehalf:(id) => dispatch(doChooseUserOnBehalf(id))
+  chooseUserOnBehalf: (id) => dispatch(doChooseUserOnBehalf(id)),
 });
 const connectToComponent = connect(
   mapStateToProps,

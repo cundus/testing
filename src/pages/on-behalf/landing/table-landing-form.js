@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import Text from "antd/lib/typography/Text";
 import React, { Component } from "react";
 import TableSSR from "../../../components/dataTable/ssrTable";
 
@@ -11,6 +11,7 @@ class TableLandingUserOnBehalf extends Component {
       {
         title: "No",
         width: 40,
+        fixed: true,
         dataIndex: "no",
         render: (row, data, index) => {
           return index + 1 + size * (page + 1) - size;
@@ -19,12 +20,14 @@ class TableLandingUserOnBehalf extends Component {
       {
         title: "Form Title",
         dataIndex: "formTitle",
-        width: 100,
+        fixed: true,
         sorter: true,
+        width: 400,
         render: (row, data) => {
           return (
-            <Button
-              type="link"
+            <Text
+              strong
+              style={{color: "#591DF1", textDecoration: 'underline', cursor: 'pointer'}}
               onClick={() =>
                 onChoose({
                   formDataId: data?.formDataId,
@@ -33,44 +36,63 @@ class TableLandingUserOnBehalf extends Component {
               }
             >
               {row}
-            </Button>
+            </Text>
           );
         },
       },
       {
         title: "Employee",
         width: 120,
-        dataIndex: "firstName",
+        dataIndex: "formSubject",
         sorter: true,
+        render: (row, data) => {
+          return (
+            <div>
+              {row?.firstName} {row?.lastName}
+            </div>
+          );
+        },
       },
       {
-        title: "Last Name",
-        width: 120,
-        dataIndex: "lastName",
-        sorter: true,
-      },
-      {
-        title: "Email",
+        title: "Step",
         width: 200,
-        dataIndex: "email",
+        dataIndex: "currentStep",
         sorter: true,
       },
       {
-        title: "Manager ID",
+        title: "Date Assigned",
         width: 100,
-        dataIndex: "managerId",
+        dataIndex: "dateAssigned",
         sorter: true,
       },
       {
-        title: "Directorate",
-        width: 200,
-        dataIndex: "directorate",
+        title: "Step due Date",
+        width: 100,
+        dataIndex: "stepDueDate",
         sorter: true,
       },
       {
-        title: "Department",
-        width: 200,
-        dataIndex: "department",
+        title: "Form Start Date",
+        width: 120,
+        dataIndex: "formReviewStartDate",
+        sorter: true,
+      },
+      {
+        title: "Form End Date",
+        width: 100,
+        dataIndex: "formReviewEndDate",
+        sorter: true,
+      },
+      {
+        title: "Form Due Date",
+        width: 100,
+        dataIndex: "formReviewDueDate",
+        sorter: true,
+      },
+      {
+        title: "Last Modified",
+        width: 100,
+        dataIndex: "formLastModifiedDate",
         sorter: true,
       },
     ];

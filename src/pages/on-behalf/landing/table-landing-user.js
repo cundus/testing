@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import Text from "antd/lib/typography/Text";
 import React, { Component } from "react";
 import TableSSR from "../../../components/dataTable/ssrTable";
 
@@ -22,7 +22,19 @@ class TableLandingUserOnBehalf extends Component {
         width: 100,
         sorter: true,
         render: (row) => {
-          return <Button type="link" onClick={() => onChoose(row)}>{row}</Button>
+          return (
+            <Text
+              strong
+              style={{
+                color: "#591DF1",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+              onClick={() => onChoose(row)}
+            >
+              {row}
+            </Text>
+          );
         },
       },
       {
@@ -62,7 +74,7 @@ class TableLandingUserOnBehalf extends Component {
         sorter: true,
       },
     ];
-    return <TableSSR {...this.props} columns={columns} />
+    return <TableSSR {...this.props} columns={columns} />;
   }
 }
 

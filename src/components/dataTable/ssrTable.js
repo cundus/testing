@@ -51,7 +51,7 @@ class TableSSR extends Component {
           </div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <Text style={{ marginRight: 10 }}>
-              Showing {size} of {total} entries
+              Showing {dataSource.length} of {total} entries
             </Text>
             <Pagination
               current={page + 1}
