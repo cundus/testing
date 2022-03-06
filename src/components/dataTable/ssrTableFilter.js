@@ -11,10 +11,11 @@ class FilterTableSSR extends Component {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Select
           value={value}
-          onChange={async(value) => {
-            await onChange('')
-            onChange(value)
+          onChange={async (value) => {
+            await onChange("");
+            onChange(value);
           }}
+          size="large"
           placeholder="Search By"
           style={{
             minWidth: 200,
@@ -48,11 +49,12 @@ class FilterTableSSR extends Component {
   }
 }
 
-const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
+const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
   switch (type) {
     case "FREE_TEXT":
       return (
         <Input.Search
+          size="large"
           placeholder={`Search by ${name}`}
           onSearch={(value) => onFilter(value)}
         />
@@ -61,6 +63,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
     case "DROPDOWN":
       return (
         <Select
+          size="large"
           onChange={(value) => onFilter(value)}
           placeholder={`Search By ${name}`}
           style={{
@@ -80,6 +83,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
     case "DATEPICKER":
       return (
         <DatePicker
+          size="large"
           style={{
             width: "100%",
           }}
@@ -90,18 +94,21 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
     case "RANGE_DATE":
       return (
         <DatePicker.RangePicker
+          size="large"
           style={{
             width: "100%",
           }}
           placeholder={`Search By ${name}`}
-          onChange={(date, dateString) => onFilterFull({
-            [`start${value}`]: dateString[0],
-            [`end${value}`]: dateString[1]
-          })}
+          onChange={(date, dateString) =>
+            onFilterFull({
+              [`start${value}`]: dateString[0],
+              [`end${value}`]: dateString[1],
+            })
+          }
         />
       );
     default:
-      return <Input.Search disabled />;
+      return <Input.Search size="large" disabled />;
   }
 };
 
