@@ -30,7 +30,6 @@ class OnBehalf extends Component {
     const isMonitoring = menuMonitoringAllow.includes(authReducer?.currentStep);
     const isAppraisal = menuAppraisalAllow.includes(authReducer?.currentStep);
 
-    console.log(onBehalf);
     return (
       <>
         <div
