@@ -23,7 +23,7 @@ export const customAxios = axios.create({
 });
 
 customAxios.interceptors.request.use(async (config) => {
-  console.log(config);
+  // console.log(config);
   return new Promise((resolve, reject) => {
     let interval = setInterval(async () => {
       if (PENDING_REQUESTS < MAX_REQUESTS_COUNT) {
