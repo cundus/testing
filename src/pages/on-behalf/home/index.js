@@ -39,8 +39,12 @@ class OnBehalf extends Component {
             alignItems: "center",
           }}
         >
-          <Text strong style={{marginRight: 20}}>{onBehalf?.form?.formTitle} </Text>
-          <Button type="primary" onClick={this.props.resetBehalf}>Change</Button>
+          <Text strong style={{ marginRight: 20 }}>
+            {onBehalf?.form?.formTitle}{" "}
+          </Text>
+          <Button type="primary" onClick={this.props.resetBehalf}>
+            Change
+          </Button>
         </div>
         <div
           style={{
@@ -62,15 +66,13 @@ class OnBehalf extends Component {
               />
               <h1>Planning</h1>
               <p className="qoute-text">Create New KPI or Cascade</p>
-              <Link to="planning">
-                <Button
-                  shape="round"
-                  className="homeBtn  purpleBtn"
-                  style={{ fontWeight: "bold" }}
-                >
-                  Create KPI
-                </Button>
-              </Link>
+              <Button
+                shape="round"
+                className="homeBtn  purpleBtn"
+                style={{ fontWeight: "bold" }}
+              >
+                Create KPI
+              </Button>
             </Col>
             <Col xl={24 / 3} lg={24 / 3} md={24 / 3} xs={24} className="grid">
               <br />
@@ -83,16 +85,13 @@ class OnBehalf extends Component {
               />
               <h1>Monitoring</h1>
               <p className="qoute-text">Feedback session with Superior</p>
-              <Link to="/monitoring">
-                <Button
-                  shape="round"
-                  className="homeBtn  pinkBtn"
-                  disabled={!isMonitoring}
-                  style={{ fontWeight: "bold" }}
-                >
-                  View Feedback Session
-                </Button>
-              </Link>
+              <Button
+                shape="round"
+                className="homeBtn  pinkBtn"
+                style={{ fontWeight: "bold" }}
+              >
+                View Feedback Session
+              </Button>
             </Col>
             <Col xl={24 / 3} lg={24 / 3} md={24 / 3} xs={24} className="grid">
               <br />
@@ -105,16 +104,13 @@ class OnBehalf extends Component {
               />
               <h1>Appraisal</h1>
               <p className="qoute-text">View your final performance rating</p>
-              <Link to="/appraisal">
-                <Button
-                  shape="round"
-                  className="homeBtn  yellowBtn"
-                  disabled={!isAppraisal}
-                  style={{ fontWeight: "bold" }}
-                >
-                  View My Final Performance
-                </Button>
-              </Link>
+              <Button
+                shape="round"
+                className="homeBtn  yellowBtn"
+                style={{ fontWeight: "bold" }}
+              >
+                View My Final Performance
+              </Button>
             </Col>
           </Row>
         </div>
