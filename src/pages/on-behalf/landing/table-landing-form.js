@@ -67,9 +67,16 @@ class TableLandingUserOnBehalf extends Component {
       },
       {
         title: "Step due Date",
-        width: 100,
+        width: 120,
         dataIndex: "stepDueDate",
         sorter: true,
+        render: (row, data) => {
+          return (
+            <div style={{color: 'red', fontWeight: 'bold'}}>
+              {row}
+            </div>
+          );
+        },
       },
       {
         title: "Form Start Date",
