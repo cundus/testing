@@ -1,21 +1,17 @@
+import { Button, Col, Row } from "antd";
+import Text from "antd/lib/typography/Text";
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter, Link } from "react-router-dom";
-import { Row, Col, Button } from "antd";
-import PropTypes from "prop-types";
-import "../onbehalf-styles.scss";
-
+import { withRouter } from "react-router-dom";
 // icons list
 import CustomerIcon from "../../../assets/icons/customer.svg";
 import FileIcon from "../../../assets/icons/file.svg";
 import UsersIcon from "../../../assets/icons/users.svg";
-import globalStyle from "../../../styles/globalStyles";
-import {
-  menuAppraisalAllow,
-  menuMonitoringAllow,
-} from "../../../utils/stepKpi";
 import { doResetBehalf } from "../../../redux/actions/onBehalf";
-import Text from "antd/lib/typography/Text";
+import globalStyle from "../../../styles/globalStyles";
+import "../onbehalf-styles.scss";
+
 
 class OnBehalf extends Component {
   constructor(props) {
@@ -26,9 +22,7 @@ class OnBehalf extends Component {
   }
 
   render() {
-    const { authReducer, onBehalf } = this.props;
-    const isMonitoring = menuMonitoringAllow.includes(authReducer?.currentStep);
-    const isAppraisal = menuAppraisalAllow.includes(authReducer?.currentStep);
+    const { onBehalf } = this.props;
 
     return (
       <>
