@@ -38,6 +38,7 @@ class LandingUserBehalf extends Component {
     const { onBehalf } = this.props;
     const data = onBehalf?.dataUsersBehalf?.result;
     const loading = onBehalf?.loadingUsersBehalf;
+    const sort = onBehalf?.filterUsersBehalf?.sort
 
     const filters = [
       {name: "User ID", value: "userId", type: "FREE_TEXT"},
@@ -87,6 +88,7 @@ class LandingUserBehalf extends Component {
             loading={loading}
             onChoose={this.props.chooseUserOnBehalf}
             fetchData={this.fetchData}
+            sort={sort}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,

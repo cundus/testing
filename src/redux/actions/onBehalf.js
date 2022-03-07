@@ -31,7 +31,7 @@ export const doResetBehalf = () => async (dispatch) => {
 };
 
 export const doGetUsersBehalf =
-  ({ size, page, filters, sort, order }) =>
+  ({ size, page, filters, sort }) =>
   async (dispatch) => {
     dispatch({
       type: GET_USERS_BEHALF,
@@ -43,19 +43,20 @@ export const doGetUsersBehalf =
         page,
         ...filters,
         sort,
-        sortParameter: order === "descend" ? "DESC" : "ASC",
       });
       if (payload?.data?.status_code === 0) {
         dispatch({
           type: GET_USERS_BEHALF,
           dataUsersBehalf: payload?.data,
-          filterUsersBehalf: filters,
+          filterUsersBehalf: {...filters, sort},
           loadingUsersBehalf: false,
         });
       } else return payload;
     } catch (error) {
       dispatch({
         type: GET_USERS_BEHALF,
+        dataUsersBehalf: null,
+        filterFormsBehalf: null,
         loadingUsersBehalf: false,
         errorUsersBehalf: error,
       });
@@ -63,7 +64,7 @@ export const doGetUsersBehalf =
   };
 
 export const doGetFormsBehalf =
-  ({ size, page, filters, sort, order }) =>
+  ({ size, page, filters, sort }) =>
   async (dispatch) => {
     dispatch({
       type: GET_FORMS_BEHALF,
@@ -76,7 +77,6 @@ export const doGetFormsBehalf =
           page,
           ...filters,
           sort,
-          sortParameter: order === "descend" ? "DESC" : "ASC",
         },
         localStorage.getItem("onbehalf_userid")
       );
@@ -84,13 +84,15 @@ export const doGetFormsBehalf =
         dispatch({
           type: GET_FORMS_BEHALF,
           dataFormsBehalf: payload?.data,
-          filterFormsBehalf: filters,
+          filterFormsBehalf: {...filters, sort},
           loadingFormsBehalf: false,
         });
       } else return payload;
     } catch (error) {
       dispatch({
         type: GET_FORMS_BEHALF,
+        dataFormsBehalf: null,
+        filterFormsBehalf: null,
         loadingFormsBehalf: false,
         errorFormsBehalf: error,
       });

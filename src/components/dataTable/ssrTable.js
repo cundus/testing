@@ -2,14 +2,23 @@ import { Pagination, Select, Table } from "antd";
 import Text from "antd/lib/typography/Text";
 import React, { Component } from "react";
 
+export const sorterChecker = (index, sorterInfo) =>
+  sorterInfo?.[0] === index &&
+  (sorterInfo?.[1]
+    ? sorterInfo?.[1] === "desc"
+      ? "descend"
+      : "ascend"
+    : null);
 class TableSSR extends Component {
   render() {
-    const { dataSource, loading, pagination, fetchData, columns } = this.props;
+    const { dataSource, loading, pagination, fetchData, columns, sort, rowKey } =
+      this.props;
     const { total, size, page } = pagination;
 
     return (
       <div id="table-ssr">
         <Table
+          rowKey={rowKey}
           dataSource={dataSource}
           columns={columns}
           size={"small"}
@@ -18,20 +27,19 @@ class TableSSR extends Component {
             x: true,
           }}
           pagination={false}
-          onChange={(pagination, filters, sorters) => {
+          onChange={(p, f, sorters) => {
             fetchData({
-              page: pagination.current - 1,
+              page: page,
               size: 10,
-              sort: sorters.field,
-              order: sorters.order,
+              sort: `${sorters.field},${
+                sorters.order === "descend" ? "desc" : "asc"
+              }`,
             });
           }}
         />
         <div style={{ display: "flex", marginTop: 20 }}>
           <div style={{ flex: 1, display: "flex", alignItems: "center" }}>
-            <Text style={{ marginRight: 10 }}>
-                Items per page
-            </Text>
+            <Text style={{ marginRight: 10 }}>Items per page</Text>
             <Select
               value={size}
               style={{ width: 120 }}
@@ -39,7 +47,7 @@ class TableSSR extends Component {
                 fetchData({
                   page: 0,
                   size: value,
-                  resetFilter: true
+                  resetFilter: true,
                 });
               }}
             >
@@ -61,6 +69,7 @@ class TableSSR extends Component {
                 fetchData({
                   page: page - 1,
                   size: pageSize,
+                  sort: sort,
                 });
               }}
             />

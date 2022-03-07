@@ -37,6 +37,7 @@ class LandingFormBehalf extends Component {
     const { onBehalf } = this.props;
     const data = onBehalf?.dataFormsBehalf?.result;
     const loading = onBehalf?.loadingFormsBehalf;
+    const sort = onBehalf?.filterFormsBehalf?.sort
 
     const filters = [
       {name: "Form Title", value: "title", type: "FREE_TEXT"},
@@ -90,6 +91,7 @@ class LandingFormBehalf extends Component {
             loading={loading}
             onChoose={this.props.chooseFormOnBehalf}
             fetchData={this.fetchData}
+            sort={sort}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,

@@ -11,11 +11,10 @@ class FilterTableSSR extends Component {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Select
           value={value}
-          onChange={async (value) => {
-            await onChange("");
-            onChange(value);
+          onChange={async(value) => {
+            await onChange('')
+            onChange(value)
           }}
-          size="large"
           placeholder="Search By"
           style={{
             minWidth: 200,
@@ -26,7 +25,7 @@ class FilterTableSSR extends Component {
           </Select.Option>
           {Array.from(filters || []).map((item) => {
             return (
-              <Select.Option value={item.value}>{item.name}</Select.Option>
+              <Select.Option key={item.name} value={item.value}>{item.name}</Select.Option>
             );
           })}
         </Select>
@@ -49,22 +48,20 @@ class FilterTableSSR extends Component {
   }
 }
 
-const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
+const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
   switch (type) {
     case "FREE_TEXT":
       return (
         <Input.Search
-          size="large"
           placeholder={`Search by ${name}`}
-          onSearch={(value) => onFilter(value)}
+          onSearch={(val) => onFilter(val)}
         />
       );
 
     case "DROPDOWN":
       return (
         <Select
-          size="large"
-          onChange={(value) => onFilter(value)}
+          onChange={(val) => onFilter(val)}
           placeholder={`Search By ${name}`}
           style={{
             width: "100%",
@@ -73,9 +70,9 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           <Select.Option disabled value={"none"}>
             Search By {name}
           </Select.Option>
-          {Array.from(data || []).map((item) => {
+          {Array.from(data || []).map(item => {
             return (
-              <Select.Option value={item.value}>{item.name}</Select.Option>
+              <Select.Option key={item.name} value={item.value}>{item.name}</Select.Option>
             );
           })}
         </Select>
@@ -83,7 +80,6 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
     case "DATEPICKER":
       return (
         <DatePicker
-          size="large"
           style={{
             width: "100%",
           }}
@@ -94,21 +90,18 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
     case "RANGE_DATE":
       return (
         <DatePicker.RangePicker
-          size="large"
           style={{
             width: "100%",
           }}
           placeholder={`Search By ${name}`}
-          onChange={(date, dateString) =>
-            onFilterFull({
-              [`start${value}`]: dateString[0],
-              [`end${value}`]: dateString[1],
-            })
-          }
+          onChange={(date, dateString) => onFilterFull({
+            [`start${value}`]: dateString[0],
+            [`end${value}`]: dateString[1]
+          })}
         />
       );
     default:
-      return <Input.Search size="large" disabled />;
+      return <Input.Search disabled />;
   }
 };
 

@@ -1,11 +1,12 @@
 import Text from "antd/lib/typography/Text";
 import React, { Component } from "react";
-import TableSSR from "../../../components/dataTable/ssrTable";
+import TableSSR, { sorterChecker } from "../../../components/dataTable/ssrTable";
 
 class TableLandingUserOnBehalf extends Component {
   render() {
-    const { pagination, onChoose } = this.props;
+    const { pagination, onChoose, sort } = this.props;
     const { size, page } = pagination;
+    const sorterInfo = String(sort || "").split(",");
 
     const columns = [
       {
@@ -23,6 +24,7 @@ class TableLandingUserOnBehalf extends Component {
         fixed: true,
         sorter: true,
         width: 400,
+        sortOrder: sorterChecker("formTitle", sorterInfo),
         render: (row, data) => {
           return (
             <Text
@@ -44,7 +46,6 @@ class TableLandingUserOnBehalf extends Component {
         title: "Employee",
         width: 120,
         dataIndex: "formSubject",
-        sorter: true,
         render: (row, data) => {
           return (
             <div>
@@ -57,18 +58,21 @@ class TableLandingUserOnBehalf extends Component {
         title: "Step",
         width: 200,
         dataIndex: "currentStep",
+        sortOrder: sorterChecker("currentStep", sorterInfo),
         sorter: true,
       },
       {
         title: "Date Assigned",
         width: 100,
         dataIndex: "dateAssigned",
+        sortOrder: sorterChecker("dateAssigned", sorterInfo),
         sorter: true,
       },
       {
         title: "Step due Date",
         width: 120,
         dataIndex: "stepDueDate",
+        sortOrder: sorterChecker("stepDueDate", sorterInfo),
         sorter: true,
         render: (row, data) => {
           return (
@@ -82,28 +86,32 @@ class TableLandingUserOnBehalf extends Component {
         title: "Form Start Date",
         width: 120,
         dataIndex: "formReviewStartDate",
+        sortOrder: sorterChecker("formReviewStartDate", sorterInfo),
         sorter: true,
       },
       {
         title: "Form End Date",
         width: 100,
         dataIndex: "formReviewEndDate",
+        sortOrder: sorterChecker("formReviewEndDate", sorterInfo),
         sorter: true,
       },
       {
         title: "Form Due Date",
         width: 100,
         dataIndex: "formReviewDueDate",
+        sortOrder: sorterChecker("formReviewDueDate", sorterInfo),
         sorter: true,
       },
       {
         title: "Last Modified",
         width: 100,
         dataIndex: "formLastModifiedDate",
+        sortOrder: sorterChecker("formLastModifiedDate", sorterInfo),
         sorter: true,
       },
     ];
-    return <TableSSR {...this.props} columns={columns} />;
+    return <TableSSR rowKey={"formDataId"} {...this.props} columns={columns} />;
   }
 }
 
