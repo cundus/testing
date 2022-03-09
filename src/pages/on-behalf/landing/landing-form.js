@@ -6,15 +6,15 @@ import {
     doChooseFormOnBehalf, doGetFormsBehalf
 } from "../../../redux/actions/onBehalf";
 import globalStyle from "../../../styles/globalStyles";
+import { stepKpisDropdown } from "../../../utils/stepKpi";
 import "../onbehalf-styles.scss";
 import TableLandingFormOnBehalf from "./table-landing-form";
 
-export const initGetDataParams = {
+ const initGetDataParams = {
   size: 10,
   page: 0,
   filters: {},
 };
-
 
 class LandingFormBehalf extends Component {
   componentDidMount() {
@@ -42,7 +42,7 @@ class LandingFormBehalf extends Component {
     const filters = [
       {name: "Form Title", value: "title", type: "FREE_TEXT"},
 
-      {name: "Step", value: "step", type: "DROPDOWN"},
+      {name: "Step", value: "step", type: "DROPDOWN", data: stepKpisDropdown},
 
       {name: "Date Assigned", value: "DateAssigned", type: "RANGE_DATE"},
       {name: "Step Due Date", value: "StepDueDate", type: "RANGE_DATE"},
