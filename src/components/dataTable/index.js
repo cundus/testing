@@ -435,7 +435,7 @@ const DataTable = (props) => {
         datasource,
         indexlength: datasource.length,
         indexarr: index,
-        editable: Boolean(!col.noEditableRow && (editableRow === record?.id))|| col.editable,
+        editable: editableRow ? Boolean(!col.noEditableRow && (editableRow === record?.id)) : col.editable,
         dataindex: col.dataIndex,
         title: col.title,
         type: col.type,
