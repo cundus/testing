@@ -143,7 +143,7 @@ class TableMonitorKPI extends Component {
                       style={{ marginRight: 5 }}
                       icon="edit"
                       type="danger"
-                      onClick={() => this.props.editRow(true, record)}
+                      onClick={() => this.props.editRow(true, record, this.getColumns)}
                     ></Button>
                   </div>
                 ) : (
@@ -273,7 +273,7 @@ class TableMonitorKPI extends Component {
                       style={{ marginRight: 5 }}
                       icon="edit"
                       type="danger"
-                      onClick={() => this.props.editRow(true, record)}
+                      onClick={() => this.props.editRow(true, record, this.getColumns)}
                     ></Button>
                   </div>
                 ) : (

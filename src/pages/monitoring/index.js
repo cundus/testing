@@ -170,13 +170,14 @@ class MonitorKPI extends Component {
     });
   };
 
-  _showConfirm = (val, record) => {
+  _showConfirm = (val, record, refetch) => {
     Modal.confirm({
       title: "Are you sure to edit this KPI?",
       content:
         "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
-      onOk: () => {
-        this._onEditButton(val, record);
+      onOk: async () => {
+        await this._onEditButton(val, record);
+        refetch()
       },
       onCancel: () => {
         this._onEditButton(val, record);
