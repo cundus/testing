@@ -21,9 +21,7 @@ class TableMonitorKPI extends Component {
     super(props);
     this.state = {
       columns: [],
-      isModalConfirmationEdit: true,
     };
-    // change = this.change.bind(this);
   }
 
   componentDidMount() {
@@ -474,69 +472,63 @@ class TableMonitorKPI extends Component {
         title: "Progress Tracking",
         align: "center",
         editable: false,
+        noEditableRow: true,
         width: 250,
         dataIndex: "action",
         render: (text, record) => {
-          const { dataSource } = this.props;
+          const { dataSource, handleSave, handleEditRow } = this.props;
+          if (this.props.editableRow === record?.id) {
+            return (
+              <div>
+                <Button
+                  style={{ marginBottom: 5 }}
+                  onClick={handleSave}
+                  type={"primary"}
+                  ghost
+                >
+                  Save
+                </Button>
+              </div>
+            );
+          }
           return dataSource.length >= 1 ? (
             <div>
-              {!record?.isInlineEdit ? (
-                <div>
-                  <Button
-                    key={"a" + record.key}
-                    style={{ marginRight: 5 }}
-                    disabled={record?.isInlineEdit ? true : false}
-                  >
-                    <Link
-                      to={`/Activity/${record.key}/${
-                        !isSuperior ? userId : stafid
-                      }`}
-                    >
-                      Activity
-                    </Link>
-                  </Button>
-                  <Button
-                    key={"b" + record.key}
-                    style={{ marginRight: 5 }}
-                    disabled={record?.isInlineEdit ? true : false}
-                  >
-                    <Link
-                      to={`/Achievement/${record.key}/${
-                        !isSuperior ? userId : stafid
-                      }`}
-                    >
-                      Achievement
-                    </Link>
-                  </Button>
-                  <Button
-                    style={{ marginRight: 5 }}
-                    icon="edit"
-                    type="danger"
-                    onClick={() =>
-                      this.props.editRow(true, record, this.getColumns)
-                    }
-                  ></Button>
-                </div>
-              ) : (
-                <div>
-                  <Button
-                    key={"c" + record.key}
-                    style={{ marginRight: 5 }}
-                    icon="save"
-                    type="primary"
-                    onClick={() => this._onSaveButton()}
-                  ></Button>
-                  <Button
-                    key={"d" + record.key}
-                    style={{ marginRight: 5 }}
-                    icon="close-circle"
-                    type="danger"
-                    onClick={() =>
-                      this.props.cancelEditRow(false, record, this.getColumns)
-                    }
-                  ></Button>
-                </div>
-              )}
+              <Button
+                type={"primary"}
+                ghost
+                style={{ marginRight: 5, marginBottom: 5 }}
+              >
+                <Link
+                  to={`/Activity/${record.key}/${
+                    !isSuperior ? userId : stafid
+                  }`}
+                >
+                  Activity
+                </Link>
+              </Button>
+              <Button
+                type={"primary"}
+                ghost
+                style={{ marginRight: 5, marginBottom: 5 }}
+              >
+                <Link
+                  to={`/Achievement/${record.key}/${
+                    !isSuperior ? userId : stafid
+                  }`}
+                >
+                  Achievement
+                </Link>
+              </Button>
+              <Button
+                icon={"edit"}
+                style={{
+                  marginRight: 5,
+                  marginBottom: 5,
+                  color: "#FF2222",
+                  border: "1px solid #FF2222",
+                }}
+                onClick={() => handleEditRow(record?.id)}
+              />
             </div>
           ) : null;
         },
@@ -558,10 +550,18 @@ class TableMonitorKPI extends Component {
 
   render() {
     const { columns } = this.state;
-    const { dataSource, handleChange, handleError, loading, form } = this.props;
+    const {
+      dataSource,
+      handleChange,
+      handleError,
+      loading,
+      form,
+      editableRow,
+    } = this.props;
     return (
       <div>
         <DataTable
+          editableRow={editableRow}
           form={form}
           columns={columns}
           loading={loading}

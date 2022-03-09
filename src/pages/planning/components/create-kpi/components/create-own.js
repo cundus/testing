@@ -122,6 +122,8 @@ class CreateOwn extends Component {
             id="add-row-crate-own"
             onClick={handleAddRow}
             style={{ margin: 10 }}
+            type="primary"
+            ghost
           >
             Add a row
           </Button>

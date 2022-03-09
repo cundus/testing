@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spin, Divider, Typography, Button, message, Modal, Form } from "antd";
+import { Spin, Divider, Typography, Button, Modal, Form } from "antd";
 import { withRouter } from "react-router-dom";
 import TableAlignmentDetail from "./table-alignmentDetail";
 import globalStyle from "../../../styles/globalStyles";
@@ -220,6 +220,14 @@ class AlignmentList extends Component {
     };
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) {
+        // console.log(errors?.dataGeneral || [])
+        Array.from(errors?.dataGeneral || []).map((item, index) => {
+          if (item){
+            toast.warning("Outstanding Ranking is required for line : " + parseInt(index + 1));
+          }
+          return item
+        })
+        console.log(errors)
       } else if (callibrations.length > 0) {
         confirm({
           title:
@@ -243,7 +251,7 @@ class AlignmentList extends Component {
           onCancel() {},
         });
       } else {
-        message.info("Nothing changes");
+        toast.info("Nothing changes");
       }
     });
   };
@@ -266,7 +274,7 @@ class AlignmentList extends Component {
       }
       if (indexRanking >= 0) {
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: " ",
+          [`dataGeneral[${indexRanking}].ranking`]: "",
         });
       }
     }

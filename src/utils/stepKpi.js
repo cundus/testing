@@ -10,6 +10,23 @@ export const PROGRESS_MONITORING_1 = 'Progress Monitoring 1';
 export const PROGRESS_MONITORING_2 = 'Progress Monitoring 2';
 export const PROGRESS_REVIEW_ALIGNMENT_1 = 'Performance Review Alignment 1';
 export const PROGRESS_REVIEW_ALIGNMENT_2 = 'Performance Review Alignment 2';
+export const PROGRESS_REVIEW_ALIGNMENT_1_CALLIBRATION_1 = 'Performance Review Alignment 1 (Calibration 1)';
+export const PROGRESS_REVIEW_ALIGNMENT_2_CALLIBRATION_2 = 'Performance Review Alignment 2 (Calibration 2)';
+
+export const stepKpisDropdown = [
+  EMP_GOAL_SETTING,
+  MANAGER_GOAL_REVIEW,
+  PROGRESS_MONITORING_1,
+  PROGRESS_MONITORING_2,
+  PERFORMANCE_REVIEW_EMPLOYEE,
+  PERFORMANCE_REVIEW_MANAGER,
+  PROGRESS_REVIEW_ALIGNMENT_1,
+  PROGRESS_REVIEW_ALIGNMENT_2,
+  COMPILING_PROCESS,
+  MANAGER_ACKNOWLEDMENT,
+  EMP_ACKNOWLEDGEMENT,
+  COMPLETED
+];
 
 const stepKpi = [
   EMP_GOAL_SETTING,

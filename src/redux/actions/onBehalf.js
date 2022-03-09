@@ -36,6 +36,7 @@ export const doGetUsersBehalf =
     dispatch({
       type: GET_USERS_BEHALF,
       loadingUsersBehalf: true,
+      errorUsersBehalf: null
     });
     try {
       const payload = await getOnBehalfUsers({
@@ -50,8 +51,9 @@ export const doGetUsersBehalf =
           dataUsersBehalf: payload?.data,
           filterUsersBehalf: {...filters, sort},
           loadingUsersBehalf: false,
+          errorUsersBehalf: null
         });
-      } else return payload;
+      } else throw payload;
     } catch (error) {
       dispatch({
         type: GET_USERS_BEHALF,
@@ -69,6 +71,7 @@ export const doGetFormsBehalf =
     dispatch({
       type: GET_FORMS_BEHALF,
       loadingFormsBehalf: true,
+      errorFormsBehalf: null
     });
     try {
       const payload = await getOnBehalfForms(
@@ -86,8 +89,9 @@ export const doGetFormsBehalf =
           dataFormsBehalf: payload?.data,
           filterFormsBehalf: {...filters, sort},
           loadingFormsBehalf: false,
+          errorFormsBehalf: null
         });
-      } else return payload;
+      } else throw payload;
     } catch (error) {
       dispatch({
         type: GET_FORMS_BEHALF,

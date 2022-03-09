@@ -419,6 +419,7 @@ const DataTable = (props) => {
     form,
     emptytext,
     handleChangeTable,
+    editableRow,
   } = props;
 
   // const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
@@ -436,7 +437,7 @@ const DataTable = (props) => {
         datasource,
         indexlength: datasource.length,
         indexarr: index,
-        editable: col.editable,
+        editable: editableRow ? Boolean(!col.noEditableRow && (editableRow === record?.id)) : col.editable,
         dataindex: col.dataIndex,
         title: col.title,
         type: col.type,

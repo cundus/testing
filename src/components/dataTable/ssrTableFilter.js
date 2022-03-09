@@ -1,4 +1,4 @@
-import { DatePicker, Input, Select } from "antd";
+import { DatePicker, Icon, Input, Select } from "antd";
 import React, { Component } from "react";
 
 class FilterTableSSR extends Component {
@@ -11,9 +11,9 @@ class FilterTableSSR extends Component {
       <div style={{ display: "flex", alignItems: "center" }}>
         <Select
           value={value}
-          onChange={async(value) => {
-            await onChange('')
-            onChange(value)
+          onChange={async (value) => {
+            await onChange("");
+            onChange(value);
           }}
           placeholder="Search By"
           style={{
@@ -25,7 +25,9 @@ class FilterTableSSR extends Component {
           </Select.Option>
           {Array.from(filters || []).map((item) => {
             return (
-              <Select.Option key={item.name} value={item.value}>{item.name}</Select.Option>
+              <Select.Option key={item.name} value={item.value}>
+                {item.name}
+              </Select.Option>
             );
           })}
         </Select>
@@ -48,13 +50,18 @@ class FilterTableSSR extends Component {
   }
 }
 
-const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
+const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
   switch (type) {
     case "FREE_TEXT":
       return (
         <Input.Search
           placeholder={`Search by ${name}`}
           onSearch={(val) => onFilter(val)}
+          allowClear
+          enterButton
+          prefix={
+            <Icon type="search" style={{ color: 'rgba(0,0,0,.45)' }} />
+          }
         />
       );
 
@@ -66,13 +73,19 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
           style={{
             width: "100%",
           }}
+          allowClear
         >
           <Select.Option disabled value={"none"}>
             Search By {name}
           </Select.Option>
-          {Array.from(data || []).map(item => {
+          {Array.from(data || []).map((item) => {
             return (
-              <Select.Option key={item.name} value={item.value}>{item.name}</Select.Option>
+              <Select.Option
+                key={item?.name || item}
+                value={item?.value || item}
+              >
+                {item?.name || item}
+              </Select.Option>
             );
           })}
         </Select>
@@ -94,10 +107,12 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value}) => {
             width: "100%",
           }}
           placeholder={`Search By ${name}`}
-          onChange={(date, dateString) => onFilterFull({
-            [`start${value}`]: dateString[0],
-            [`end${value}`]: dateString[1]
-          })}
+          onChange={(date, dateString) =>
+            onFilterFull({
+              [`start${value}`]: dateString[0],
+              [`end${value}`]: dateString[1],
+            })
+          }
         />
       );
     default:

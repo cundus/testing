@@ -30,7 +30,6 @@ customAxios.interceptors.request.use(async (config) => {
         PENDING_REQUESTS++;
         clearInterval(interval);
 
-        config.baseURL = await apiUrl();
         let newHeaders = Object.assign(config.headers, {
           "X-Requested-With": `${uuidv1()}-${new Date().getTime()}`,
           Authorization: localStorage.getItem("sfToken")

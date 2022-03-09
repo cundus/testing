@@ -61,6 +61,10 @@ const Header = (props) => {
               if (childsRoutes.length === 0) {
                 const isMonDisabled = !isMonitoring && (menu.title === 'Monitoring')
                 const isApDisabled = !isAppraisal && (menu.title === 'Appraisal')
+                const isOnBehalfHide = !authReducer?.administrator && (menu.title === 'On Behalf')
+                if (isOnBehalfHide) {
+                  return null
+                }
                 return (
                   <Menu.Item
                     key={`${menu.path}`}

@@ -32,12 +32,14 @@ import {
   doEmpAcknowledgeList,
   doAssessmentAll
 } from '../../redux/actions/kpi';
-import { actionGetNotifications } from '../../redux/actions';
+import { actionGetNotifications, actionSaveKpi } from '../../redux/actions';
 import { Success, FAILED_SAVE_CHALLENGE_YOURSELF } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi from '../../utils/stepKpi';
 import TextArea from 'antd/lib/input/TextArea';
 import { toast } from 'react-toastify'
+import kpiSendProcess from '../../utils/kpiSendProcess';
+import { sendChallengeYourselfChecker } from '../../utils/challengeYourselfChecker';
 
 const { Text, Title } = Typography;
 const { TabPane } = Tabs;
@@ -59,7 +61,10 @@ class Appraisal extends Component {
       myStep: false,
       isFeedback: false,
       dataEmpAckOptions: [],
-      finalAck: ''
+      finalAck: '',
+      editableRow: null,
+      weightTotal: 0,
+      weightTotalErr: false,
     };
   }
 
@@ -162,6 +167,7 @@ class Appraisal extends Component {
     form.setFieldsValue({
       dataKpi: dataGen
     })
+    this.liveCount(dataOrdered);
     const dataKpiCheck = form.getFieldsValue(['dataKpi']);
     if (dataKpiCheck) {
       form.setFieldsValue({
@@ -536,6 +542,119 @@ class Appraisal extends Component {
     });
   };
 
+  handleChangeRow = (row) => {
+    const { dataKpis } = this.state;
+    const newData = [...dataKpis];
+    const index = newData.findIndex((item) => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row
+    });
+    this.setState({ dataKpis: newData });
+    this.liveCount(newData);
+  };
+
+  handleErrorRow = () => {
+    const { weightTotal } = this.state;
+    if (weightTotal !== 100) {
+      this.setState({
+        kpiErr: true,
+        kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+      });
+    } else {
+      this.setState({
+        kpiErr: false,
+        kpiErrMessage: ''
+      });
+    }
+  }
+
+  liveCount = (data) => {
+    let totalWeight = 0;
+    // eslint-disable-next-line array-callback-return
+    data.map((itemKpi) => {
+      if (itemKpi.weight) {
+        const weight = parseFloat(itemKpi.weight);
+        totalWeight += weight;
+      } else {
+        totalWeight += 0;
+      }
+    });
+    totalWeight = parseFloat(totalWeight);
+    if (typeof totalWeight === 'number') {
+      if (totalWeight === 100) {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: false,
+          kpiErr: false,
+          kpiErrMessage: ''
+        });
+      } else {
+        this.setState({
+          weightTotal: totalWeight,
+          weightTotalErr: true,
+          kpiErr: true,
+          kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+        });
+      }
+    }
+  }
+
+  handleSaveRow = async (index) => {
+    try {
+      const {
+        doSavingKpi, authReducer, form, ownkpiReducer
+      } = this.props;
+      const { dataKpis, weightTotalErr } = this.state;
+      const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
+      let dataSaving = [...dataKpis]
+      const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
+      const data = {
+        kpiList: newDataKpi,
+        challengeYourSelf: sendChallengeYourselfChecker(challenge)
+      };
+      if (weightTotalErr) {
+        toast.warn("Sorry, Total KPI Weight must be 100%")
+      } else {
+        form.validateFieldsAndScroll([`dataKpi[${index}]`], (err, values) => {
+          let errs = err?.dataKpi?.[index]
+          if (errs?.assessment) {
+            delete errs.assessment
+          }
+
+          if (errs ? Object.keys(errs).length === 0 : true) {
+            confirm({
+              title: 'Are you sure?',
+              onOk: async () => {
+                try {
+                  await doSavingKpi(data, authReducer.userId);
+                  const { savekpiReducer } = this.props;
+                  const { status, statusMessage } = savekpiReducer;
+                  if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                    toast.success('Your KPI has been saved');
+                    this.setState({editableRow: null})
+                  } else {
+                    toast.warn(`Sorry, ${statusMessage}`);
+                  }
+                  
+                } catch (error) {
+                  console.log(error)
+                }
+              },
+              onCancel() {}
+            });
+          } else if (err.dataKpi) {
+            
+            toast.warn(`Please correctly fill your KPI`);
+          }
+        });
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
   render() {
     const {
       loadingKpis,
@@ -552,7 +671,11 @@ class Appraisal extends Component {
       dataEmpAckOptions,
       dataEmpAckName,
       checkedFinal,
-      finalAck
+      finalAck,
+
+      editableRow,
+      weightTotalErr,
+      weightTotal
     } = this.state;
     const {
       form,
@@ -571,12 +694,17 @@ class Appraisal extends Component {
       statusValues,
       messageValues
     } = kpiReducer;
+
     return (
       <div>
         <div style={{ ...globalStyle.contentContainer, borderRadius: 0, paddingBottom: 10 }}>
           <Divider />
           <Text strong>Final Appraisal </Text>
           <Divider />
+          <Text type={weightTotalErr ? 'danger' : ''}>
+            Total KPI Weight :
+            {` ${weightTotal}%`}
+          </Text>
           <center>
             {(currentStep === stepKpi[5] || currentStep === stepKpi[6] || formStatusId === '3') &&
             <Row>
@@ -617,6 +745,12 @@ class Appraisal extends Component {
                     proposeRating={dataKpiRating.rating}
                     handleChangeField={this.handleChangeAssessment}
                     handleSaveAssessment={this.handleSaveAssessment}
+
+                    handleEditRow={(id) => this.setState({editableRow: id})}
+                    handleChangeRow={this.handleChangeRow}
+                    handleSaveRow={this.handleSaveRow}
+                    editableRow={editableRow}
+                    handleErrorRow={this.handleErrorRow}
                   /> :
                   <Result
                     status={'error'}
@@ -694,6 +828,8 @@ class Appraisal extends Component {
                       id="save-assessment"
                       onClick={this.handleSaveAssessment}
                       style={{ margin: 10 }}
+                      type={'primary'}
+                      ghost
                     >
                       Save Assessment
                     </Button> : tab === '2' &&
@@ -792,7 +928,10 @@ class Appraisal extends Component {
 
 const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
-  authReducer: state.authReducer
+  authReducer: state.authReducer,
+
+  ownkpiReducer: state.ownKpi,
+  savekpiReducer: state.saveKpi,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -807,6 +946,7 @@ const mapDispatchToProps = (dispatch) => ({
   submitNext: (id) => dispatch(doSubmitNext(id)),
   empAcknowledge: (data) => dispatch(doEmpAcknowledge(data)),
   empAcknowledgeList: () => dispatch(doEmpAcknowledgeList()),
+  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
 });
 
 const connectToComponent = connect(

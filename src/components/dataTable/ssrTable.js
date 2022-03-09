@@ -52,7 +52,7 @@ class TableSSR extends Component {
               }}
             >
               <Select.Option value={10}>10</Select.Option>
-              <Select.Option value={20}>20</Select.Option>
+              <Select.Option value={25}>25</Select.Option>
               <Select.Option value={50}>50</Select.Option>
               <Select.Option value={100}>100</Select.Option>
             </Select>
