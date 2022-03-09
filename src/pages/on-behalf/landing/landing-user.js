@@ -97,11 +97,11 @@ class LandingUserBehalf extends Component {
             <Steps current={0}>
               <Steps.Step
                 title="Select User"
-                icon={<img src="/assets/icon/user-group.svg" />}
+                icon={<img src="/assets/icon/user-group.svg" alt="user"  />}
               />
               <Steps.Step
                 title="Select KPI Form"
-                icon={<img src="/assets/icon/select.svg" />}
+                icon={<img src="/assets/icon/select.svg" alt="select"  />}
               />
             </Steps>
           </div>

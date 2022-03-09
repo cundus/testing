@@ -72,13 +72,13 @@ class LandingFormBehalf extends Component {
           <Steps current={1}>
             <Steps.Step
               title="Select User"
-              icon={<img src="/assets/icon/user-group.svg" />}
+              icon={<img src="/assets/icon/user-group.svg" alt="user" />}
               style={{ cursor: "pointer" }}
               onClick={resetBehalf}
             />
             <Steps.Step
               title="Select KPI Form"
-              icon={<img src="/assets/icon/select-active.svg" />}
+              icon={<img src="/assets/icon/select-active.svg" alt="select" />}
             />
           </Steps>
         </div>

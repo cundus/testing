@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button, Icon
+ Button
 } from 'antd';
 import { DataTable } from '../../components';
 import { Link } from  'react-router-dom';
@@ -79,10 +79,12 @@ class TableMonitorKPI extends Component {
         if (this.props.editableRow === record?.id) {
           return (
             <div>
-              <Button style={{ marginBottom: 5 }} onClick={() => {
-                handleSave()
-                this.setState({editableRow:null})
-              }}>
+              <Button
+                style={{ marginBottom: 5 }} 
+                onClick={handleSave}
+                type={'primary'}
+                ghost
+              >
                   Save
               </Button>
             </div>)
@@ -110,7 +112,6 @@ class TableMonitorKPI extends Component {
               </Button>
               <Button 
                 icon={"edit"}
-                shape="shape"
                 style={{ marginRight: 5, marginBottom: 5, color: "#FF2222", border: '1px solid #FF2222' }}
                 onClick={() => handleEditRow(record?.id)}
               />

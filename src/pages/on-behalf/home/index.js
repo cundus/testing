@@ -39,7 +39,7 @@ class OnBehalf extends Component {
             onClick={this.props.resetBehalf}
             style={{ color: "#3111F9", border: "1px solid #3111F9" }}
           >
-            <img src="/assets/icon/exchange.svg" style={{height: 20, marginRight: 10}} />
+            <img src="/assets/icon/exchange.svg" alt="exchange"  style={{height: 20, marginRight: 10}} />
             <span>Change</span>
           </Button>
         </div>

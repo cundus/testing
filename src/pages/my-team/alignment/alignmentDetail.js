@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Spin, Divider, Typography, Button, message, Modal, Form } from "antd";
+import { Spin, Divider, Typography, Button, Modal, Form } from "antd";
 import { withRouter } from "react-router-dom";
 import TableAlignmentDetail from "./table-alignmentDetail";
 import globalStyle from "../../../styles/globalStyles";
@@ -225,6 +225,7 @@ class AlignmentList extends Component {
           if (item){
             toast.warning("Outstanding Ranking is required for line : " + parseInt(index + 1));
           }
+          return item
         })
         console.log(errors)
       } else if (callibrations.length > 0) {
