@@ -274,7 +274,7 @@ class AlignmentList extends Component {
       }
       if (indexRanking >= 0) {
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: " ",
+          [`dataGeneral[${indexRanking}].ranking`]: "",
         });
       }
     }
