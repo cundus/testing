@@ -176,11 +176,11 @@ class MonitorKPI extends Component {
       content:
         "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
       onOk: async () => {
-        await this._onEditButton(val, record);
-        refetch()
+        await this._onEditButton(val, record, refetch);
+        refetch();
       },
-      onCancel: () => {
-        this._onEditButton(val, record);
+      onCancel: async () => {
+        await this._onEditButton(val, record, refetch);
       },
       autoFocusButton: "ok",
       okText: "Yes",
@@ -201,30 +201,13 @@ class MonitorKPI extends Component {
       className: "editMonitoringModal",
     });
   };
-
-  _cancelEditRow = (val, record) => {
-    const { dataSource } = this.state;
-    const newData = [...dataSource];
-    const index = newData.findIndex(
-      (item) => item?.isInlineEdit && item?.isInlineEdit === true
-    );
-    let item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      isInlineEdit: false,
-    });
-    this.setState({
-      dataSource: newData,
-      rowEdit: false,
-    });
+  _onCancel = async (val, record, refetch) => {
+    await this._onEditButton(val, record, refetch);
+    refetch();
   };
 
-  _onEditButton = (val, record) => {
-    // this.showConfirm();
-    console.log("_onEditButton", val);
-    // console.log(record);
+  _onEditButton = (val, record, refetch) => {
     if (val) {
-      console.log("_onEditButton INSIDE", val);
       const { dataSource } = this.state;
       const { doInlineEdit } = this.props;
       const newData = [...dataSource];
@@ -235,7 +218,8 @@ class MonitorKPI extends Component {
         isInlineEdit: true,
       });
       doInlineEdit(record.id, val);
-      console.log("on edit", newData);
+      // console.log("on edit", newData);
+
       this.setState({
         dataSource: newData,
         rowEdit: true,
@@ -251,12 +235,14 @@ class MonitorKPI extends Component {
         isInlineEdit: false,
       });
       doInlineEdit(record.id, val);
-      console.log("on edit", newData);
+      // console.log("on edit", newData);
+      // refetch();
       this.setState({
         dataSource: newData,
         rowEdit: false,
       });
     }
+    // refetch();
   };
 
   _onSaveButton() {
@@ -391,9 +377,8 @@ class MonitorKPI extends Component {
                 isSuperior={isSuperior}
                 stafid={stafid}
                 //new
-                refetch={this.getAllData.bind(this)}
                 editRow={this._showConfirm.bind(this)}
-                cancelEditRow={this._onEditButton.bind(this)}
+                cancelEditRow={this._onCancel.bind(this)}
                 isRowEdit={this.props.monitoring}
               />
               <div>

@@ -19,6 +19,7 @@ const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
   change = (index, field) => {
+    console.log(field);
     const { record, handlechange, form } = this.props;
     let checkField = field;
     setTimeout(() => {
@@ -219,6 +220,7 @@ class EditableCell extends React.Component {
       record.metrics.map((metricLabel) => {
         return field.push(`${type}[${indexarr}].${metricLabel.label}`);
       });
+      // console.log(record[index]);
       return (
         <Form.Item style={{ margin: 0 }}>
           {form.getFieldDecorator(`${type}[${indexarr}].${title}`, {
