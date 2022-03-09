@@ -90,12 +90,12 @@ class TableMonitorKPI extends Component {
         return (
           dataSource.length >= 1 ? (
             <div>
-              <Button style={{ marginRight: 5, marginBottom: 5, color: "#591DF1",  border: '1px solid #591DF1' }}>
+              <Button style={{ marginRight: 5, marginBottom: 5, color: "#1890ff",  border: '1px solid #1890ff' }}>
                 <Link to={`/Activity/${record.key}/${!isSuperior ? userId : stafid}`}>
                   Activity
                 </Link>
               </Button>
-              <Button style={{ marginRight: 5, marginBottom: 5, color: "#591DF1", border: '1px solid #591DF1'}}>
+              <Button style={{ marginRight: 5, marginBottom: 5, color: "#1890ff", border: '1px solid #1890ff'}}>
                 <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
                   Achievement
                 </Link>
