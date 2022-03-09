@@ -91,6 +91,7 @@ class KPI extends Component {
       title: 'Result',
       align: 'center',
       editable: false,
+      noEditableRow: true,
       width: 100,
       dataIndex: 'result',
       render: (text, record) => {
@@ -114,7 +115,8 @@ class KPI extends Component {
       title: 'Action',
       align: 'center',
       editable: false,
-      width: 100,
+      noEditableRow: true,
+      width: 140,
       dataIndex: 'action',
       render: (text, record, index) => {
         const {
@@ -124,7 +126,9 @@ class KPI extends Component {
           handleChangeField,
           dataSource,
           handleAssesLoading,
-          getOwnKpiList
+          getOwnKpiList,
+          handleEditRow,
+          handleSaveRow
         } = this.props;
         let error = false;
         const field = form.getFieldsError([`dataKpi[${index}].assessment`]);
@@ -132,6 +136,20 @@ class KPI extends Component {
           error = true;
         } else {
           error = false;
+        }
+
+        if (this.props.editableRow === record?.id) {
+          return (
+            <div>
+              <Button
+                style={{ marginBottom: 5 }} 
+                onClick={() => handleSaveRow(index)}
+                type={'primary'}
+                ghost
+              >
+                  Save
+              </Button>
+            </div>)
         }
         return (
           <div>
@@ -141,9 +159,15 @@ class KPI extends Component {
               ghost
               // eslint-disable-next-line react/jsx-no-bind
               onClick={() => showHideModal(record.id)}
+              style={{marginRight: 5, marginBottom: 5,}}
             >
               Assess
             </Button>
+            <Button 
+              icon={"edit"}
+              style={{ marginRight: 5, marginBottom: 5, color: "#FF2222", border: '1px solid #FF2222' }}
+              onClick={() => handleEditRow(record?.id)}
+            />
             <ModalAssessment
               form={form}
               dataSource={dataSource}
@@ -172,7 +196,8 @@ class KPI extends Component {
       align: 'center',
       width: 100,
       className: 'ant-table-th-yellow',
-      editable: false
+      editable: false,
+      noEditableRow: true,
     };
     if (isFeedback) {
       await newColumns.push(Feedback);
@@ -192,7 +217,11 @@ class KPI extends Component {
       challengeYour,
       myStep,
       changeChallenge,
+      editableRow,
+      handleChangeRow,
+      handleErrorRow
     } = this.props;
+
     return (
       <div>
         <div>
@@ -204,6 +233,9 @@ class KPI extends Component {
               columns={columns}
               // loading={loading}
               datasource={dataSource}
+              editableRow={editableRow}
+              handleerror={handleErrorRow}
+              handlechange={handleChangeRow}
             />
             <Text strong>Challenge yourself :</Text>
             {!(myStep) ?
