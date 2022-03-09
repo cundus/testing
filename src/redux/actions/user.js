@@ -73,7 +73,6 @@ export const GetMyTeamKPI = (idUser) => {
         });
       }
       const arayTeam = resp.data.result;
-      console.log("My team", arayTeam);
       arayTeam.map((d) => {
         d.title = d.kpiTitle;
         d.status = d.userStatus;
