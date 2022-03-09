@@ -1,4 +1,4 @@
-import { DatePicker, Input, Select } from "antd";
+import { DatePicker, Icon, Input, Select } from "antd";
 import React, { Component } from "react";
 
 class FilterTableSSR extends Component {
@@ -58,6 +58,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           placeholder={`Search by ${name}`}
           onSearch={(val) => onFilter(val)}
           allowClear
+          enterButton
         />
       );
 
