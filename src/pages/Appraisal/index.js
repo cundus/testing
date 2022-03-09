@@ -694,6 +694,8 @@ class Appraisal extends Component {
                       id="save-assessment"
                       onClick={this.handleSaveAssessment}
                       style={{ margin: 10 }}
+                      type={'primary'}
+                      ghost
                     >
                       Save Assessment
                     </Button> : tab === '2' &&

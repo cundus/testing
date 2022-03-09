@@ -319,6 +319,8 @@ class DraftKPI extends Component {
             // eslint-disable-next-line react/jsx-no-bind
             onClick={() => stepChange(0) /* go back add */}
             style={{ margin: 10 }}
+            type="primary"
+            ghost
           >
             Add KPI
           </Button>
@@ -326,6 +328,8 @@ class DraftKPI extends Component {
             id="save-draft"
             onClick={handleSaveDraft}
             style={{ margin: 10 }}
+            type="primary"
+            ghost
           >
             Save as Draft
           </Button>
