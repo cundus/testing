@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
- Button
+ Button, Icon
 } from 'antd';
 import { DataTable } from '../../components';
 import { Link } from  'react-router-dom';
@@ -9,7 +9,7 @@ class TableMonitorKPI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      columns: []
+      columns: [],
     };
   }
 
@@ -71,23 +71,41 @@ class TableMonitorKPI extends Component {
       title: 'Progress Tracking',
       align: 'center',
       editable: false,
+      noEditableRow: true,
       width: 250,
       dataIndex: 'action',
       render: (text, record) => {
-        const { dataSource } = this.props;
+        const { dataSource, handleSave, handleEditRow } = this.props;
+        if (this.props.editableRow === record?.id) {
+          return (
+            <div>
+              <Button style={{ marginBottom: 5 }} onClick={() => {
+                handleSave()
+                this.setState({editableRow:null})
+              }}>
+                  Save
+              </Button>
+            </div>)
+        }
         return (
           dataSource.length >= 1 ? (
             <div>
-              <Button style={{ marginRight: 5 }}>
+              <Button style={{ marginRight: 5, marginBottom: 5, color: "#591DF1",  border: '1px solid #591DF1' }}>
                 <Link to={`/Activity/${record.key}/${!isSuperior ? userId : stafid}`}>
                   Activity
                 </Link>
               </Button>
-              <Button style={{ marginRight: 5 }}>
+              <Button style={{ marginRight: 5, marginBottom: 5, color: "#591DF1", border: '1px solid #591DF1'}}>
                 <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
                   Achievement
                 </Link>
               </Button>
+              <Button 
+                icon={"edit"}
+                shape="shape"
+                style={{ marginRight: 5, marginBottom: 5, color: "#FF2222", border: '1px solid #FF2222' }}
+                onClick={() => handleEditRow(record?.id)}
+              />
             </div>
           ) : null
         );
@@ -96,7 +114,7 @@ class TableMonitorKPI extends Component {
     await newColumns.push(action);
     };
     this.setState({
-      columns: newColumns
+      columns: newColumns,
     });
   }
 
@@ -107,11 +125,13 @@ class TableMonitorKPI extends Component {
       handleChange,
       handleError,
       loading,
-      form
+      form,
+      editableRow
     } = this.props;
     return (
       <div>
         <DataTable
+          editableRow={editableRow}
           form={form}
           columns={columns}
           loading={loading}

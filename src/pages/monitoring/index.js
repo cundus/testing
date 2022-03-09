@@ -14,12 +14,15 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import TableKPI from './kpi';
 import { doGetKpiList, doGetLatestGoalKpi } from '../../redux/actions/kpi';
-import { Success } from '../../redux/status-code-type';
+import { FAILED_SAVE_CHALLENGE_YOURSELF, Success } from '../../redux/status-code-type';
 import globalStyle from '../../styles/globalStyles';
 import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
 import { doReviseKPI } from '../../redux/actions/monitoring';
 import { toast } from 'react-toastify'
 
+import { sendChallengeYourselfChecker } from '../../utils/challengeYourselfChecker';
+import kpiSendProcess from '../../utils/kpiSendProcess';
+import { actionSaveKpi } from '../../redux/actions';
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -36,7 +39,8 @@ class MonitorKPI extends Component {
       kpiErr: false,
       isFeedback: false,
       userId: '',
-      isSuperior: false
+      isSuperior: false,
+      editableRow: null
     };
   }
 
@@ -228,21 +232,66 @@ class MonitorKPI extends Component {
     });
   };
 
+  handleSave = async () => {
+    const {
+      doSavingKpi, authReducer, form, ownkpiReducer
+    } = this.props;
+    const { dataSource, weightTotalErr } = this.state;
+    const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
+    let dataSaving = [...dataSource]
+    const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
+    const data = {
+      kpiList: newDataKpi,
+      challengeYourSelf: sendChallengeYourselfChecker(challenge)
+    };
+    if (weightTotalErr) {
+      toast.warn("Sorry, Total KPI Weight must be 100%")
+    } else {
+      form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+          confirm({
+            title: 'Are you sure?',
+            onOk: async () => {
+              try {
+                await doSavingKpi(data, authReducer.userId);
+                const { savekpiReducer } = this.props;
+                const { status, statusMessage } = savekpiReducer;
+                if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
+                  toast.success('Your KPI has been saved');
+                  this.setState({editableRow: null})
+                } else {
+                  toast.warn(`Sorry, ${statusMessage}`);
+                }
+                
+              } catch (error) {
+                console.log(error)
+              }
+            },
+            onCancel() {}
+          });
+        } else if (err.dataKpi) {
+          toast.warn(`Please correctly fill your KPI`);
+        }
+      });
+    }
+  };
 
   render() {
     const {
-      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback, userId, isSuperior
+      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback, userId, isSuperior, editableRow
     } = this.state;
     const {
       handleChange,
       handleDelete,
-      handleError
+      handleError,
+      handleSave
     } = this;
     const { kpiReducer, form } = this.props;
     const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, status, errMessage } = kpiReducer;
     const { name  } = dataGoal;
     const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
     const stafid = user?.userId;
+    
     if (status === Success || loadingKpi) {
     return (
       <div style={globalStyle.contentContainer}>
@@ -259,7 +308,7 @@ class MonitorKPI extends Component {
           </center>
         </div>
         {!loadingKpi ?
-          <div>
+          <div style={{marginBottom: 5}}>
             <Text type={weightTotalErr ? 'danger' : ''}>
             Total KPI Weight :
             {` ${weightTotal}%`}
@@ -271,11 +320,14 @@ class MonitorKPI extends Component {
               dataSource={dataSource}
               handleError={handleError}
               handleChange={handleChange}
+              handleSave={handleSave}
               handleDelete={handleDelete}
               userId={userId}
               isEditable={currentStep === stepKpiMonitoring[0]}
               isSuperior={isSuperior}
               stafid={stafid}
+              editableRow={editableRow}
+              handleEditRow={(id) => this.setState({editableRow: id})}
             />
             <div>
               <Text strong className='label-challenge'>Challenge Yourself :</Text>
@@ -320,6 +372,8 @@ class MonitorKPI extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  ownkpiReducer: state.ownKpi,
+  savekpiReducer: state.saveKpi,
   kpiReducer: state.kpiReducer,
   authReducer: state.authReducer,
   step: state.userKpiStateReducer,
@@ -327,6 +381,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
