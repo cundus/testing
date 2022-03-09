@@ -160,3 +160,16 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
         color: #fff;
     }
 }
+
+#result-token {
+  .ant-result-title {
+    font-size: 20px;
+    white-space: break-spaces;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    
+  }
+  .ant-result-subtitle {
+    font-size: 18px;
+  }
+}

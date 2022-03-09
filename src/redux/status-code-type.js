@@ -28,32 +28,37 @@ export const errorHandlerCode = (statusCode, statusDesc) => {
     case INVALID_LOGIN_TOKEN:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
-        title: 'Sorry, you are not authorized to access this application.',
-        subTitle: `Refresh this page or try relogin again`
+        title: `Failed to login
+Please refresh this page, if Error still persist try to login again into PMGM web.`,
+        subTitle: "(Invalid refresh token)"
       };
       case USER_NOT_FOUND:
         return {
           status: httpHeaders.NOT_AUTHORIZED,
-          title: 'Sorry, you are not authorized to access this application.',
-          subTitle: `Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+          title: `Failed to login
+You are not authorized to access PMGM web.`,
+          subTitle: `${statusDesc}. Error ${statusCode}`
         };
     case MULTI_SESSION_NOT_ALLOWED:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
-        title: 'Sorry, you are unable to access the application right now.',
-        subTitle: `Sign Out from other device/browser or Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+        title: `Failed to login
+Sign Out from other device/browser and try to login again into PMGM web.`,
+        subTitle: `(${statusDesc}. Error ${statusCode})`
       };
     case NOT_AUTHORIZED:
       return {
         status: httpHeaders.NOT_AUTHORIZED,
-        title: 'Sorry, you are not authorized to access this application.',
-        subTitle: `Refresh this page or try relogin again`
+        title: `Login session expired
+Please refresh this page, if Error still persist try to login again into PMGM web`,
+        subTitle: "(Invalid refresh token)"
       };
     default:
       return {
         status: httpHeaders.ERR_SERVER,
-        title: 'Sorry, Something went wrong with the server.',
-        subTitle: `Contact the PMGM's help desk with the following information: ${statusDesc}. Error ${statusCode}`
+        title: `Something went wrong with the server.
+Please try again later`,
+        subTitle: statusCode ? `(${statusDesc}. Error ${statusCode})` : "(Internal Server Error)"
       };
   }
 };

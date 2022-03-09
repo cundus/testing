@@ -187,7 +187,7 @@ class Dashboard extends React.Component {
     } else {
       const errors = errorHandlerCode(authReducer?.statusLoginCode, authReducer?.statusLoginDesc);
       return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ minHeight: '100vh' }} id="result-token">
           <ToastContainer />
           <Content style={styles.contentContainer}>
             <Result
