@@ -1,3 +1,4 @@
+import { Steps } from "antd";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -16,7 +17,6 @@ export const initGetDataParams = {
   page: 0,
   filters: {},
 };
-
 
 class LandingUserBehalf extends Component {
   constructor(props) {
@@ -67,14 +67,14 @@ class LandingUserBehalf extends Component {
     const { options } = this.state;
     const data = onBehalf?.dataUsersBehalf?.result;
     const loading = onBehalf?.loadingUsersBehalf;
-    const sort = onBehalf?.filterUsersBehalf?.sort
+    const sort = onBehalf?.filterUsersBehalf?.sort;
 
     const filters = [
-      {name: "User ID", value: "userId", type: "FREE_TEXT"},
-      {name: "First Name", value: "firstName", type: "FREE_TEXT"},
-      {name: "Last Name", value: "lastName", type: "FREE_TEXT"},
-      {name: "Email", value: "email", type: "FREE_TEXT"},
-      {name: "Manager ID", value: "managerId", type: "FREE_TEXT"},
+      { name: "User ID", value: "userId", type: "FREE_TEXT" },
+      { name: "First Name", value: "firstName", type: "FREE_TEXT" },
+      { name: "Last Name", value: "lastName", type: "FREE_TEXT" },
+      { name: "Email", value: "email", type: "FREE_TEXT" },
+      { name: "Manager ID", value: "managerId", type: "FREE_TEXT" },
 
       {name: "Directorate", value: "directorate", type: "DROPDOWN", data: options?.directorates || []},
       {name: "Department", value: "department", type: "DROPDOWN", data:  options?.departments || []},
@@ -84,10 +84,27 @@ class LandingUserBehalf extends Component {
         <div
           style={{
             ...globalStyle.contentContainer,
-            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          WIZZARD
+          <div
+            style={{
+              width: "40vw",
+            }}
+          >
+            <Steps current={0}>
+              <Steps.Step
+                title="Select User"
+                icon={<img src="/assets/icon/user-group.svg" />}
+              />
+              <Steps.Step
+                title="Select KPI Form"
+                icon={<img src="/assets/icon/select.svg" />}
+              />
+            </Steps>
+          </div>
         </div>
         <div
           style={{
@@ -96,12 +113,14 @@ class LandingUserBehalf extends Component {
           }}
         >
           <FilterTableSSR
-            onFilter={(p) => this.fetchData({ ...initGetDataParams, filters: p })}
+            onFilter={(p) =>
+              this.fetchData({ ...initGetDataParams, filters: p })
+            }
             value={this.state?.filterField}
             onChange={(filterField) => {
               this.setState({
-                filterField
-              })
+                filterField,
+              });
             }}
             filters={filters}
           />

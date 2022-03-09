@@ -1,9 +1,10 @@
+import { Steps } from "antd";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import FilterTableSSR from "../../../components/dataTable/ssrTableFilter";
 import {
-    doChooseFormOnBehalf, doGetFormsBehalf
+    doChooseFormOnBehalf, doGetFormsBehalf, doResetBehalf
 } from "../../../redux/actions/onBehalf";
 import globalStyle from "../../../styles/globalStyles";
 import { stepKpisDropdown } from "../../../utils/stepKpi";
@@ -34,7 +35,7 @@ class LandingFormBehalf extends Component {
   };
 
   render() {
-    const { onBehalf } = this.props;
+    const { onBehalf, resetBehalf } = this.props;
     const data = onBehalf?.dataFormsBehalf?.result;
     const loading = onBehalf?.loadingFormsBehalf;
     const sort = onBehalf?.filterFormsBehalf?.sort
@@ -55,14 +56,33 @@ class LandingFormBehalf extends Component {
     ]
     return (
       <>
+      <div
+        style={{
+          ...globalStyle.contentContainer,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <div
           style={{
-            ...globalStyle.contentContainer,
-            textAlign: "center",
+            width: "40vw",
           }}
         >
-          WIZZARD
+          <Steps current={1}>
+            <Steps.Step
+              title="Select User"
+              icon={<img src="/assets/icon/user-group.svg" />}
+              style={{ cursor: "pointer" }}
+              onClick={resetBehalf}
+            />
+            <Steps.Step
+              title="Select KPI Form"
+              icon={<img src="/assets/icon/select-active.svg" />}
+            />
+          </Steps>
         </div>
+      </div>
         <div
           style={{
             ...globalStyle.contentContainer,
@@ -110,6 +130,7 @@ const mapDispatchToProps = (dispatch) => ({
   getFormsBehalf: ({ page, size, filters, sort, order }) =>
     dispatch(doGetFormsBehalf({ page, size, filters, sort, order })),
   chooseFormOnBehalf: (id) => dispatch(doChooseFormOnBehalf(id)),
+  resetBehalf: () => dispatch(doResetBehalf()),
 });
 const connectToComponent = connect(
   mapStateToProps,

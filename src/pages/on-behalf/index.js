@@ -12,9 +12,9 @@ class IndexOnBehalf extends Component {
     if (onBehalf?.userId && onBehalf?.form) {
       return <OnBehalf />;
     } else if (onBehalf?.userId) {
-      return <LandingFormBehalf />;
+      return <LandingFormBehalf activeStep={1} />;
     }
-    return <LandingUserBehalf />;
+    return <LandingUserBehalf activeStep={0} />;
   }
 }
 const mapStateToProps = (state) => ({

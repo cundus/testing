@@ -12,7 +12,6 @@ import { doResetBehalf } from "../../../redux/actions/onBehalf";
 import globalStyle from "../../../styles/globalStyles";
 import "../onbehalf-styles.scss";
 
-
 class OnBehalf extends Component {
   constructor(props) {
     super(props);
@@ -33,11 +32,15 @@ class OnBehalf extends Component {
             alignItems: "center",
           }}
         >
-          <Text strong style={{ marginRight: 20 }}>
+          <Text strong style={{ marginRight: 20, color: "#3111F9" }}>
             {onBehalf?.form?.formTitle}{" "}
           </Text>
-          <Button type="primary" onClick={this.props.resetBehalf}>
-            Change
+          <Button
+            onClick={this.props.resetBehalf}
+            style={{ color: "#3111F9", border: "1px solid #3111F9" }}
+          >
+            <img src="/assets/icon/exchange.svg" style={{height: 20, marginRight: 10}} />
+            <span>Change</span>
           </Button>
         </div>
         <div
