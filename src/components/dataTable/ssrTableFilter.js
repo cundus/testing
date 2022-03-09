@@ -57,6 +57,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
         <Input.Search
           placeholder={`Search by ${name}`}
           onSearch={(val) => onFilter(val)}
+          allowClear
         />
       );
 
