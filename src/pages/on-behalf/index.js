@@ -7,8 +7,17 @@ import LandingFormBehalf from "./landing/landing-form";
 import "./onbehalf-styles.scss";
 
 class IndexOnBehalf extends Component {
+  componentDidMount() {
+    if (!this.props.authReducer?.administrator) {
+      this.props.history.replace("/")
+    }
+  }
+
   render() {
-    const { onBehalf } = this.props;
+    const { onBehalf, authReducer } = this.props;
+    if(!authReducer?.administrator) {
+      return <div />
+    }
     if (onBehalf?.userId && onBehalf?.form) {
       return <OnBehalf />;
     } else if (onBehalf?.userId) {
@@ -19,6 +28,7 @@ class IndexOnBehalf extends Component {
 }
 const mapStateToProps = (state) => ({
   onBehalf: state.onBehalf,
+  authReducer: state.authReducer,
 });
 const connectToComponent = connect(mapStateToProps, null)(IndexOnBehalf);
 
