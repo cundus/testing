@@ -59,6 +59,9 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           onSearch={(val) => onFilter(val)}
           allowClear
           enterButton
+          prefix={
+            <Icon type="search" style={{ color: 'rgba(0,0,0,.45)' }} />
+          }
         />
       );
 
