@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
- Button, Typography, Skeleton, Input, Spin
-} from 'antd';
-import { DataTable } from '../../../components';
-import ModalAssessment from './modalAssesment';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Button, Typography, Skeleton, Input, Spin } from "antd";
+import { DataTable } from "../../../components";
+import ModalAssessment from "./modalAssesment";
 
 const { Text } = Typography;
 const { TextArea } = Input;
@@ -15,7 +13,7 @@ class KPI extends Component {
     this.state = {
       columns: [],
       metrics: [],
-      myStepState: null
+      myStepState: null,
     };
   }
 
@@ -25,14 +23,12 @@ class KPI extends Component {
 
   componentDidUpdate() {
     const { metrics, myStepState } = this.state;
-    const {
-      dataMetrics, isFeedback, feedShow, myStep
-    } = this.props;
+    const { dataMetrics, isFeedback, feedShow, myStep } = this.props;
     if (metrics !== dataMetrics) {
       this.getColumns();
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        metrics: dataMetrics
+        metrics: dataMetrics,
       });
     }
     if (myStepState !== myStep) {
@@ -45,35 +41,35 @@ class KPI extends Component {
   }
 
   getColumns = async () => {
-     // the async await on this function would leaking memory (showing warn)
-     // but i have to async await for making it table
+    // the async await on this function would leaking memory (showing warn)
+    // but i have to async await for making it table
     const { dataMetrics, isFeedback, myStep } = this.props;
     const newColumns = [
       {
-        title: 'KPI Subject',
-        dataIndex: 'kpi',
-        placeholder: 'Enter KPI Subject',
-        align: 'center',
+        title: "KPI Subject",
+        dataIndex: "kpi",
+        placeholder: "Enter KPI Subject",
+        align: "center",
         width: 200,
-        editable: false
+        editable: false,
       },
       {
-        title: 'Baseline',
-        dataIndex: 'baseline',
-        placeholder: 'Enter baseline',
-        align: 'center',
+        title: "Baseline",
+        dataIndex: "baseline",
+        placeholder: "Enter baseline",
+        align: "center",
         width: 150,
-        editable: false
+        editable: false,
       },
       {
-        title: 'Weight (%)',
-        dataIndex: 'weight',
-        placeholder: 'Enter KPI Weight',
-        align: 'center',
-        type: 'number',
+        title: "Weight (%)",
+        dataIndex: "weight",
+        placeholder: "Enter KPI Weight",
+        align: "center",
+        type: "number",
         width: 90,
-        editable: false
-      }
+        editable: false,
+      },
     ];
     // eslint-disable-next-line array-callback-return
     await dataMetrics.map((itemMetric) => {
@@ -81,43 +77,50 @@ class KPI extends Component {
         title: itemMetric.label,
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
-        align: 'center',
+        align: "center",
         width: 150,
-        editable: false
+        editable: false,
       };
       newColumns.push(data);
     });
     const result = {
-      title: 'Result',
-      align: 'center',
+      title: "Result",
+      align: "center",
       editable: false,
       noEditableRow: true,
       width: 100,
-      dataIndex: 'result',
+      dataIndex: "result",
       render: (text, record) => {
         const { loadingResult } = this.props;
-        let colorring = 'default';
-        if (record.rating === 'Below') {
-          colorring = '#d1a145';
-        } else if (record.rating === 'Meet') {
-          colorring = '#4ebf37';
-        } else if (record.rating === 'Exceed') {
-          colorring = '#484ef0';
+        let colorring = "default";
+        if (record.rating === "Below") {
+          colorring = "#d1a145";
+        } else if (record.rating === "Meet") {
+          colorring = "#4ebf37";
+        } else if (record.rating === "Exceed") {
+          colorring = "#484ef0";
         }
         return (
-          <Skeleton active loading={loadingResult === record.id} paragraph={false} title={{ width: 'auto' }}>
-            <Text strong style={{ color: colorring }}>{record.rating}</Text>
+          <Skeleton
+            active
+            loading={loadingResult === record.id}
+            paragraph={false}
+            title={{ width: "auto" }}
+          >
+            <Text strong style={{ color: colorring }}>
+              {record.rating}
+            </Text>
           </Skeleton>
         );
-      }
+      },
     };
     const action = {
-      title: 'Action',
-      align: 'center',
+      title: "Action",
+      align: "center",
       editable: false,
       noEditableRow: true,
       width: 140,
-      dataIndex: 'action',
+      dataIndex: "action",
       render: (text, record, index) => {
         const {
           form,
@@ -128,7 +131,8 @@ class KPI extends Component {
           handleAssesLoading,
           getOwnKpiList,
           handleEditRow,
-          handleSaveRow
+          handleSaveRow,
+          handleCancel,
         } = this.props;
         let error = false;
         const field = form.getFieldsError([`dataKpi[${index}].assessment`]);
@@ -142,30 +146,44 @@ class KPI extends Component {
           return (
             <div>
               <Button
-                style={{ marginBottom: 5 }} 
-                onClick={() => handleSaveRow(index)}
-                type={'primary'}
+                style={{ marginRight: 5, marginBottom: 5 }}
+                onClick={() => handleCancel()}
+                type={"primary"}
                 ghost
               >
-                  Save
+                Cancel
               </Button>
-            </div>)
+              <Button
+                style={{ marginBottom: 5 }}
+                onClick={() => handleSaveRow(index)}
+                type={"primary"}
+                ghost
+              >
+                Save
+              </Button>
+            </div>
+          );
         }
         return (
           <div>
             <Button
               disabled={myStep}
-              type={error ? 'danger' : 'primary'}
+              type={error ? "danger" : "primary"}
               ghost
               // eslint-disable-next-line react/jsx-no-bind
               onClick={() => showHideModal(record.id)}
-              style={{marginRight: 5, marginBottom: 5,}}
+              style={{ marginRight: 5, marginBottom: 5 }}
             >
               Assess
             </Button>
-            <Button 
+            <Button
               icon={"edit"}
-              style={{ marginRight: 5, marginBottom: 5, color: "#FF2222", border: '1px solid #FF2222' }}
+              style={{
+                marginRight: 5,
+                marginBottom: 5,
+                color: "#FF2222",
+                border: "1px solid #FF2222",
+              }}
               onClick={() => handleEditRow(record?.id)}
             />
             <ModalAssessment
@@ -185,17 +203,17 @@ class KPI extends Component {
             {error && <Text type="danger">is required</Text>}
           </div>
         );
-      }
+      },
     };
     await newColumns.push(result);
     await newColumns.push(action);
     const Feedback = {
-      title: 'Feedback',
-      dataIndex: 'feedback',
-      placeholder: 'Enter KPI Feedback',
-      align: 'center',
+      title: "Feedback",
+      dataIndex: "feedback",
+      placeholder: "Enter KPI Feedback",
+      align: "center",
       width: 100,
-      className: 'ant-table-th-yellow',
+      className: "ant-table-th-yellow",
       editable: false,
       noEditableRow: true,
     };
@@ -204,9 +222,9 @@ class KPI extends Component {
     }
     this.setState({
       columns: newColumns,
-      myStepState: myStep
+      myStepState: myStep,
     });
-  }
+  };
 
   render() {
     const { columns } = this.state;
@@ -219,15 +237,13 @@ class KPI extends Component {
       changeChallenge,
       editableRow,
       handleChangeRow,
-      handleErrorRow
+      handleErrorRow,
     } = this.props;
 
     return (
       <div>
         <div>
-          <Spin
-            spinning={loading}
-          >
+          <Spin spinning={loading}>
             <DataTable
               form={form}
               columns={columns}
@@ -238,19 +254,21 @@ class KPI extends Component {
               handlechange={handleChangeRow}
             />
             <Text strong>Challenge yourself :</Text>
-            {!(myStep) ?
-            <TextArea
-              autoSize={{minRows: 3}}
-              placeholder="Challenge yourself"
-              value={challengeYour}
-              onChange={changeChallenge}
-            />:
-            <TextArea
-              autoSize={{minRows: 3}}
-              className="challenge-input-disabled"
-              value={challengeYour}
-              readOnly
-            />}
+            {!myStep ? (
+              <TextArea
+                autoSize={{ minRows: 3 }}
+                placeholder="Challenge yourself"
+                value={challengeYour}
+                onChange={changeChallenge}
+              />
+            ) : (
+              <TextArea
+                autoSize={{ minRows: 3 }}
+                className="challenge-input-disabled"
+                value={challengeYour}
+                readOnly
+              />
+            )}
           </Spin>
         </div>
       </div>
@@ -273,10 +291,10 @@ KPI.propTypes = {
   myStep: PropTypes.bool,
   form: PropTypes.instanceOf(Object),
   challengeYour: PropTypes.string,
-  handleSubmit:  PropTypes.func,
+  handleSubmit: PropTypes.func,
   changeChallenge: PropTypes.func,
   feedShow: PropTypes.func,
   handleAssesLoading: PropTypes.func,
   getOwnKpiList: PropTypes.func,
-  handleSaveAssessment:  PropTypes.func
+  handleSaveAssessment: PropTypes.func,
 };
