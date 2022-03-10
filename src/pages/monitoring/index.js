@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Button,
   Modal,
@@ -7,22 +7,27 @@ import {
   Input,
   Spin,
   Form,
-  Result
-} from 'antd';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import TableKPI from './kpi';
-import { doGetKpiList, doGetLatestGoalKpi } from '../../redux/actions/kpi';
-import { FAILED_SAVE_CHALLENGE_YOURSELF, Success } from '../../redux/status-code-type';
-import globalStyle from '../../styles/globalStyles';
-import stepKpi, { stepKpiMonitoring } from '../../utils/stepKpi';
-import { doReviseKPI } from '../../redux/actions/monitoring';
-import { toast } from 'react-toastify'
+  Result,
+  Icon,
+} from "antd";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import { connect } from "react-redux";
+import TableKPI from "./kpi";
+import { doGetKpiList, doGetLatestGoalKpi } from "../../redux/actions/kpi";
+import {
+  FAILED_SAVE_CHALLENGE_YOURSELF,
+  Success,
+} from "../../redux/status-code-type";
+import globalStyle from "../../styles/globalStyles";
+import stepKpi, { stepKpiMonitoring } from "../../utils/stepKpi";
+import { doReviseKPI } from "../../redux/actions/monitoring";
+import { toast } from "react-toastify";
 
-import { sendChallengeYourselfChecker } from '../../utils/challengeYourselfChecker';
-import kpiSendProcess from '../../utils/kpiSendProcess';
-import { actionSaveKpi } from '../../redux/actions';
+import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
+import kpiSendProcess from "../../utils/kpiSendProcess";
+import { actionSaveKpi } from "../../redux/actions";
+import "./style.css";
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -35,12 +40,12 @@ class MonitorKPI extends Component {
       dataSource: [],
       weightTotal: 0,
       weightTotalErr: false,
-      challengeYour: '',
+      challengeYour: "",
       kpiErr: false,
       isFeedback: false,
-      userId: '',
+      userId: "",
       isSuperior: false,
-      editableRow: null
+      editableRow: null,
     };
   }
 
@@ -49,11 +54,11 @@ class MonitorKPI extends Component {
     const { params } = match;
     if (authReducer?.userId === params.userId) {
       if (step.currentStep === stepKpi[0] || step.currentStep === stepKpi[1]) {
-        this.props.history.push('/planning/kpi');
-      } else if(step.currentStep === stepKpi[2]) {
-        this.props.history.push('/monitoring');
+        this.props.history.push("/planning/kpi");
+      } else if (step.currentStep === stepKpi[2]) {
+        this.props.history.push("/monitoring");
       } else {
-        this.props.history.push('/appraisal');
+        this.props.history.push("/appraisal");
       }
     } else {
       this.getAllData();
@@ -67,67 +72,69 @@ class MonitorKPI extends Component {
     getLatestGoalKpi();
     if (userId) {
       await getKpiList(userId);
-      await
-      this.setState({
-        isSuperior: true
-      })
+      await this.setState({
+        isSuperior: true,
+      });
     } else {
       await getKpiList(authReducer?.userId);
       this.setState({
-        isSuperior: false
-      })
+        isSuperior: false,
+      });
     }
     const { kpiReducer } = this.props;
     const { dataKpi, challenge, dataKpiMetrics, status } = kpiReducer;
     const newData = [];
     if (status === Success) {
-    // for fetching data metrics API
-    // eslint-disable-next-line array-callback-return
-    dataKpi.map((itemKpi) => {
-      if (itemKpi.othersRatingComments.id) {
-        this.setState({ isFeedback: true });
-      }
-      let dataMetrics = itemKpi.metricLookup.map((metric) => {
-        return `{"${metric.label}":""}`;
-      });
-      dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
-      dataMetrics = dataMetrics.reduce((result, current) => {
-        return Object.assign(result, current);
-      }, {});
-      Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
-        return itemKpi.metricLookup.map((metric) => {
-          if (newDataMetric === metric.label) {
-            dataMetrics[newDataMetric] = `${itemKpi.achievementType === 0 ?
-              metric.achievementText : metric.achievementNumeric}`;
-            return dataMetrics;
-          }
-          return null;
+      // for fetching data metrics API
+      // eslint-disable-next-line array-callback-return
+      dataKpi.map((itemKpi) => {
+        if (itemKpi.othersRatingComments.id) {
+          this.setState({ isFeedback: true });
+        }
+        let dataMetrics = itemKpi.metricLookup.map((metric) => {
+          return `{"${metric.label}":""}`;
         });
+        dataMetrics = JSON.parse(`[${dataMetrics.toString()}]`);
+        dataMetrics = dataMetrics.reduce((result, current) => {
+          return Object.assign(result, current);
+        }, {});
+        Object.keys(dataMetrics).map((newDataMetric, newIndex) => {
+          return itemKpi.metricLookup.map((metric) => {
+            if (newDataMetric === metric.label) {
+              dataMetrics[newDataMetric] = `${
+                itemKpi.achievementType === 0
+                  ? metric.achievementText
+                  : metric.achievementNumeric
+              }`;
+              return dataMetrics;
+            }
+            return null;
+          });
+        });
+        const data = {
+          key: itemKpi.id,
+          id: itemKpi.id,
+          cascadeType: itemKpi.cascadeType,
+          cascadeName: itemKpi.cascadeName,
+          // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
+          kpi: itemKpi.name,
+          baseline: itemKpi.baseline,
+          weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
+          achievementType: itemKpi.achievementType,
+          metrics: dataKpiMetrics,
+          ...dataMetrics,
+          // feedback: itemKpi.othersRatingComments.comment
+        };
+        newData.push(data);
       });
-      const data = {
-        key: itemKpi.id,
-        id: itemKpi.id,
-        cascadeType: itemKpi.cascadeType,
-        cascadeName: itemKpi.cascadeName,
-        // typeKpi: itemKpi.cascadeType === 0 ? 'Self KPI' : `Cascade From ${itemKpi.cascadeName}`,
-        kpi: itemKpi.name,
-        baseline: itemKpi.baseline,
-        weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
-        achievementType: itemKpi.achievementType,
-        metrics: dataKpiMetrics,
-        ...dataMetrics,
-        // feedback: itemKpi.othersRatingComments.comment
-      };
-      newData.push(data);
-    });
-    this.setState({
-      dataSource: newData,
-      userId: authReducer?.userId,
-      challengeYour: challenge === '----------' ? '' : challenge
-    });
-    this.liveCount(newData);
+      this.setState({
+        dataSource: newData,
+        userId: authReducer?.userId,
+        challengeYour: challenge === "----------" ? "" : challenge,
+      });
+      this.liveCount(newData);
     } else {
-      this.props.history.push('/my-team/monitoring');
+      this.props.history.push("/my-team/monitoring");
     }
   };
 
@@ -143,24 +150,24 @@ class MonitorKPI extends Component {
       }
     });
     totalWeight = parseFloat(totalWeight);
-    if (typeof totalWeight === 'number') {
+    if (typeof totalWeight === "number") {
       if (totalWeight === 100) {
         this.setState({
           weightTotal: totalWeight,
           weightTotalErr: false,
           kpiErr: false,
-          kpiErrMessage: ''
+          kpiErrMessage: "",
         });
       } else {
         this.setState({
           weightTotal: totalWeight,
           weightTotalErr: true,
           kpiErr: true,
-          kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+          kpiErrMessage: "Sorry, Total KPI Weight must be 100%",
         });
       }
     }
-  }
+  };
 
   handleChange = (row) => {
     const { dataSource } = this.state;
@@ -169,7 +176,7 @@ class MonitorKPI extends Component {
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
-      ...row
+      ...row,
     });
     this.setState({ dataSource: newData });
     this.liveCount(newData);
@@ -184,15 +191,15 @@ class MonitorKPI extends Component {
     if (weightTotal !== 100) {
       this.setState({
         kpiErr: true,
-        kpiErrMessage: 'Sorry, Total KPI Weight must be 100%'
+        kpiErrMessage: "Sorry, Total KPI Weight must be 100%",
       });
     } else {
       this.setState({
         kpiErr: false,
-        kpiErrMessage: ''
+        kpiErrMessage: "",
       });
     }
-  }
+  };
 
   handleDelete = (key) => {
     const { form } = this.props;
@@ -200,74 +207,106 @@ class MonitorKPI extends Component {
     const data = [...dataSource];
     const newData = data.filter((item) => item.key !== key);
     this.setState({
-      dataSource: newData
+      dataSource: newData,
     });
-    const dataKpiCheck = form.getFieldsValue(['dataKpi']);
+    const dataKpiCheck = form.getFieldsValue(["dataKpi"]);
     if (dataKpiCheck) {
       form.setFieldsValue({
-        dataKpi: newData
+        dataKpi: newData,
       });
     }
     this.liveCount(newData);
   };
 
-  handleRevise = () => {
-    const {
-      doRevisingKPI,
-      kpiReducer
-    } = this.props;
+  handleConfirm = (id) => {
     confirm({
-      title: 'Are you sure?',
+      content:
+        "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+      title: "Are you sure you want to edit this KPI?",
+      icon: <Icon type="exclamation-circle" />,
+      className: "editMonitoringModal",
+      okButtonProps: {
+        style: {
+          backgroundColor: "#FF2222",
+          color: "white",
+          border: "1px solid #FF2222",
+          marginLeft: "45px",
+        },
+      },
+      cancelButtonProps: {
+        style: {
+          marginRight: "45px",
+        },
+      },
+      onOk: async () => {
+        await this.setState({
+          editableRow: id,
+        });
+      },
+      onCancel() {},
+    });
+  };
+
+  handleRevise = () => {
+    const { doRevisingKPI, kpiReducer } = this.props;
+    confirm({
+      title: "Are you sure?",
       onOk: async () => {
         await doRevisingKPI(kpiReducer?.user?.userId);
         // eslint-disable-next-line react/destructuring-assignment
         if (this.props.monitoring.status === Success) {
-          toast.success('Your employee KPI has been sent to revise');
+          toast.success("Your employee KPI has been sent to revise");
           this.getAllData();
         } else {
           toast.warn(`Sorry, ${this.props.monitoring.message}`);
         }
       },
-      onCancel() {}
+      onCancel() {},
+    });
+  };
+
+  handleCancel = async () => {
+    await this.setState({
+      editableRow: null,
     });
   };
 
   handleSave = async () => {
-    const {
-      doSavingKpi, authReducer, form, ownkpiReducer
-    } = this.props;
+    const { doSavingKpi, authReducer, form, ownkpiReducer } = this.props;
     const { dataSource, weightTotalErr } = this.state;
     const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
-    let dataSaving = [...dataSource]
+    let dataSaving = [...dataSource];
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
       kpiList: newDataKpi,
-      challengeYourSelf: sendChallengeYourselfChecker(challenge)
+      challengeYourSelf: sendChallengeYourselfChecker(challenge),
     };
     if (weightTotalErr) {
-      toast.warn("Sorry, Total KPI Weight must be 100%")
+      toast.warn("Sorry, Total KPI Weight must be 100%");
     } else {
       form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           confirm({
-            title: 'Are you sure?',
+            title: "Are you sure?",
             onOk: async () => {
               try {
                 await doSavingKpi(data, authReducer.userId);
                 const { savekpiReducer } = this.props;
                 const { status, statusMessage } = savekpiReducer;
-                if (status === Success || status === FAILED_SAVE_CHALLENGE_YOURSELF) {
-                  toast.success('Your KPI has been saved');
-                  this.setState({editableRow: null})
+                if (
+                  status === Success ||
+                  status === FAILED_SAVE_CHALLENGE_YOURSELF
+                ) {
+                  toast.success("Your KPI has been saved");
+                  this.setState({ editableRow: null });
                 } else {
                   toast.warn(`Sorry, ${statusMessage}`);
                 }
-                
               } catch (error) {
-                console.log(error)
+                console.log(error);
               }
             },
-            onCancel() {}
+            onCancel() {},
           });
         } else if (err.dataKpi) {
           toast.warn(`Please correctly fill your KPI`);
@@ -278,95 +317,132 @@ class MonitorKPI extends Component {
 
   render() {
     const {
-      dataSource, weightTotal, weightTotalErr, challengeYour, isFeedback, userId, isSuperior, editableRow
+      dataSource,
+      weightTotal,
+      weightTotalErr,
+      challengeYour,
+      isFeedback,
+      userId,
+      isSuperior,
+      editableRow,
     } = this.state;
     const {
       handleChange,
       handleDelete,
       handleError,
-      handleSave
+      handleSave,
+      handleCancel,
+      handleConfirm,
     } = this;
     const { kpiReducer, form } = this.props;
-    const { loadingKpi, dataKpiMetrics, dataGoal, currentStep, user, status, errMessage } = kpiReducer;
-    const { name  } = dataGoal;
-    const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : '';
+    const {
+      loadingKpi,
+      dataKpiMetrics,
+      dataGoal,
+      currentStep,
+      user,
+      status,
+      errMessage,
+    } = kpiReducer;
+    const { name } = dataGoal;
+    const stafname = isSuperior ? `${user?.firstName} ${user?.lastName}` : "";
     const stafid = user?.userId;
-    
+
     if (status === Success || loadingKpi) {
-    return (
-      <div style={globalStyle.contentContainer}>
-        <div>
-          <Divider />
-          <Text strong> Monitoring KPI - {stafname} </Text>
-          <Text>
-            {` Monitoring your KPI.`}
-          </Text>
-          <Divider />
-          <center>
-            <Title level={4}>{name || ''}</Title>
-            <br />
-          </center>
-        </div>
-        {!loadingKpi ?
-          <div style={{marginBottom: 5}}>
-            <Text type={weightTotalErr ? 'danger' : ''}>
-            Total KPI Weight :
-            {` ${weightTotal}%`}
-          </Text>
-            <TableKPI
-              form={form}
-              dataMetrics={dataKpiMetrics}
-              isFeedback={isFeedback}
-              dataSource={dataSource}
-              handleError={handleError}
-              handleChange={handleChange}
-              handleSave={handleSave}
-              handleDelete={handleDelete}
-              userId={userId}
-              isEditable={currentStep === stepKpiMonitoring[0]}
-              isSuperior={isSuperior}
-              stafid={stafid}
-              editableRow={editableRow}
-              handleEditRow={(id) => this.setState({editableRow: id})}
-            />
-            <div>
-              <Text strong className='label-challenge'>Challenge Yourself :</Text>
+      return (
+        <div style={globalStyle.contentContainer}>
+          <div>
+            <Divider />
+            <Text strong> Monitoring KPI - {stafname} </Text>
+            <Text>{` Monitoring your KPI.`}</Text>
+            <Divider />
+            <center>
+              <Title level={4}>{name || ""}</Title>
+              <br />
+            </center>
+          </div>
+          {!loadingKpi ? (
+            <div style={{ marginBottom: 5 }}>
+              <Text type={weightTotalErr ? "danger" : ""}>
+                Total KPI Weight :{` ${weightTotal}%`}
+              </Text>
+              <TableKPI
+                form={form}
+                dataMetrics={dataKpiMetrics}
+                isFeedback={isFeedback}
+                dataSource={dataSource}
+                handleError={handleError}
+                handleChange={handleChange}
+                handleSave={handleSave}
+                handleDelete={handleDelete}
+                userId={userId}
+                isEditable={currentStep === stepKpiMonitoring[0]}
+                isSuperior={isSuperior}
+                stafid={stafid}
+                editableRow={editableRow}
+                // handleEditRow={(id) => this.setState({ editableRow: id })}
+                handleEditRow={handleConfirm.bind(this)}
+                handleCancel={handleCancel}
+              />
+              <div>
+                <Text strong className="label-challenge">
+                  Challenge Yourself :
+                </Text>
                 <TextArea
-                  autoSize={{minRows: 3}}
+                  autoSize={{ minRows: 3 }}
                   className="challenge-input-disabled"
                   value={challengeYour}
                   readOnly
                 />
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              {
-                isSuperior &&
-                  <Button style={{margin: 10, marginRight: 0}} type="default" onClick={()=> this.props.history.push('/my-team/monitoring/')}>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                {isSuperior && (
+                  <Button
+                    style={{ margin: 10, marginRight: 0 }}
+                    type="default"
+                    onClick={() =>
+                      this.props.history.push("/my-team/monitoring/")
+                    }
+                  >
                     Back
                   </Button>
-                }
-                {
-                  (isSuperior && (currentStep === stepKpiMonitoring[0])) && 
-                    <Button style={{margin: 10}} type="primary" onClick={this.handleRevise}>
-                      Revise KPI
-                    </Button>
-                }
+                )}
+                {isSuperior && currentStep === stepKpiMonitoring[0] && (
+                  <Button
+                    style={{ margin: 10 }}
+                    type="primary"
+                    onClick={this.handleRevise}
+                  >
+                    Revise KPI
+                  </Button>
+                )}
+              </div>
             </div>
-          </div> : <center><Spin /></center>}
-      </div>
-    );} else {
+          ) : (
+            <center>
+              <Spin />
+            </center>
+          )}
+        </div>
+      );
+    } else {
       return (
         <div style={globalStyle.contentContainer}>
-        <Result
-          status={'error'}
-          title={status}
-          subTitle={`Sorry, ${errMessage}`}
-          extra={[
-            <Button key="back" onClick={() => this.props.history.push('/my-team/appraisal/')}>Back</Button>,
-          ]}
-        />
+          <Result
+            status={"error"}
+            title={status}
+            subTitle={`Sorry, ${errMessage}`}
+            extra={[
+              <Button
+                key="back"
+                onClick={() => this.props.history.push("/my-team/appraisal/")}
+              >
+                Back
+              </Button>,
+            ]}
+          />
         </div>
-      )
+      );
     }
   }
 }
@@ -377,7 +453,7 @@ const mapStateToProps = (state) => ({
   kpiReducer: state.kpiReducer,
   authReducer: state.authReducer,
   step: state.userKpiStateReducer,
-  monitoring: state.monitoringReducer
+  monitoring: state.monitoringReducer,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -401,5 +477,5 @@ MonitorKPI.propTypes = {
   submitNext: PropTypes.func,
   userReducer: PropTypes.instanceOf(Object),
   stepChange: PropTypes.func,
-  form: PropTypes.instanceOf(Object)
+  form: PropTypes.instanceOf(Object),
 };

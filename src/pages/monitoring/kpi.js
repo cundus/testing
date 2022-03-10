@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import {
- Button
-} from 'antd';
-import { DataTable } from '../../components';
-import { Link } from  'react-router-dom';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Button } from "antd";
+import { DataTable } from "../../components";
+import { Link } from "react-router-dom";
 class TableMonitorKPI extends Component {
   constructor(props) {
     super(props);
@@ -20,38 +18,38 @@ class TableMonitorKPI extends Component {
   }
 
   getColumns = async () => {
-     // the async await on this function would leaking memory (showing warn)
-     // but i have to async await for making it table
+    // the async await on this function would leaking memory (showing warn)
+    // but i have to async await for making it table
     const { dataMetrics, userId, isSuperior, isEditable, stafid } = this.props;
     const newColumns = [
       {
-        title: 'KPI Subject',
-        dataIndex: 'kpi',
-        placeholder: 'Enter KPI Subject',
-        align: 'center',
+        title: "KPI Subject",
+        dataIndex: "kpi",
+        placeholder: "Enter KPI Subject",
+        align: "center",
         width: 200,
-        className: 'td-top',
-        editable: false
+        className: "td-top",
+        editable: false,
       },
       {
-        title: 'Baseline',
-        dataIndex: 'baseline',
-        placeholder: 'Enter baseline',
-        align: 'center',
-        className: 'td-top',
+        title: "Baseline",
+        dataIndex: "baseline",
+        placeholder: "Enter baseline",
+        align: "center",
+        className: "td-top",
         width: 200,
-        editable: false
+        editable: false,
       },
       {
-        title: 'Weight (%)',
-        dataIndex: 'weight',
-        placeholder: 'Enter KPI Weight',
-        align: 'center',
-        className: 'td-top',
-        type: 'number',
+        title: "Weight (%)",
+        dataIndex: "weight",
+        placeholder: "Enter KPI Weight",
+        align: "center",
+        className: "td-top",
+        type: "number",
         width: 90,
-        editable: false
-      }
+        editable: false,
+      },
     ];
     // eslint-disable-next-line array-callback-return
     await dataMetrics.map((itemMetric) => {
@@ -59,73 +57,94 @@ class TableMonitorKPI extends Component {
         title: itemMetric.label,
         dataIndex: itemMetric.label,
         placeholder: `Enter Level ${itemMetric.index}`,
-        align: 'center',
-        className: 'td-top',
+        align: "center",
+        className: "td-top",
         width: 150,
-        editable: false
+        editable: false,
       };
       newColumns.push(data);
     });
-    if (isEditable){
-    const action = {
-      title: 'Progress Tracking',
-      align: 'center',
-      editable: false,
-      noEditableRow: true,
-      width: 250,
-      dataIndex: 'action',
-      render: (text, record) => {
-        const { dataSource, handleSave, handleEditRow } = this.props;
-        if (this.props.editableRow === record?.id) {
-          return (
+    if (isEditable) {
+      const action = {
+        title: "Progress Tracking",
+        align: "center",
+        editable: false,
+        noEditableRow: true,
+        width: 250,
+        dataIndex: "action",
+        render: (text, record) => {
+          const { dataSource, handleSave, handleEditRow, handleCancel } =
+            this.props;
+          if (this.props.editableRow === record?.id) {
+            return (
+              <div>
+                <Button
+                  style={{ marginRight: 5, marginBottom: 5 }}
+                  onClick={handleCancel}
+                  type={"primary"}
+                  ghost
+                >
+                  cancel
+                </Button>
+                <Button
+                  style={{ marginBottom: 5 }}
+                  onClick={handleSave}
+                  type={"primary"}
+                  ghost
+                >
+                  Save
+                </Button>
+              </div>
+            );
+          }
+          return dataSource.length >= 1 ? (
             <div>
               <Button
-                style={{ marginBottom: 5 }} 
-                onClick={handleSave}
-                type={'primary'}
+                type={"primary"}
                 ghost
+                style={{ marginRight: 5, marginBottom: 5 }}
               >
-                  Save
-              </Button>
-            </div>)
-        }
-        return (
-          dataSource.length >= 1 ? (
-            <div>
-              <Button 
-                type={'primary'}
-                ghost
-                style={{ marginRight: 5, marginBottom: 5 }
-              }>
-                <Link to={`/Activity/${record.key}/${!isSuperior ? userId : stafid}`}>
+                <Link
+                  to={`/Activity/${record.key}/${
+                    !isSuperior ? userId : stafid
+                  }`}
+                >
                   Activity
                 </Link>
               </Button>
-              <Button 
-                type={'primary'}
+              <Button
+                type={"primary"}
                 ghost
-                style={{ marginRight: 5, marginBottom: 5 }
-              }>
-                <Link to={`/Achievement/${record.key}/${ !isSuperior ? userId : stafid}`}>
+                style={{ marginRight: 5, marginBottom: 5 }}
+              >
+                <Link
+                  to={`/Achievement/${record.key}/${
+                    !isSuperior ? userId : stafid
+                  }`}
+                >
                   Achievement
                 </Link>
               </Button>
-              <Button 
+              <Button
                 icon={"edit"}
-                style={{ marginRight: 5, marginBottom: 5, color: "#FF2222", border: '1px solid #FF2222' }}
+                style={{
+                  marginRight: 5,
+                  marginBottom: 5,
+                  color: "#FF2222",
+                  border: "1px solid #FF2222",
+                }}
                 onClick={() => handleEditRow(record?.id)}
               />
             </div>
-          ) : null
-        );
-      }
+          ) : null;
+        },
+      };
+      await newColumns.push(action);
     }
-    await newColumns.push(action);
-    };
     this.setState({
       columns: newColumns,
     });
-  }
+  };
 
   render() {
     const { columns } = this.state;
@@ -135,7 +154,7 @@ class TableMonitorKPI extends Component {
       handleError,
       loading,
       form,
-      editableRow
+      editableRow,
     } = this.props;
     return (
       <div>
@@ -164,5 +183,5 @@ TableMonitorKPI.propTypes = {
   isFeedback: PropTypes.bool,
   dataMetrics: PropTypes.instanceOf(Array),
   form: PropTypes.instanceOf(Object),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
