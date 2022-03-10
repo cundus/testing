@@ -1,6 +1,6 @@
 import axios from "axios";
 import { INVALID_LOGIN_TOKEN, NOT_AUTHORIZED } from "../redux/status-code-type";
-import apiUrl from "../utils/apiUrl";
+// import apiUrl from "../utils/apiUrl";
 import { authProvider } from "./activeDirectory";
 import { loginByADToken } from "./auth";
 const {
