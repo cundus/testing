@@ -52,6 +52,7 @@ class KPI extends Component {
         align: "center",
         width: 200,
         editable: false,
+        noEditableRow: true,
       },
       {
         title: "Baseline",
