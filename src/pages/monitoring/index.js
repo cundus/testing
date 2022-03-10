@@ -8,6 +8,7 @@ import {
   Spin,
   Form,
   Result,
+  Icon,
 } from "antd";
 import PropTypes from "prop-types";
 import { withRouter } from "react-router";
@@ -26,6 +27,7 @@ import { toast } from "react-toastify";
 import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import kpiSendProcess from "../../utils/kpiSendProcess";
 import { actionSaveKpi } from "../../redux/actions";
+import "./style.css";
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -120,7 +122,6 @@ class MonitorKPI extends Component {
           weight: itemKpi.weight ? parseFloat(itemKpi.weight) : parseFloat("0"),
           achievementType: itemKpi.achievementType,
           metrics: dataKpiMetrics,
-          isInlineEdit: false,
           ...dataMetrics,
           // feedback: itemKpi.othersRatingComments.comment
         };
@@ -128,7 +129,6 @@ class MonitorKPI extends Component {
       });
       this.setState({
         dataSource: newData,
-        dataSourceNonEdit: newData,
         userId: authReducer?.userId,
         challengeYour: challenge === "----------" ? "" : challenge,
       });
@@ -168,95 +168,6 @@ class MonitorKPI extends Component {
       }
     }
   };
-
-  aggreToEdit = (val) => {
-    this.setState({
-      agreeToEdit: val,
-    });
-  };
-
-  _showConfirm = (val, record, refetch) => {
-    Modal.confirm({
-      title: "Are you sure to edit this KPI?",
-      content:
-        "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
-      onOk: async () => {
-        await this._onEditButton(val, record, refetch);
-        refetch();
-      },
-      onCancel: async () => {
-        await this._onEditButton(val, record, refetch);
-      },
-      autoFocusButton: "ok",
-      okText: "Yes",
-      cancelText: "No",
-      okButtonProps: {
-        style: {
-          backgroundColor: "#ff4d4f",
-          borderColor: "#ff4d4f",
-          color: "white",
-          marginLeft: "30px",
-        },
-      },
-      cancelButtonProps: {
-        style: {
-          marginRight: "30px",
-        },
-      },
-      className: "editMonitoringModal",
-    });
-  };
-  _onCancel = async (val, record, refetch) => {
-    await this._onEditButton(val, record, refetch);
-    refetch();
-  };
-
-  _onEditButton = (val, record, refetch) => {
-    if (val) {
-      const { dataSource } = this.state;
-      const { doInlineEdit } = this.props;
-      const newData = [...dataSource];
-      const index = newData.findIndex((item) => record.key === item.key);
-      let item = newData[index];
-      newData.splice(index, 1, {
-        ...item,
-        isInlineEdit: true,
-      });
-      doInlineEdit(record.id, val);
-      // console.log("on edit", newData);
-
-      this.setState({
-        dataSource: newData,
-        rowEdit: true,
-      });
-    } else {
-      const { dataSource } = this.state;
-      const { doInlineEdit } = this.props;
-      const newData = [...dataSource];
-      const index = newData.findIndex((item) => record.key === item.key);
-      let item = newData[index];
-      newData.splice(index, 1, {
-        ...item,
-        isInlineEdit: false,
-      });
-      doInlineEdit(record.id, val);
-      // console.log("on edit", newData);
-      // refetch();
-      this.setState({
-        dataSource: newData,
-        rowEdit: false,
-      });
-    }
-    // refetch();
-  };
-
-  _onSaveButton() {
-    this.setState({
-      inlineEditId: "",
-      isInlineEdit: false,
-    });
-    // alert("Yeay!");
-  }
 
   handleChange = (row) => {
     const { dataSource } = this.state;
@@ -307,6 +218,35 @@ class MonitorKPI extends Component {
     this.liveCount(newData);
   };
 
+  handleConfirm = (id) => {
+    confirm({
+      content:
+        "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+      title: "Are you sure you want to edit this KPI?",
+      icon: <Icon type="exclamation-circle" />,
+      className: "editMonitoringModal",
+      okButtonProps: {
+        style: {
+          backgroundColor: "#FF2222",
+          color: "white",
+          border: "1px solid #FF2222",
+          marginLeft: "45px",
+        },
+      },
+      cancelButtonProps: {
+        style: {
+          marginRight: "45px",
+        },
+      },
+      onOk: async () => {
+        await this.setState({
+          editableRow: id,
+        });
+      },
+      onCancel() {},
+    });
+  };
+
   handleRevise = () => {
     const { doRevisingKPI, kpiReducer } = this.props;
     confirm({
@@ -322,6 +262,12 @@ class MonitorKPI extends Component {
         }
       },
       onCancel() {},
+    });
+  };
+
+  handleCancel = async () => {
+    await this.setState({
+      editableRow: null,
     });
   };
 
@@ -370,8 +316,6 @@ class MonitorKPI extends Component {
   };
 
   render() {
-    // console.log("index render", this.state.rowEdit);
-    console.log("on render", this.props.monitoring);
     const {
       dataSource,
       weightTotal,
@@ -382,7 +326,14 @@ class MonitorKPI extends Component {
       isSuperior,
       editableRow,
     } = this.state;
-    const { handleChange, handleDelete, handleError, handleSave } = this;
+    const {
+      handleChange,
+      handleDelete,
+      handleError,
+      handleSave,
+      handleCancel,
+      handleConfirm,
+    } = this;
     const { kpiReducer, form } = this.props;
     const {
       loadingKpi,
@@ -429,7 +380,9 @@ class MonitorKPI extends Component {
                 isSuperior={isSuperior}
                 stafid={stafid}
                 editableRow={editableRow}
-                handleEditRow={(id) => this.setState({ editableRow: id })}
+                // handleEditRow={(id) => this.setState({ editableRow: id })}
+                handleEditRow={handleConfirm.bind(this)}
+                handleCancel={handleCancel}
               />
               <div>
                 <Text strong className="label-challenge">
@@ -508,7 +461,6 @@ const mapDispatchToProps = (dispatch) => ({
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
-  doInlineEdit: (id, val) => dispatch(doInlineEdit(id, val)),
 });
 
 const connectToComponent = connect(
