@@ -19,7 +19,6 @@ const EditableContext = React.createContext();
 
 class EditableCell extends React.Component {
   change = (index, field) => {
-    console.log(field);
     const { record, handlechange, form } = this.props;
     let checkField = field;
     setTimeout(() => {

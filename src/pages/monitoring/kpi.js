@@ -72,7 +72,7 @@ class TableMonitorKPI extends Component {
         noEditableRow: true,
         width: 250,
         dataIndex: "action",
-        render: (text, record) => {
+        render: (text, record, index) => {
           const { dataSource, handleSave, handleEditRow, handleCancel } =
             this.props;
           if (this.props.editableRow === record?.id) {
@@ -84,13 +84,12 @@ class TableMonitorKPI extends Component {
                   type={"primary"}
                   ghost
                 >
-                  cancel
+                  Cancel
                 </Button>
                 <Button
                   style={{ marginBottom: 5 }}
-                  onClick={handleSave}
+                  onClick={() => handleSave(index)}
                   type={"primary"}
-                  ghost
                 >
                   Save
                 </Button>

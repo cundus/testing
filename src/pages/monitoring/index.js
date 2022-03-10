@@ -271,7 +271,7 @@ class MonitorKPI extends Component {
     });
   };
 
-  handleSave = async () => {
+  handleSave = async (index) => {
     const { doSavingKpi, authReducer, form, ownkpiReducer } = this.props;
     const { dataSource, weightTotalErr } = this.state;
     const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
@@ -287,7 +287,11 @@ class MonitorKPI extends Component {
       form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           confirm({
-            title: "Are you sure?",
+            content:
+              "By saving this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+            title: "Are you sure you want to save this changes KPI?",
+            icon: <Icon type="exclamation-circle" />,
+            className: "editAppraisalModal",
             onOk: async () => {
               try {
                 await doSavingKpi(data, authReducer.userId);

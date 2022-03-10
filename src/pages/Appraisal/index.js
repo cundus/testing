@@ -641,7 +641,11 @@ class Appraisal extends Component {
 
           if (errs ? Object.keys(errs).length === 0 : true) {
             confirm({
-              title: "Are you sure?",
+              content:
+                "By saving this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+              title: "Are you sure you want to save this changes KPI?",
+              icon: <Icon type="exclamation-circle" />,
+              className: "editAppraisalModal",
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
@@ -652,7 +656,16 @@ class Appraisal extends Component {
                     status === FAILED_SAVE_CHALLENGE_YOURSELF
                   ) {
                     toast.success("Your KPI has been saved");
-                    this.setState({ editableRow: null });
+                    let newData = dataSaving.map((item, idx) => {
+                      if (index === idx) {
+                        return {
+                          ...item,
+                          rating: ""
+                        }
+                      }
+                      return item
+                    })
+                    this.setState({ editableRow: null, dataKpis: newData});
                   } else {
                     toast.warn(`Sorry, ${statusMessage}`);
                   }
