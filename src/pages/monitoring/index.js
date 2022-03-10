@@ -26,8 +26,8 @@ import { toast } from "react-toastify";
 
 import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import kpiSendProcess from "../../utils/kpiSendProcess";
-import { actionSaveKpi } from "../../redux/actions";
 import "./style.css";
+import { actionSaveKpiPartial } from "../../redux/actions/kpi/saveKpi";
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -278,7 +278,7 @@ class MonitorKPI extends Component {
     let dataSaving = [...dataSource];
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
-      kpiList: newDataKpi,
+      kpiList: [...newDataKpi[index]],
       challengeYourSelf: sendChallengeYourselfChecker(challenge),
     };
     if (weightTotalErr) {
@@ -461,7 +461,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  doSavingKpi: (data, id) => dispatch(actionSaveKpiPartial(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),
