@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Layout, Result, Button, Spin } from "antd";
+import { Layout, Result, Button, Spin, Typography } from "antd";
 import PropTypes from "prop-types";
 import IdleTimer from "react-idle-timer";
 import { GetInfoUser, GetUserKpiState } from "../../redux/actions/user";
@@ -28,6 +28,7 @@ class Dashboard extends React.Component {
     this.state = {
       collapsed: true,
       loading: true,
+      pleaseWait: false,
     };
     this.idleTimer = null;
   }
@@ -79,6 +80,11 @@ class Dashboard extends React.Component {
 
   getDetailUser = async (token) => {
     const { doLoginByADToken, doGetCurrStep } = this.props;
+    setTimeout(() => {
+      this.setState({
+        pleaseWait: true
+      })
+    }, 8000)
     await doLoginByADToken(token);
     const { authReducer } = this.props;
     if (authReducer?.statusLoginCode === SUCCESS) {
@@ -143,6 +149,11 @@ class Dashboard extends React.Component {
             alt="logo"
             style={{ ...styles.logo, marginBottom: 20 }}
           />
+          {this.state.pleaseWait && <Typography
+            style={{ marginBottom: 10 }}
+          >
+            Please wait a minute, while we are getting a response from a server
+          </Typography>}
           <Spin />
         </Layout>
       );
