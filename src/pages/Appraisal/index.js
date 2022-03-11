@@ -33,7 +33,7 @@ import {
   doEmpAcknowledgeList,
   doAssessmentAll,
 } from "../../redux/actions/kpi";
-import { actionGetNotifications, actionSaveKpi } from "../../redux/actions";
+import { actionGetNotifications } from "../../redux/actions";
 import {
   Success,
   FAILED_SAVE_CHALLENGE_YOURSELF,
@@ -45,6 +45,7 @@ import { toast } from "react-toastify";
 import kpiSendProcess from "../../utils/kpiSendProcess";
 import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import "./style.css";
+import { actionSaveKpiPartial } from "../../redux/actions/kpi/saveKpi";
 
 const { Text, Title } = Typography;
 const { TabPane } = Tabs;
@@ -627,7 +628,7 @@ class Appraisal extends Component {
       let dataSaving = [...dataKpis];
       const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
       const data = {
-        kpiList: newDataKpi,
+        kpiList: [newDataKpi[index]],
         challengeYourSelf: sendChallengeYourselfChecker(challenge),
       };
       if (weightTotalErr) {
@@ -641,7 +642,11 @@ class Appraisal extends Component {
 
           if (errs ? Object.keys(errs).length === 0 : true) {
             confirm({
-              title: "Are you sure?",
+              content:
+                "By saving this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+              title: "Are you sure you want to save this changes KPI?",
+              icon: <Icon type="exclamation-circle" />,
+              className: "editAppraisalModal",
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
@@ -652,7 +657,16 @@ class Appraisal extends Component {
                     status === FAILED_SAVE_CHALLENGE_YOURSELF
                   ) {
                     toast.success("Your KPI has been saved");
-                    this.setState({ editableRow: null });
+                    let newData = dataSaving.map((item, idx) => {
+                      if (index === idx) {
+                        return {
+                          ...item,
+                          rating: ""
+                        }
+                      }
+                      return item
+                    })
+                    this.setState({ editableRow: null, dataKpis: newData});
                   } else {
                     toast.warn(`Sorry, ${statusMessage}`);
                   }
@@ -1064,7 +1078,7 @@ const mapDispatchToProps = (dispatch) => ({
   submitNext: (id) => dispatch(doSubmitNext(id)),
   empAcknowledge: (data) => dispatch(doEmpAcknowledge(data)),
   empAcknowledgeList: () => dispatch(doEmpAcknowledgeList()),
-  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  doSavingKpi: (data, id) => dispatch(actionSaveKpiPartial(data, id)),
 });
 
 const connectToComponent = connect(

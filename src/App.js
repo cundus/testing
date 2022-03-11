@@ -5,6 +5,7 @@ import { AzureAD, AuthenticationState } from 'react-aad-msal';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createBrowserHistory } from 'history';
 import { Provider } from 'react-redux';
+import { CookiesProvider } from "react-cookie";
 
 import { authProvider } from './service/activeDirectory';
 import routes from './routes/Route';
@@ -31,18 +32,20 @@ const App = (props) => {
         if (authenticationState === AuthenticationState.Authenticated) {
           return (
             <Provider store={store}>
-              <BrowserRouter>
-                <Switch>
-                  <MappedRouter
-                    history={browserHistory}
-                    routes={routes}
-                    auth={authProvider}
-                    authenticationState={authenticationState}
-                    login={login}
-                    logout={logout}
-                  />
-                </Switch>
-              </BrowserRouter>
+              <CookiesProvider>
+                <BrowserRouter>
+                  <Switch>
+                    <MappedRouter
+                      history={browserHistory}
+                      routes={routes}
+                      auth={authProvider}
+                      authenticationState={authenticationState}
+                      login={login}
+                      logout={logout}
+                    />
+                  </Switch>
+                </BrowserRouter>
+              </CookiesProvider>
             </Provider>
           );
         } else if (

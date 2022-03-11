@@ -170,7 +170,6 @@ class KPI extends Component {
                 style={{ marginBottom: 5 }}
                 onClick={() => handleSaveRow(index)}
                 type={"primary"}
-                ghost
               >
                 Save
               </Button>

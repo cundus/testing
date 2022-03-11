@@ -26,8 +26,8 @@ import { toast } from "react-toastify";
 
 import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import kpiSendProcess from "../../utils/kpiSendProcess";
-import { actionSaveKpi } from "../../redux/actions";
 import "./style.css";
+import { actionSaveKpiPartial } from "../../redux/actions/kpi/saveKpi";
 
 const { confirm } = Modal;
 const { Text, Title } = Typography;
@@ -271,14 +271,14 @@ class MonitorKPI extends Component {
     });
   };
 
-  handleSave = async () => {
+  handleSave = async (index) => {
     const { doSavingKpi, authReducer, form, ownkpiReducer } = this.props;
     const { dataSource, weightTotalErr } = this.state;
     const { challenge, dataKpi, dataKpiMetrics } = ownkpiReducer;
     let dataSaving = [...dataSource];
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
-      kpiList: newDataKpi,
+      kpiList: [newDataKpi[index]],
       challengeYourSelf: sendChallengeYourselfChecker(challenge),
     };
     if (weightTotalErr) {
@@ -287,7 +287,11 @@ class MonitorKPI extends Component {
       form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           confirm({
-            title: "Are you sure?",
+            content:
+              "By saving this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
+            title: "Are you sure you want to save this changes KPI?",
+            icon: <Icon type="exclamation-circle" />,
+            className: "editAppraisalModal",
             onOk: async () => {
               try {
                 await doSavingKpi(data, authReducer.userId);
@@ -457,7 +461,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  doSavingKpi: (data, id) => dispatch(actionSaveKpiPartial(data, id)),
   getKpiList: (id) => dispatch(doGetKpiList(id)),
   getLatestGoalKpi: () => dispatch(doGetLatestGoalKpi()),
   doRevisingKPI: (id) => dispatch(doReviseKPI(id)),

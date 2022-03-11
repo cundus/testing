@@ -34,6 +34,14 @@ export const saveKpi = (data, id) => customAxios({
   data
 });
 
+export const saveKpiPartial = (data, id) => customAxios({
+  url: `/kpi/byid/${id}/upsert`,
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem('sfToken')}`
+  },
+  data
+});
 export const getMetrics = () => customAxios({
   url: '/kpi/metrics',
   method: 'GET',
