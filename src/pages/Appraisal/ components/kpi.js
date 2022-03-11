@@ -44,6 +44,18 @@ class KPI extends Component {
     // the async await on this function would leaking memory (showing warn)
     // but i have to async await for making it table
     const { dataMetrics, isFeedback, myStep } = this.props;
+    const styleActive = {
+      marginRight: 5,
+      marginBottom: 5,
+      color: "#FF2222",
+      border: "1px solid #FF2222",
+    };
+    const styleDisabled = {
+      marginRight: 5,
+      marginBottom: 5,
+      color: "#d9d9d9",
+      border: "1px solid #d9d9d9",
+    };
     const newColumns = [
       {
         title: "KPI Subject",
@@ -178,13 +190,10 @@ class KPI extends Component {
               Assess
             </Button>
             <Button
+              ghost
+              disabled={myStep}
               icon={"edit"}
-              style={{
-                marginRight: 5,
-                marginBottom: 5,
-                color: "#FF2222",
-                border: "1px solid #FF2222",
-              }}
+              style={myStep ? styleDisabled : styleActive}
               onClick={() => handleEditRow(record?.id)}
             />
             <ModalAssessment
