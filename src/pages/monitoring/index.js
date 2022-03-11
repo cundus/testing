@@ -278,7 +278,7 @@ class MonitorKPI extends Component {
     let dataSaving = [...dataSource];
     const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
     const data = {
-      kpiList: [...newDataKpi[index]],
+      kpiList: [newDataKpi[index]],
       challengeYourSelf: sendChallengeYourselfChecker(challenge),
     };
     if (weightTotalErr) {

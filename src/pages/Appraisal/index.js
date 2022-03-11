@@ -628,7 +628,7 @@ class Appraisal extends Component {
       let dataSaving = [...dataKpis];
       const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
       const data = {
-        kpiList: [...newDataKpi[index]],
+        kpiList: [newDataKpi[index]],
         challengeYourSelf: sendChallengeYourselfChecker(challenge),
       };
       if (weightTotalErr) {
