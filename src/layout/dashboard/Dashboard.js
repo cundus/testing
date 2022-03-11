@@ -1,27 +1,23 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import {
-  Layout,
-  Result,
-  Button,
-  Spin
-} from 'antd';
-import PropTypes from 'prop-types';
-import IdleTimer from 'react-idle-timer';
-import { GetInfoUser, GetUserKpiState } from '../../redux/actions/user';
-import { doGetMetrics } from '../../redux/actions/kpi';
-import { actionGetNotifications } from '../../redux/actions';
-import { Footer, Header, Sidebar } from './components';
-import { MappedRouter } from '../../routes/RouteGenerator';
-import { authProvider } from '../../service/activeDirectory';
-import styles from './Dashboard.style';
-import { menuMonitoringAllow, menuAppraisalAllow } from '../../utils/stepKpi';
-import actionLoginByADToken from '../../redux/actions/auth/actionLoginByADToken';
-import Logo from '../../assets/xl.png';
-import { SUCCESS, errorHandlerCode } from '../../redux/status-code-type';
-import actionGetCurrStep from '../../redux/actions/auth/actionGetCurrentStep';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from "react";
+import { connect } from "react-redux";
+import { Layout, Result, Button, Spin } from "antd";
+import PropTypes from "prop-types";
+import IdleTimer from "react-idle-timer";
+import { GetInfoUser, GetUserKpiState } from "../../redux/actions/user";
+import { doGetMetrics } from "../../redux/actions/kpi";
+import { actionGetNotifications } from "../../redux/actions";
+import { Footer, Header, Sidebar } from "./components";
+import { MappedRouter } from "../../routes/RouteGenerator";
+import { authProvider } from "../../service/activeDirectory";
+import styles from "./Dashboard.style";
+import { menuMonitoringAllow, menuAppraisalAllow } from "../../utils/stepKpi";
+import actionLoginByADToken from "../../redux/actions/auth/actionLoginByADToken";
+import Logo from "../../assets/xl.png";
+import { SUCCESS, errorHandlerCode, httpHeaders } from "../../redux/status-code-type";
+import actionGetCurrStep from "../../redux/actions/auth/actionGetCurrentStep";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { withCookies } from "react-cookie";
 
 // import Stores from '../../redux/store/index';
 const { Content } = Layout;
@@ -31,7 +27,7 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       collapsed: true,
-      loading: true
+      loading: true,
     };
     this.idleTimer = null;
   }
@@ -39,7 +35,7 @@ class Dashboard extends React.Component {
   async componentDidMount() {
     await this.callAndStore();
     // listen when browser close
-    window.addEventListener('onbeforeunload', () => {
+    window.addEventListener("onbeforeunload", () => {
       localStorage.clear();
     });
     // listen when route change
@@ -69,13 +65,13 @@ class Dashboard extends React.Component {
 
   getToken = async () => {
     const { auth } = this.props;
-    let token = localStorage.getItem('token');
+    let token = localStorage.getItem("token");
     if (token === null) {
       if (!auth) {
         token = null;
       } else if (auth.accessToken) {
         token = auth.accessToken.accessToken;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
       }
     }
     return token;
@@ -86,11 +82,10 @@ class Dashboard extends React.Component {
     await doLoginByADToken(token);
     const { authReducer } = this.props;
     if (authReducer?.statusLoginCode === SUCCESS) {
-      if (localStorage.getItem('sfToken')) {
-      doGetCurrStep();
+      if (localStorage.getItem("sfToken")) {
+        doGetCurrStep();
       } else {
         await doGetCurrStep();
-
       }
     }
   };
@@ -100,7 +95,7 @@ class Dashboard extends React.Component {
     await this.callToken();
     const myToken = await this.getToken();
     await this.getDetailUser(myToken);
-    if (localStorage.getItem('sfToken')) {
+    if (localStorage.getItem("sfToken")) {
       this.props.getNotifications();
       setInterval(() => this.props.getNotifications(), 180000);
     }
@@ -109,18 +104,18 @@ class Dashboard extends React.Component {
 
   callToken = async () => {
     const token = await authProvider.getAccessToken();
-    localStorage.setItem('token', token.accessToken);
+    localStorage.setItem("token", token.accessToken);
   };
 
   toggle = () => {
     const { collapsed } = this.state;
     this.setState({
-      collapsed: !collapsed
+      collapsed: !collapsed,
     });
   };
 
   onIdle = (e) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     this.getDetailUser(token);
   };
 
@@ -132,15 +127,16 @@ class Dashboard extends React.Component {
     const mainRouter = child;
     if (loading || authReducer?.loadingLogin) {
       return (
-        <Layout style={{
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#fff'
-        }}
-        > 
+        <Layout
+          style={{
+            minHeight: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#fff",
+          }}
+        >
           <ToastContainer />
           <img
             src={Logo}
@@ -152,7 +148,7 @@ class Dashboard extends React.Component {
       );
     } else if (authReducer?.statusLoginCode === SUCCESS) {
       return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <Layout style={{ minHeight: "100vh" }}>
           <ToastContainer />
           <IdleTimer
             ref={(ref) => {
@@ -169,7 +165,7 @@ class Dashboard extends React.Component {
             isMonitoring={isMonitoring}
             isAppraisal={isAppraisal}
           />
-          <Layout style={{ opacity: !collapsed ? '0.3' : '1' }}>
+          <Layout style={{ opacity: !collapsed ? "0.3" : "1" }}>
             <Header
               collapsed={collapsed}
               toggle={this.toggle}
@@ -185,18 +181,60 @@ class Dashboard extends React.Component {
         </Layout>
       );
     } else {
-      const errors = errorHandlerCode(authReducer?.statusLoginCode, authReducer?.statusLoginDesc);
+      const errors = errorHandlerCode(
+        authReducer?.statusLoginCode,
+        authReducer?.statusLoginDesc
+      );
       return (
-        <Layout style={{ minHeight: '100vh' }} id="result-token">
+        <Layout style={{ minHeight: "100vh" }} id="result-token">
           <ToastContainer />
           <Content style={styles.contentContainer}>
             <Result
               // eslint-disable-next-line react/jsx-props-no-spreading
               {...errors}
               extra={
-                <Button type="primary" onClick={logout} style={{ fontWeight: 'bold' }}>
-                  Logout
-                </Button>
+                errors?.status === httpHeaders.ERR_SERVER ? (
+                  <>
+                    <Button
+                      type="primary"
+                      onClick={() => {
+                        localStorage.removeItem("sfToken");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("currStep");
+                        try {
+                          const cookies = this.props.cookies.getAll();
+                          Array.from(
+                            (Object.keys(cookies) || []).map((item) => {
+                              this.props.cookies.remove(item);
+                            })
+                          );
+                        } catch (error) {
+                          console.log(error);
+                        }
+                        window.location.reload();
+                      }}
+                      style={{ fontWeight: "bold" }}
+                    >
+                      Refresh
+                    </Button>
+                    <Button
+                      type="primary"
+                      onClick={logout}
+                      style={{ fontWeight: "bold" }}
+                      ghost
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    type="primary"
+                    onClick={logout}
+                    style={{ fontWeight: "bold" }}
+                  >
+                    Logout
+                  </Button>
+                )
               }
             />
           </Content>
@@ -212,7 +250,7 @@ const mapDispatchtoProps = (dispatch) => ({
   GetMyKpiState: () => dispatch(GetUserKpiState()),
   getNotifications: () => dispatch(actionGetNotifications()),
   doLoginByADToken: (token) => dispatch(actionLoginByADToken(token)),
-  doGetCurrStep: () => dispatch(actionGetCurrStep())
+  doGetCurrStep: () => dispatch(actionGetCurrStep()),
 });
 
 const mapStateToProps = (state) => ({
@@ -220,10 +258,10 @@ const mapStateToProps = (state) => ({
   authReducer: state.authReducer,
   user: state.userReducer,
   kpi: state.kpiReducer,
-  step: state.userKpiStateReducer
+  step: state.userKpiStateReducer,
 });
 
-export default connect(mapStateToProps, mapDispatchtoProps)(Dashboard);
+export default withCookies(connect(mapStateToProps, mapDispatchtoProps)(Dashboard));
 
 Dashboard.propTypes = {
   auth: PropTypes.instanceOf(Object),
@@ -235,5 +273,5 @@ Dashboard.propTypes = {
   logout: PropTypes.func,
   doLoginByADToken: PropTypes.func,
   doGetCurrStep: PropTypes.func,
-  child: PropTypes.instanceOf(Array)
+  child: PropTypes.instanceOf(Array),
 };
