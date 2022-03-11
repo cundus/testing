@@ -33,7 +33,7 @@ import {
   doEmpAcknowledgeList,
   doAssessmentAll,
 } from "../../redux/actions/kpi";
-import { actionGetNotifications, actionSaveKpi } from "../../redux/actions";
+import { actionGetNotifications } from "../../redux/actions";
 import {
   Success,
   FAILED_SAVE_CHALLENGE_YOURSELF,
@@ -45,6 +45,7 @@ import { toast } from "react-toastify";
 import kpiSendProcess from "../../utils/kpiSendProcess";
 import { sendChallengeYourselfChecker } from "../../utils/challengeYourselfChecker";
 import "./style.css";
+import { actionSaveKpiPartial } from "../../redux/actions/kpi/saveKpi";
 
 const { Text, Title } = Typography;
 const { TabPane } = Tabs;
@@ -627,7 +628,7 @@ class Appraisal extends Component {
       let dataSaving = [...dataKpis];
       const newDataKpi = kpiSendProcess(dataSaving, dataKpi, dataKpiMetrics);
       const data = {
-        kpiList: newDataKpi,
+        kpiList: [newDataKpi[index]],
         challengeYourSelf: sendChallengeYourselfChecker(challenge),
       };
       if (weightTotalErr) {
@@ -1075,7 +1076,7 @@ const mapDispatchToProps = (dispatch) => ({
   submitNext: (id) => dispatch(doSubmitNext(id)),
   empAcknowledge: (data) => dispatch(doEmpAcknowledge(data)),
   empAcknowledgeList: () => dispatch(doEmpAcknowledgeList()),
-  doSavingKpi: (data, id) => dispatch(actionSaveKpi(data, id)),
+  doSavingKpi: (data, id) => dispatch(actionSaveKpiPartial(data, id)),
 });
 
 const connectToComponent = connect(
