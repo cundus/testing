@@ -712,6 +712,8 @@ class Appraisal extends Component {
         });
       },
       onCancel() {},
+      okText: "Yes",
+      cancelText: "No",
     });
   };
 

@@ -75,27 +75,28 @@ class TableMonitorKPI extends Component {
         render: (text, record, index) => {
           const { dataSource, handleSave, handleEditRow, handleCancel } =
             this.props;
-          if (this.props.editableRow === record?.id) {
-            return (
-              <div>
-                <Button
-                  style={{ marginRight: 5, marginBottom: 5 }}
-                  onClick={handleCancel}
-                  type={"primary"}
-                  ghost
-                >
-                  Cancel
-                </Button>
-                <Button
-                  style={{ marginBottom: 5 }}
-                  onClick={() => handleSave(index)}
-                  type={"primary"}
-                >
-                  Save
-                </Button>
-              </div>
-            );
-          }
+          // if (this.props.editableRow === record?.id) {
+          //   return (
+          //     <div>
+          //       <Button
+          //         style={{ marginRight: 5, marginBottom: 5 }}
+          //         onClick={handleCancel}
+          //         type={"primary"}
+          //         ghost
+          //       >
+          //         cancel
+          //       </Button>
+          //       <Button
+          //         style={{ marginBottom: 5 }}
+          //         onClick={handleSave}
+          //         type={"primary"}
+          //         ghost
+          //       >
+          //         Save
+          //       </Button>
+          //     </div>
+          //   );
+          // }
           return dataSource.length >= 1 ? (
             <div>
               <Button
@@ -124,7 +125,7 @@ class TableMonitorKPI extends Component {
                   Achievement
                 </Link>
               </Button>
-              <Button
+              {/* <Button
                 icon={"edit"}
                 style={{
                   marginRight: 5,
@@ -133,7 +134,7 @@ class TableMonitorKPI extends Component {
                   border: "1px solid #FF2222",
                 }}
                 onClick={() => handleEditRow(record?.id)}
-              />
+              /> */}
             </div>
           ) : null;
         },
