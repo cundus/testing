@@ -73,7 +73,9 @@ class TableMonitorKPI extends Component {
         width: 250,
         dataIndex: "action",
         render: (text, record, index) => {
-          const { dataSource, handleSave, handleEditRow, handleCancel } =
+          const { dataSource, 
+            // handleSave, handleEditRow, handleCancel 
+          } =
             this.props;
           // if (this.props.editableRow === record?.id) {
           //   return (

@@ -217,6 +217,7 @@ class Dashboard extends React.Component {
                           Array.from(
                             (Object.keys(cookies) || []).map((item) => {
                               this.props.cookies.remove(item);
+                              return item
                             })
                           );
                         } catch (error) {
