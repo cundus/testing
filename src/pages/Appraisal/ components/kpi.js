@@ -157,7 +157,7 @@ class KPI extends Component {
 
         if (this.props.editableRow === record?.id) {
           return (
-            <div>
+            <div style={{display: 'flex'}}>
               <Button
                 style={{ marginRight: 5, marginBottom: 5 }}
                 onClick={() => handleCancel()}
@@ -177,6 +177,7 @@ class KPI extends Component {
           );
         }
         return (
+          <div style={{display: 'flex'}}>
           <div>
             <Button
               disabled={myStep}
@@ -188,13 +189,6 @@ class KPI extends Component {
             >
               Assess
             </Button>
-            <Button
-              ghost
-              disabled={myStep}
-              icon={"edit"}
-              style={myStep ? styleDisabled : styleActive}
-              onClick={() => handleEditRow(record?.id)}
-            />
             <ModalAssessment
               form={form}
               dataSource={dataSource}
@@ -210,6 +204,14 @@ class KPI extends Component {
             />
             <br />
             {error && <Text type="danger">is required</Text>}
+          </div>
+            <Button
+              ghost
+              disabled={myStep}
+              icon={"edit"}
+              style={myStep ? styleDisabled : styleActive}
+              onClick={() => handleEditRow(record)}
+            />
           </div>
         );
       },

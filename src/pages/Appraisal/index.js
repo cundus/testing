@@ -647,6 +647,8 @@ class Appraisal extends Component {
               title: "Are you sure you want to save this changes KPI?",
               icon: <Icon type="exclamation-circle" />,
               className: "editAppraisalModal",
+              okText: "Yes",
+              cancelText: "No",
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
@@ -661,6 +663,7 @@ class Appraisal extends Component {
                       if (index === idx) {
                         return {
                           ...item,
+                          assessment: "",
                           rating: ""
                         }
                       }
@@ -686,7 +689,7 @@ class Appraisal extends Component {
     }
   };
 
-  handleConfirm = (id) => {
+  handleConfirm = (data) => {
     confirm({
       content:
         "By edit this KPI, system will remove selected KPI result data. Are you sure want to continue ?",
@@ -708,7 +711,8 @@ class Appraisal extends Component {
       },
       onOk: async () => {
         await this.setState({
-          editableRow: id,
+          editableRow: data?.id,
+          editableRowData: data
         });
       },
       onCancel() {},
@@ -718,8 +722,12 @@ class Appraisal extends Component {
   };
 
   handleCancel = async () => {
+    if (this.state?.editableRowData?.id) {
+      this.handleChangeRow(this.state?.editableRowData)
+    }
     await this.setState({
       editableRow: null,
+      editableRowData: null
     });
   };
 
