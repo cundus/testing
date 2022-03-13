@@ -22,7 +22,7 @@ const Header = (props) => {
   } = props;
   let mainRouter = MenuList.filter((x) => x.menuLevel === 1);
   const pathlocation = history.location.pathname;
-  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
   const uId = authReducer?.userId;
   const url = uId && `${apiUrl()}/user/photo/${uId}`;
   const name = authReducer?.firstName;

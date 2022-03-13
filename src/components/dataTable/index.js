@@ -421,7 +421,7 @@ const DataTable = (props) => {
     editableRow,
   } = props;
 
-  // const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+  // const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
   const components = {
     body: {
       cell: EditableCell,

@@ -13,7 +13,7 @@ const CardRating = (props) => {
   const {
       boxRateColor, title, rate, desc
     } = props;
-  const isDesktopOrLaptop = useMediaQuery({ minDeviceWidth: 1224 });
+  const isDesktopOrLaptop = useMediaQuery({ minWidth: 1224 });
   return (
     <Card style={{
       width: 'auto',
