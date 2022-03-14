@@ -143,11 +143,8 @@ class Appraisal extends Component {
           });
         });
         const dataKeyMetric = Object.keys(dataMetrics);
-        const newOption = [];
-        dataKeyMetric.map((item) => {
-          const data = dataMetrics[item];
-          newOption.push(data);
-          return data;
+        const newOption = dataKeyMetric.map((item) => {
+          return dataMetrics[item];
         });
         const data = {
           key: itemKpi.id,
@@ -652,24 +649,29 @@ class Appraisal extends Component {
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
-                  const { savekpiReducer } = this.props;
+                  const { savekpiReducer, kpiReducer } = this.props;
                   const { status, statusMessage } = savekpiReducer;
                   if (
                     status === Success ||
                     status === FAILED_SAVE_CHALLENGE_YOURSELF
                   ) {
                     toast.success("Your KPI has been saved");
+                    const rowData = dataKpis[index]
+                    const newOption = Array.from(rowData?.metrics||[]).map((item) => {
+                      return rowData[item?.label];
+                    });
                     let newData = dataSaving.map((item, idx) => {
                       if (index === idx) {
                         return {
                           ...item,
+                          qualitativeOption: newOption,
                           assessment: "",
                           rating: ""
                         }
                       }
                       return item
                     })
-                    this.setState({ editableRow: null, dataKpis: newData});
+                    this.setState({ editableRow: null, dataKpis: newData, editableRowData: null});
                   } else {
                     toast.warn(`Sorry, ${statusMessage}`);
                   }
