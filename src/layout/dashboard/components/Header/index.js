@@ -49,7 +49,7 @@ const Header = (props) => {
             />
           </Link>
         </Col>
-        <Col xs={0} sm={0} md={12} lg={13} style={{marginLeft: -30}}>
+        <Col xs={0} sm={0} md={6} lg={13} style={{marginLeft: -30}}>
           <Menu
             theme="light"
             mode="horizontal"
