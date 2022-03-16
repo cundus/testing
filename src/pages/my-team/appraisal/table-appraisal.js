@@ -94,24 +94,24 @@ class TableAppraisal extends Component {
       },
       {
         title: "Status",
-        dataIndex: "statusNumber",
+        dataIndex: "status",
         placeholder: "Status",
         width: 100,
         align: "center",
         sorter: (a, b) => {
-          return a.statusNumber - b.statusNumber;
+          return a.status.localeCompare(b.status);
         },
         render: (text, record) => {
           let color = "";
-          if (text === 8) {
+          if (record.statusNumber === 8) {
             color = "#4CAF50";
-          } else if (text === 7) {
+          } else if (record.statusNumber === 7) {
             color = "#FFA000";
-          } else if (text === 6) {
+          } else if (record.statusNumber === 6) {
             color = "#8BC34A";
-          } else if (text === 4) {
+          } else if (record.statusNumber === 4) {
             color = "#FFEB3B";
-          } else if (text === 3) {
+          } else if (record.statusNumber === 3) {
             color = "#607D8B";
           } else {
             color = "#ccc";
