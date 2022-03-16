@@ -91,7 +91,7 @@ class Home extends Component {
     return (
       <div style={{ ...globalStyle.contentContainer, textAlign: 'center', minHeight: '80vh' }}>
         <Row style={{ paddingTop: 50, paddingBottom: 50 }}>
-          <Col xl={size} lg={size} md={size} xs={24} className="grid">
+          <Col xl={size} lg={size} md={12} xs={24} className="grid">
             <br />
             <br />
             <img
@@ -112,7 +112,7 @@ class Home extends Component {
               </Button>
             </Link>
           </Col>
-          <Col xl={size} lg={size} md={size} xs={24} className="grid">
+          <Col xl={size} lg={size} md={12} xs={24} className="grid">
             <br />
             <br />
             <img
@@ -134,7 +134,7 @@ class Home extends Component {
               </Button>
             </Link>
           </Col>
-          <Col xl={6} lg={6} md={6} xs={24} className="grid">
+          <Col xl={size} lg={size} md={12} xs={24} className="grid">
             <br />
             <br />
             <img
@@ -159,7 +159,7 @@ class Home extends Component {
           <Col
             xl={size}
             lg={size}
-            md={size}
+            md={12}
             xs={24}
             className="grid"
             style={{ display: isManager ? '' : 'none' }}
