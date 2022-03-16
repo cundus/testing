@@ -64,7 +64,6 @@ class KPI extends Component {
         align: "center",
         width: 200,
         editable: false,
-        noEditableRow: true,
       },
       {
         title: "Baseline",
@@ -157,7 +156,7 @@ class KPI extends Component {
 
         if (this.props.editableRow === record?.id) {
           return (
-            <div style={{display: 'flex'}}>
+            <div style={{ display: "flex" }}>
               <Button
                 style={{ marginRight: 5, marginBottom: 5 }}
                 onClick={() => handleCancel()}
@@ -177,34 +176,34 @@ class KPI extends Component {
           );
         }
         return (
-          <div style={{display: 'flex'}}>
-          <div>
-            <Button
-              disabled={myStep}
-              type={error ? "danger" : "primary"}
-              ghost
-              // eslint-disable-next-line react/jsx-no-bind
-              onClick={() => showHideModal(record.id)}
-              style={{ marginRight: 5, marginBottom: 5 }}
-            >
-              Assess
-            </Button>
-            <ModalAssessment
-              form={form}
-              dataSource={dataSource}
-              isModalShow={isModalShow === record.id}
-              assessment={record.assessment}
-              qualitativeOption={record.qualitativeOption}
-              modalRecord={record}
-              modalIndex={index}
-              showHideModal={showHideModal}
-              handleAssesLoading={handleAssesLoading}
-              getOwnKpiList={getOwnKpiList}
-              handleChangeAssessment={handleChangeField}
-            />
-            <br />
-            {error && <Text type="danger">is required</Text>}
-          </div>
+          <div style={{ display: "flex" }}>
+            <div>
+              <Button
+                disabled={myStep}
+                type={error ? "danger" : "primary"}
+                ghost
+                // eslint-disable-next-line react/jsx-no-bind
+                onClick={() => showHideModal(record.id)}
+                style={{ marginRight: 5, marginBottom: 5 }}
+              >
+                Assess
+              </Button>
+              <ModalAssessment
+                form={form}
+                dataSource={dataSource}
+                isModalShow={isModalShow === record.id}
+                assessment={record.assessment}
+                qualitativeOption={record.qualitativeOption}
+                modalRecord={record}
+                modalIndex={index}
+                showHideModal={showHideModal}
+                handleAssesLoading={handleAssesLoading}
+                getOwnKpiList={getOwnKpiList}
+                handleChangeAssessment={handleChangeField}
+              />
+              <br />
+              {error && <Text type="danger">is required</Text>}
+            </div>
             <Button
               ghost
               disabled={myStep}
