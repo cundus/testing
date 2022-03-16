@@ -11,8 +11,15 @@ export const sorterChecker = (index, sorterInfo) =>
     : null);
 class TableSSR extends Component {
   render() {
-    const { dataSource, loading, pagination, fetchData, columns, sort, rowKey } =
-      this.props;
+    const {
+      dataSource,
+      loading,
+      pagination,
+      fetchData,
+      columns,
+      sort,
+      rowKey,
+    } = this.props;
     const { total, size, page } = pagination;
 
     return (
@@ -30,7 +37,7 @@ class TableSSR extends Component {
           onChange={(p, f, sorters) => {
             fetchData({
               page: page,
-              size: 10,
+              size: sorters.field ? size : 10,
               sort: `${sorters.field},${
                 sorters.order === "descend" ? "desc" : "asc"
               }`,
