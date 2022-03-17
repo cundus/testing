@@ -649,7 +649,7 @@ class Appraisal extends Component {
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
-                  const { savekpiReducer, kpiReducer } = this.props;
+                  const { savekpiReducer } = this.props;
                   const { status, statusMessage } = savekpiReducer;
                   if (
                     status === Success ||
