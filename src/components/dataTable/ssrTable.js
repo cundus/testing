@@ -38,9 +38,10 @@ class TableSSR extends Component {
             fetchData({
               page: page,
               size: sorters.field ? size : 10,
-              sort: `${sorters.field},${
+              sort: sorters?.order ? `${sorters.field},${
                 sorters.order === "descend" ? "desc" : "asc"
-              }`,
+              }` : undefined,
+              resetFilter: sorters?.order ? undefined : true
             });
           }}
         />
@@ -54,7 +55,7 @@ class TableSSR extends Component {
                 fetchData({
                   page: 0,
                   size: value,
-                  resetFilter: true,
+                  sort: sort
                 });
               }}
             >
