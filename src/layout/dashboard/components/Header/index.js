@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import Logo from '../../../../assets/xl.png';
 import Indonesia from '../../../../assets/flags/004-indonesia.svg';
 import MenuList from '../../../../routes/MenuList';
-import { accountMenu, langMenu, notifMenu } from './components/menus';
+import { accountMenu, notifMenu } from './components/menus';
 import styles from './Header.styles';
 import apiUrl from '../../../../utils/apiUrl';
 
