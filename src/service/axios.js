@@ -50,7 +50,9 @@ customAxios.interceptors.response.use(
   async function (response) {
     PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1);
     if (response?.data?.status_code === undefined) { // if server goes down
-      await getToken(response)
+      let resp = {...response}
+      resp.data.status_description = "Internal Server Error"
+      return Promise.resolve(resp);
     }
     if (
       REFRESH_TOKEN <= 2 &&
