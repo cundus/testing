@@ -49,27 +49,17 @@ customAxios.interceptors.request.use(async (config) => {
 customAxios.interceptors.response.use(
   async function (response) {
     PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1);
-    // console.log(response)
+    if (response?.data?.status_code === undefined) { // if server goes down
+      let resp = {...response}
+      resp.data.status_description = "Internal Server Error"
+      return Promise.resolve(resp);
+    }
     if (
       REFRESH_TOKEN <= 2 &&
       (response?.data?.status_code === NOT_AUTHORIZED ||
         response?.data?.status_code === INVALID_LOGIN_TOKEN)
-    ) {
-      const originalRequest = response.config;
-      const token = await authProvider.getAccessToken();
-      try {
-        const res = await loginByADToken(token?.accessToken);
-        if (res?.data?.status_code === 0) {
-          REFRESH_TOKEN++;
-          const result = res?.data?.result;
-          await localStorage.setItem("sfToken", result?.accessToken);
-          customAxios.defaults.headers.common["Authorization"] =
-            result?.accessToken ? `Bearer ${result?.accessToken}` : "";
-          return customAxios(originalRequest);
-        }
-      } catch (error) {
-        Promise.reject(error);
-      }
+    ) { // if server goes down
+      await getToken(response)
     } else {
       REFRESH_TOKEN = 0;
       return Promise.resolve(response);
@@ -80,3 +70,21 @@ customAxios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+const getToken = async (response) => {
+  const originalRequest = response.config;
+  const token = await authProvider.getAccessToken();
+  try {
+    const res = await loginByADToken(token?.accessToken);
+    if (res?.data?.status_code === 0) {
+      REFRESH_TOKEN++;
+      const result = res?.data?.result;
+      await localStorage.setItem("sfToken", result?.accessToken);
+      customAxios.defaults.headers.common["Authorization"] =
+        result?.accessToken ? `Bearer ${result?.accessToken}` : "";
+      return customAxios(originalRequest);
+    }
+  } catch (error) {
+    Promise.reject(error);
+  }
+}
