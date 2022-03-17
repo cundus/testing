@@ -31,9 +31,6 @@
   width: 22px;
   border-radius: 4px;
 }
-.avatar {
-  margin-left: 10px;
-}
 .ant-table {
   td {
     // white-space: nowrap;
@@ -172,4 +169,19 @@ th.td-top.ant-table-align-center.ant-table-row-cell-break-word {
   .ant-result-subtitle {
     font-size: 18px;
   }
+}
+
+.accountWrapper {
+  border-radius: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: -10px;
+}
+
+.accountWrapper:hover {
+  background-color: #e6f7ff;
+}
+
+.nohover:hover {
+  background-color: #fff;
 }

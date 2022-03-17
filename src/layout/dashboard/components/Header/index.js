@@ -26,6 +26,7 @@ const Header = (props) => {
   const uId = authReducer?.userId;
   const url = uId && `${apiUrl()}/user/photo/${uId}`;
   const name = authReducer?.firstName;
+  const fullName = String(authReducer?.firstName || "") + " " + String(authReducer?.lastName || "");
   const isManager = authReducer?.manager;
   if (!isManager) {
     mainRouter = mainRouter.filter((d) => d.title !== 'My Team');
@@ -121,10 +122,10 @@ const Header = (props) => {
                   </Badge>
                 </div>
             </Dropdown>
-            <Dropdown overlay={langMenu} placement="bottomCenter">
-              <img src={Indonesia} alt="flag" className="flagIcon" />
-            </Dropdown>
-            <Dropdown trigger={['hover', 'click']} overlay={accountMenu(logout)} placement="bottomLeft">
+            <img src={Indonesia} alt="flag" className="flagIcon" />
+            <Dropdown trigger={['click', 'hover']} overlay={accountMenu(logout, {
+              fullName, avatar: url, authReducer
+            })} placement="bottomRight">
                 <div className="accountWrapper"  style={{cursor: 'pointer'}}>
                   {isDesktopOrLaptop && <Text>{name && `Hi, ${name}`}</Text>}
                   <Avatar
@@ -132,7 +133,7 @@ const Header = (props) => {
                     size={isDesktopOrLaptop ? 'large' : 'default'}
                     src={url}
                     icon="user"
-                    className="avatar"
+                    style={{marginLeft: isDesktopOrLaptop ? 10 : 0 }}
                   />
                 </div>
             </Dropdown>
