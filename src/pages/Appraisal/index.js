@@ -471,8 +471,7 @@ class Appraisal extends Component {
           confirm({
             title: "Are you sure?",
             onOk: async () => {
-              await doAssessAll(dataAssessment);
-              await doSaveValues(authReducer?.userId, dataValues);
+              await Promise.all([doAssessAll(dataAssessment), doSaveValues(authReducer?.userId, dataValues)])
               this.setState({
                 loadingKpis: true,
               });
@@ -649,7 +648,7 @@ class Appraisal extends Component {
               onOk: async () => {
                 try {
                   await doSavingKpi(data, authReducer.userId);
-                  const { savekpiReducer, kpiReducer } = this.props;
+                  const { savekpiReducer } = this.props;
                   const { status, statusMessage } = savekpiReducer;
                   if (
                     status === Success ||
