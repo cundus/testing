@@ -57,7 +57,6 @@ export const actionGetKPI = (id) => async (dispatch) => {
       });
     }
   } catch (error) {
-    console.log(error)
     if (error?.response?.data) {
       dispatch({
         type: GET_KPI_LIST_FAILED,

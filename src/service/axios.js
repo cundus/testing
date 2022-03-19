@@ -82,7 +82,8 @@ const getToken = async (response) => {
       await localStorage.setItem("sfToken", result?.accessToken);
       customAxios.defaults.headers.common["Authorization"] =
         result?.accessToken ? `Bearer ${result?.accessToken}` : "";
-      return customAxios(originalRequest);
+      const newPayload = await customAxios(originalRequest);
+      return Promise.resolve(newPayload);
     }
   } catch (error) {
     Promise.reject(error);
