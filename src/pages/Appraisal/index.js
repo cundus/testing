@@ -471,8 +471,7 @@ class Appraisal extends Component {
           confirm({
             title: "Are you sure?",
             onOk: async () => {
-              await doAssessAll(dataAssessment);
-              await doSaveValues(authReducer?.userId, dataValues);
+              await Promise.all([doAssessAll(dataAssessment), doSaveValues(authReducer?.userId, dataValues)])
               this.setState({
                 loadingKpis: true,
               });
