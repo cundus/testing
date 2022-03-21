@@ -24,15 +24,15 @@ class LandingUserBehalf extends Component {
     this.state = {
       options: {
         directorates: [],
-        departments: []
-      }
+        departments: [],
+      },
     };
     this.idleTimer = null;
   }
 
   componentDidMount() {
     this.fetchData({ ...initGetDataParams, resetFilter: true });
-    this.fetchOptions()
+    this.fetchOptions();
   }
 
   fetchData = (p) => {
@@ -49,18 +49,18 @@ class LandingUserBehalf extends Component {
 
   fetchOptions = async () => {
     try {
-      const dataDirectorates = await getDirectorates()
-      const dataDepartements = await getDepartements()
+      const dataDirectorates = await getDirectorates();
+      const dataDepartements = await getDepartements();
       this.setState({
         options: {
           directorates: dataDirectorates?.data?.result || [],
-          departments: dataDepartements?.data?.result || []
-        }
-      })
+          departments: dataDepartements?.data?.result || [],
+        },
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   render() {
     const { onBehalf } = this.props;
@@ -76,9 +76,19 @@ class LandingUserBehalf extends Component {
       { name: "Email", value: "email", type: "FREE_TEXT" },
       { name: "Manager ID", value: "managerId", type: "FREE_TEXT" },
 
-      {name: "Directorate", value: "directorate", type: "DROPDOWN", data: options?.directorates || []},
-      {name: "Department", value: "department", type: "DROPDOWN", data:  options?.departments || []},
-    ]
+      {
+        name: "Directorate",
+        value: "directorate",
+        type: "DROPDOWN_WITH_SEARCH",
+        data: options?.directorates || [],
+      },
+      {
+        name: "Department",
+        value: "department",
+        type: "DROPDOWN_WITH_SEARCH",
+        data: options?.departments || [],
+      },
+    ];
     return (
       <>
         <div
@@ -97,11 +107,11 @@ class LandingUserBehalf extends Component {
             <Steps current={0}>
               <Steps.Step
                 title="Select User"
-                icon={<img src="/assets/icon/user-group.svg" alt="user"  />}
+                icon={<img src="/assets/icon/user-group.svg" alt="user" />}
               />
               <Steps.Step
                 title="Select KPI Form"
-                icon={<img src="/assets/icon/select.svg" alt="select"  />}
+                icon={<img src="/assets/icon/select.svg" alt="select" />}
               />
             </Steps>
           </div>

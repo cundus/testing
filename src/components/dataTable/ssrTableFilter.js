@@ -1,5 +1,6 @@
-import { DatePicker, Icon, Input, Select } from "antd";
+import { DatePicker, Icon, Input, Select, AutoComplete } from "antd";
 import React, { Component } from "react";
+const { Option } = Select;
 
 class FilterTableSSR extends Component {
   render() {
@@ -59,9 +60,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           onSearch={(val) => onFilter(val)}
           allowClear
           enterButton
-          prefix={
-            <Icon type="search" style={{ color: 'rgba(0,0,0,.45)' }} />
-          }
+          prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.45)" }} />}
         />
       );
 
@@ -90,6 +89,7 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           })}
         </Select>
       );
+
     case "DATEPICKER":
       return (
         <DatePicker
@@ -115,6 +115,37 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
           }
         />
       );
+
+    case "DROPDOWN_WITH_SEARCH":
+      return (
+        <Select
+          onChange={(val) => onFilter(val)}
+          placeholder={`Search By ${name}`}
+          style={{
+            width: "100%",
+          }}
+          allowClear
+          // optionFilterProp="children"
+          showSearch
+          filterOption={(input, option) =>
+            option.props.value
+              .toLowerCase()
+              .indexOf(input.toLocaleLowerCase()) >= 0
+          }
+        >
+          <Option disabled value={"none"}>
+            Search By {name}
+          </Option>
+          {Array.from(data || []).map((item) => {
+            return (
+              <Option key={item?.name || item} value={item?.value || item}>
+                {item?.name || item}
+              </Option>
+            );
+          })}
+        </Select>
+      );
+
     default:
       return <Input.Search disabled />;
   }
