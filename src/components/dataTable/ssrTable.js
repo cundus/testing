@@ -21,7 +21,6 @@ class TableSSR extends Component {
       rowKey,
     } = this.props;
     const { total, size, page } = pagination;
-
     return (
       <div id="table-ssr">
         <Table
@@ -44,6 +43,10 @@ class TableSSR extends Component {
                   }`
                 : undefined,
               resetFilter: sorters?.order ? undefined : true,
+              filters:
+                this.props.searchableFilter !== undefined
+                  ? this.props.searchableFilter
+                  : {},
             });
           }}
         />

@@ -26,6 +26,7 @@ class LandingUserBehalf extends Component {
         directorates: [],
         departments: [],
       },
+      searchableFilter: {},
     };
     this.idleTimer = null;
   }
@@ -37,7 +38,11 @@ class LandingUserBehalf extends Component {
 
   fetchData = (p) => {
     const { onBehalf } = this.props;
-    if (p?.resetFilter) {
+    if (
+      p?.resetFilter &&
+      p?.filters?.directorate === undefined &&
+      p?.filters?.department === undefined
+    ) {
       this.props.getUsersBehalf({ ...p, filters: {} });
     } else {
       this.props.getUsersBehalf({
@@ -123,9 +128,22 @@ class LandingUserBehalf extends Component {
           }}
         >
           <FilterTableSSR
-            onFilter={(p) =>
-              this.fetchData({ ...initGetDataParams, filters: p })
-            }
+            onFilter={(p) => {
+              if (
+                p?.filters?.directorate !== "" ||
+                p?.filters?.directorate === undefined ||
+                p?.filters?.department === undefined
+              ) {
+                this.setState({
+                  searchableFilter: p,
+                });
+              } else {
+                this.setState({
+                  searchableFilter: p,
+                });
+              }
+              this.fetchData({ ...initGetDataParams, filters: p });
+            }}
             value={this.state?.filterField}
             onChange={(filterField) => {
               this.setState({
@@ -147,6 +165,7 @@ class LandingUserBehalf extends Component {
             onChoose={this.props.chooseUserOnBehalf}
             fetchData={this.fetchData}
             sort={sort}
+            searchableFilter={this.state.searchableFilter}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,

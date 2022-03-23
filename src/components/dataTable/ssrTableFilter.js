@@ -125,7 +125,6 @@ const FilterInput = ({ onFilter, type, name, data, onFilterFull, value }) => {
             width: "100%",
           }}
           allowClear
-          // optionFilterProp="children"
           showSearch
           filterOption={(input, option) =>
             option.props.value
