@@ -27,7 +27,7 @@ pipeline {
                     if (env.BRANCH_NAME == 'phase3-development') {
                         echo 'Deploying on Branch : ' + env.BRANCH_NAME
                         echo 'Build Docker Image'
-                        sh 'docker build --build-arg HTTP_PROXY=http://172.30.221.21:80 . -t 10.23.51.253/pmgm-fe-stg:latest -f Dockerfile'
+                        sh 'docker build --build-arg HTTP_PROXY=http://172.30.221.21:80 . -t 10.23.51.253/pmgm-fe-stg:latest --add-host=sonarqube.intra.excelcom.co.id:10.23.51.10 -f Dockerfile'
                         echo 'Push Docker Image'
                         sh 'docker push 10.23.51.253/pmgm-fe-stg:latest'
                     } else 
