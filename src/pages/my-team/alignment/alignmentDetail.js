@@ -222,12 +222,15 @@ class AlignmentList extends Component {
       if (errors) {
         // console.log(errors?.dataGeneral || [])
         Array.from(errors?.dataGeneral || []).map((item, index) => {
-          if (item){
-            toast.warning("Outstanding Ranking is required for line : " + parseInt(index + 1));
+          if (item) {
+            toast.warning(
+              "Outstanding Ranking is required for line : " +
+                parseInt(index + 1)
+            );
           }
-          return item
-        })
-        console.log(errors)
+          return item;
+        });
+        console.log(errors);
       } else if (callibrations.length > 0) {
         confirm({
           title:
@@ -256,51 +259,59 @@ class AlignmentList extends Component {
     });
   };
 
-  handleChange = (row, update, id, value) => {
+  handleChange = (row, target, afterChange) => {
     const { dataTable } = this.state;
     const newData = [...dataTable];
-    if (update === "ranking") {
-      const indexRanking = newData.findIndex(
-        (item) =>
-          parseInt(row?.ranking || 0) === parseInt(item?.ranking || 0) &&
-          row?.postAlignment === item?.postAlignment
-      );
-      const itemRanking = newData?.[indexRanking];
-      if (itemRanking) {
-        newData.splice(indexRanking, 1, {
-          ...itemRanking,
+    const index = newData.findIndex((itm) => row.formDataId === itm.formDataId);
+    const item = newData[index];
+
+    switch (target) {
+      case "ranking":
+        const indexRanking = newData.findIndex(
+          (itm) =>
+            parseInt(row?.ranking || 0) === parseInt(itm?.ranking || 0) &&
+            row?.postAlignment === itm?.postAlignment
+        );
+        const itemRanking = newData?.[indexRanking];
+        // make empty others sameranking state
+        if (itemRanking) { 
+          newData.splice(indexRanking, 1, {
+            ...itemRanking,
+            ranking: " ",
+          });
+        }
+        // make empty others sameranking rc-form
+        if (indexRanking >= 0) {
+          this.props.form.setFieldsValue({
+            [`dataGeneral[${indexRanking}].ranking`]: "",
+          });
+        }
+        // change data
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        break;
+
+      case "postAlignment":
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
           ranking: " ",
         });
-      }
-      if (indexRanking >= 0) {
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: "",
+          [`dataGeneral[${index}].ranking`]: "",
         });
-      }
+        break;
+      default:
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        break;
     }
-    const index = newData.findIndex(
-      (item) => row.formDataId === item.formDataId
-    );
-    const item = newData[index];
-    if (update === "postAlignment") {
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-        ranking: " ",
-      });
-      this.props.form.setFieldsValue({
-        [`dataGeneral[${index}].ranking`]: "",
-      });
-    } else {
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
-      });
-    }
-    if (id) {
-      this.props.form.setFieldsValue({
-        [`${id}`]: value,
-      });
+    if (afterChange) {
+      afterChange()
     }
     this.setState({ dataTable: newData, hasChange: true });
   };
@@ -426,6 +437,8 @@ class AlignmentList extends Component {
     const isCanEdit =
       alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
       alignmentReducer?.dataDetail?.userRole?.isOwner;
+
+    console.log(this.state.dataTable, this.props.form.getFieldsValue());
     return (
       <div style={globalStyle.contentContainer}>
         <div>
