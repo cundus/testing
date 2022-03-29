@@ -24,20 +24,25 @@ class LandingUserBehalf extends Component {
     this.state = {
       options: {
         directorates: [],
-        departments: []
-      }
+        departments: [],
+      },
+      searchableFilter: {},
     };
     this.idleTimer = null;
   }
 
   componentDidMount() {
     this.fetchData({ ...initGetDataParams, resetFilter: true });
-    this.fetchOptions()
+    this.fetchOptions();
   }
 
   fetchData = (p) => {
     const { onBehalf } = this.props;
-    if (p?.resetFilter) {
+    if (
+      p?.resetFilter &&
+      p?.filters?.directorate === undefined &&
+      p?.filters?.department === undefined
+    ) {
       this.props.getUsersBehalf({ ...p, filters: {} });
     } else {
       this.props.getUsersBehalf({
@@ -49,18 +54,18 @@ class LandingUserBehalf extends Component {
 
   fetchOptions = async () => {
     try {
-      const dataDirectorates = await getDirectorates()
-      const dataDepartements = await getDepartements()
+      const dataDirectorates = await getDirectorates();
+      const dataDepartements = await getDepartements();
       this.setState({
         options: {
           directorates: dataDirectorates?.data?.result || [],
-          departments: dataDepartements?.data?.result || []
-        }
-      })
+          departments: dataDepartements?.data?.result || [],
+        },
+      });
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   render() {
     const { onBehalf } = this.props;
@@ -76,9 +81,19 @@ class LandingUserBehalf extends Component {
       { name: "Email", value: "email", type: "FREE_TEXT" },
       { name: "Manager ID", value: "managerId", type: "FREE_TEXT" },
 
-      {name: "Directorate", value: "directorate", type: "DROPDOWN", data: options?.directorates || []},
-      {name: "Department", value: "department", type: "DROPDOWN", data:  options?.departments || []},
-    ]
+      {
+        name: "Directorate",
+        value: "directorate",
+        type: "DROPDOWN_WITH_SEARCH",
+        data: options?.directorates || [],
+      },
+      {
+        name: "Department",
+        value: "department",
+        type: "DROPDOWN_WITH_SEARCH",
+        data: options?.departments || [],
+      },
+    ];
     return (
       <>
         <div
@@ -97,11 +112,11 @@ class LandingUserBehalf extends Component {
             <Steps current={0}>
               <Steps.Step
                 title="Select User"
-                icon={<img src="/assets/icon/user-group.svg" alt="user"  />}
+                icon={<img src="/assets/icon/user-group.svg" alt="user" />}
               />
               <Steps.Step
                 title="Select KPI Form"
-                icon={<img src="/assets/icon/select.svg" alt="select"  />}
+                icon={<img src="/assets/icon/select.svg" alt="select" />}
               />
             </Steps>
           </div>
@@ -113,9 +128,22 @@ class LandingUserBehalf extends Component {
           }}
         >
           <FilterTableSSR
-            onFilter={(p) =>
-              this.fetchData({ ...initGetDataParams, filters: p })
-            }
+            onFilter={(p) => {
+              if (
+                p?.filters?.directorate !== "" ||
+                p?.filters?.directorate === undefined ||
+                p?.filters?.department === undefined
+              ) {
+                this.setState({
+                  searchableFilter: p,
+                });
+              } else {
+                this.setState({
+                  searchableFilter: p,
+                });
+              }
+              this.fetchData({ ...initGetDataParams, filters: p });
+            }}
             value={this.state?.filterField}
             onChange={(filterField) => {
               this.setState({
@@ -137,6 +165,7 @@ class LandingUserBehalf extends Component {
             onChoose={this.props.chooseUserOnBehalf}
             fetchData={this.fetchData}
             sort={sort}
+            searchableFilter={this.state.searchableFilter}
             pagination={{
               size: data?.size || initGetDataParams.size,
               total: data?.totalElements || 0,

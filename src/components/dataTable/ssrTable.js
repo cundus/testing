@@ -21,7 +21,6 @@ class TableSSR extends Component {
       rowKey,
     } = this.props;
     const { total, size, page } = pagination;
-
     return (
       <div id="table-ssr">
         <Table
@@ -38,10 +37,16 @@ class TableSSR extends Component {
             fetchData({
               page: page,
               size: sorters.field ? size : 10,
-              sort: sorters?.order ? `${sorters.field},${
-                sorters.order === "descend" ? "desc" : "asc"
-              }` : undefined,
-              resetFilter: sorters?.order ? undefined : true
+              sort: sorters?.order
+                ? `${sorters.field},${
+                    sorters.order === "descend" ? "desc" : "asc"
+                  }`
+                : undefined,
+              resetFilter: sorters?.order ? undefined : true,
+              filters:
+                this.props.searchableFilter !== undefined
+                  ? this.props.searchableFilter
+                  : {},
             });
           }}
         />
@@ -55,7 +60,7 @@ class TableSSR extends Component {
                 fetchData({
                   page: 0,
                   size: value,
-                  sort: sort
+                  sort: sort,
                 });
               }}
             >
