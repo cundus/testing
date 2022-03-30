@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import { INVALID_LOGIN_TOKEN, NOT_AUTHORIZED } from "../redux/status-code-type";
 // import apiUrl from "../utils/apiUrl";
 import { authProvider } from "./activeDirectory";
@@ -19,7 +20,7 @@ const uuidv1 = require("uuid/v1");
 // custom config to create a new instance
 export const customAxios = axios.create({
   baseURL: REACT_APP_API_URL,
-  timeout: parseInt(REACT_APP_API_TIMEOUT),
+  timeout: REACT_APP_API_TIMEOUT,
 });
 
 customAxios.interceptors.request.use(async (config) => {
@@ -67,6 +68,9 @@ customAxios.interceptors.response.use(
   },
   function (error) {
     PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1);
+    if (String(error).includes("timeout")) {
+      toast.error("Something went wrong with the network, Request Network timeout, try again")
+    }
     return Promise.reject(error);
   }
 );
