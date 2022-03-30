@@ -230,6 +230,7 @@ class AlignmentList extends Component {
     };
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) {
+        window.scrollTo(0, window.pageYOffset - 120)
       } else if (callibrations.length > 0) {
         confirm({
           title:
@@ -437,7 +438,6 @@ class AlignmentList extends Component {
       alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
       alignmentReducer?.dataDetail?.userRole?.isOwner;
 
-    console.log(this.state.dataTable, this.props.form.getFieldsValue());
     return (
       <div style={globalStyle.contentContainer}>
         <div>
