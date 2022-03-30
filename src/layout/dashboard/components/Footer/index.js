@@ -7,7 +7,7 @@ const Footer = () => {
       <Row>
         <Col sm={18} md={20} xs={24}>
           <div>
-            2020 &copy; Human Capital - People Services | PT XL Axiata
+            {new Date().getFullYear()} &copy; Human Capital - People Services | PT XL Axiata
           </div>
         </Col>
       </Row>
