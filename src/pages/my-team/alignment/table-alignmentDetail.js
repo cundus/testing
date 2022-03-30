@@ -213,13 +213,18 @@ class TableAlignmentDetail extends Component {
                   onChange={(value) =>
                     handleChange(
                       { ...record, postAlignment: value },
-                      "postAlignment"
+                      "postAlignment",
+                      this.props.recalculatePostAlignment(record, value)
                     )
                   }
                 >
                   {dataOptionRating.map((item, index) => {
                     return (
-                      <Select.Option key={index} value={parseInt(item.id)} style={{height: 30}}>
+                      <Select.Option
+                        key={index}
+                        value={parseInt(item.id)}
+                        style={{ height: 30 }}
+                      >
                         {item.name}
                       </Select.Option>
                     );
@@ -277,9 +282,10 @@ class TableAlignmentDetail extends Component {
                       onChange={(value) =>
                         handleChange(
                           { ...record, ranking: value },
-                          "ranking",  
+                          "ranking",
                           this.props.form.setFieldsValue({
-                            [`dataGeneral[${record?.number - 1}].ranking`]: value,
+                            [`dataGeneral[${record?.number - 1}].ranking`]:
+                              value,
                           })
                         )
                       }
@@ -311,6 +317,7 @@ class TableAlignmentDetail extends Component {
           columns={columns}
           datasource={dataSource}
           handleChangeTable={handleChangeTable}
+          loading={this.props.loadingRankingSequenceAdjustment}
         />
         {/* </Layout> */}
       </div>
