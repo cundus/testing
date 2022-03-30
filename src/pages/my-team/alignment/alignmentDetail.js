@@ -138,7 +138,7 @@ class AlignmentList extends Component {
       if (isFieldHasFilter("managerName")) {
         return filters.managerName.includes(item.managerName);
       } else if (isFieldHasFilter("directorate")) {
-        return filters.managerName.includes(item.directorate);
+        return filters.directorate.includes(item.directorate);
       } else {
         return true;
       }
