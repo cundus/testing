@@ -130,26 +130,36 @@ class AlignmentList extends Component {
   handleChangeTable = (pagination, filters, sorter, extra) => {
     const { alignmentReducer } = this.props;
     const data = extra?.currentDataSource || [];
-    const dataGraph = Array.from(this.state.dataTable || []).filter((item) =>
-      filters?.managerName && filters.managerName.length !== 0
-        ? filters.managerName.includes(item.managerName)
-        : true
-    );
+
+    const isFieldHasFilter = (target) =>
+      Array.from(filters?.[target] || []).length !== 0;
+
+    const dataGraph = Array.from(this.state.dataTable || []).filter((item) => {
+      if (isFieldHasFilter("managerName")) {
+        return filters.managerName.includes(item.managerName);
+      } else if (isFieldHasFilter("directorate")) {
+        return filters.managerName.includes(item.directorate);
+      } else {
+        return true;
+      }
+    });
+    const totalRating = (val) =>
+      dataGraph.filter((item) => item.postAlignment === val).length;
+
     const totalMaximumOutstanding = Math.round(
       parseFloat(alignmentReducer?.dataDetail?.outstandingPercentage) *
         (dataGraph.length / 100)
     );
     this.setState({
+      // table filter state
       filteredInfo: filters,
       sortedInfo: sorter,
-      totalNeedImprovement: dataGraph.filter((item) => item.postAlignment === 1)
-        .length,
-      totalWellDone: dataGraph.filter((item) => item.postAlignment === 2)
-        .length,
-      totalOutstanding: dataGraph.filter((item) => item.postAlignment === 3)
-        .length,
       totalFiltered: data.length === this.state.totalData ? null : data.length,
 
+      // graph state
+      totalNeedImprovement: totalRating(1),
+      totalWellDone: totalRating(2),
+      totalOutstanding: totalRating(3),
       totalMaximumOutstanding: totalMaximumOutstanding,
     });
   };
@@ -220,17 +230,6 @@ class AlignmentList extends Component {
     };
     this.props.form.validateFieldsAndScroll((errors, values) => {
       if (errors) {
-        // console.log(errors?.dataGeneral || [])
-        Array.from(errors?.dataGeneral || []).map((item, index) => {
-          if (item) {
-            toast.warning(
-              "Outstanding Ranking is required for line : " +
-                parseInt(index + 1)
-            );
-          }
-          return item;
-        });
-        console.log(errors);
       } else if (callibrations.length > 0) {
         confirm({
           title:
@@ -274,7 +273,7 @@ class AlignmentList extends Component {
         );
         const itemRanking = newData?.[indexRanking];
         // make empty others sameranking state
-        if (itemRanking) { 
+        if (itemRanking) {
           newData.splice(indexRanking, 1, {
             ...itemRanking,
             ranking: " ",
@@ -311,7 +310,7 @@ class AlignmentList extends Component {
         break;
     }
     if (afterChange) {
-      afterChange()
+      afterChange();
     }
     this.setState({ dataTable: newData, hasChange: true });
   };
