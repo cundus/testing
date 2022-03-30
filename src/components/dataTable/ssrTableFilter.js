@@ -1,4 +1,4 @@
-import { DatePicker, Icon, Input, Select, AutoComplete } from "antd";
+import { DatePicker, Icon, Input, Select } from "antd";
 import React, { Component } from "react";
 const { Option } = Select;
 
