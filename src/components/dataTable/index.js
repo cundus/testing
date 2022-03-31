@@ -466,6 +466,7 @@ const DataTable = (props) => {
             />
           ),
         }}
+        rowKey={(item, index) => index}
         rowClassName="editable-row"
         bordered
         onChange={handleChangeTable}
