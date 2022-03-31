@@ -213,8 +213,7 @@ class TableAlignmentDetail extends Component {
                   onChange={(value) =>
                     handleChange(
                       { ...record, postAlignment: value },
-                      "postAlignment",
-                      this.props.recalculatePostAlignment(record, value)
+                      "postAlignment"
                     )
                   }
                 >
@@ -282,11 +281,7 @@ class TableAlignmentDetail extends Component {
                       onChange={(value) =>
                         handleChange(
                           { ...record, ranking: value },
-                          "ranking",
-                          this.props.form.setFieldsValue({
-                            [`dataGeneral[${record?.number - 1}].ranking`]:
-                              value,
-                          })
+                          "ranking"
                         )
                       }
                     >

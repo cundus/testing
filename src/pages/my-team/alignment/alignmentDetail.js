@@ -15,7 +15,6 @@ import { Success } from "../../../redux/status-code-type";
 import { toast } from "react-toastify";
 import JSONtoXLSX from "json-as-xlsx";
 import moment from "moment";
-import DataTable from "../../../components/dataTable";
 
 const { confirm } = Modal;
 
@@ -266,595 +265,74 @@ class AlignmentList extends Component {
     });
   };
 
-  recalculatePostAlignment = (row, value) => {
-    this.setState({ loadingRankingSequenceAdjustment: true });
-    const { dataTable, need, well, out } = this.state;
-    let alignmentUpdate = dataTable.filter(
-      (item) => item.formDataId === row.formDataId
-    );
-    let alingmentUpdateIndex = dataTable.findIndex(
-      (e) => e.formDataId === row.formDataId
-    );
-    let cpyData = {
-      ...alignmentUpdate[0],
-      postAlignment: value,
-      postAlignmentNumeric: value,
-      postRanking: 0,
-      ranking: " ",
-    };
-    dataTable.splice(alingmentUpdateIndex, 1, cpyData);
-    let maxRanking, minRanking, temp, dataChange, dataChangeIndex;
-    switch (value) {
-      //change into NEED IMPROVEMENT
-      case 1:
-        //cek dari alignment mana dia sebelumnya dipindah
-        switch (row.postAlignment) {
-          case 1:
-            //urutkan berdasrkan ranking data  yg out
-            need.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = need.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = need.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = need[need.length - 1].ranking;
-            minRanking = need[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 2:
-            //urutkan berdasrkan ranking data  yg out
-            well.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = well.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = well.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = well[well.length - 1].ranking;
-            minRanking = well[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 3:
-            //urutkan berdasrkan ranking data  yg out
-            out.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = out.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = out.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = out[out.length - 1].ranking;
-            minRanking = out[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
 
-          default:
-            break;
-        }
-        break;
-      //change into WELLDONE
-      case 2:
-        //cek dari alignment mana dia sebelumnya dipindah
-        switch (row.postAlignment) {
-          case 1:
-            //urutkan berdasrkan ranking data  yg out
-            need.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = need.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = need.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = need[need.length - 1].ranking;
-            minRanking = need[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 2:
-            //urutkan berdasrkan ranking data  yg out
-            well.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = well.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = well.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = well[well.length - 1].ranking;
-            minRanking = well[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 3:
-            //urutkan berdasrkan ranking data  yg out
-            out.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = out.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = out.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = out[out.length - 1].ranking;
-            minRanking = out[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
+  handleChangeRanking = ({data, index, row, item, oldData}) => {
+    // change target ranking
+    data.splice(index, 1, {
+      ...item,
+      ...row,
+    });
 
-          default:
-            break;
-        }
-        break;
-      //change into OUTSTANDING
-      case 3:
-        //cek dari alignment mana dia sebelumnya dipindah
-        switch (row.postAlignment) {
-          case 1:
-            //urutkan berdasrkan ranking data  yg out
-            need.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = need.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = need.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = need[need.length - 1].ranking;
-            minRanking = need[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= need.length; index++) {
-                if (index === need.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === need[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...need[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 2:
-            //urutkan berdasrkan ranking data  yg out
-            well.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = well.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = well.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = well[well.length - 1].ranking;
-            minRanking = well[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= well.length; index++) {
-                if (index === well.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === well[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...well[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-          case 3:
-            //urutkan berdasrkan ranking data  yg out
-            out.sort((a, b) => a.ranking - b.ranking);
-            //data di index ke berapa mana yang rubah dari out
-            dataChange = out.filter((e) => e.formDataId === row.formDataId);
-            dataChangeIndex = out.findIndex(
-              (e) => e.formDataId === row.formDataId
-            );
-            //cari maks ranking dan minimal ranking ada di index berapa aja dari out
-            maxRanking = out[out.length - 1].ranking;
-            minRanking = out[0].ranking;
-            //cek kalo rankingnya tidak kosong, tidak sama dengan max/min, lebih kecil dari max, lebih besar dari max
-            if (
-              (dataChange[0].ranking !== "" || dataChange[0].ranking !== " ") &&
-              dataChange[0].ranking !== minRanking &&
-              dataChange[0].ranking !== maxRanking &&
-              dataChange[0].ranking > minRanking &&
-              dataChange[0].ranking < maxRanking
-            ) {
-              let index = dataChangeIndex + 1;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            } else {
-              let index = dataChangeIndex;
-              let nextDataIndexOnExisting;
-              //loop dari posisi index+1, ambil formDataId selanjutnya
-              for (index; index <= out.length; index++) {
-                if (index === out.length) {
-                  break;
-                } else {
-                  nextDataIndexOnExisting = dataTable.findIndex(
-                    (e) => e.formDataId === out[index].formDataId
-                  );
-                }
-                dataTable.splice(nextDataIndexOnExisting, 1, {
-                  ...out[index],
-                  ranking: index,
-                });
-              }
-            }
-            this.setState({ loadingRankingSequenceAdjustment: false });
-            break;
-
-          default:
-            break;
-        }
-        break;
-      default:
-        this.setState({ loadingRankingSequenceAdjustment: false });
-        break;
+    // reranking
+    for (let ranking = row.ranking; ranking < data.length; ranking++) {
+      const indexRanking = oldData.findIndex(
+        (itm) => {
+          return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
+      });
+      if (indexRanking >= 0) {
+        data.splice(indexRanking, 1, {
+          ...data[indexRanking],
+          ranking: ranking + 1
+        });
+        this.props.form.setFieldsValue({
+          [`dataGeneral[${indexRanking}].ranking`]: ranking + 1
+        });
+      }
     }
-  };
+  }
+
+  handleChangePostAlignment = ({data, index, row, item, oldData}) => {
+    // change target post alignment data and make his ranking empty
+    data.splice(index, 1, {
+      ...item,
+      ...row,
+      ranking: " ",
+    });
+    this.props.form.setFieldsValue({
+      [`dataGeneral[${index}].ranking`]: "",
+    });
+
+    // reranking
+    for (let ranking = oldData?.[index].ranking; ranking < data.length; ranking++) {
+      const theRank = ranking + 1
+      const indexRanking = oldData.findIndex(
+        (itm) => itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
+      );
+      if (indexRanking >= 0) {
+        data.splice(indexRanking, 1, {
+          ...data[indexRanking],
+          ranking: theRank - 1,
+        });
+        this.props.form.setFieldsValue({
+          [`dataGeneral[${indexRanking}].ranking`]: theRank - 1
+        });
+      }
+    }
+  }
 
   handleChange = (row, target, afterChange) => {
     const { dataTable } = this.state;
+    const oldData = [...dataTable];
     const newData = [...dataTable];
     const index = newData.findIndex((itm) => row.formDataId === itm.formDataId);
     const item = newData[index];
     switch (target) {
       case "ranking":
-        const indexRanking = newData.findIndex(
-          (itm) =>
-            parseInt(row?.ranking || 0) === parseInt(itm?.ranking || 0) &&
-            row?.postAlignment === itm?.postAlignment
-        );
-        const itemRanking = newData?.[indexRanking];
-        // make empty others sameranking state
-        if (itemRanking) {
-          newData.splice(indexRanking, 1, {
-            ...itemRanking,
-            ranking: " ",
-          });
-        }
-        // make empty others sameranking rc-form
-        if (indexRanking >= 0) {
-          this.props.form.setFieldsValue({
-            [`dataGeneral[${indexRanking}].ranking`]: "",
-          });
-        }
-        // change data
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
+        this.handleChangeRanking({data: newData, index, row, item, oldData})
         break;
 
       case "postAlignment":
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-          ranking: " ",
-        });
-        this.props.form.setFieldsValue({
-          [`dataGeneral[${index}].ranking`]: "",
-        });
+        this.handleChangePostAlignment({data: newData, index, row, item, oldData})
         break;
       default:
         newData.splice(index, 1, {
@@ -1067,7 +545,6 @@ class AlignmentList extends Component {
                 isCanEdit={isCanEdit}
                 handleChange={this.handleChange}
                 handleChangeTable={this.handleChangeTable}
-                recalculatePostAlignment={this.recalculatePostAlignment}
                 sortedInfo={sortedInfo}
                 dataProposeRating={dataProposeRating}
                 filteredInfo={filteredInfo}
