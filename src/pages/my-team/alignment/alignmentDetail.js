@@ -275,20 +275,17 @@ class AlignmentList extends Component {
 
     // reranking
     if (oldData?.[index].ranking === 1) {
-      for (let ranking = oldData?.[index].ranking; ranking < row?.ranking; ranking++) {
-        const theRank = ranking + 1
-        const indexRanking = oldData.findIndex(
-          (itm) => itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
-        );
-        if (indexRanking >= 0) {
-          data.splice(indexRanking, 1, {
-            ...data[indexRanking],
-            ranking: theRank - 1,
-          });
-          this.props.form.setFieldsValue({
-            [`dataGeneral[${indexRanking}].ranking`]: theRank - 1
-          });
-        }
+      const indexRanking = oldData.findIndex(
+        (itm) => itm.ranking === 2 && itm.postAlignment === oldData[index]?.postAlignment
+      );
+      if (indexRanking >= 0) {
+        data.splice(indexRanking, 1, {
+          ...data[indexRanking],
+          ranking: 1,
+        });
+        this.props.form.setFieldsValue({
+          [`dataGeneral[${indexRanking}].ranking`]: 1
+        });
       }
     } else {
       for (let ranking = row.ranking; ranking < data.length; ranking++) {
