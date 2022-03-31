@@ -272,24 +272,35 @@ class AlignmentList extends Component {
       ...item,
       ...row,
     });
+    this.props.form.setFieldsValue({
+      [`dataGeneral[${row?.number - 1}].ranking`]: "",
+    });
 
     // reranking
     if (oldData?.[index].ranking === 1) {
       const indexRanking = oldData.findIndex(
         (itm) => itm.ranking === 2 && itm.postAlignment === oldData[index]?.postAlignment
       );
+      const dataTarget = oldData.find(
+        (itm) => {
+          return itm.ranking === 2 && itm.postAlignment === oldData[index]?.postAlignment
+      });
       if (indexRanking >= 0) {
         data.splice(indexRanking, 1, {
           ...data[indexRanking],
           ranking: 1,
         });
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: 1
+          [`dataGeneral[${dataTarget?.number - 1}].ranking`]: 1
         });
       }
     } else {
-      for (let ranking = row.ranking; ranking < data.length; ranking++) {
+      for (let ranking = row.ranking; ranking < oldData[index]?.ranking; ranking++) {
         const indexRanking = oldData.findIndex(
+          (itm) => {
+            return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
+        });
+        const dataTarget = oldData.find(
           (itm) => {
             return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
         });
@@ -299,7 +310,7 @@ class AlignmentList extends Component {
             ranking: ranking + 1
           });
           this.props.form.setFieldsValue({
-            [`dataGeneral[${indexRanking}].ranking`]: ranking + 1
+            [`dataGeneral[${dataTarget?.number - 1}].ranking`]: ranking + 1
           });
         }
       }
@@ -314,7 +325,7 @@ class AlignmentList extends Component {
       ranking: " ",
     });
     this.props.form.setFieldsValue({
-      [`dataGeneral[${index}].ranking`]: "",
+      [`dataGeneral[${row?.number - 1}].ranking`]: "",
     });
 
     // reranking
@@ -323,13 +334,17 @@ class AlignmentList extends Component {
       const indexRanking = oldData.findIndex(
         (itm) => itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
       );
+      const dataTarget = oldData.find(
+        (itm) => {
+          return itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
+      });
       if (indexRanking >= 0) {
         data.splice(indexRanking, 1, {
           ...data[indexRanking],
           ranking: theRank - 1,
         });
         this.props.form.setFieldsValue({
-          [`dataGeneral[${indexRanking}].ranking`]: theRank - 1
+          [`dataGeneral[${dataTarget?.number - 1}].ranking`]: theRank - 1
         });
       }
     }
@@ -462,6 +477,13 @@ class AlignmentList extends Component {
       totalOutstanding,
       totalMaximumOutstanding,
     } = this.state;
+    // to debug ranking sync
+    // console.log(
+    //   Array.from(form.getFieldsValue()?.dataGeneral || []).map(
+    //     (item) => item.ranking
+    //   ),
+    //   dataTable.map((item) => item.ranking)
+    // );
     const contentChart = {
       ...options,
       series: [
@@ -483,7 +505,6 @@ class AlignmentList extends Component {
     const isCanEdit =
       alignmentReducer?.dataDetail?.userRole?.isFacilitator ||
       alignmentReducer?.dataDetail?.userRole?.isOwner;
-
     return (
       <div style={globalStyle.contentContainer}>
         <div>
