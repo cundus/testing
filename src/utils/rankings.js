@@ -1,4 +1,11 @@
-export const handleChangeRanking = ({ data, index, row, item, oldData, form }) => {
+export const handleChangeRanking = ({
+  data,
+  index,
+  row,
+  item,
+  oldData,
+  form,
+}) => {
   // change target ranking
   data.splice(index, 1, {
     ...item,
@@ -23,13 +30,13 @@ export const handleChangeRanking = ({ data, index, row, item, oldData, form }) =
   // reranking when there are any duplication
   if (isDuplicate >= 0) {
     if (oldRanking === 0) {
-      const totalHasRanking = data.filter(
+      const totalTargetSwap = oldData.filter(
         (itm) =>
-          rankingParser(itm.ranking) > 0 &&
+          rankingParser(itm.ranking) >= row?.ranking &&
           itm.postAlignment === oldData[index]?.postAlignment
       );
-      const limit = totalHasRanking.length - parseInt(row?.ranking)
-      for (let ranking = row.ranking; ranking > limit + 1; ranking--) {
+      let ranking = row?.ranking;
+      totalTargetSwap.map(() => {
         const indexRanking = oldData.findIndex((itm) => {
           return (
             rankingParser(itm.ranking) === ranking &&
@@ -52,7 +59,8 @@ export const handleChangeRanking = ({ data, index, row, item, oldData, form }) =
               rankingParserToValueForm(ranking + 1),
           });
         }
-      }
+        ranking++
+      });
     } else if (oldRanking < row?.ranking) {
       for (let ranking = oldRanking; ranking < row.ranking; ranking++) {
         const theRank = ranking + 1;
@@ -107,8 +115,14 @@ export const handleChangeRanking = ({ data, index, row, item, oldData, form }) =
   }
 };
 
-
-export const handleChangePostAlignment = ({ data, index, row, item, oldData , form}) => {
+export const handleChangePostAlignment = ({
+  data,
+  index,
+  row,
+  item,
+  oldData,
+  form,
+}) => {
   // change target post alignment data and make his ranking empty
   data.splice(index, 1, {
     ...item,
@@ -124,11 +138,7 @@ export const handleChangePostAlignment = ({ data, index, row, item, oldData , fo
   );
   // reranking when target not empty
   if (oldRanking > 0) {
-    for (
-      let ranking = oldRanking;
-      ranking < data.length;
-      ranking++
-    ) {
+    for (let ranking = oldRanking; ranking < data.length; ranking++) {
       const theRank = ranking + 1;
       const indexRanking = oldData.findIndex(
         (itm) =>
