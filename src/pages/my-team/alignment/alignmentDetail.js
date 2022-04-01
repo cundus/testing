@@ -265,8 +265,7 @@ class AlignmentList extends Component {
     });
   };
 
-
-  handleChangeRanking = ({data, index, row, item, oldData}) => {
+  handleChangeRanking = ({ data, index, row, item, oldData }) => {
     // change target ranking
     data.splice(index, 1, {
       ...item,
@@ -275,60 +274,79 @@ class AlignmentList extends Component {
     this.props.form.setFieldsValue({
       [`dataGeneral[${row?.number - 1}].ranking`]: "",
     });
-    const oldRanking = parseInt(oldData?.[index].ranking === " " ? 0 : oldData?.[index].ranking)
-    // reranking
-    if (oldRanking < row?.ranking) {
-      for (let ranking = oldData[index]?.ranking; ranking < row.ranking; ranking++) {
-        const theRank = ranking + 1
-        const indexRanking = oldData.findIndex(
-          (itm) => itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
-        );
-        const dataTarget = oldData.find(
-          (itm) => {
-            return itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
-        });
-        const isDuplicate = oldData.findIndex(
-          (itm) => {
-            return itm.ranking === row?.ranking && itm.postAlignment === oldData[index]?.postAlignment
-        });
-        if (indexRanking >= 0 && isDuplicate >= 0) {
-          data.splice(indexRanking, 1, {
-            ...data[indexRanking],
-            ranking: theRank - 1,
+
+    const isDuplicate = oldData.findIndex((itm) => {
+      return (
+        itm.ranking === row?.ranking &&
+        itm.postAlignment === oldData[index]?.postAlignment
+      );
+    });
+    // reranking when there are any duplication
+    if (isDuplicate >= 0) {
+      const oldRanking = parseInt(
+        oldData?.[index].ranking === " " ? 0 : oldData?.[index].ranking
+      );
+      if (oldRanking < row?.ranking) {
+        for (
+          let ranking = oldData[index]?.ranking;
+          ranking < row.ranking;
+          ranking++
+        ) {
+          const theRank = ranking + 1;
+          const indexRanking = oldData.findIndex(
+            (itm) =>
+              itm.ranking === theRank &&
+              itm.postAlignment === oldData[index]?.postAlignment
+          );
+          const dataTarget = oldData.find((itm) => {
+            return (
+              itm.ranking === theRank &&
+              itm.postAlignment === oldData[index]?.postAlignment
+            );
           });
-          this.props.form.setFieldsValue({
-            [`dataGeneral[${dataTarget?.number - 1}].ranking`]: theRank - 1
-          });
+          if (indexRanking >= 0) {
+            data.splice(indexRanking, 1, {
+              ...data[indexRanking],
+              ranking: theRank - 1,
+            });
+            this.props.form.setFieldsValue({
+              [`dataGeneral[${dataTarget?.number - 1}].ranking`]: theRank - 1,
+            });
+          }
         }
-      }
-    } else {
-      for (let ranking = row.ranking; ranking < oldData[index]?.ranking; ranking++) {
-        const indexRanking = oldData.findIndex(
-          (itm) => {
-            return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
-        });
-        const dataTarget = oldData.find(
-          (itm) => {
-            return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
-        });
-        const isDuplicate = oldData.findIndex(
-          (itm) => {
-            return itm.ranking === row?.ranking && itm.postAlignment === oldData[index]?.postAlignment
-        });
-        if (indexRanking >= 0 && isDuplicate >= 0) {
-          data.splice(indexRanking, 1, {
-            ...data[indexRanking],
-            ranking: ranking + 1
+      } else {
+        for (
+          let ranking = row.ranking;
+          ranking < oldData[index]?.ranking;
+          ranking++
+        ) {
+          const indexRanking = oldData.findIndex((itm) => {
+            return (
+              itm.ranking === ranking &&
+              itm.postAlignment === oldData[index]?.postAlignment
+            );
           });
-          this.props.form.setFieldsValue({
-            [`dataGeneral[${dataTarget?.number - 1}].ranking`]: ranking + 1
+          const dataTarget = oldData.find((itm) => {
+            return (
+              itm.ranking === ranking &&
+              itm.postAlignment === oldData[index]?.postAlignment
+            );
           });
+          if (indexRanking >= 0) {
+            data.splice(indexRanking, 1, {
+              ...data[indexRanking],
+              ranking: ranking + 1,
+            });
+            this.props.form.setFieldsValue({
+              [`dataGeneral[${dataTarget?.number - 1}].ranking`]: ranking + 1,
+            });
+          }
         }
       }
     }
-  }
+  };
 
-  handleChangePostAlignment = ({data, index, row, item, oldData}) => {
+  handleChangePostAlignment = ({ data, index, row, item, oldData }) => {
     // change target post alignment data and make his ranking empty
     data.splice(index, 1, {
       ...item,
@@ -339,27 +357,40 @@ class AlignmentList extends Component {
       [`dataGeneral[${row?.number - 1}].ranking`]: "",
     });
 
-    // reranking
-    for (let ranking = oldData?.[index].ranking; ranking < data.length; ranking++) {
-      const theRank = ranking + 1
-      const indexRanking = oldData.findIndex(
-        (itm) => itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
-      );
-      const dataTarget = oldData.find(
-        (itm) => {
-          return itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
-      });
-      if (indexRanking >= 0) {
-        data.splice(indexRanking, 1, {
-          ...data[indexRanking],
-          ranking: theRank - 1,
+    const oldRanking = parseInt(
+      oldData?.[index].ranking === " " ? 0 : oldData?.[index].ranking
+    );
+    // reranking when target not empty
+    if (oldRanking > 0) {
+      for (
+        let ranking = oldRanking;
+        ranking < data.length;
+        ranking++
+      ) {
+        const theRank = ranking + 1;
+        const indexRanking = oldData.findIndex(
+          (itm) =>
+            itm.ranking === theRank &&
+            itm.postAlignment === oldData[index]?.postAlignment
+        );
+        const dataTarget = oldData.find((itm) => {
+          return (
+            itm.ranking === theRank &&
+            itm.postAlignment === oldData[index]?.postAlignment
+          );
         });
-        this.props.form.setFieldsValue({
-          [`dataGeneral[${dataTarget?.number - 1}].ranking`]: theRank - 1
-        });
+        if (indexRanking >= 0) {
+          data.splice(indexRanking, 1, {
+            ...data[indexRanking],
+            ranking: theRank - 1,
+          });
+          this.props.form.setFieldsValue({
+            [`dataGeneral[${dataTarget?.number - 1}].ranking`]: theRank - 1,
+          });
+        }
       }
     }
-  }
+  };
 
   handleChange = (row, target, afterChange) => {
     const { dataTable } = this.state;
@@ -369,11 +400,17 @@ class AlignmentList extends Component {
     const item = newData[index];
     switch (target) {
       case "ranking":
-        this.handleChangeRanking({data: newData, index, row, item, oldData})
+        this.handleChangeRanking({ data: newData, index, row, item, oldData });
         break;
 
       case "postAlignment":
-        this.handleChangePostAlignment({data: newData, index, row, item, oldData})
+        this.handleChangePostAlignment({
+          data: newData,
+          index,
+          row,
+          item,
+          oldData,
+        });
         break;
       default:
         newData.splice(index, 1, {
