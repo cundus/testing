@@ -275,9 +275,9 @@ class AlignmentList extends Component {
     this.props.form.setFieldsValue({
       [`dataGeneral[${row?.number - 1}].ranking`]: "",
     });
-
+    const oldRanking = parseInt(oldData?.[index].ranking === " " ? 0 : oldData?.[index].ranking)
     // reranking
-    if (oldData?.[index].ranking < row?.ranking) {
+    if (oldRanking < row?.ranking) {
       for (let ranking = oldData[index]?.ranking; ranking < row.ranking; ranking++) {
         const theRank = ranking + 1
         const indexRanking = oldData.findIndex(
@@ -287,7 +287,11 @@ class AlignmentList extends Component {
           (itm) => {
             return itm.ranking === theRank && itm.postAlignment === oldData[index]?.postAlignment
         });
-        if (indexRanking >= 0) {
+        const isDuplicate = oldData.findIndex(
+          (itm) => {
+            return itm.ranking === row?.ranking && itm.postAlignment === oldData[index]?.postAlignment
+        });
+        if (indexRanking >= 0 && isDuplicate >= 0) {
           data.splice(indexRanking, 1, {
             ...data[indexRanking],
             ranking: theRank - 1,
@@ -307,7 +311,11 @@ class AlignmentList extends Component {
           (itm) => {
             return itm.ranking === ranking && itm.postAlignment === oldData[index]?.postAlignment
         });
-        if (indexRanking >= 0) {
+        const isDuplicate = oldData.findIndex(
+          (itm) => {
+            return itm.ranking === row?.ranking && itm.postAlignment === oldData[index]?.postAlignment
+        });
+        if (indexRanking >= 0 && isDuplicate >= 0) {
           data.splice(indexRanking, 1, {
             ...data[indexRanking],
             ranking: ranking + 1
