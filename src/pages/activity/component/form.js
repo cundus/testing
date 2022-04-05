@@ -1,31 +1,29 @@
-import React, { Component } from 'react';
-import {
-  Modal, Form, Select, Input
-} from 'antd';
+import React, { Component } from "react";
+import { Modal, Form, Select, Input } from "antd";
 
 const { Option } = Select;
 
-
-class form extends Component {
-
+class FormSend extends Component {
   componentDidMount() {
     //
   }
 
   change = (field) => {
     const { dataModal, handleModalChangeForm, form } = this.props;
-    setTimeout(() => form.validateFields(field, (errors, values) => {
-      handleModalChangeForm({
-        ...dataModal,
-        ...values
-      });
-    }), 100);
+    setTimeout(
+      () =>
+        form.validateFields(field, (errors, values) => {
+          handleModalChangeForm({
+            ...dataModal,
+            ...values,
+          });
+        }),
+      100
+    );
   };
 
   render() {
-    const {
-      statusActivity, form, dataModal
-    } = this.props;
+    const { statusActivity, form, dataModal } = this.props;
     return (
       <Modal
         title={this.props.titleForm}
@@ -36,20 +34,21 @@ class form extends Component {
       >
         <Form>
           <Form.Item label="Activity Name">
-            {form.getFieldDecorator('name', {
+            {form.getFieldDecorator("name", {
               rules: [{ required: true }],
-              initialValue: dataModal.name
-            })(<Input size="large" onChange={() => this.change(['name'])} />)}
+              initialValue: dataModal.name,
+            })(<Input size="large" onChange={() => this.change(["name"])} />)}
           </Form.Item>
           <Form.Item label="Status">
-            {form.getFieldDecorator('status', {
+            {form.getFieldDecorator("status", {
               rules: [{ required: true }],
-              initialValue: dataModal.status
+              initialValue: dataModal.status,
             })(
-              <Select onChange={() => this.change(['status'])}>
-                {statusActivity && statusActivity.map((value, index) => {
-                  return <Option value={value.id}>{value.name}</Option>;
-                })}
+              <Select onChange={() => this.change(["status"])}>
+                {statusActivity &&
+                  statusActivity.map((value, index) => {
+                    return <Option value={value.id}>{value.name}</Option>;
+                  })}
               </Select>
             )}
           </Form.Item>
@@ -59,4 +58,4 @@ class form extends Component {
   }
 }
 
-export default form;
+export default FormSend;

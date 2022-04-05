@@ -138,14 +138,15 @@ class TableAppraisal extends Component {
         render: (text, record) => {
           let access = false;
           if (
-            record.statusNumber !== 1 &&
-            record.statusNumber !== 2 &&
-            record.statusNumber !== 3 &&
-            record.statusNumber !== 5
+            // Sundus Change from
+            // record.statusNumber !== 1 &&
+            // record.statusNumber !== 2 &&
+            // record.statusNumber !== 3 &&
+            // record.statusNumber !== 5
+            // to
+            record.statusNumber === 4
           ) {
             access = true;
-          } else {
-            access = false;
           }
           return (
             <Button

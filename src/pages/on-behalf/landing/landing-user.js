@@ -129,19 +129,11 @@ class LandingUserBehalf extends Component {
         >
           <FilterTableSSR
             onFilter={(p) => {
-              if (
-                p?.filters?.directorate !== "" ||
-                p?.filters?.directorate === undefined ||
-                p?.filters?.department === undefined
-              ) {
-                this.setState({
-                  searchableFilter: p,
-                });
-              } else {
-                this.setState({
-                  searchableFilter: p,
-                });
-              }
+              // Sundus Changes
+              this.setState({
+                searchableFilter: p,
+              });
+
               this.fetchData({ ...initGetDataParams, filters: p });
             }}
             value={this.state?.filterField}
