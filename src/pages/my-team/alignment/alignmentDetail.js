@@ -15,7 +15,11 @@ import { Success } from "../../../redux/status-code-type";
 import { toast } from "react-toastify";
 import JSONtoXLSX from "json-as-xlsx";
 import moment from "moment";
-import { handleChangePostAlignment, handleChangeRanking } from "../../../utils/rankings";
+import {
+  handleChangePostAlignment,
+  handleChangeRanking,
+} from "../../../utils/rankings";
+import { getConfirmLocale } from "antd/lib/modal/locale";
 
 const { confirm } = Modal;
 
@@ -135,6 +139,8 @@ class AlignmentList extends Component {
   };
 
   handleChangeTable = (pagination, filters, sorter, extra) => {
+    console.log("extra", extra);
+    console.log("filters awal", filters);
     const { alignmentReducer } = this.props;
     const data = extra?.currentDataSource || [];
 
@@ -143,8 +149,20 @@ class AlignmentList extends Component {
 
     const dataGraph = Array.from(this.state.dataTable || []).filter((item) => {
       if (isFieldHasFilter("managerName")) {
+        if (isFieldHasFilter("directorate")) {
+          return (
+            filters.managerName.includes(item.managerName) &&
+            filters.directorate.includes(item.directorate)
+          );
+        }
         return filters.managerName.includes(item.managerName);
       } else if (isFieldHasFilter("directorate")) {
+        if (isFieldHasFilter("managerName")) {
+          return (
+            filters.managerName.includes(item.managerName) &&
+            filters.directorate.includes(item.directorate)
+          );
+        }
         return filters.directorate.includes(item.directorate);
       } else {
         return true;
@@ -274,7 +292,14 @@ class AlignmentList extends Component {
     const item = newData[index];
     switch (target) {
       case "ranking":
-        handleChangeRanking({ data: newData, index, row, item, oldData, form: this.props.form });
+        handleChangeRanking({
+          data: newData,
+          index,
+          row,
+          item,
+          oldData,
+          form: this.props.form,
+        });
         break;
 
       case "postAlignment":
@@ -284,7 +309,7 @@ class AlignmentList extends Component {
           row,
           item,
           oldData,
-          form: this.props.form
+          form: this.props.form,
         });
         break;
       default:
