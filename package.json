@@ -35,21 +35,21 @@
     "dev:staging": "env-cmd -f .env.local.staging npm run dev",
     "dev:prod": "env-cmd -f .env.local.prod npm run dev",
     "build:staging": "env-cmd -f .env.staging npm run build",
-    "sonar":  "node sonar-project.js",
+    "sonar": "node sonar-project.js",
     "build:prod": "env-cmd -f .env.prod npm run build"
   },
-    "jest": {
-        "testEnvironment":  "node",
-        "coveragePathIgnorePatterns": [
-            "/node_modules/"
-        ],
-        "testResultsProcessor":  "jest-sonar-reporter"
-    },
-    "jestSonar": {
-        "reportPath":  "coverage",
-        "reportFile":  "test-reporter.xml",
-        "indent":  4
-    },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  },
+  "jestSonar": {
+    "reportPath": "coverage",
+    "reportFile": "test-reporter.xml",
+    "indent": 4
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
