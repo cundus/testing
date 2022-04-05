@@ -18,9 +18,9 @@ import {
 } from "antd";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import TableKPI from "./ components/kpi";
-import TableValue from "./ components/value";
-import CardRating from "./ components/cardRating";
+import TableKPI from "./components/kpi";
+import TableValue from "./components/value";
+import CardRating from "./components/cardRating";
 import {
   doGetKpiList,
   doAssessment,
@@ -471,7 +471,10 @@ class Appraisal extends Component {
           confirm({
             title: "Are you sure?",
             onOk: async () => {
-              await Promise.all([doAssessAll(dataAssessment), doSaveValues(authReducer?.userId, dataValues)])
+              await Promise.all([
+                doAssessAll(dataAssessment),
+                doSaveValues(authReducer?.userId, dataValues),
+              ]);
               this.setState({
                 loadingKpis: true,
               });
@@ -655,22 +658,28 @@ class Appraisal extends Component {
                     status === FAILED_SAVE_CHALLENGE_YOURSELF
                   ) {
                     toast.success("Your KPI has been saved");
-                    const rowData = dataKpis[index]
-                    const newOption = Array.from(rowData?.metrics||[]).map((item) => {
-                      return rowData[item?.label];
-                    });
+                    const rowData = dataKpis[index];
+                    const newOption = Array.from(rowData?.metrics || []).map(
+                      (item) => {
+                        return rowData[item?.label];
+                      }
+                    );
                     let newData = dataSaving.map((item, idx) => {
                       if (index === idx) {
                         return {
                           ...item,
                           qualitativeOption: newOption,
                           assessment: "",
-                          rating: ""
-                        }
+                          rating: "",
+                        };
                       }
-                      return item
-                    })
-                    this.setState({ editableRow: null, dataKpis: newData, editableRowData: null});
+                      return item;
+                    });
+                    this.setState({
+                      editableRow: null,
+                      dataKpis: newData,
+                      editableRowData: null,
+                    });
                   } else {
                     toast.warn(`Sorry, ${statusMessage}`);
                   }
@@ -713,7 +722,7 @@ class Appraisal extends Component {
       onOk: async () => {
         await this.setState({
           editableRow: data?.id,
-          editableRowData: data
+          editableRowData: data,
         });
       },
       onCancel() {},
@@ -724,11 +733,11 @@ class Appraisal extends Component {
 
   handleCancel = async () => {
     if (this.state?.editableRowData?.id) {
-      this.handleChangeRow(this.state?.editableRowData)
+      this.handleChangeRow(this.state?.editableRowData);
     }
     await this.setState({
       editableRow: null,
-      editableRowData: null
+      editableRowData: null,
     });
   };
 
