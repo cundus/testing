@@ -23,8 +23,8 @@ const initialState = {
   loadingLogin: true,
 };
 
-const authReducer = (action, state = initialState) => {
-  switch (action.type) {
+const authReducer = (state = initialState, action) => {
+  switch (action?.type) {
     case GET_USER_SUCCESS:
       return {
         ...state,

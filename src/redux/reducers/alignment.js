@@ -18,7 +18,7 @@ import {
 
 const init = {};
 
-export default (action, state = init) => {
+export default (state = init, action) => {
   switch (action.type) {
     case GET_ALIGNMENTS:
     case GET_ALIGNMENTS_SUCCESS:
