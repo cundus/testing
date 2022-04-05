@@ -1,13 +1,9 @@
-import {
-  SAVE_KPI,
-  SAVE_KPI_SUCCESS,
-  SAVE_KPI_FAILED
-} from '../../action.type';
+import { SAVE_KPI, SAVE_KPI_SUCCESS, SAVE_KPI_FAILED } from "../../action.type";
 
 const initialState = {
   loading: false,
   status: NaN,
-  statusMessage: ''
+  statusMessage: "",
 };
 
 const kpiReducer = (state = initialState, action) => {
@@ -15,21 +11,15 @@ const kpiReducer = (state = initialState, action) => {
     case SAVE_KPI:
       return {
         ...state,
-        loading: action.loading
+        loading: action.loading,
       };
     case SAVE_KPI_SUCCESS:
-      return {
-        ...state,
-        loading: action.loading,
-        status: action.status,
-        statusMessage: action.message
-      };
     case SAVE_KPI_FAILED:
       return {
         ...state,
         loading: action.loading,
         status: action.status,
-        statusMessage: action.message
+        statusMessage: action.message,
       };
     default:
       return { ...state };
