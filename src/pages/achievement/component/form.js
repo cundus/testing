@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Modal, Form, DatePicker, Input } from "antd";
 
-class Form extends Component {
+class FormSend extends Component {
   componentDidMount() {}
 
   change = (field) => {
@@ -66,4 +66,4 @@ class Form extends Component {
   }
 }
 
-export default Form;
+export default FormSend;
