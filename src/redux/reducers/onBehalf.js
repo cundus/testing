@@ -32,10 +32,6 @@ export default (state = initalState, action) => {
         userId: null,
       };
     case GET_USERS_BEHALF:
-      return {
-        ...state,
-        ...action,
-      };
     case GET_FORMS_BEHALF:
       return {
         ...state,

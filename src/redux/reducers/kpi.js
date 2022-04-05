@@ -64,24 +64,24 @@ import {
   DOWNLOAD_FILE_FAILED,
   DO_ASSESSMENT_ALL,
   DO_ASSESSMENT_SUCCESS_ALL,
-  DO_ASSESSMENT_FAILED_ALL
-} from '../action.type';
+  DO_ASSESSMENT_FAILED_ALL,
+} from "../action.type";
 
 const initialState = {
   loadingMetric: false,
   loadingGoal: false,
   loadingKpi: false,
   status: null,
-  message: '',
-  page: '',
+  message: "",
+  page: "",
   dataGoal: {},
   dataKpi: [],
   loadingSaveKPI: false,
   statusSaveKPI: null,
-  messageSaveKPI: '',
+  messageSaveKPI: "",
   loadingManagerKpi: false,
   statusManagerKpi: null,
-  messageManagerKpi: '',
+  messageManagerKpi: "",
   dataFirstManager: {},
   dataSecondManager: {},
   dataMetrics: [],
@@ -92,8 +92,8 @@ const initialState = {
   loadingEmpAck: false,
   generalFeedback: {
     id: null,
-    comment: null
-  }
+    comment: null,
+  },
 };
 
 const kpiReducer = (state = initialState, action) => {
@@ -101,7 +101,7 @@ const kpiReducer = (state = initialState, action) => {
     case GET_METRICS:
       return {
         ...state,
-        loadingMetric: action.loading
+        loadingMetric: action.loading,
       };
     case GET_METRICS_SUCCESS:
       return {
@@ -109,35 +109,32 @@ const kpiReducer = (state = initialState, action) => {
         loadingMetric: action.loading,
         status: action.status,
         message: action.message,
-        dataMetrics: action.data
+        dataMetrics: action.data,
       };
     case GET_METRICS_FAILED:
       return {
         ...state,
         loadingMetric: action.loading,
         status: action.status,
-        message: action.message
+        message: action.message,
       };
     case GET_LATEST_GOAL_KPI:
+    case GET_LATEST_GOAL_KPI_FAILED:
       return {
         ...state,
-        loadingGoal: action.loading
+        loadingGoal: action.loading,
       };
     case GET_LATEST_GOAL_KPI_SUCCESS:
       return {
         ...state,
         loadingGoal: action.loading,
-        dataGoal: action.data
+        dataGoal: action.data,
       };
-    case GET_LATEST_GOAL_KPI_FAILED:
-      return {
-        ...state,
-        loadingGoal: action.loading
-      };
+
     case GET_KPI_LIST:
       return {
         ...state,
-        loadingKpi: action.loading
+        loadingKpi: action.loading,
       };
     case GET_KPI_LIST_SUCCESS:
       return {
@@ -153,7 +150,7 @@ const kpiReducer = (state = initialState, action) => {
         formStatusId: action.data.formStatusId,
         formStatusDescription: action.data.formStatusDescription,
         holderUserId: action.data.holderUserId,
-        user: action.data.user
+        user: action.data.user,
       };
     case GET_KPI_LIST_FAILED:
       return {
@@ -162,18 +159,18 @@ const kpiReducer = (state = initialState, action) => {
         status: action.status,
         dataKpi: [],
         dataKpiMetrics: [],
-        generalFeedback: '',
-        challenge: '',
-        currentStep: '',
-        formStatusId: '',
-        formStatusDescription: '',
-        holderUserId: '',
-        errMessage: action.message
+        generalFeedback: "",
+        challenge: "",
+        currentStep: "",
+        formStatusId: "",
+        formStatusDescription: "",
+        holderUserId: "",
+        errMessage: action.message,
       };
     case GET_KPI_MANAGER_LIST:
       return {
         ...state,
-        loadingManagerKpi: action.loading
+        loadingManagerKpi: action.loading,
       };
     case GET_KPI_MANAGER_LIST_SUCCESS:
       return {
@@ -183,57 +180,37 @@ const kpiReducer = (state = initialState, action) => {
         messageManagerKpi: action.message,
         dataFirstManager: action.data.firstManager,
         dataSecondManager: action.data.secondManager,
-        dataKpiManagerMetrics: action.data.labelList || []
+        dataKpiManagerMetrics: action.data.labelList || [],
       };
     case GET_KPI_MANAGER_LIST_FAILED:
       return {
         ...state,
         loadingManagerKpi: action.loading,
         statusManagerKpi: action.status,
-        messageManagerKpi: action.message
+        messageManagerKpi: action.message,
       };
     case SAVE_KPI:
-      return {
-        ...state,
-        loadingSaveKPI: action.loading
-      };
-    case SAVE_KPI_SUCCESS:
-      return {
-        ...state,
-        loadingSaveKPI: action.loading,
-        statusSaveKPI: action.status,
-        messageSaveKPI: action.message
-      };
-    case SAVE_KPI_FAILED:
-      return {
-        ...state,
-        loadingSaveKPI: action.loading,
-        statusSaveKPI: action.status,
-        messageSaveKPI: action.message
-      };
     case SUBMIT_NEXT:
       return {
         ...state,
-        loadingSaveKPI: action.loading
-      };
-    case SUBMIT_NEXT_SUCCESS:
-      return {
-        ...state,
         loadingSaveKPI: action.loading,
-        statusSaveKPI: action.status,
-        messageSaveKPI: action.message
       };
+
+    case SAVE_KPI_SUCCESS:
+    case SAVE_KPI_FAILED:
+    case SUBMIT_NEXT_SUCCESS:
     case SUBMIT_NEXT_FAILED:
       return {
         ...state,
         loadingSaveKPI: action.loading,
         statusSaveKPI: action.status,
-        messageSaveKPI: action.message
+        messageSaveKPI: action.message,
       };
+
     case DO_ASSESSMENT:
       return {
         ...state,
-        loadingAssessOne: action.loading
+        loadingAssessOne: action.loading,
       };
     case DO_ASSESSMENT_SUCCESS:
       return {
@@ -241,39 +218,33 @@ const kpiReducer = (state = initialState, action) => {
         loadingAssessOne: action.loading,
         statusAssessOne: action.status,
         messageAssessOne: action.message,
-        dataAssessOne: action.data
+        dataAssessOne: action.data,
       };
     case DO_ASSESSMENT_FAILED:
       return {
         ...state,
         loadingAssessOne: action.loading,
         statusAssessOne: action.status,
-        messageAssessOne: action.message
+        messageAssessOne: action.message,
       };
     case DO_ASSESSMENT_ALL:
       return {
         ...state,
-        loadingAssess: action.loading
+        loadingAssess: action.loading,
       };
     case DO_ASSESSMENT_SUCCESS_ALL:
-      return {
-        ...state,
-        loadingAssess: action.loading,
-        statusAssess: action.status,
-        messageAssess: action.message
-      };
     case DO_ASSESSMENT_FAILED_ALL:
       return {
         ...state,
         loadingAssess: action.loading,
         statusAssess: action.status,
-        messageAssess: action.message
+        messageAssess: action.message,
       };
     case GET_VALUES:
       return {
         ...state,
         loadingValues: action.loading,
-        dataValues: []
+        dataValues: [],
       };
     case GET_VALUES_SUCCESS:
       return {
@@ -281,7 +252,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingValues: action.loading,
         statusValues: action.status,
         messageValues: action.message,
-        dataValues: action.data.values
+        dataValues: action.data.values,
       };
     case GET_VALUES_FAILED:
       return {
@@ -289,88 +260,66 @@ const kpiReducer = (state = initialState, action) => {
         loadingValues: action.loading,
         statusValues: action.status,
         messageValues: action.message,
-        dataValues: []
+        dataValues: [],
       };
     case SAVE_VALUES:
       return {
         ...state,
-        loadingSaveValues: action.loading
+        loadingSaveValues: action.loading,
       };
     case SAVE_VALUES_SUCCESS:
-      return {
-        ...state,
-        loadingSaveValues: action.loading,
-        statusSaveValues: action.status,
-        messageSaveValues: action.message
-      };
     case SAVE_VALUES_FAILED:
       return {
         ...state,
         loadingSaveValues: action.loading,
         statusSaveValues: action.status,
-        messageSaveValues: action.message
+        messageSaveValues: action.message,
       };
     case GET_RATING:
+    case GET_RATING_FAILED:
       return {
         ...state,
         loading: action.loading,
-        dataRating: []
+        dataRating: [],
       };
     case GET_RATING_SUCCESS:
       return {
         ...state,
         loading: action.loading,
-        dataRating: action.data.ratings
+        dataRating: action.data.ratings,
       };
-    case GET_RATING_FAILED:
-      return {
-        ...state,
-        loading: action.loading,
-        dataRating: []
-      };
+
     case ATTACHMENT_FILE:
       return {
         ...state,
-        loadingAttach: action.loading
+        loadingAttach: action.loading,
       };
     case ATTACHMENT_FILE_SUCCESS:
-      return {
-        ...state,
-        loadingAttach: action.loading,
-        statusAttach: action.status,
-        messageAttach: action.message
-      };
     case ATTACHMENT_FILE_FAILED:
       return {
         ...state,
         loadingAttach: action.loading,
         statusAttach: action.status,
-        messageAttach: action.message
+        messageAttach: action.message,
       };
     case DELETE_FILE:
       return {
         ...state,
-        loadingDeleteFile: action.loading
+        loadingDeleteFile: action.loading,
       };
     case DELETE_FILE_SUCCESS:
-      return {
-        ...state,
-        loadingDeleteFile: action.loading,
-        statusDeleteFile: action.status,
-        messageDeleteFile: action.message
-      };
     case DELETE_FILE_FAILED:
       return {
         ...state,
         loadingDeleteFile: action.loading,
         statusDeleteFile: action.status,
-        messageDeleteFile: action.message
+        messageDeleteFile: action.message,
       };
     case GET_KPI_RATING:
       return {
         ...state,
         loadingKpiRating: action.loading,
-        dataKpiRating: {}
+        dataKpiRating: {},
       };
     case GET_KPI_RATING_SUCCESS:
       return {
@@ -378,7 +327,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingKpiRating: action.loading,
         statusKpiRating: action.status,
         messageKpiRating: action.message,
-        dataKpiRating: action.data
+        dataKpiRating: action.data,
       };
     case GET_KPI_RATING_FAILED:
       return {
@@ -386,13 +335,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingKpiRating: action.loading,
         statusKpiRating: action.status,
         messageKpiRating: action.message,
-        dataKpiRating: {}
+        dataKpiRating: {},
       };
     case GET_PROPOSE_RATING:
       return {
         ...state,
         loadingProposeRating: action.loading,
-        dataProposeRating: []
+        dataProposeRating: [],
       };
     case GET_PROPOSE_RATING_SUCCESS:
       return {
@@ -400,7 +349,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingProposeRating: action.loading,
         statusProposeRating: action.status,
         messageProposeRating: action.message,
-        dataProposeRating: action.data
+        dataProposeRating: action.data,
       };
     case GET_PROPOSE_RATING_FAILED:
       return {
@@ -408,13 +357,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingProposeRating: action.loading,
         statusProposeRating: action.status,
         messageProposeRating: action.message,
-        dataProposeRating: []
+        dataProposeRating: [],
       };
     case SEND_FEEDBACK_APPRAISAL:
       return {
         ...state,
         loadingSendBackAppraisal: action.loading,
-        dataSendBackAppraisal: null
+        dataSendBackAppraisal: null,
       };
     case SEND_FEEDBACK_APPRAISAL_SUCCESS:
       return {
@@ -422,7 +371,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingSendBackAppraisal: action.loading,
         statusSendBackAppraisal: action.status,
         messageSendBackAppraisal: action.message,
-        dataSendBackAppraisal: action.data
+        dataSendBackAppraisal: action.data,
       };
     case SEND_FEEDBACK_APPRAISAL_FAILED:
       return {
@@ -430,13 +379,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingSendBackAppraisal: action.loading,
         statusSendBackAppraisal: action.status,
         messageSendBackAppraisal: action.message,
-        dataSendBackAppraisal: null
+        dataSendBackAppraisal: null,
       };
     case APPROVE_APPRAISAL:
       return {
         ...state,
         loadingApproveAppraisal: action.loading,
-        dataApproveAppraisal: null
+        dataApproveAppraisal: null,
       };
     case APPROVE_APPRAISAL_SUCCESS:
       return {
@@ -444,7 +393,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingApproveAppraisal: action.loading,
         statusApproveAppraisal: action.status,
         messageApproveAppraisal: action.message,
-        dataApproveAppraisal: action.data
+        dataApproveAppraisal: action.data,
       };
     case APPROVE_APPRAISAL_FAILED:
       return {
@@ -452,13 +401,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingApproveAppraisal: action.loading,
         statusApproveAppraisal: action.status,
         messageApproveAppraisal: action.message,
-        dataApproveAppraisal: null
+        dataApproveAppraisal: null,
       };
     case TEAM_ACKNOWLEDGEMENT:
       return {
         ...state,
         loadingTeamAck: action.loading,
-        dataTeamAck: null
+        dataTeamAck: null,
       };
     case TEAM_ACKNOWLEDGEMENT_SUCCESS:
       return {
@@ -466,7 +415,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingTeamAck: action.loading,
         statusTeamAck: action.status,
         messageTeamAck: action.message,
-        dataTeamAck: action.data
+        dataTeamAck: action.data,
       };
     case TEAM_ACKNOWLEDGEMENT_FAILED:
       return {
@@ -474,13 +423,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingTeamAck: action.loading,
         statusTeamAck: action.status,
         messageTeamAck: action.message,
-        dataTeamAck: null
+        dataTeamAck: null,
       };
     case EMP_ACKNOWLEDGEMENT:
       return {
         ...state,
         loadingEmpAck: action.loading,
-        dataEmpAck: null
+        dataEmpAck: null,
       };
     case EMP_ACKNOWLEDGEMENT_SUCCESS:
       return {
@@ -488,7 +437,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingEmpAck: action.loading,
         statusEmpAck: action.status,
         messageEmpAck: action.message,
-        dataEmpAck: action.data
+        dataEmpAck: action.data,
       };
     case EMP_ACKNOWLEDGEMENT_FAILED:
       return {
@@ -496,16 +445,16 @@ const kpiReducer = (state = initialState, action) => {
         loadingEmpAck: action.loading,
         statusEmpAck: action.status,
         messageEmpAck: action.message,
-        dataEmpAck: null
+        dataEmpAck: null,
       };
     case EMP_ACKNOWLEDGEMENT_LIST:
       return {
         ...state,
         loadingEmpAckList: action.loading,
         dataEmpAckList: {
-          name: '',
-          list: []
-        }
+          name: "",
+          list: [],
+        },
       };
     case EMP_ACKNOWLEDGEMENT_LIST_SUCCESS:
       return {
@@ -513,7 +462,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingEmpAckList: action.loading,
         statusEmpAckList: action.status,
         messageEmpAckList: action.message,
-        dataEmpAckList: action.data
+        dataEmpAckList: action.data,
       };
     case EMP_ACKNOWLEDGEMENT_LIST_FAILED:
       return {
@@ -522,15 +471,15 @@ const kpiReducer = (state = initialState, action) => {
         statusEmpAckList: action.status,
         messageEmpAckList: action.message,
         dataEmpAckList: {
-          name: '',
-          list: []
-        }
+          name: "",
+          list: [],
+        },
       };
     case GET_ATTACHMENT_FILE:
       return {
         ...state,
         loadingAttachment: action.loading,
-        dataAttachment: []
+        dataAttachment: [],
       };
     case GET_ATTACHMENT_FILE_SUCCESS:
       return {
@@ -538,7 +487,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingAttachment: action.loading,
         statusAttachment: action.status,
         messageAttachment: action.message,
-        dataAttachment: action.data
+        dataAttachment: action.data,
       };
     case GET_ATTACHMENT_FILE_FAILED:
       return {
@@ -546,13 +495,13 @@ const kpiReducer = (state = initialState, action) => {
         loadingAttachment: action.loading,
         statusAttachment: action.status,
         messageAttachment: action.message,
-        dataAttachment: []
+        dataAttachment: [],
       };
     case DOWNLOAD_FILE:
       return {
         ...state,
         loadingDownload: action.loading,
-        dataDownload: []
+        dataDownload: [],
       };
     case DOWNLOAD_FILE_SUCCESS:
       return {
@@ -560,7 +509,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingDownload: action.loading,
         statusDownload: action.status,
         messageDownload: action.message,
-        dataDownload: action.data
+        dataDownload: action.data,
       };
     case DOWNLOAD_FILE_FAILED:
       return {
@@ -568,7 +517,7 @@ const kpiReducer = (state = initialState, action) => {
         loadingDownload: action.loading,
         statusDownload: action.status,
         messageDownload: action.message,
-        dataDownload: []
+        dataDownload: [],
       };
     default:
       return { ...state };

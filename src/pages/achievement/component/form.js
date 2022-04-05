@@ -1,29 +1,26 @@
-import React, { Component } from 'react';
-import {
-  Modal, Form, DatePicker, Input
-} from 'antd';
+import React, { Component } from "react";
+import { Modal, Form, DatePicker, Input } from "antd";
 
-
-class form extends Component {
-
-  componentDidMount() {
-  }
+class FormSend extends Component {
+  componentDidMount() {}
 
   change = (field) => {
     const { dataModal, handleModalChangeForm, form } = this.props;
-    setTimeout(() => form.validateFields(field, (errors, values) => {
-      handleModalChangeForm({
-        ...dataModal,
-        ...values,
-        achievementDate: values['achievementDate'].format('YYYY-MM-DD')
-      });
-    }), 100);
+    setTimeout(
+      () =>
+        form.validateFields(field, (errors, values) => {
+          handleModalChangeForm({
+            ...dataModal,
+            ...values,
+            achievementDate: values["achievementDate"].format("YYYY-MM-DD"),
+          });
+        }),
+      100
+    );
   };
 
   render() {
-    const {
-      form, dataModal
-    } = this.props;
+    const { form, dataModal } = this.props;
     return (
       <Modal
         title={this.props.titleForm}
@@ -34,20 +31,33 @@ class form extends Component {
       >
         <Form>
           <Form.Item label="Achievement Name">
-            {form.getFieldDecorator('achievementName', {
-              rules: [{ required: true, message: 'achievement name required!' }],
-              initialValue: dataModal.achievementName
-            })(<Input size="large" onChange={() => this.change(['achievementName', 'achievementDate'])} />)}
+            {form.getFieldDecorator("achievementName", {
+              rules: [
+                { required: true, message: "achievement name required!" },
+              ],
+              initialValue: dataModal.achievementName,
+            })(
+              <Input
+                size="large"
+                onChange={() =>
+                  this.change(["achievementName", "achievementDate"])
+                }
+              />
+            )}
           </Form.Item>
           <Form.Item label="Achievement Date">
-            {form.getFieldDecorator('achievementDate', {
+            {form.getFieldDecorator("achievementDate", {
               rules: [{ required: true }],
-              initialValue: dataModal.achievementDate
+              initialValue: dataModal.achievementDate,
             })(
-              <DatePicker onChange={() => this.change(['achievementName', 'achievementDate'])} disabledDate={current => {
-                return current && current > new Date()
-              }}>
-              </DatePicker>
+              <DatePicker
+                onChange={() =>
+                  this.change(["achievementName", "achievementDate"])
+                }
+                disabledDate={(current) => {
+                  return current && current > new Date();
+                }}
+              ></DatePicker>
             )}
           </Form.Item>
         </Form>
@@ -56,4 +66,4 @@ class form extends Component {
   }
 }
 
-export default form;
+export default FormSend;
